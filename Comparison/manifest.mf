@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.fidentis.comparison
+OpenIDE-Module-Localizing-Bundle: cz/fidentis/comparison/Bundle.properties
+OpenIDE-Module-Requires: cnb.cz.fidentis.externallibraries
+OpenIDE-Module-Specification-Version: 1.0
+

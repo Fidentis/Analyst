@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<proband>
+    <id>99021<id>
+    <part>nose</part>
+    <sex>female</sex>
+    <dateOfBirth>
+        <day>10</day>
+        <month>01</month>
+        <year>1990</year>
+    </dateOfBirth>
+    <age>23</age>
+    <placeOfBirth>
+        <country>Czech republic</country>
+        <city>Bruntal</city>
+    </placeOfBirth>
+    <domicile>
+        <country>Czech republic</country>
+        <city>Brno</city>
+    </domicile>
+    <nationality>czech</nationality>
+    <education>bachelor</education>
+    <position>
+  	<x>9</x>
+ 	<y>-23</y>
+  	<z>100</z>
+    </position>
+</proband>

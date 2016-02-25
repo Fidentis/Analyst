@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<proband>
+    <id>99875<id>
+    <part>chin</part>
+    <sex>male</sex>
+    <dateOfBirth>
+        <day>10</day>
+        <month>01</month>
+        <year>1975</year>
+    </dateOfBirth>
+    <age>38</age>
+    <placeOfBirth>
+        <country>Czech republic</country>
+        <city>Bruntal</city>
+    </placeOfBirth>
+    <domicile>
+        <country>Czech republic</country>
+        <city>Brno</city>
+    </domicile>
+    <nationality>czech</nationality>
+    <education>bachelor</education>
+    <position>
+	<x>3.2066</x>
+	<y>-101.561</y>
+	<z>53.7884</z>
+     </position>
+     <position>
+	<x>-7.12713</x>
+	<y>-114.085</y>
+	<z>45.9685</z>
+     </position>
+     <position>
+	<x>13.2478</x>
+	<y>-114.489</y>
+	<z>44.9338</z>
+     </position>
+</proband>

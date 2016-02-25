@@ -1,0 +1,2395 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cz.fidentis.gui.comparison_batch;
+
+import Jama.Matrix;
+import cz.fidentis.comparison.ComparisonMethod;
+import cz.fidentis.comparison.ICPmetric;
+import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.comparison.procrustes.DatabaseWorker;
+import cz.fidentis.controller.BatchComparison;
+import cz.fidentis.controller.OneToManyComparison;
+import cz.fidentis.gui.GUIController;
+import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.TableProcessing;
+import cz.fidentis.model.Model;
+import cz.fidentis.model.ModelExporter;
+import cz.fidentis.model.ModelLoader;
+import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.ResultExports;
+import cz.fidentis.undersampling.Methods;
+import cz.fidentis.undersampling.Type;
+import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utils.IntersectionUtils;
+import cz.fidentis.utils.MathUtils;
+import cz.fidentis.utils.SortUtils;
+import cz.fidentis.visualisation.ColorScheme;
+import cz.fidentis.visualisation.histogram.histogramPanel;
+import cz.fidentis.visualisation.surfaceComparison.HDpainting;
+import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
+import cz.fidentis.visualisation.surfaceComparison.SelectionType;
+import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.LayoutManager;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.media.opengl.awt.GLJPanel;
+import javax.swing.JFileChooser;
+import static javax.swing.JFileChooser.SAVE_DIALOG;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.vecmath.Vector3f;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
+
+/**
+ *
+ * @author Katka
+ */
+public class BatchComparisonResults extends javax.swing.JPanel {
+
+    JPanel activeColorPanel;
+    String result;
+    Boolean tresholdValueChanged = false;
+    private boolean valuesModified;
+
+    /**
+     * Creates new form BatchComparisonResults
+     */
+    public BatchComparisonResults() {
+        initComponents();
+        activeColorPanel = new JPanel();
+
+    }
+
+    public void showProcrustesControls() {
+        jSpinner1.setVisible(false);
+        jSlider1.setVisible(false);
+        jLabel14.setVisible(false);
+
+        jLabel13.setVisible(false);
+        jComboBox4.setVisible(false);
+        jPanel1.setVisible(false);
+        colormapPanel.setVisible(false);
+        slicesPanel.setVisible(false);
+        jButton9.setVisible(false);
+        jButton10.setVisible(false);
+        jPanel2.setVisible(true);
+        jButton8.setVisible(false);
+        exportDistToMeanButton.setVisible(true);
+        exportSymetricResults.setVisible(false);
+        BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        jSlider2.setValue(c.getFpDistance());
+        sizeSlider.setValue(c.getFpSize());
+    }
+
+    public void showHausdorfControls() {
+        jSpinner1.setVisible(true);
+        jSlider1.setVisible(true);
+        jLabel14.setVisible(true);
+
+        jLabel13.setVisible(true);
+        jComboBox4.setVisible(true);
+        jLabel13.setVisible(true);
+        jComboBox4.setVisible(true);
+        jPanel1.setVisible(true);
+        jPanel2.setVisible(false);
+        jButton9.setVisible(true);
+        jButton10.setVisible(true);
+        jButton8.setVisible(true);
+        exportDistToMeanButton.setVisible(false);
+        exportSymetricResults.setVisible(true);
+        setupVisualizationControls();
+
+    }
+
+    public void setNumericalResult(String result) {
+        this.result = result;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        colorDialog = new javax.swing.JDialog();
+        jColorChooser1 = new javax.swing.JColorChooser();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jDialog1 = new javax.swing.JDialog();
+        jFrame1 = new javax.swing.JFrame();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jFrame2 = new javax.swing.JFrame();
+        histogramPanel1 = new cz.fidentis.visualisation.histogram.histogramPanel();
+        jFrame3 = new javax.swing.JFrame();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        jComboBox5 = new javax.swing.JComboBox();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jFrame4 = new javax.swing.JFrame();
+        jPanel4 = new javax.swing.JPanel();
+        plotsDrawingPanelAuxiliary2 = new cz.fidentis.gui.PlotsDrawingPanelAuxiliary();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jComboBox7 = new javax.swing.JComboBox();
+        jLabel24 = new javax.swing.JLabel();
+        jComboBox8 = new javax.swing.JComboBox();
+        pairFrame = new javax.swing.JFrame();
+        pairComparisonPanel = new cz.fidentis.gui.PairComparisonPanel();
+        alignmentFrame = new javax.swing.JFrame();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        alignmentTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel(null);
+        jSlider1 = new javax.swing.JSlider();
+        jComboBox2 = new javax.swing.JComboBox();
+        jLabel14 = new javax.swing.JLabel();
+        jComboBox4 = new javax.swing.JComboBox();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel3 = new javax.swing.JLabel();
+        VisualizationBox = new javax.swing.JComboBox();
+        density = new javax.swing.JSlider();
+        densLabel = new javax.swing.JLabel();
+        cylLengthLabel = new javax.swing.JLabel();
+        cylLength = new javax.swing.JSlider();
+        cylRadius = new javax.swing.JSlider();
+        cylRadiusLabel = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jSlider2 = new javax.swing.JSlider();
+        jLabel6 = new javax.swing.JLabel();
+        sizeLabel = new javax.swing.JLabel();
+        sizeSlider = new javax.swing.JSlider();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        heatplotButton = new javax.swing.JButton();
+        exportDistToMeanButton = new javax.swing.JButton();
+        exportSymetricResults = new javax.swing.JButton();
+        slicesPanel = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jRadioButton7 = new javax.swing.JRadioButton();
+        jLabel9 = new javax.swing.JLabel();
+        normalSpinnerX = new javax.swing.JSpinner();
+        jLabel12 = new javax.swing.JLabel();
+        normalSpinnerY = new javax.swing.JSpinner();
+        jLabel15 = new javax.swing.JLabel();
+        normalSpinnerZ = new javax.swing.JSpinner();
+        positionSpinnerZ = new javax.swing.JSpinner();
+        jLabel16 = new javax.swing.JLabel();
+        positionSpinnerY = new javax.swing.JSpinner();
+        jLabel17 = new javax.swing.JLabel();
+        positionSpinnerX = new javax.swing.JSpinner();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jSlider3 = new javax.swing.JSlider();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        densLabel2 = new javax.swing.JLabel();
+        densLabel1 = new javax.swing.JLabel();
+        thickness = new javax.swing.JSlider();
+        colorPanel = new javax.swing.JPanel();
+        comparisonButton = new javax.swing.JButton();
+        colormapPanel = new javax.swing.JPanel();
+        histogram1 = new cz.fidentis.visualisation.histogram.histogramPanel();
+        jButton12 = new javax.swing.JButton();
+        selectionButton = new javax.swing.JToggleButton();
+        jButton11 = new javax.swing.JButton();
+        jComboBox3 = new javax.swing.JComboBox();
+        jComboBox6 = new javax.swing.JComboBox();
+        jLabel21 = new javax.swing.JLabel();
+        heatplotButton1 = new javax.swing.JButton();
+        alignResButton = new javax.swing.JButton();
+
+        Dimension dimension = new Dimension();
+        dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
+        colorDialog.setMinimumSize(dimension);
+        colorDialog.setModal(true);
+        colorDialog.setResizable(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton4, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton4.text")); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton5.text")); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout colorDialogLayout = new javax.swing.GroupLayout(colorDialog.getContentPane());
+        colorDialog.getContentPane().setLayout(colorDialogLayout);
+        colorDialogLayout.setHorizontalGroup(
+            colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jColorChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
+                .addGap(6, 6, 6))
+        );
+        colorDialogLayout.setVerticalGroup(
+            colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(colorDialogLayout.createSequentialGroup()
+                .addComponent(jColorChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton4))
+                .addGap(0, 16, Short.MAX_VALUE))
+        );
+
+        colorDialog.getAccessibleContext().setAccessibleParent(this);
+
+        jDialog1.setModal(true);
+        jDialog1.setModalityType(java.awt.Dialog.ModalityType.DOCUMENT_MODAL);
+        jDialog1.setName("Numerical results "); // NOI18N
+        jDialog1.getContentPane().setLayout(new java.awt.GridLayout(1, 1));
+
+        jFrame1.getContentPane().setLayout(new java.awt.GridLayout(1, 0));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable1.setColumnSelectionAllowed(true);
+        jTable1.getTableHeader().setResizingAllowed(false);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title0")); // NOI18N
+            jTable1.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title1")); // NOI18N
+            jTable1.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title2")); // NOI18N
+            jTable1.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title3")); // NOI18N
+        }
+
+        jFrame1.getContentPane().add(jScrollPane1);
+
+        jFrame1.getAccessibleContext().setAccessibleParent(this);
+
+        jFrame2.setBackground(new java.awt.Color(255, 255, 255));
+        jFrame2.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                jFrame2ComponentResized(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                jFrame2ComponentShown(evt);
+            }
+        });
+
+        javax.swing.GroupLayout histogramPanel1Layout = new javax.swing.GroupLayout(histogramPanel1);
+        histogramPanel1.setLayout(histogramPanel1Layout);
+        histogramPanel1Layout.setHorizontalGroup(
+            histogramPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 376, Short.MAX_VALUE)
+        );
+        histogramPanel1Layout.setVerticalGroup(
+            histogramPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 210, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame2Layout = new javax.swing.GroupLayout(jFrame2.getContentPane());
+        jFrame2.getContentPane().setLayout(jFrame2Layout);
+        jFrame2Layout.setHorizontalGroup(
+            jFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(histogramPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+        );
+        jFrame2Layout.setVerticalGroup(
+            jFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(histogramPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel22, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel22.text")); // NOI18N
+
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
+        jComboBox5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(366, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        plotsDrawingPanelBatchNumerical1.setPreferredSize(new java.awt.Dimension(500, 388));
+
+        javax.swing.GroupLayout plotsDrawingPanelBatchNumerical1Layout = new javax.swing.GroupLayout(plotsDrawingPanelBatchNumerical1);
+        plotsDrawingPanelBatchNumerical1.setLayout(plotsDrawingPanelBatchNumerical1Layout);
+        plotsDrawingPanelBatchNumerical1Layout.setHorizontalGroup(
+            plotsDrawingPanelBatchNumerical1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        plotsDrawingPanelBatchNumerical1Layout.setVerticalGroup(
+            plotsDrawingPanelBatchNumerical1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 388, Short.MAX_VALUE)
+        );
+
+        jScrollPane4.setViewportView(plotsDrawingPanelBatchNumerical1);
+
+        javax.swing.GroupLayout jFrame3Layout = new javax.swing.GroupLayout(jFrame3.getContentPane());
+        jFrame3.getContentPane().setLayout(jFrame3Layout);
+        jFrame3Layout.setHorizontalGroup(
+            jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane4)
+        );
+        jFrame3Layout.setVerticalGroup(
+            jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame3Layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4))
+        );
+
+        plotsDrawingPanelAuxiliary2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                plotsDrawingPanelAuxiliary2MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout plotsDrawingPanelAuxiliary2Layout = new javax.swing.GroupLayout(plotsDrawingPanelAuxiliary2);
+        plotsDrawingPanelAuxiliary2.setLayout(plotsDrawingPanelAuxiliary2Layout);
+        plotsDrawingPanelAuxiliary2Layout.setHorizontalGroup(
+            plotsDrawingPanelAuxiliary2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        plotsDrawingPanelAuxiliary2Layout.setVerticalGroup(
+            plotsDrawingPanelAuxiliary2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 320, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel5.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel23, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel23.text")); // NOI18N
+
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
+        jComboBox7.setSelectedIndex(1);
+        jComboBox7.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jComboBox7.toolTipText")); // NOI18N
+        jComboBox7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox7ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel24, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel24.text")); // NOI18N
+
+        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Relative", "Absolute" }));
+        jComboBox8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox8ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24)
+                    .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel23)
+                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(plotsDrawingPanelAuxiliary2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(plotsDrawingPanelAuxiliary2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jFrame4Layout = new javax.swing.GroupLayout(jFrame4.getContentPane());
+        jFrame4.getContentPane().setLayout(jFrame4Layout);
+        jFrame4Layout.setHorizontalGroup(
+            jFrame4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jFrame4Layout.setVerticalGroup(
+            jFrame4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout pairFrameLayout = new javax.swing.GroupLayout(pairFrame.getContentPane());
+        pairFrame.getContentPane().setLayout(pairFrameLayout);
+        pairFrameLayout.setHorizontalGroup(
+            pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pairComparisonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+        );
+        pairFrameLayout.setVerticalGroup(
+            pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pairComparisonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+        );
+
+        pairFrame.setSize(new Dimension(800,600));
+        pairFrame.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
+
+        alignmentFrame.getContentPane().setLayout(new java.awt.GridLayout(1, 0));
+
+        alignmentTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        alignmentTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        alignmentTable.getTableHeader().setResizingAllowed(false);
+        alignmentTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(alignmentTable);
+        alignmentTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (alignmentTable.getColumnModel().getColumnCount() > 0) {
+            alignmentTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title0")); // NOI18N
+            alignmentTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title1")); // NOI18N
+            alignmentTable.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title2")); // NOI18N
+            alignmentTable.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jTable1.columnModel.title3")); // NOI18N
+        }
+
+        alignmentFrame.getContentPane().add(jScrollPane3);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel2.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton3.text")); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jSlider1.setMajorTickSpacing(20);
+        jSlider1.setMinorTickSpacing(5);
+        jSlider1.setPaintLabels(true);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setValue(100);
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Root Mean Square", "Arithmetic Mean", "Geometric Mean", "Minimal Distance", "Maximal Distance", "Variance", "75 percentil" }));
+        jComboBox2.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jComboBox2.toolTipText")); // NOI18N
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel14.text")); // NOI18N
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Relative", "Absolute" }));
+        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox4ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel13.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel4.text")); // NOI18N
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(100, 0, 100, 1));
+        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner1StateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel3.text")); // NOI18N
+
+        VisualizationBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Color map", "Vectors", "Cross-sections" }));
+        VisualizationBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VisualizationBoxActionPerformed(evt);
+            }
+        });
+
+        density.setMajorTickSpacing(10);
+        density.setMinorTickSpacing(5);
+        density.setPaintLabels(true);
+        density.setPaintTicks(true);
+        density.setValue(10);
+        density.setVisible(false);
+        densLabel.setVisible(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(densLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.densLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(cylLengthLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.cylLengthLabel.text")); // NOI18N
+
+        cylLength.setMajorTickSpacing(1);
+        cylLength.setMaximum(10);
+        cylLength.setMinimum(1);
+        cylLength.setPaintLabels(true);
+        cylLength.setPaintTicks(true);
+        cylLength.setSnapToTicks(true);
+        cylLength.setValue(1);
+        cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
+
+        cylRadius.setMajorTickSpacing(1);
+        cylRadius.setMaximum(10);
+        cylRadius.setMinimum(1);
+        cylRadius.setPaintLabels(true);
+        cylRadius.setPaintTicks(true);
+        cylRadius.setValue(1);
+        cylRadius.setVisible(false);
+        cylRadiusLabel.setVisible(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(cylRadiusLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.cylRadiusLabel.text")); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox2, 0, 240, Short.MAX_VALUE)
+                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(densLabel)
+                .addGap(18, 18, 18)
+                .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(cylLengthLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cylRadiusLabel)
+                                .addGap(7, 7, 7)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(cylLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(1, 1, 1))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(VisualizationBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(density, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(densLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cylLengthLabel)
+                    .addComponent(cylLength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cylRadius, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cylRadiusLabel))
+                .addContainerGap())
+        );
+
+        jSlider2.setMajorTickSpacing(20);
+        jSlider2.setMinorTickSpacing(5);
+        jSlider2.setPaintLabels(true);
+        jSlider2.setPaintTicks(true);
+        jSlider2.setValue(0);
+        jSlider2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider2StateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel6.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(sizeLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.sizeLabel.text")); // NOI18N
+
+        sizeSlider.setMajorTickSpacing(20);
+        sizeSlider.setMaximum(50);
+        sizeSlider.setMinimum(10);
+        sizeSlider.setMinorTickSpacing(5);
+        sizeSlider.setPaintLabels(true);
+        sizeSlider.setPaintTicks(true);
+        sizeSlider.setValue(30);
+        sizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sizeSliderStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton6.text")); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(sizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(sizeLabel))
+                .addContainerGap())
+            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6))
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton7, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton7.text")); // NOI18N
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton8, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton8.text")); // NOI18N
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton9, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton9.text")); // NOI18N
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton10.text")); // NOI18N
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(heatplotButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.heatplotButton.text")); // NOI18N
+        heatplotButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                heatplotButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportDistToMeanButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportDistToMeanButton.text")); // NOI18N
+        exportDistToMeanButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportDistToMeanButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportSymetricResults, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportSymetricResults.text")); // NOI18N
+        exportSymetricResults.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportSymetricResultsActionPerformed(evt);
+            }
+        });
+
+        slicesPanel.setName(""); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel8.text")); // NOI18N
+
+        buttonGroup1.add(jRadioButton1);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton1.text")); // NOI18N
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton5);
+        jRadioButton5.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton5.text")); // NOI18N
+        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton5ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton6);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton6.text")); // NOI18N
+        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton6ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton7);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton7, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton7.text")); // NOI18N
+        jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton7ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel9.text")); // NOI18N
+        jLabel9.setEnabled(false);
+
+        normalSpinnerX.setModel(new javax.swing.SpinnerNumberModel(1.0f, null, null, 0.1f));
+        normalSpinnerX.setEnabled(false);
+        normalSpinnerX.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                normalSpinnerXStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel12.text")); // NOI18N
+        jLabel12.setEnabled(false);
+
+        normalSpinnerY.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
+        normalSpinnerY.setEnabled(false);
+        normalSpinnerY.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                normalSpinnerYStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel15.text")); // NOI18N
+        jLabel15.setEnabled(false);
+
+        normalSpinnerZ.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
+        normalSpinnerZ.setEnabled(false);
+        normalSpinnerZ.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                normalSpinnerZStateChanged(evt);
+            }
+        });
+
+        positionSpinnerZ.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.5f));
+        positionSpinnerZ.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                positionSpinnerZStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel16.text")); // NOI18N
+
+        positionSpinnerY.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.5f));
+        positionSpinnerY.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                positionSpinnerYStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel17.text")); // NOI18N
+
+        positionSpinnerX.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.5f));
+        positionSpinnerX.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                positionSpinnerXStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel18, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel18.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel19, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel19.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel20, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel20.text")); // NOI18N
+
+        jSlider3.setMajorTickSpacing(10);
+        jSlider3.setMinimum(10);
+        jSlider3.setMinorTickSpacing(5);
+        jSlider3.setPaintLabels(true);
+        jSlider3.setPaintTicks(true);
+        jSlider3.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jSlider3.toolTipText")); // NOI18N
+        jSlider2.setValue(10);
+        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider3StateChanged(evt);
+            }
+        });
+
+        jCheckBox3.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox3.text")); // NOI18N
+        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox3ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox5.text")); // NOI18N
+        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox5ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox4.text")); // NOI18N
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox6.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox6.text")); // NOI18N
+        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox6ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox1.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox1.text")); // NOI18N
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(densLabel2, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.densLabel2.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(densLabel1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.densLabel1.text")); // NOI18N
+
+        thickness.setMaximum(80);
+        thickness.setMinimum(10);
+        density.setVisible(false);
+        densLabel.setVisible(false);
+        thickness.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                thicknessStateChanged(evt);
+            }
+        });
+
+        colorPanel.setBackground(new java.awt.Color(255, 255, 255));
+        colorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        colorPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        colorPanel.setEnabled(false);
+        colorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorPanelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout colorPanelLayout = new javax.swing.GroupLayout(colorPanel);
+        colorPanel.setLayout(colorPanelLayout);
+        colorPanelLayout.setHorizontalGroup(
+            colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        colorPanelLayout.setVerticalGroup(
+            colorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout slicesPanelLayout = new javax.swing.GroupLayout(slicesPanel);
+        slicesPanel.setLayout(slicesPanelLayout);
+        slicesPanelLayout.setHorizontalGroup(
+            slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(slicesPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addComponent(densLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(thickness, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addComponent(densLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(normalSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(normalSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(normalSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(positionSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(positionSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(positionSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButton7)
+                                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                                        .addComponent(jRadioButton1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jRadioButton5)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jRadioButton6))))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox3)
+                                    .addComponent(jCheckBox1))
+                                .addGap(23, 23, 23)
+                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox5)
+                                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                                        .addComponent(jCheckBox6)
+                                        .addGap(41, 41, 41)
+                                        .addComponent(jCheckBox4)))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        slicesPanelLayout.setVerticalGroup(
+            slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(slicesPanelLayout.createSequentialGroup()
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jLabel8)
+                    .addComponent(jRadioButton5)
+                    .addComponent(jRadioButton6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(normalSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(normalSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(normalSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addGap(18, 18, 18)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(positionSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18)
+                    .addComponent(positionSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17)
+                    .addComponent(positionSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel20)
+                .addGap(2, 2, 2)
+                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(thickness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(densLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(densLabel2)
+                    .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox3)
+                    .addComponent(jCheckBox6)
+                    .addComponent(jCheckBox4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1)))
+        );
+
+        Hashtable<Integer, JLabel> labels =
+        new Hashtable<Integer, JLabel>();
+        labels.put(10, new JLabel("1"));
+        labels.put(20, new JLabel("2"));
+        labels.put(30, new JLabel("3"));
+        labels.put(40, new JLabel("4"));
+        labels.put(50, new JLabel("5"));
+        labels.put(60, new JLabel("6"));
+        labels.put(70, new JLabel("7"));
+        labels.put(80, new JLabel("8"));
+        labels.put(90, new JLabel("9"));
+        labels.put(100, new JLabel("10"));
+        jSlider3.setLabelTable(labels);
+
+        org.openide.awt.Mnemonics.setLocalizedText(comparisonButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.comparisonButton.text")); // NOI18N
+        comparisonButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comparisonButtonActionPerformed(evt);
+            }
+        });
+
+        histogram1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                histogram1MouseDragged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout histogram1Layout = new javax.swing.GroupLayout(histogram1);
+        histogram1.setLayout(histogram1Layout);
+        histogram1Layout.setHorizontalGroup(
+            histogram1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        histogram1Layout.setVerticalGroup(
+            histogram1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 163, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton12, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton12.text")); // NOI18N
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(selectionButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.selectionButton.text")); // NOI18N
+        selectionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectionButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton11, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton11.text")); // NOI18N
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rectangle", "Ellipse" }));
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
+
+        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
+        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox6ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel21, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel21.text")); // NOI18N
+
+        javax.swing.GroupLayout colormapPanelLayout = new javax.swing.GroupLayout(colormapPanel);
+        colormapPanel.setLayout(colormapPanelLayout);
+        colormapPanelLayout.setHorizontalGroup(
+            colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(colormapPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(colormapPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel21)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(colormapPanelLayout.createSequentialGroup()
+                        .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                    .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        colormapPanelLayout.setVerticalGroup(
+            colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(colormapPanelLayout.createSequentialGroup()
+                .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(histogram1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(selectionButton)
+                    .addComponent(jButton12)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
+
+        jButton11.setVisible(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(heatplotButton1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.heatplotButton1.text")); // NOI18N
+        heatplotButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                heatplotButton1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(alignResButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.alignResButton.text")); // NOI18N
+        alignResButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alignResButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(heatplotButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(colormapPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comparisonButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(slicesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exportSymetricResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exportDistToMeanButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(heatplotButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(alignResButton, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 26, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colormapPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(slicesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(comparisonButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(heatplotButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(heatplotButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportSymetricResults)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportDistToMeanButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(alignResButton)
+                .addGap(24, 24, 24)
+                .addComponent(jButton7)
+                .addGap(25, 25, 25))
+        );
+
+        jScrollPane2.setViewportView(jPanel3);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(result != null){
+            String[][] values = TableProcessing.instance().parseTable(result);
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    values,
+                    values[0]
+            ));
+        }
+        
+        TableProcessing.instance().setUpTable(jTable1, jFrame1, GUIController.getSelectedProjectTopComponent(), "Numerical results");
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+
+        if (!tresholdValueChanged) {
+            tresholdValueChanged = true;
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfTreshold(jSlider1.getValue());
+            jSpinner1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfTreshold());
+
+            setMaxValue();
+        }
+
+        /*HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
+        if (info != null) {
+            //        info.setThreshPecent(jSlider1.getValue() / (float) 100);
+        }*/
+        histogramPanel1.repaint();
+        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogram1.revalidate();
+        histogram1.repaint();
+        updateHistograms();
+
+    }//GEN-LAST:event_jSlider1StateChanged
+
+    private void sizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sizeSliderStateChanged
+        if (GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().getScaleEnabled()) {
+            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(sizeSlider.getValue() / (float) (30));
+            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFpSize(sizeSlider.getValue() / (float) (30));
+
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
+        } else {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
+            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFpSize(sizeSlider.getValue() * 3);
+        }
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setFpSize(sizeSlider.getValue());
+    }//GEN-LAST:event_sizeSliderStateChanged
+
+    private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider2StateChanged
+        if (GUIController.getSelectedProjectTopComponent() != null) {
+            if (GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo() != null) {
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setEnhance(jSlider2.getValue());
+            }
+            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setEnhance(jSlider2.getValue());
+            repaint();
+
+            if (GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison() != null) {
+                GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setFpDistance(jSlider2.getValue());
+            }
+        }
+    }//GEN-LAST:event_jSlider2StateChanged
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        colorDialog.setVisible(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        colorDialog.setVisible(false);
+        activeColorPanel.setBackground(jColorChooser1.getColor());
+
+        HDpaintingInfo hdp;
+
+        try {
+            hdp = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
+
+        } catch (NullPointerException ex) {
+            hdp = null;
+        }
+
+        //    horizontalGradient1.repaint();
+        histogramPanel1.repaint();
+        histogram1.repaint();
+
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * This method is help method for saving numerical result as table
+     *
+     * @param file results should be saved into this file
+     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        ResultExports.instance().exportCSVnumeric(tc, result);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * This method saves current visualisation shown in the panel after pushing
+     * saving button into a png file
+     *
+     * @param evt
+     */
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), 1920, 1920);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * This method is a help method for saving numerical results as database
+     *
+     * @param file database should be saved into the file
+     * @throws FileNotFoundException
+     */
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        JFileChooser chooser = new JFileChooser() {
+            @Override
+            public void approveSelection() {
+                File f = getSelectedFile();
+                if (f.exists() && getDialogType() == SAVE_DIALOG) {
+                    int result = JOptionPane.showConfirmDialog(this,
+                            "The file exists. Overwrite?", "Existing file",
+                            JOptionPane.YES_NO_CANCEL_OPTION);
+                    switch (result) {
+                        case JOptionPane.YES_OPTION:
+                            super.approveSelection();
+                            return;
+                        case JOptionPane.CANCEL_OPTION:
+                            cancelSelection();
+                            return;
+                        default:
+                            return;
+                    }
+                }
+                super.approveSelection();
+            }
+        };
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "TXT files", "txt");
+        chooser.setFileFilter(filter);
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setMultiSelectionEnabled(false);
+        int returnVal = chooser.showSaveDialog(GUIController.getSelectedProjectTopComponent());
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+            String path = chooser.getSelectedFile().getPath();
+            if (!(path.contains(".txt"))) {
+                path = path.concat(".txt");
+            }
+
+            try {
+                DatabaseWorker dfw = new DatabaseWorker();
+                try {
+                    dfw.convertTableToDatabase(result);
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(this, "Cannot be saved as database.");
+                    return;
+                }
+                dfw.sortDatabase(new File(path));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GUIController.getSelectedProjectTopComponent().getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setState(2);
+        GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setProcrustes(false);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().drawHD(false);
+
+        if (GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getAverageFace());
+
+        } else {
+            ModelLoader ml = new ModelLoader();
+            Model m = ml.loadModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModel(0), false, true);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
+                    GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getFacialPoints(m.getName())
+            );
+        }
+
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().rotationAndSizeRestart();
+
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        Runnable run = new Runnable() {
+
+            @Override
+            public void run() {
+                final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+                ResultExports.instance().saveAuxBatch(tc, tc.getProject().getSelectedBatchComparison().getModels(),
+                        tc.getProject().getSelectedBatchComparison().getHdVisualResults(),
+                        jComboBox4.getSelectedIndex() == 0,
+                        tc.getProject().getSelectedBatchComparison().getHdCSVresults().getPath());
+
+            }
+        };
+
+        Thread t = new Thread(run);
+        t.start();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        ResultExports.instance().saveAvgFace(tc, tc.getProject().getSelectedBatchComparison().getAverageFace(),
+                "_batch");
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        //GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setVariance(jComboBox2.getSelectedIndex());
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        if (!tresholdValueChanged) {
+            tresholdValueChanged = true;
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfTreshold(Integer.valueOf(jSpinner1.getValue().toString()));
+            jSlider1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfTreshold());
+
+            setMaxValue();
+        }
+
+        /*HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
+        if (info != null) {
+            //        info.setThreshPecent(jSlider1.getValue() / (float) 100);
+        }*/
+        histogramPanel1.repaint();
+        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogram1.revalidate();
+        histogram1.repaint();
+        updateHistograms();
+    }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void setMaxValue() {
+        float usedValues;
+        List<Float> list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getSortedHd();
+
+        int size = list.size();
+        int index = (int) (size * (jSlider1.getValue() / 100f));
+
+        if (index == 0) {
+            usedValues = list.get(0);
+        } else {
+            usedValues = list.get(index - 1);
+        }
+
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setThreshValue(usedValues);
+        tresholdValueChanged = false;
+    }
+
+    private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
+
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        Runnable run = new Runnable() {
+
+            @Override
+            public void run() {
+                ProgressHandle p;
+                List<Float> variance;
+                HDpaintingInfo info;
+                ArrayList<ArrayList<Float>> numResults;
+                List<Float> sortedHd;
+                List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
+                ArrayList<ArrayList<Float>> results = tc.getProject().getSelectedBatchComparison().getHdVisualResults();
+
+                p = ProgressHandleFactory.createHandle("Computing comparison...");
+                p.start();
+
+                if (results == null) {
+                    //TODO error
+                }
+
+                info = tc.getProject().getSelectedBatchComparison().getHDinfo();
+
+                if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+                    info.setvType(VisualizationType.COLORMAP);
+                }
+                if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+                    info.setvType(VisualizationType.VECTORS);
+                    info.setLenghtFactor(3.0f);
+                }
+
+                info.setDensity(density.getValue());
+                info.setCylLengthFactor(cylLength.getValue());
+                info.setCylRadius(cylRadius.getValue());
+                info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
+                info.setRecompute(true);
+
+                variance = SurfaceComparisonProcessing.instance().computeVariation(results, jComboBox2.getSelectedIndex(), jComboBox4.getSelectedIndex() == 0);
+                sortedHd = SortUtils.instance().sortValues(variance);
+                info.setDistance(variance);
+                info.setUseRelative(jComboBox4.getSelectedIndex() == 0);
+
+                numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(tc.getProject().getSelectedBatchComparison().getHdCSVresults(),
+                        jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
+                tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().
+                        batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels));
+                tc.getProject().getSelectedBatchComparison().setValuesTypeIndex(jComboBox4.getSelectedIndex());
+                tc.getProject().getSelectedBatchComparison().setMetricTypeIndex(jComboBox2.getSelectedIndex());
+                tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
+
+                p.finish();
+
+                if (GUIController.getSelectedProjectTopComponent() == tc) {
+                    GUIController.getConfigurationTopComponent().addBatchComparisonResults();
+                }
+                updateHistograms();
+            }
+        };
+
+        Thread t = new Thread(run);
+        t.start();
+    }//GEN-LAST:event_comparisonButtonActionPerformed
+
+    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox4ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        ResultExports.instance().saveRegisteredModelsBatch(tc, tc.getProject().getSelectedBatchComparison().getRegistrationResults(),
+                tc.getProject().getSelectedBatchComparison().getModels(), "_batch");
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
+         if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+            densLabel.setVisible(false);
+            density.setVisible(false);
+            cylLength.setVisible(false);
+            cylLengthLabel.setVisible(false);
+            cylRadius.setVisible(false);
+            cylRadiusLabel.setVisible(false);
+            colormapPanel.setVisible(true);
+
+        }
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.TRANSPARENCY.toString())) {
+            densLabel.setVisible(false);
+            density.setVisible(false);
+            cylLength.setVisible(false);
+            cylLengthLabel.setVisible(false);
+            cylRadius.setVisible(false);
+            cylRadiusLabel.setVisible(false);
+          
+        }
+
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+            densLabel.setVisible(true);
+            density.setVisible(true);
+            cylLength.setVisible(true);
+            cylLengthLabel.setVisible(true);
+            cylRadius.setVisible(true);
+            cylRadiusLabel.setVisible(true);
+        }
+        
+        setupVisualizationControls();
+        updateHistograms();
+    }//GEN-LAST:event_VisualizationBoxActionPerformed
+
+    private void setupVisualizationControls() {
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+            colormapPanel.setVisible(true);
+            slicesPanel.setVisible(false);
+            densLabel.setVisible(false);
+            density.setVisible(false);
+            if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
+                tc.getViewerPanel_Batch().sliceViewerVisible(false);
+            }
+            tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.COLORMAP);
+
+        }
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+            densLabel.setVisible(true);
+            density.setVisible(true);
+            colormapPanel.setVisible(false);
+            slicesPanel.setVisible(false);
+            if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
+                tc.getViewerPanel_Batch().sliceViewerVisible(false);
+            }
+            tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.VECTORS);
+
+        }
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.CROSSSECTION.toString())) {
+            densLabel.setVisible(false);
+            density.setVisible(false);
+            colormapPanel.setVisible(false);
+            slicesPanel.setVisible(true);
+
+            tc.getViewerPanel_Batch().getListener2().removeModel();
+            tc.getViewerPanel_Batch().sliceViewerVisible(true);
+            tc.getViewerPanel_Batch().getListener2().setSecondaryListener(true);
+            tc.getViewerPanel_Batch().getListener2().setHdInfo(tc.getProject().getSelectedBatchComparison().getHDinfo());
+            tc.getViewerPanel_Batch().getListener2().setPaintHD(true);
+            tc.getViewerPanel_Batch().getListener().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()));
+            Runnable run = new Runnable() {
+
+                @Override
+                public void run() {
+                    ModelLoader l = new ModelLoader();
+                    ArrayList<Model> models = new ArrayList<>();
+                    models.add(tc.getProject().getSelectedBatchComparison().getAverageFace());
+                    List<File> md = tc.getProject().getSelectedBatchComparison().getRegistrationResults().size() > 0 ? tc.getProject().getSelectedBatchComparison().getRegistrationResults() : tc.getProject().getSelectedBatchComparison().getModels();
+                    for (int i = 0; i < md.size(); i++) {
+                        Model m = l.loadModel(md.get(i), false, false);
+                        models.add(m);
+                    }
+                    tc.getViewerPanel_Batch().getListener2().setModels(models);
+                    tc.getViewerPanel_Batch().getListener().setPrimaryModel();
+                    tc.getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+
+                    tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.CROSSSECTION);
+
+                }
+            };
+
+            Thread t = new Thread(run);
+            t.start();
+
+        }
+    }
+
+    public void setPlaneNormal(Vector3f normal) {
+        normalSpinnerX.setValue(normal.x);
+        normalSpinnerY.setValue(normal.y);
+        normalSpinnerZ.setValue(normal.z);
+    }
+
+    public void setPlanePoint(Vector3f p) {
+        positionSpinnerX.setValue(p.x);
+        positionSpinnerY.setValue(p.y);
+        positionSpinnerZ.setValue(p.z);
+
+    }
+
+    private void setNormalControlsEnabled(boolean en) {
+        normalSpinnerX.setEnabled(en);
+        normalSpinnerY.setEnabled(en);
+        normalSpinnerZ.setEnabled(en);
+        jLabel9.setEnabled(en);
+        jLabel12.setEnabled(en);
+        jLabel13.setEnabled(en);
+    }
+
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        jFrame2.setSize(600, 400);
+        List<Float> f = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getDistance();
+        histogramPanel1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogramPanel1.setValues(f);
+
+        jFrame2.setVisible(true);
+        histogramPanel1.revalidate();
+        histogramPanel1.repaint();
+
+
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jFrame2ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jFrame2ComponentResized
+        histogramPanel1.revalidate();
+        histogramPanel1.repaint();
+    }//GEN-LAST:event_jFrame2ComponentResized
+
+    private void jFrame2ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jFrame2ComponentShown
+        histogramPanel1.revalidate();
+        histogramPanel1.repaint();
+    }//GEN-LAST:event_jFrame2ComponentShown
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().clearSelection();
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void selectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionButtonActionPerformed
+        if (jComboBox3.getSelectedItem().equals(SelectionType.RECTANGLE.toString())) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.RECTANGLE);
+        }
+        if (jComboBox3.getSelectedItem().equals(SelectionType.ELLIPSE.toString())) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.ELLIPSE);
+        }
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setSelection(selectionButton.isSelected());
+    }//GEN-LAST:event_selectionButtonActionPerformed
+
+    private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
+        if (result != null) {
+
+            int n = result.split("\n").length;
+            String[][] valuesString = new String[n][n];
+            for (int i = 0; i < n; i++) {
+                valuesString[i] = result.split("\n")[i].split(";");
+            }
+            float values[][] = new float[n][n];
+            for (int i = 1; i < n; i++) {
+                values[n - 1][i] = i;
+                values[i][n - 1] = i;
+                for (int j = 1; j < n; j++) {
+                    values[j - 1][i - 1] = Float.valueOf(valuesString[i][j]);
+                }
+
+            }
+
+            plotsDrawingPanelBatchNumerical1.setValues(values);
+            String names[] = new String[GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels().size()];
+            int i = 0;
+            for (File f : GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels()) {
+                names[i] = f.getName();
+                i++;
+            }
+            plotsDrawingPanelBatchNumerical1.setModelNames(names);
+            
+
+            plotsDrawingPanelBatchNumerical1.repaint();
+            jFrame3.setTitle("Numerical results");
+            Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
+            jFrame3.setIconImage(icon);
+            jFrame3.setVisible(true);
+            jFrame3.setSize(500, 500);
+            jFrame3.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
+            plotsDrawingPanelBatchNumerical1.revalidate();
+            plotsDrawingPanelBatchNumerical1.repaint();
+
+        }
+    }//GEN-LAST:event_heatplotButtonActionPerformed
+
+    private void exportDistToMeanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDistToMeanButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        ResultExports.instance().exportCSVnumeric(tc, tc.getProject().getSelectedBatchComparison().getDistanceToMeanConfiguration());
+    }//GEN-LAST:event_exportDistToMeanButtonActionPerformed
+
+    private void exportSymetricResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportSymetricResultsActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        ResultExports.instance().exportSymetricRes(tc, tc.getProject().getSelectedBatchComparison().getNumericalResults(),
+                jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels());
+    }//GEN-LAST:event_exportSymetricResultsActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        setNormalControlsEnabled(false);
+        normalSpinnerX.setValue(0f);
+        normalSpinnerY.setValue(0f);
+        normalSpinnerZ.setValue(1f);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f(0f, 0f, 1f), true);
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+        setNormalControlsEnabled(false);
+        normalSpinnerX.setValue(1f);
+        normalSpinnerY.setValue(0f);
+        normalSpinnerZ.setValue(0f);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f(1f, 0f, 0f), true);
+    }//GEN-LAST:event_jRadioButton5ActionPerformed
+
+    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+        setNormalControlsEnabled(false);
+        normalSpinnerX.setValue(0f);
+        normalSpinnerY.setValue(1f);
+        normalSpinnerZ.setValue(0f);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f(0f, 1f, 0f), true);
+    }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
+        if (jRadioButton7.isSelected()) {
+            setNormalControlsEnabled(true);
+        }
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+    }//GEN-LAST:event_jRadioButton7ActionPerformed
+
+    private void normalSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerXStateChanged
+        if (normalSpinnerX.isEnabled()&&!valuesModified ) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+        }
+    }//GEN-LAST:event_normalSpinnerXStateChanged
+
+    private void normalSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerYStateChanged
+        if (normalSpinnerY.isEnabled()&&!valuesModified ) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+        }
+    }//GEN-LAST:event_normalSpinnerYStateChanged
+
+    private void normalSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerZStateChanged
+        if (normalSpinnerZ.isEnabled()&&!valuesModified ) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+        }
+    }//GEN-LAST:event_normalSpinnerZStateChanged
+
+    private void positionSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerZStateChanged
+        if (!valuesModified) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
+        }
+    }//GEN-LAST:event_positionSpinnerZStateChanged
+
+    private void positionSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerYStateChanged
+        if (!valuesModified) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
+        }
+    }//GEN-LAST:event_positionSpinnerYStateChanged
+
+    private void positionSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerXStateChanged
+        if (!valuesModified) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
+        }
+    }//GEN-LAST:event_positionSpinnerXStateChanged
+
+    private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setVectroScale(jSlider3.getValue() / (float) 10);
+    }//GEN-LAST:event_jSlider3StateChanged
+
+    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setHighlightCuts(jCheckBox3.isSelected());
+    }//GEN-LAST:event_jCheckBox3ActionPerformed
+
+    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowSamplingRays(jCheckBox5.isSelected());
+    }//GEN-LAST:event_jCheckBox5ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowAllCuts(jCheckBox4.isSelected());
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowVectors(jCheckBox6.isSelected());
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setShowPlane(jCheckBox1.isSelected());
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void heatplotButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButton1ActionPerformed
+        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        jComboBox1.removeAllItems();
+        jComboBox1.addItem("Average face");
+        for (int i = 0; i < bc.getModels().size(); i++) {
+            jComboBox1.addItem(bc.getModels().get(i).getName());
+        }
+        ArrayList<ArrayList<Float>> res = new ArrayList<ArrayList<Float>>();
+        if (jComboBox1.getSelectedIndex() == 0) {
+            res = bc.getHdVisualResults();
+        } else {
+            res = FileUtils.instance().readFolderWithCSV(bc.getHdCSVresults().getPath() + File.separator + (jComboBox1.getSelectedIndex()), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, true);
+        }
+
+        float values[][] = new float[res.size()][res.get(0).size()];
+        for (int i = 0; i < res.size(); i++) {
+            for (int j = 0; j < res.get(0).size(); j++) {
+                values[i][j] = res.get(i).get(j);
+            }
+
+        }
+
+        String names[] = new String[GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels().size()];
+        int i = 0;
+        for (File f : GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels()) {
+            names[i] = f.getName();
+            i++;
+        }
+        plotsDrawingPanelAuxiliary2.setNames(names);
+        plotsDrawingPanelAuxiliary2.setValues(values);
+
+        plotsDrawingPanelAuxiliary2.repaint();
+        jFrame4.setTitle("Auxiliary results");
+        Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
+        jFrame4.setIconImage(icon);
+        jFrame4.setVisible(true);
+        jFrame4.setSize(1000, 500);
+        jFrame4.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
+        plotsDrawingPanelAuxiliary2.revalidate();
+        plotsDrawingPanelAuxiliary2.repaint();
+
+
+    }//GEN-LAST:event_heatplotButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        ArrayList<ArrayList<Float>> res = new ArrayList<ArrayList<Float>>();
+        if (jComboBox1.getSelectedIndex() == 0) {
+            res = bc.getHdVisualResults();
+        } else {
+            res = FileUtils.instance().readFolderWithCSV(bc.getHdCSVresults().getPath() + File.separator + (jComboBox1.getSelectedIndex()), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, true);
+        }
+
+        float values[][] = new float[res.size()][res.get(0).size()];
+        for (int i = 0; i < res.size(); i++) {
+            for (int j = 0; j < res.get(0).size(); j++) {
+                values[i][j] = res.get(i).get(j);
+            }
+
+        }
+
+        plotsDrawingPanelAuxiliary2.setValues(values);
+        plotsDrawingPanelAuxiliary2.revalidate();
+        plotsDrawingPanelAuxiliary2.repaint();
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void plotsDrawingPanelAuxiliary2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_plotsDrawingPanelAuxiliary2MouseClicked
+        final BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        plotsDrawingPanelAuxiliary2.mouseClicked(evt);
+        System.out.println();
+        if (plotsDrawingPanelAuxiliary2.getSelectedModelIndex() > -1 && plotsDrawingPanelAuxiliary2.getSelectedModelIndex() < bc.getModels().size()) {
+            pairFrame.setVisible(true);
+            pairComparisonPanel.clear();
+            Runnable run = new Runnable() {
+                @Override
+                public void run() {
+                    String model2 = bc.getModels().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName();
+                    String model1 = jComboBox1.getSelectedIndex() == 0 ? "Average" : bc.getModels().get(jComboBox1.getSelectedIndex() - 1).getName();
+                    pairFrame.setTitle(model1 + " vs. " + model2);
+                    ModelLoader ml = new ModelLoader();
+                    pairComparisonPanel.getListener().removeModel();
+                    List<File> models;
+                    if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
+                        models = bc.getModels();
+                    } else {
+                        models = bc.getRegistrationResults();
+                    }
+                    Model primary;
+                    List<Float> values;
+                    if (jComboBox1.getSelectedIndex() == 0) {
+                        primary = bc.getAverageFace();
+                        values = bc.getHdVisualResults().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex());
+                    } else {
+                        primary = ml.loadModel(models.get(jComboBox1.getSelectedIndex() - 1), false, false);
+                        values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, plotsDrawingPanelAuxiliary2.getSelectedModelIndex(), true);
+                    }
+                    pairComparisonPanel.getListener().addModel(primary);
+                    pairComparisonPanel.getListener().addModel(ml.loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
+
+                    HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
+                    HDpainting hdp = new HDpainting(info);
+                    pairComparisonPanel.getListener().setHdPaint(hdp);
+                    pairComparisonPanel.getListener().setHdInfo(info);
+                    pairComparisonPanel.setInfo(hdp);
+                    pairComparisonPanel.getListener().setPaintHD(true);
+                    pairFrame.setVisible(true);
+                }
+
+            };
+
+            Thread t = new Thread(run);
+            t.start();
+
+        }
+    }//GEN-LAST:event_plotsDrawingPanelAuxiliary2MouseClicked
+
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+        if (jComboBox3.getSelectedItem().equals(SelectionType.RECTANGLE.toString())) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.RECTANGLE);
+        }
+        if (jComboBox3.getSelectedItem().equals(SelectionType.ELLIPSE.toString())) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.ELLIPSE);
+        }
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+
+    private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
+        List<Float> l = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getSortedHd();
+        int count = 0;
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i) < GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getThreshValue()) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        float percent = count / (float) l.size();
+        jSlider1.setValue((int) (percent * 100));
+    }//GEN-LAST:event_histogram1MouseDragged
+
+    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
+        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        bc.getHDP().getInfo().setColorScheme(ColorScheme.values()[jComboBox6.getSelectedIndex()]);
+    }//GEN-LAST:event_jComboBox6ActionPerformed
+
+    private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
+        plotsDrawingPanelBatchNumerical1.setScheme(ColorScheme.values()[jComboBox5.getSelectedIndex()]);
+        plotsDrawingPanelBatchNumerical1.repaint();
+    }//GEN-LAST:event_jComboBox5ActionPerformed
+
+    private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
+        plotsDrawingPanelAuxiliary2.setScheme(ColorScheme.values()[jComboBox7.getSelectedIndex()]);
+        plotsDrawingPanelAuxiliary2.resetValues();
+        plotsDrawingPanelAuxiliary2.repaint();
+    }//GEN-LAST:event_jComboBox7ActionPerformed
+
+    private void jComboBox8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox8ActionPerformed
+        plotsDrawingPanelAuxiliary2.setAbsolute(jComboBox8.getSelectedIndex() == 1);
+        plotsDrawingPanelAuxiliary2.resetValues();
+        plotsDrawingPanelAuxiliary2.repaint();
+    }//GEN-LAST:event_jComboBox8ActionPerformed
+
+    private void alignResButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alignResButtonActionPerformed
+     BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+     String[][] values = TableProcessing.instance().alignmentInfoTable(bc.getIcpMetric(), bc.getScaleEnabled(), bc.getICPerrorRate(),
+             bc.getICPmaxIteration(), bc.getICPnumberOfHeads(), bc.getModel(bc.getTemplateIndex()).getName(), Methods.values()[bc.getMethod()],
+             Type.values()[bc.getType()], bc.getValue());
+     
+     alignmentTable.setModel(new javax.swing.table.DefaultTableModel(
+                    values,
+                    values[0]
+            ));
+     
+     TableProcessing.instance().setUpTable(alignmentTable, alignmentFrame, GUIController.getSelectedProjectTopComponent(), "Alignment parameters");
+    }//GEN-LAST:event_alignResButtonActionPerformed
+
+    private void thicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_thicknessStateChanged
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setCutThickness(thickness.getValue()/10f);
+    }//GEN-LAST:event_thicknessStateChanged
+
+    private void colorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorPanelMouseClicked
+        activeColorPanel = colorPanel;
+        jColorChooser1.setColor(colorPanel.getBackground());
+        colorDialog.setVisible(true);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setColorOfCuts(colorPanel.getBackground().getRGBColorComponents(new float[3]));
+
+    }//GEN-LAST:event_colorPanelMouseClicked
+
+    public histogramPanel getHistogram() {
+        return histogram1;
+    }
+
+    public void setConfiguration() {
+        jSpinner1.setVisible(false);
+        jSlider1.setVisible(false);
+        jLabel14.setVisible(false);
+        BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+
+        thickness.setValue(10);
+        jSlider1.setValue(c.getHausdorfTreshold());
+        jSpinner1.setValue(c.getHausdorfTreshold());
+        jComboBox2.setSelectedIndex(c.getMetricTypeIndex());
+        jComboBox4.setSelectedIndex(c.getValuesTypeIndex());
+
+        updateHistograms();
+
+        if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().sliceViewerVisible(false);
+            showProcrustesControls();
+        }
+        if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
+                || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
+
+            showHausdorfControls();
+
+            if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV) {
+                jLabel13.setVisible(false);
+                jComboBox4.setVisible(false);
+            }
+
+        }
+        
+        if(c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF){
+            alignResButton.setVisible(true);
+        }else{
+            alignResButton.setVisible(false);
+        }
+        result = c.getNumericalResults();
+    }
+
+    public void setValuesModified(boolean valuesModified) {
+        this.valuesModified = valuesModified;
+    }
+    
+    
+
+    public void updateHistograms() {
+        HDpaintingInfo hdp = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
+
+        if (hdp == null) {
+            return;
+        }
+
+        List<Float> f = hdp.getDistance();
+        histogramPanel1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogramPanel1.recomputeSliderPosition();
+        histogramPanel1.setValues(f);
+        histogramPanel1.validate();
+
+        // histogramPanel1.repaint();
+        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogram1.setValues(f);
+        histogram1.recomputeSliderPosition();
+        histogram1.validate();
+
+        //    histogramPanel2.repaint();
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox VisualizationBox;
+    private javax.swing.JButton alignResButton;
+    private javax.swing.JFrame alignmentFrame;
+    private javax.swing.JTable alignmentTable;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JDialog colorDialog;
+    private javax.swing.JPanel colorPanel;
+    private javax.swing.JPanel colormapPanel;
+    private javax.swing.JButton comparisonButton;
+    private javax.swing.JSlider cylLength;
+    private javax.swing.JLabel cylLengthLabel;
+    private javax.swing.JSlider cylRadius;
+    private javax.swing.JLabel cylRadiusLabel;
+    private javax.swing.JLabel densLabel;
+    private javax.swing.JLabel densLabel1;
+    private javax.swing.JLabel densLabel2;
+    private javax.swing.JSlider density;
+    private javax.swing.JButton exportDistToMeanButton;
+    private javax.swing.JButton exportSymetricResults;
+    private javax.swing.JButton heatplotButton;
+    private javax.swing.JButton heatplotButton1;
+    private cz.fidentis.visualisation.histogram.histogramPanel histogram1;
+    private cz.fidentis.visualisation.histogram.histogramPanel histogramPanel1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JColorChooser jColorChooser1;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
+    private javax.swing.JComboBox jComboBox4;
+    private javax.swing.JComboBox jComboBox5;
+    private javax.swing.JComboBox jComboBox6;
+    private javax.swing.JComboBox jComboBox7;
+    private javax.swing.JComboBox jComboBox8;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JFrame jFrame2;
+    private javax.swing.JFrame jFrame3;
+    private javax.swing.JFrame jFrame4;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JRadioButton jRadioButton7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSlider jSlider1;
+    private javax.swing.JSlider jSlider2;
+    private javax.swing.JSlider jSlider3;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JSpinner normalSpinnerX;
+    private javax.swing.JSpinner normalSpinnerY;
+    private javax.swing.JSpinner normalSpinnerZ;
+    private cz.fidentis.gui.PairComparisonPanel pairComparisonPanel;
+    private javax.swing.JFrame pairFrame;
+    private cz.fidentis.gui.PlotsDrawingPanelAuxiliary plotsDrawingPanelAuxiliary2;
+    private cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical plotsDrawingPanelBatchNumerical1;
+    private javax.swing.JSpinner positionSpinnerX;
+    private javax.swing.JSpinner positionSpinnerY;
+    private javax.swing.JSpinner positionSpinnerZ;
+    private javax.swing.JToggleButton selectionButton;
+    private javax.swing.JLabel sizeLabel;
+    private javax.swing.JSlider sizeSlider;
+    private javax.swing.JPanel slicesPanel;
+    private javax.swing.JSlider thickness;
+    // End of variables declaration//GEN-END:variables
+
+
+}

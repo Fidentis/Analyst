@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.fidentis.libraries
+OpenIDE-Module-Localizing-Bundle: cz/fidentis/libraries/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

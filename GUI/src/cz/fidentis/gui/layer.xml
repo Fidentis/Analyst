@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <file name="Edit_hidden"/>
+        <file name="File_hidden"/>
+        <file name="Help_hidden"/>
+        <file name="Profile_hidden"/>
+        <file name="System_hidden"/>
+        <file name="Tools_hidden"/>
+        <file name="View_hidden"/>
+        <file name="Window_hidden"/>
+    </folder>
+    <folder name="Menu">
+        <file name="Edit_hidden"/>
+        <folder name="File">
+            <file name="Separator2.instance_hidden"/>
+            <file name="Separator3.instance_hidden"/>
+            <file name="Separator4.instance_hidden"/>
+            <file name="org-netbeans-core-actions-SystemExit.shadow_hidden"/>
+            <file name="org-netbeans-modules-print-action-PageSetupAction.shadow_hidden"/>
+            <file name="org-netbeans-modules-print-action-PrintAction.shadow_hidden"/>
+            <file name="org-openide-actions-SaveAction.shadow_hidden"/>
+            <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
+            <file name="org-openide-actions-SaveAsAction.shadow_hidden"/>
+        </folder>
+        <file name="GoTo_hidden"/>
+        <file name="Help_hidden"/>
+        <file name="Tools_hidden"/>
+        <file name="View_hidden"/>
+        <file name="Window_hidden"/>
+        <folder name="Options">
+        </folder>
+    </folder>
+    <folder name="Toolbars">
+        <file name="Clipboard_hidden"/>
+        <file name="File_hidden"/>
+        <file name="Memory_hidden"/>
+        <file name="UndoRedo_hidden"/>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Modes">
+            <file name="editor.wsmode" url="editorWsmode.xml"/>
+            <file name="explorer.wsmode_hidden"/>
+            <file name="navigator.wsmode" url="navigatorWsmode.xml"/>
+            <file name="properties.wsmode" url="propertiesWsmode.xml"/>
+            <file name="rightSlidingSide.wsmode" url="rightSlidingSideWsmode.xml"/>
+        </folder>
+    </folder>
+    <folder name="xml">
+        <folder name="memory">
+            <folder name="cz">
+                <folder name="fidentis">
+                    <folder name="gui"/>
+                </folder>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

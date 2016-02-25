@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: cz.fidentis.merging
+OpenIDE-Module-Localizing-Bundle: cz/fidentis/merging/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

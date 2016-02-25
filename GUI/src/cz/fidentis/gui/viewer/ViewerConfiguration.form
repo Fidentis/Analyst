@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="jScrollPane1" alignment="0" pref="203" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="jScrollPane1" alignment="0" pref="229" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanel1">
+          <Properties>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[150, 180]"/>
+            </Property>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane2" pref="181" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jSpinner1" max="32767" attributes="0"/>
+                                          <Component id="jComboBox1" pref="87" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" pref="95" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="14" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cz/fidentis/gui/viewer/Bundle.properties" key="ViewerConfiguration.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cz/fidentis/gui/viewer/Bundle.properties" key="ViewerConfiguration.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBox1">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="-"/>
+                    <StringItem index="1" value="male"/>
+                    <StringItem index="2" value="female"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel1">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cz/fidentis/gui/viewer/Bundle.properties" key="ViewerConfiguration.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSpinner" name="jSpinner1">
+              <Properties>
+                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                  <SpinnerModel type="list">
+                    <ListItem value="-"/>
+                    <ListItem value="0"/>
+                    <ListItem value="1"/>
+                    <ListItem value="2"/>
+                    <ListItem value="3"/>
+                    <ListItem value="4"/>
+                    <ListItem value="5"/>
+                    <ListItem value="6"/>
+                    <ListItem value="7"/>
+                    <ListItem value="8"/>
+                    <ListItem value="9"/>
+                    <ListItem value="10"/>
+                    <ListItem value="11"/>
+                    <ListItem value="12"/>
+                    <ListItem value="13"/>
+                    <ListItem value="14"/>
+                    <ListItem value="15"/>
+                    <ListItem value="16"/>
+                    <ListItem value="17"/>
+                    <ListItem value="18"/>
+                    <ListItem value="19"/>
+                    <ListItem value="20"/>
+                    <ListItem value="21"/>
+                    <ListItem value="22"/>
+                    <ListItem value="23"/>
+                    <ListItem value="24"/>
+                    <ListItem value="25"/>
+                    <ListItem value="26"/>
+                    <ListItem value="27"/>
+                    <ListItem value="28"/>
+                    <ListItem value="29"/>
+                    <ListItem value="30"/>
+                    <ListItem value="31"/>
+                    <ListItem value="32"/>
+                    <ListItem value="33"/>
+                    <ListItem value="34"/>
+                    <ListItem value="35"/>
+                    <ListItem value="36"/>
+                    <ListItem value="37"/>
+                    <ListItem value="38"/>
+                    <ListItem value="39"/>
+                    <ListItem value="40"/>
+                    <ListItem value="41"/>
+                    <ListItem value="42"/>
+                    <ListItem value="43"/>
+                    <ListItem value="44"/>
+                    <ListItem value="45"/>
+                    <ListItem value="46"/>
+                    <ListItem value="47"/>
+                    <ListItem value="48"/>
+                    <ListItem value="49"/>
+                    <ListItem value="50"/>
+                    <ListItem value="51"/>
+                    <ListItem value="52"/>
+                    <ListItem value="53"/>
+                    <ListItem value="54"/>
+                    <ListItem value="55"/>
+                    <ListItem value="56"/>
+                    <ListItem value="57"/>
+                    <ListItem value="58"/>
+                    <ListItem value="59"/>
+                    <ListItem value="60"/>
+                    <ListItem value="61"/>
+                    <ListItem value="62"/>
+                    <ListItem value="63"/>
+                    <ListItem value="64"/>
+                    <ListItem value="65"/>
+                    <ListItem value="66"/>
+                    <ListItem value="67"/>
+                    <ListItem value="68"/>
+                    <ListItem value="69"/>
+                    <ListItem value="70"/>
+                    <ListItem value="71"/>
+                    <ListItem value="72"/>
+                    <ListItem value="73"/>
+                    <ListItem value="74"/>
+                    <ListItem value="75"/>
+                    <ListItem value="76"/>
+                    <ListItem value="77"/>
+                    <ListItem value="78"/>
+                    <ListItem value="79"/>
+                    <ListItem value="80"/>
+                    <ListItem value="81"/>
+                    <ListItem value="82"/>
+                    <ListItem value="83"/>
+                    <ListItem value="84"/>
+                    <ListItem value="85"/>
+                    <ListItem value="86"/>
+                    <ListItem value="87"/>
+                    <ListItem value="88"/>
+                    <ListItem value="89"/>
+                    <ListItem value="90"/>
+                    <ListItem value="91"/>
+                    <ListItem value="92"/>
+                    <ListItem value="93"/>
+                    <ListItem value="94"/>
+                    <ListItem value="95"/>
+                    <ListItem value="96"/>
+                    <ListItem value="97"/>
+                    <ListItem value="98"/>
+                    <ListItem value="99"/>
+                    <ListItem value="100"/>
+                  </SpinnerModel>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel4">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cz/fidentis/gui/viewer/Bundle.properties" key="ViewerConfiguration.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="jTextArea1">
+                  <Properties>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="rows" type="int" value="5"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

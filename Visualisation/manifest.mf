@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.fidentis.visualisation
+OpenIDE-Module-Localizing-Bundle: cz/fidentis/visualisation/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

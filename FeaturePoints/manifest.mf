@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.fidentis.featurepoints
+OpenIDE-Module-Localizing-Bundle: cz/fidentis/featurepoints/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
