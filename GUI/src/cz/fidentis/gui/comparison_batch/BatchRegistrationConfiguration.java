@@ -991,8 +991,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         jButton1.setEnabled(true);
                     }
 
-                    p.finish();
-
                 } else if (jComboBox6.getSelectedIndex() == 0) {
                     int size = tc.getProject().getSelectedBatchComparison().getModels().size();
                     p.start(size);
@@ -1066,6 +1064,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 if (jCheckBox10.isSelected()) {
                     GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().computeComparison(tc);
                 }
+                p.finish();
                 GUIController.updateNavigator();
             }
         };
