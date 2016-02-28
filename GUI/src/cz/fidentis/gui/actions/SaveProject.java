@@ -754,6 +754,8 @@ public final class SaveProject implements ActionListener {
             }
             final File outFile = selected;
             final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+            tc.setDisplayName(outFile.getName());
+            tc.getProject().setName(outFile.getName());
             
             Runnable r = new Runnable() {
                 @Override
