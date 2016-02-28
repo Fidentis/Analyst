@@ -337,10 +337,9 @@ public final class ProjectTopComponent extends TopComponent {
         super.componentActivated();
         if (GUIController.getSelectedProjectTopComponent() != this) {
             GUIController.setSelectedProjectTopComponent(this);
-            this.showComponents(); 
+            this.showComponents();
         }
-            GUIController.updateSelectedComponent();
-            GUIController.getNavigatorTopComponent().clearSelectionIfNeeded(this);
-     
+        GUIController.updateSelectedComponent();
+        GUIController.getNavigatorTopComponent().clearSelectionIfNeeded(this);
     }
 }

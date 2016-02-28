@@ -308,7 +308,6 @@ public final class NavigatorTopComponent extends TopComponent {
             tree.getRoot().addChild(Controller.getProjects().get(i).getTree().getRoot());
         }
 
-        jTree1.addTreeSelectionListener(tsl);
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(tree.getRoot().getName());
         TreeModel m = new DefaultTreeModel(processNodes(root, tree.getRoot()));
         jTree1.setModel(m);
