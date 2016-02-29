@@ -161,6 +161,8 @@ public final class OpenProject implements ActionListener {
     }
     
     private void updateGui(ProjectTopComponent ntc, Project p) {
+        GUIController.getBlankProject(); // create panel for new project
+        
         ntc.setProject(p);
         ntc.setName(String.valueOf(GUIController.getProjects().size()));
         ntc.setDisplayName(p.getName());
@@ -212,17 +214,6 @@ public final class OpenProject implements ActionListener {
                 }
             }
             ntc.show2FacesViewer();
-            switch (comparison2f.getState()) {
-                case 1:
-                    ctc.addRegistrationComponent();
-                    break;
-                case 2:
-                    ctc.addComparisonComponent();
-                    break;
-                case 3:
-                    ctc.addPairComparisonResults();
-                    break;
-            }
         }
         if (p.getSelectedOneToManyComparison() != null) {
             OneToManyComparison comparison1N = p.getSelectedOneToManyComparison();
@@ -248,17 +239,6 @@ public final class OpenProject implements ActionListener {
                 }
             }
             ntc.show1toNViewer();
-            switch (comparison1N.getState()) {
-                case 1:
-                    ctc.addOneToManyRegistrationComponent();
-                    break;
-                case 2:
-                    ctc.addOneToManyComparisonComponent();
-                    break;
-                case 3:
-                    ctc.addOneToManyComparisonResults();
-                    break;
-            }
         }
         if (p.getSelectedBatchComparison() != null) {
             BatchComparison comparison = p.getSelectedBatchComparison();
@@ -278,21 +258,9 @@ public final class OpenProject implements ActionListener {
                 }
             }
             ntc.showBatchViewer();
-            switch (comparison.getState()) {
-                case 1:
-                    ctc.addBatchRegistrationComponent();
-                    break;
-                case 2:
-                    ctc.addBatchComparisonComponent();
-                    break;
-                case 3:
-                    ctc.addBatchComparisonResults();
-                    break;
-            }
         }
-        GUIController.getBlankProject(); // create panel for new project
-        ntc.requestActive();
         GUIController.updateNavigator();
+        ntc.requestActive();
     }
 
     private void createComposite(Element projectE, ProjectTopComponent tc) {
@@ -1121,8 +1089,9 @@ public final class OpenProject implements ActionListener {
                     } catch (IOException | ParserConfigurationException | SAXException ex) {
                         JOptionPane.showMessageDialog(null, "Failed to open project");
                         ex.printStackTrace();
+                    } finally {
+                        p.finish();
                     }
-                    p.finish();
                 }
             };
             Thread t = new Thread(r);
