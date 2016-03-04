@@ -374,29 +374,25 @@ public class Icp {
      * @param scale - whether scale was used
      */
     public void reverseAllTransformations(List<ICPTransformation> trans, List<Vector3f> verticies, boolean scale){
-        for(int i = trans.size() - 1; i >= 0; i--){
+        /*for(int i = trans.size() - 1; i >= 0; i--){
             reverseTransformations(trans.get(i), verticies, scale);
-        }
-        
-        /*Matrix tran = createTransformationMat(trans, scale);
-        Matrix inv = tran.inverse();
-        
-        for(Vector3f v : verticies){
-           Matrix p = MathUtils.instance().pointToMatrix(v);
-           
-           p = inv.times(p.transpose());
-           
-           v.setX((float) p.get(0,0));
-           v.setY((float) p.get(1,0));
-           v.setZ((float) p.get(2,0));
         }*/
+        
+        ICPTransformation finalTrans = createFinalTrans(trans, scale);
+        reverseTransformations(finalTrans, verticies, scale);
     }
     
-    public Matrix createTransformationMat(List<ICPTransformation> trans, boolean scale){
+    /**
+     * Create final transformation combining all transformations in the list.
+     * 
+     * @param trans - transformations to combine
+     * @param scale - whether scale was used
+     * @return final transformation combining all listed transformations
+     */
+    public ICPTransformation createFinalTrans(List<ICPTransformation> trans, boolean scale){
         float s = 1f;
         Vector3f t = new Vector3f();
         Quaternion r = new Quaternion(0,0,0,1);
-        Matrix sm = null, tm = null, rm = null;
         
         for(ICPTransformation tran : trans){
             if(scale)
@@ -405,21 +401,9 @@ public class Icp {
             t.add(tran.getTranslation());            
             
             Quaternion q = tran.getRotation();
-            //q = new Quaternion(q.getW(), q.getX(), q.getY(), q.getZ());
             r.mult(q);
         }
         
-        if(scale){
-            sm = MathUtils.instance().scaleMatrix(s);
-        }
-        
-        tm = MathUtils.instance().transMatrix(t);
-        rm = MathUtils.instance().quaternionToMatrix(r);
-            
-        if(scale){
-            return rm;
-        }
-        
-        return rm.times(tm);
+        return new ICPTransformation(t, s, r, 0.0f);
     }
 }
