@@ -1394,15 +1394,15 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(result != null){
+        if (result != null) {
             String[][] values = TableProcessing.instance().parseTable(result);
-            
+
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                     values,
                     values[0]
             ));
         }
-        
+
         TableProcessing.instance().setUpTable(jTable1, jFrame1, GUIController.getSelectedProjectTopComponent(), "Numerical results");
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1666,45 +1666,49 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 p = ProgressHandleFactory.createHandle("Computing comparison...");
                 p.start();
 
-                if (results == null) {
-                    //TODO error
+                try {
+                    if (results == null) {
+                        //TODO error
+                    }
+
+                    info = tc.getProject().getSelectedBatchComparison().getHDinfo();
+
+                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+                        info.setvType(VisualizationType.COLORMAP);
+                    }
+                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+                        info.setvType(VisualizationType.VECTORS);
+                        info.setLenghtFactor(3.0f);
+                    }
+
+                    info.setDensity(density.getValue());
+                    info.setCylLengthFactor(cylLength.getValue());
+                    info.setCylRadius(cylRadius.getValue());
+                    info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
+                    info.setRecompute(true);
+
+                    variance = SurfaceComparisonProcessing.instance().computeVariation(results, jComboBox2.getSelectedIndex(), jComboBox4.getSelectedIndex() == 0);
+                    sortedHd = SortUtils.instance().sortValues(variance);
+                    info.setDistance(variance);
+                    info.setUseRelative(jComboBox4.getSelectedIndex() == 0);
+
+                    numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(tc.getProject().getSelectedBatchComparison().getHdCSVresults(),
+                            jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
+                    tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().
+                            batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels));
+                    tc.getProject().getSelectedBatchComparison().setValuesTypeIndex(jComboBox4.getSelectedIndex());
+                    tc.getProject().getSelectedBatchComparison().setMetricTypeIndex(jComboBox2.getSelectedIndex());
+                    tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
+
+                    p.finish();
+
+                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addBatchComparisonResults();
+                    }
+                    updateHistograms();
+                } catch (Exception ex) {
+                    p.finish();
                 }
-
-                info = tc.getProject().getSelectedBatchComparison().getHDinfo();
-
-                if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
-                    info.setvType(VisualizationType.COLORMAP);
-                }
-                if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
-                    info.setvType(VisualizationType.VECTORS);
-                    info.setLenghtFactor(3.0f);
-                }
-
-                info.setDensity(density.getValue());
-                info.setCylLengthFactor(cylLength.getValue());
-                info.setCylRadius(cylRadius.getValue());
-                info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
-                info.setRecompute(true);
-
-                variance = SurfaceComparisonProcessing.instance().computeVariation(results, jComboBox2.getSelectedIndex(), jComboBox4.getSelectedIndex() == 0);
-                sortedHd = SortUtils.instance().sortValues(variance);
-                info.setDistance(variance);
-                info.setUseRelative(jComboBox4.getSelectedIndex() == 0);
-
-                numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(tc.getProject().getSelectedBatchComparison().getHdCSVresults(),
-                        jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
-                tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().
-                        batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels));
-                tc.getProject().getSelectedBatchComparison().setValuesTypeIndex(jComboBox4.getSelectedIndex());
-                tc.getProject().getSelectedBatchComparison().setMetricTypeIndex(jComboBox2.getSelectedIndex());
-                tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
-
-                p.finish();
-
-                if (GUIController.getSelectedProjectTopComponent() == tc) {
-                    GUIController.getConfigurationTopComponent().addBatchComparisonResults();
-                }
-                updateHistograms();
             }
         };
 
@@ -1723,7 +1727,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
-         if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1740,7 +1744,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             cylLengthLabel.setVisible(false);
             cylRadius.setVisible(false);
             cylRadiusLabel.setVisible(false);
-          
+
         }
 
         if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
@@ -1751,7 +1755,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             cylRadius.setVisible(true);
             cylRadiusLabel.setVisible(true);
         }
-        
+
         setupVisualizationControls();
         updateHistograms();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
@@ -1905,7 +1909,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 i++;
             }
             plotsDrawingPanelBatchNumerical1.setModelNames(names);
-            
 
             plotsDrawingPanelBatchNumerical1.repaint();
             jFrame3.setTitle("Numerical results");
@@ -1963,19 +1966,19 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jRadioButton7ActionPerformed
 
     private void normalSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerXStateChanged
-        if (normalSpinnerX.isEnabled()&&!valuesModified ) {
+        if (normalSpinnerX.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_normalSpinnerXStateChanged
 
     private void normalSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerYStateChanged
-        if (normalSpinnerY.isEnabled()&&!valuesModified ) {
+        if (normalSpinnerY.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_normalSpinnerYStateChanged
 
     private void normalSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerZStateChanged
-        if (normalSpinnerZ.isEnabled()&&!valuesModified ) {
+        if (normalSpinnerZ.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_normalSpinnerZStateChanged
@@ -2185,21 +2188,21 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox8ActionPerformed
 
     private void alignResButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alignResButtonActionPerformed
-     BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
-     String[][] values = TableProcessing.instance().alignmentInfoTable(bc.getIcpMetric(), bc.getScaleEnabled(), bc.getICPerrorRate(),
-             bc.getICPmaxIteration(), bc.getICPnumberOfHeads(), bc.getModel(bc.getTemplateIndex()).getName(), Methods.values()[bc.getMethod()],
-             Type.values()[bc.getType()], bc.getValue());
-     
-     alignmentTable.setModel(new javax.swing.table.DefaultTableModel(
-                    values,
-                    values[0]
-            ));
-     
-     TableProcessing.instance().setUpTable(alignmentTable, alignmentFrame, GUIController.getSelectedProjectTopComponent(), "Alignment parameters");
+        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        String[][] values = TableProcessing.instance().alignmentInfoTable(bc.getIcpMetric(), bc.getScaleEnabled(), bc.getICPerrorRate(),
+                bc.getICPmaxIteration(), bc.getICPnumberOfHeads(), bc.getModel(bc.getTemplateIndex()).getName(), Methods.values()[bc.getMethod()],
+                Type.values()[bc.getType()], bc.getValue());
+
+        alignmentTable.setModel(new javax.swing.table.DefaultTableModel(
+                values,
+                values[0]
+        ));
+
+        TableProcessing.instance().setUpTable(alignmentTable, alignmentFrame, GUIController.getSelectedProjectTopComponent(), "Alignment parameters");
     }//GEN-LAST:event_alignResButtonActionPerformed
 
     private void thicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_thicknessStateChanged
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setCutThickness(thickness.getValue()/10f);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setCutThickness(thickness.getValue() / 10f);
     }//GEN-LAST:event_thicknessStateChanged
 
     private void colorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorPanelMouseClicked
@@ -2243,10 +2246,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
 
         }
-        
-        if(c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF){
+
+        if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
             alignResButton.setVisible(true);
-        }else{
+        } else {
             alignResButton.setVisible(false);
         }
         result = c.getNumericalResults();
@@ -2255,8 +2258,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     public void setValuesModified(boolean valuesModified) {
         this.valuesModified = valuesModified;
     }
-    
-    
 
     public void updateHistograms() {
         HDpaintingInfo hdp = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
@@ -2390,6 +2391,5 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JPanel slicesPanel;
     private javax.swing.JSlider thickness;
     // End of variables declaration//GEN-END:variables
-
 
 }

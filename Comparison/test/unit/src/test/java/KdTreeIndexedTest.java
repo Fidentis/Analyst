@@ -23,7 +23,7 @@ import org.junit.Test;
  * @author xferkova
  */
 public class KdTreeIndexedTest {
-    private static String modelPath = "..\\test_face_01m.obj";
+    private static String modelPath = "..\\resources\\test_face_01m.obj";
     private static Model loadedModel;
     
     public KdTreeIndexedTest(){

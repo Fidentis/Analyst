@@ -49,8 +49,9 @@ import org.openide.util.Exceptions;
  * @author Katka
  */
 public class PairRegistrationConfiguration extends javax.swing.JPanel {
+
     private Thread currentTask;
-    private final Cancellable cancelTask = new Cancellable(){
+    private final Cancellable cancelTask = new Cancellable() {
         @Override
         public boolean cancel() {
             currentTask.interrupt();
@@ -851,17 +852,17 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     jButton3.setEnabled(false);
-                    FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel() , tc.getViewerPanel_2Faces().getListener2().getModel(), 
-                    jButton1, jButton7, jButton3);
-            
+                    FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
+                            jButton1, jButton7, jButton3);
+
                     tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
                     tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
-                    }
-                };
-            
+                }
+            };
+
             currentTask = new Thread(run);
             currentTask.start();
-            
+
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -915,51 +916,56 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 public void run() {
                     ProgressHandle p;
                     p = ProgressHandleFactory.createHandle("Computing ICP...");
-                    p.start(100);
 
-                    Icp.instance().setP(p);
-                    KdTree mainF = null;
-                    
-                    if(icpMetricComboBox.getSelectedItem() == ICPmetric.VERTEX_TO_VERTEX){
-                        mainF = new KdTreeIndexed(mainFace.getVerts());
-                    }else{
-                        mainF = new KdTreeFaces(mainFace.getVerts(), mainFace.getFaces());
-                    }             
-                    
-                    tc.getProject().getSelectedComparison2Faces().setMainFace(mainF);
-                    
-                    Methods m = (Methods) jComboBox2.getSelectedItem();
-                    Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
-                    float value = getUndersampleValue(m, t);
+                    try {
+                        p.start(100);
 
-                    SurfaceComparisonProcessing.instance().processOneToOne(mainF, compareFace, (Integer) jSpinner2.getValue(), jCheckBox9.isSelected(), (Float) jSpinner1.getValue(),
-                            m, t, value);
+                        Icp.instance().setP(p);
+                        KdTree mainF = null;
 
-                    p.finish();
+                        if (icpMetricComboBox.getSelectedItem() == ICPmetric.VERTEX_TO_VERTEX) {
+                            mainF = new KdTreeIndexed(mainFace.getVerts());
+                        } else {
+                            mainF = new KdTreeFaces(mainFace.getVerts(), mainFace.getFaces());
+                        }
 
-                    tc.getViewerPanel_2Faces().setResultButtonVisible(true);
-                    ModelLoader l = new ModelLoader();
-                    Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-                    tc.getViewerPanel_2Faces().getListener2().addModel(model);
+                        tc.getProject().getSelectedComparison2Faces().setMainFace(mainF);
 
-                    if (GUIController.getSelectedProjectTopComponent() == tc) {
-                        GUIController.getConfigurationTopComponent().addComparisonComponent();
+                        Methods m = (Methods) jComboBox2.getSelectedItem();
+                        Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
+                        float value = getUndersampleValue(m, t);
+
+                        SurfaceComparisonProcessing.instance().processOneToOne(mainF, compareFace, (Integer) jSpinner2.getValue(), jCheckBox9.isSelected(), (Float) jSpinner1.getValue(),
+                                m, t, value);
+
+                        p.finish();
+
+                        tc.getViewerPanel_2Faces().setResultButtonVisible(true);
+                        ModelLoader l = new ModelLoader();
+                        Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
+                        tc.getViewerPanel_2Faces().getListener2().addModel(model);
+
+                        if (GUIController.getSelectedProjectTopComponent() == tc) {
+                            GUIController.getConfigurationTopComponent().addComparisonComponent();
+                        }
+                        jButton1.setEnabled(true);
+                        tc.getProject().getSelectedComparison2Faces().setState(2);
+                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true);
+
+                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().createResultIcon();
+                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().showModelIcon();
+
+                        if (jCheckBox10.isSelected()) {
+                            GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
+                        }
+
+                        tc.getProject().getSelectedComparison2Faces().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
+                        tc.getProject().getSelectedComparison2Faces().setMethod(m.ordinal());
+                        tc.getProject().getSelectedComparison2Faces().setType(t.ordinal());
+                        tc.getProject().getSelectedComparison2Faces().setValue(value);
+                    } catch (Exception ex) {
+                        p.finish();
                     }
-                    jButton1.setEnabled(true);
-                    tc.getProject().getSelectedComparison2Faces().setState(2);
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true);
-
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().createResultIcon();
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().showModelIcon();
-
-                    if (jCheckBox10.isSelected()) {
-                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-                    }
-                    
-                     tc.getProject().getSelectedComparison2Faces().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
-                     tc.getProject().getSelectedComparison2Faces().setMethod(m.ordinal());
-                     tc.getProject().getSelectedComparison2Faces().setType(t.ordinal());
-                     tc.getProject().getSelectedComparison2Faces().setValue(value);
                 }
             };
             Thread t = new Thread(run);
@@ -975,9 +981,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getGpa().getPA(0).getVertices());
                 tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getGpa().getPA(1).getVertices());*/
-                
-                
-                
                 procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), jCheckBox11.isSelected());
                 tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getPa().getVertices());
                 tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getPa2().getVertices());
@@ -987,10 +990,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 if (jCheckBox11.isSelected()) {
                     //tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 7);
-                    tc.getViewerPanel_2Faces().getListener1(). setFacialPointRadius(jSlider1.getValue()/1000f);
-                    
+                    tc.getViewerPanel_2Faces().getListener1().setFacialPointRadius(jSlider1.getValue() / 1000f);
+
                     //tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 7);
-                    tc.getViewerPanel_2Faces().getListener2(). setFacialPointRadius(jSlider1.getValue()/1000f);
+                    tc.getViewerPanel_2Faces().getListener2().setFacialPointRadius(jSlider1.getValue() / 1000f);
                 }/* else {
                     tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 300);
                  //   tc.getViewerPanel_2Faces().getListener1(). setFacialPointRadius(jSlider1.getValue());
@@ -1050,7 +1053,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         GUIController.updateNavigator();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private int getUndersampleValue(Methods m, Type t){
+    private int getUndersampleValue(Methods m, Type t) {
         if (m == Methods.Curvature || m == Methods.Random) {
             switch (t) {
                 case PERCENTAGE:
@@ -1060,48 +1063,48 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 default:
                     return -1;
             }
-        }else if(m == Methods.Disc){
+        } else if (m == Methods.Disc) {
             return jSlider2.getValue();
         }
-        
+
         return -1;
     }
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<FpModel> loaded = FPImportExport.instance().importPoints(tc, true);
-        
-        if(loaded == null || loaded.isEmpty()){
+
+        if (loaded == null || loaded.isEmpty()) {
             //nothing loaded
             return;
         }
-                
+
         tc.getViewerPanel_2Faces().getListener1().setTransformations(null);
         tc.getViewerPanel_2Faces().getListener2().setTransformations(null);
-        
+
         List<File> models = new ArrayList<>();
-        if(tc.getViewerPanel_2Faces().getListener1().getModel() != null){
+        if (tc.getViewerPanel_2Faces().getListener1().getModel() != null) {
             models.add(tc.getViewerPanel_2Faces().getListener1().getModel().getFile());
         }
-        
-        if(tc.getViewerPanel_2Faces().getListener2().getModel() != null){
+
+        if (tc.getViewerPanel_2Faces().getListener2().getModel() != null) {
             models.add(tc.getViewerPanel_2Faces().getListener2().getModel().getFile());
         }
-        
+
         FPImportExport.instance().alignPointsToModels(loaded, models);
-        
-        for(FpModel model : loaded){
-            if(tc.getViewerPanel_2Faces().getListener1().getModel() != null &&
-                    model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())){
+
+        for (FpModel model : loaded) {
+            if (tc.getViewerPanel_2Faces().getListener1().getModel() != null
+                    && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener1().initFpUniverse(model.getFacialPoints());
             }
-            
-            if(tc.getViewerPanel_2Faces().getListener2().getModel() != null && 
-                    model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())){
+
+            if (tc.getViewerPanel_2Faces().getListener2().getModel() != null
+                    && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener2().initFpUniverse(model.getFacialPoints());
             }
         }
-        
+
         jButton1.setEnabled(areFPCalculated(tc));
         jButton7.setEnabled(areFPCalculated(tc));
 
@@ -1127,7 +1130,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        FPImportExport.instance().exportTwoFaces(tc, 
+        FPImportExport.instance().exportTwoFaces(tc,
                 tc.getViewerPanel_2Faces().getListener1().getFacialPoints(),
                 tc.getViewerPanel_2Faces().getListener1().getModel(),
                 tc.getViewerPanel_2Faces().getListener2().getFacialPoints(),
@@ -1184,20 +1187,20 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_numberSpinnerStateChanged
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        switch((Methods)jComboBox2.getSelectedItem()){
+        switch ((Methods) jComboBox2.getSelectedItem()) {
             case Curvature:
             case Random: //Random
-            randomPanel.setVisible(true);
-            discPanel.setVisible(false);
-            break;
+                randomPanel.setVisible(true);
+                discPanel.setVisible(false);
+                break;
             case Disc:
-            randomPanel.setVisible(false);
-            discPanel.setVisible(true);
-            break;
+                randomPanel.setVisible(false);
+                discPanel.setVisible(true);
+                break;
             case None:
-            randomPanel.setVisible(false);
-            discPanel.setVisible(false);
-            break;
+                randomPanel.setVisible(false);
+                discPanel.setVisible(false);
+                break;
         }
     }//GEN-LAST:event_jComboBox2ActionPerformed
 

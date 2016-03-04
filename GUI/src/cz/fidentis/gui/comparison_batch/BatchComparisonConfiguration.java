@@ -267,18 +267,18 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public void computeComparison(final ProjectTopComponent tc){
-         //        final Model mainFace = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
+    public void computeComparison(final ProjectTopComponent tc) {
+        //        final Model mainFace = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
         //        final Model compareFace = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel(); //vedlajsi model v pravom panele
         //
         //        if (mainFace == null || compareFace == null) {
         //            System.out.print("Some models were not loaded.");
         //            return;
         //        }
-        
+
         Runnable run;
         run = new Runnable() {
-            
+
             @Override
             public void run() {
                 processComparisonButton.setEnabled(false);
@@ -286,151 +286,151 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 ProgressHandle p;
 
                 p = ProgressHandleFactory.createHandle("Computing comparison...");
-                GUIController.setPauseButtonVisible(true);
-                p.start();
 
-                //Computing Hausdorff Distance
-                if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST ||
-                      ((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV  ) {
-                    p.setDisplayName("Computing comparison...");
-                    SurfaceComparisonProcessing.setP(p);
+                try {
+                    GUIController.setPauseButtonVisible(true);
+                    p.start();
 
-                    ArrayList<ArrayList<Float>> results;
-                    ArrayList<ArrayList<Float>> numResults;
-                    List<Float> variance;
-                    List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
-                    List<File> models = tc.getProject().getSelectedBatchComparison().getRegistrationResults();
-                    if (models == null) {
-                        models = tc.getProject().getSelectedBatchComparison().getModels();
-                    }
-                    ModelLoader ml = new ModelLoader();
-                    Model template = ml.loadModel(models.get(tc.getProject().getSelectedBatchComparison().getTemplateIndex()), false, false);
+                    //Computing Hausdorff Distance
+                    if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
+                            || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
+                        p.setDisplayName("Computing comparison...");
+                        SurfaceComparisonProcessing.setP(p);
 
-                    tc.getViewerPanel_Batch().getListener().getModels().set(0, template);
+                        ArrayList<ArrayList<Float>> results;
+                        ArrayList<ArrayList<Float>> numResults;
+                        List<Float> variance;
+                        List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
+                        List<File> models = tc.getProject().getSelectedBatchComparison().getRegistrationResults();
+                        if (models == null) {
+                            models = tc.getProject().getSelectedBatchComparison().getModels();
+                        }
+                        ModelLoader ml = new ModelLoader();
+                        Model template = ml.loadModel(models.get(tc.getProject().getSelectedBatchComparison().getTemplateIndex()), false, false);
 
-                    try {
-                        //visual results
-                        results = SurfaceComparisonProcessing.instance().compareFaces(template, models, true, (ComparisonMethod)jComboBox1.getSelectedItem(),
-                                tc.getProject().getSelectedBatchComparison().getIcpMetric());
-                        tc.getProject().getSelectedBatchComparison().setHdVisualResults(results);
+                        tc.getViewerPanel_Batch().getListener().getModels().set(0, template);
 
-                        tc.getProject().getSelectedBatchComparison().setAverageFace(template);
+                        try {
+                            //visual results
+                            results = SurfaceComparisonProcessing.instance().compareFaces(template, models, true, (ComparisonMethod) jComboBox1.getSelectedItem(),
+                                    tc.getProject().getSelectedBatchComparison().getIcpMetric());
+                            tc.getProject().getSelectedBatchComparison().setHdVisualResults(results);
 
-                        variance = SurfaceComparisonProcessing.instance().computeVariation(results, 0, true);
+                            tc.getProject().getSelectedBatchComparison().setAverageFace(template);
 
-                        tc.getProject().getSelectedBatchComparison().setHd(variance);
+                            variance = SurfaceComparisonProcessing.instance().computeVariation(results, 0, true);
 
-                        //check
-                        float[] minColor = {0.298f, 0.0f, 0.898f};
-                        Color minCol = new Color(76, 0, 229);
-                        float[] maxColor = {0.898f, 0.1f, 0.133f};
-                        Color maxCol = new Color(229, 0, 34);
-                        
-                        HDpaintingInfo info = new HDpaintingInfo(variance, template, true);
-                        info.setMinColor(minColor);
-                        info.setMaxColor(maxColor);
-                        
-                        HDpainting paintMain = new HDpainting(info);
+                            tc.getProject().getSelectedBatchComparison().setHd(variance);
 
+                            //check
+                            float[] minColor = {0.298f, 0.0f, 0.898f};
+                            Color minCol = new Color(76, 0, 229);
+                            float[] maxColor = {0.898f, 0.1f, 0.133f};
+                            Color maxCol = new Color(229, 0, 34);
 
-                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHdColor1(minCol);
-                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHdColor2(maxCol);
+                            HDpaintingInfo info = new HDpaintingInfo(variance, template, true);
+                            info.setMinColor(minColor);
+                            info.setMaxColor(maxColor);
 
-                        
-                        tc.getViewerPanel_Batch().getListener().setHdPaint(paintMain);
-                        tc.getViewerPanel_Batch().getListener().setHdInfo(info);
-                        tc.getProject().getSelectedBatchComparison().setHDP(paintMain);
-                        tc.getProject().getSelectedBatchComparison().setHDinfo(info);
-                        tc.getViewerPanel_Batch().getListener().drawHD(true);
+                            HDpainting paintMain = new HDpainting(info);
 
-                        //numerical results
-                        numResults = SurfaceComparisonProcessing.instance().batchCompareNumericalResults(models, 0, true, 
-                                (Integer) 100 / 100f,(ComparisonMethod)jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
+                            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHdColor1(minCol);
+                            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHdColor2(maxCol);
 
-                        List<Float> sortedHd = SortUtils.instance().sortValues(variance);
-                        
-                        tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels));
-                        tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
+                            tc.getViewerPanel_Batch().getListener().setHdPaint(paintMain);
+                            tc.getViewerPanel_Batch().getListener().setHdInfo(info);
+                            tc.getProject().getSelectedBatchComparison().setHDP(paintMain);
+                            tc.getProject().getSelectedBatchComparison().setHDinfo(info);
+                            tc.getViewerPanel_Batch().getListener().drawHD(true);
 
-                    } catch (FileManipulationException ex) {
-                        //osefuj error
-                    }
+                            //numerical results
+                            numResults = SurfaceComparisonProcessing.instance().batchCompareNumericalResults(models, 0, true,
+                                    (Integer) 100 / 100f, (ComparisonMethod) jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
 
-                } else if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+                            List<Float> sortedHd = SortUtils.instance().sortValues(variance);
 
-                    //Starting procrustes comparison
+                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels));
+                            tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
 
-                    List<List<FacialPoint>> list = new ArrayList();
-                    int size = tc.getProject().getSelectedBatchComparison().getModels().size();
-                    for (int i = 0; i < size; i++) {
-                        List<FacialPoint> facialPoints = tc.getProject().getSelectedBatchComparison().getFacialPoints(
-                                tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
-                        list.add(facialPoints);
-                    }
-                    
-                    //List of points was created
-                    ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, jCheckBox2.isSelected());
+                        } catch (FileManipulationException ex) {
+                            //osefuj error
+                        }
 
-                    //String result = procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
-                    String result = procrustes.compareBatch(tc.getProject().getSelectedBatchComparison().getModels());
-                    tc.getProject().getSelectedBatchComparison().setDistanceToMeanConfiguration(procrustes.distanceToMean());
+                    } else if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
 
-                    //GPA done
+                        //Starting procrustes comparison
+                        List<List<FacialPoint>> list = new ArrayList();
+                        int size = tc.getProject().getSelectedBatchComparison().getModels().size();
+                        for (int i = 0; i < size; i++) {
+                            List<FacialPoint> facialPoints = tc.getProject().getSelectedBatchComparison().getFacialPoints(
+                                    tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
+                            list.add(facialPoints);
+                        }
 
-                    //GUIController.getConfigurationTopComponent().getBatchComparisonResults().setNumericalResult(result);
-                    tc.getProject().getSelectedBatchComparison().setNumericalResults(result);
+                        //List of points was created
+                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, jCheckBox2.isSelected());
 
-                    //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1().setDescriptionText(result);
-                    tc.getViewerPanel_Batch().getListener().setProcrustes(true);
-                    
-                    PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), null, 2);
-                    
-                    /*tc.getViewerPanel_Batch().getListener().setTypePA(2);
+                        //String result = procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
+                        String result = procrustes.compareBatch(tc.getProject().getSelectedBatchComparison().getModels());
+                        tc.getProject().getSelectedBatchComparison().setDistanceToMeanConfiguration(procrustes.distanceToMean());
+
+                        //GPA done
+                        //GUIController.getConfigurationTopComponent().getBatchComparisonResults().setNumericalResult(result);
+                        tc.getProject().getSelectedBatchComparison().setNumericalResults(result);
+
+                        //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1().setDescriptionText(result);
+                        tc.getViewerPanel_Batch().getListener().setProcrustes(true);
+
+                        PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), null, 2);
+
+                        /*tc.getViewerPanel_Batch().getListener().setTypePA(2);
                     tc.getViewerPanel_Batch().getListener().setGpa(procrustes.getGpa());
                     tc.getViewerPanel_Batch().getListener().setEnhance(0);*/
+                        if (jCheckBox2.isSelected()) {
+                            tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
+                            paInfo.setPointSize(30 * 3);
+                            //paInfo.setPointSize(30 / (float) (30));
+                            //tc.getViewerPanel_Batch().getListener().setFpSize(30 / (float) (30));
+                        } else {
+                            tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
+                            paInfo.setPointSize(30 * 3);
+                            //tc.getViewerPanel_Batch().getListener().setFpSize(30 * 3);
+                        }
 
-                    if (jCheckBox2.isSelected()) {
-                        tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
-                        paInfo.setPointSize(30 * 3);
-                        //paInfo.setPointSize(30 / (float) (30));
-                        //tc.getViewerPanel_Batch().getListener().setFpSize(30 / (float) (30));
-                    } else {
-                        tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
-                        paInfo.setPointSize(30 * 3);
-                        //tc.getViewerPanel_Batch().getListener().setFpSize(30 * 3);
+                        tc.getViewerPanel_Batch().getListener().setPaInfo(paInfo);
+                        tc.getViewerPanel_Batch().getListener().setPaPainting(new PApainting(paInfo));
+
+                        repaint();
                     }
-                    
-                    tc.getViewerPanel_Batch().getListener().setPaInfo(paInfo);
-                    tc.getViewerPanel_Batch().getListener().setPaPainting(new PApainting(paInfo));
 
-                    repaint();
-                }
+                    processComparisonButton.setEnabled(true);
+                    tc.getProject().getSelectedBatchComparison().setCompareButtonEnabled(true);
+                    p.finish();
 
-                processComparisonButton.setEnabled(true);
-                tc.getProject().getSelectedBatchComparison().setCompareButtonEnabled(true);
-                p.finish();
+                    tc.getProject().getSelectedBatchComparison().setState(3);
+                    tc.getProject().getSelectedBatchComparison().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
 
-                tc.getProject().getSelectedBatchComparison().setState(3);
-                tc.getProject().getSelectedBatchComparison().setComparisonMethod((ComparisonMethod)jComboBox1.getSelectedItem());
-
-                /*if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+                    /*if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
                     tc.getProject().getSelectedBatchComparison().setResults(0);
                 } else {
                     tc.getProject().getSelectedBatchComparison().setResults(1);
 
                 }*/
-                if (GUIController.getSelectedProjectTopComponent() == tc) {
-                    GUIController.getConfigurationTopComponent().addBatchComparisonResults();
+                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addBatchComparisonResults();
+                    }
+                    GUIController.setPauseButtonVisible(false);
+                    GUIController.updateNavigator();
+                } catch (Exception ex) {
+                    p.finish();
                 }
-                GUIController.setPauseButtonVisible(false);
-                GUIController.updateNavigator();
             }
 
         };
         Thread t = new Thread(run);
         t.start(); // start the task and progress visualisation
     }
-    
+
     private void processComparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processComparisonButtonActionPerformed
         computeComparison(GUIController.getSelectedProjectTopComponent());
     }//GEN-LAST:event_processComparisonButtonActionPerformed
@@ -440,14 +440,14 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
             procrustesPanel.setVisible(true);
         }
-        if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
             procrustesPanel.setVisible(false);
 
         }
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setComparisonMethod((ComparisonMethod)jComboBox1.getSelectedItem());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
@@ -475,7 +475,6 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 tc.getProject().getSelectedBatchComparison().getModels(), "_batch");
     }//GEN-LAST:event_jButton10ActionPerformed
 
-
     public Boolean getScaleEnabled() {
         return jCheckBox2.isSelected();
     }
@@ -484,22 +483,22 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         processComparisonButton.setEnabled(en);
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setCompareButtonEnabled(en);
     }
-    
-    private void setupComparisonMethods(BatchComparison c){
+
+    private void setupComparisonMethods(BatchComparison c) {
         jComboBox1.removeAllItems();
         for (int i = 0; i < ComparisonMethod.values().length; i++) {
             jComboBox1.addItem(ComparisonMethod.values()[i]);
-            if(c.getComparisonMethod()==ComparisonMethod.values()[i]){
+            if (c.getComparisonMethod() == ComparisonMethod.values()[i]) {
                 jComboBox1.setSelectedIndex(i);
             }
         }
-      /*  if((c.getRegistrationMethod() == 0)){
+        /*  if((c.getRegistrationMethod() == 0)){
             jComboBox1.removeItemAt(0);
         }*/
-        if((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)){
+        if ((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)) {
             jComboBox1.removeItemAt(1);
         }
-        
+
     }
 
     public void setConfiguration() {

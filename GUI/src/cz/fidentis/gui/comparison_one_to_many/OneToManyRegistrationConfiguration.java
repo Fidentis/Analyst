@@ -894,42 +894,46 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     p = ProgressHandleFactory.createHandle("Registrating faces...");
                     p.start();
 
-                    Icp.instance().setP(null);
-                    SurfaceComparisonProcessing.setP(p);
-
                     try {
-                        FileUtils.instance().createTMPmoduleFolder(new File("compF"));
-                    } catch (FileManipulationException ex) {
-                        //osefuj error
-                        jButton1.setEnabled(true);
+
+                        Icp.instance().setP(null);
+                        SurfaceComparisonProcessing.setP(p);
+
+                        try {
+                            FileUtils.instance().createTMPmoduleFolder(new File("compF"));
+                        } catch (FileManipulationException ex) {
+                            //osefuj error
+                            jButton1.setEnabled(true);
+                        }
+
+                        List<File> models = tc.getProject().getSelectedOneToManyComparison().getModels();
+                        List<File> results;
+                        Model template = tc.getOneToManyViewerPanel().getListener1().getModel();
+
+                        ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
+                        Methods m = (Methods) jComboBox2.getSelectedItem();
+                        Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
+                        float value = getUndersampleValue(m, t);
+                        KdTree mainF;
+
+                        if (metric == ICPmetric.VERTEX_TO_VERTEX) {
+                            mainF = new KdTreeIndexed(template.getVerts());
+                        } else {
+                            mainF = new KdTreeFaces(template.getVerts(), template.getFaces());
+                        }
+
+                        results = SurfaceComparisonProcessing.instance().processOneToMany(mainF, models, (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
+                                m, t, value);
+                        tc.getProject().getSelectedOneToManyComparison().setRegisteredModels(results);
+                        tc.getProject().getSelectedOneToManyComparison().setIcpMetric(metric);
+                        tc.getProject().getSelectedOneToManyComparison().setMethod(m.ordinal());
+                        tc.getProject().getSelectedOneToManyComparison().setType(t.ordinal());
+                        tc.getProject().getSelectedOneToManyComparison().setValue(value);
+
+                        p.finish();
+                    } catch (Exception ex) {
+                        p.finish();
                     }
-
-                    List<File> models = tc.getProject().getSelectedOneToManyComparison().getModels();
-                    List<File> results;
-                    Model template = tc.getOneToManyViewerPanel().getListener1().getModel();
-
-                    ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
-                    Methods m = (Methods) jComboBox2.getSelectedItem();
-                    Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
-                    float value = getUndersampleValue(m, t);
-                    KdTree mainF;
-                    
-                    
-                    if(metric == ICPmetric.VERTEX_TO_VERTEX){
-                       mainF = new KdTreeIndexed(template.getVerts());
-                    }else{
-                        mainF = new KdTreeFaces(template.getVerts(), template.getFaces());
-                    }
-                    
-                    results = SurfaceComparisonProcessing.instance().processOneToMany(mainF, models, (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(), 
-                            m, t, value);
-                    tc.getProject().getSelectedOneToManyComparison().setRegisteredModels(results);
-                    tc.getProject().getSelectedOneToManyComparison().setIcpMetric(metric);
-                    tc.getProject().getSelectedOneToManyComparison().setMethod(m.ordinal());
-                    tc.getProject().getSelectedOneToManyComparison().setType(t.ordinal());
-                    tc.getProject().getSelectedOneToManyComparison().setValue(value);
-
-                    p.finish();
 
                 } else if (jComboBox6.getSelectedIndex() == 0) {
                     //zarovnanie feature points
@@ -954,24 +958,24 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                     tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().setVerts(procrustes.getPa().getVertices());
                     procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints());
-                    
+
                     //clear all current Feature Points in listener
                     tc.getProject().getSelectedOneToManyComparison().clearFacialPoints();
 
                     for (int i = 0; i < tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().size(); i++) {
                         /*tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i).setVerts(procrustes.getGpa().getPA(i).getVertices());
                         procrustes.getGpa().getPA(i).updateFacialPoints(tc.getProject().getSelectedOneToManyComparison().getFacialPoints(tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i).getName()));
-                           */
-                        
+                         */
+
                         tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i).setVerts(procrustes.getPa2().get(i).getVertices());
                         //add new rotated facial points
                         List<FacialPoint> values = new ArrayList<>();
                         values.addAll(procrustes.getPa2().get(i).getConfig().values());
-                        
+
                         tc.getProject().getSelectedOneToManyComparison().addFacialPoints(tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i).getName(),
                                 values);
                         //procrustes.getPa2().get(i).updateFacialPoints(tc.getProject().getSelectedOneToManyComparison().getFacialPoints(tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i).getName()));
-                        
+
                         if (tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i).getName().equals(tc.getOneToManyViewerPanel().getListener2().getModel().getName())) {
                             tc.getOneToManyViewerPanel().getListener2().setModels(tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().get(i));
                         }
@@ -980,10 +984,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                     if (jCheckBox11.isSelected()) {
                         //tc.getOneToManyViewerPanel().getListener1().setCameraPosition(0, 0, 7);
-                        tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(jSlider1.getValue()/30f);
-                        
+                        tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(jSlider1.getValue() / 30f);
+
                         //tc.getOneToManyViewerPanel().getListener2().setCameraPosition(0, 0, 7);
-                        tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(jSlider1.getValue()/30f);
+                        tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(jSlider1.getValue() / 30f);
                     }/* else {
                         tc.getOneToManyViewerPanel().getListener2().setCameraPosition(0, 0, 700);
                     //    tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(jSlider1.getValue());
@@ -992,9 +996,11 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     //    tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(jSlider1.getValue());
                     }*/
 
+                    ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
+
                     try {
                         List<File> results;
-                        ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
+
                         k.start();
 
                         File tmpModuleFile = new File("compF");
@@ -1005,6 +1011,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     } catch (FileManipulationException ex) {
                         //osefuj vynimku
                         jButton1.setEnabled(true);
+                        k.finish();
                     }
 
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
@@ -1024,6 +1031,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 }
                 GUIController.updateNavigator();
             }
+
         };
 
         Thread t = new Thread(run);

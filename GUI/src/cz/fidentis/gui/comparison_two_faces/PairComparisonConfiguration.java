@@ -776,221 +776,224 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                 p = ProgressHandleFactory.createHandle("Computing comparison...");
 
-                p.start(100);
+                try {
 
-                processComparisonButton.setEnabled(false);
-                tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(false);
-                //Computing Hausdorff Distance
-                if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
-                        || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
-                    List<Float> hdDistance = null;
+                    p.start(100);
 
-                    if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
-                        KdTree mainF = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getMainFace();
-                        List<Vector3f> usedNormals = compareFace.getNormals();
+                    processComparisonButton.setEnabled(false);
+                    tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(false);
+                    //Computing Hausdorff Distance
+                    if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
+                            || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
+                        List<Float> hdDistance = null;
 
-                        if (compareFace.getVerts().size() > compareFace.getNormals().size()) {
-                            usedNormals = SurfaceComparisonProcessing.instance().recomputeVertexNormals(compareFace);
-                            compareFace.setNormals((ArrayList<Vector3f>) usedNormals);
-                        }
+                        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+                            KdTree mainF = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getMainFace();
+                            List<Vector3f> usedNormals = compareFace.getNormals();
 
-                        if (mainF == null) {
-                            mainF = new KdTreeIndexed(mainFace.getVerts());
-                        }
-
-                        p.setDisplayName("Computing Hausdorff Distance...");
-                        p.progress(90);
-                        hdDistance = HausdorffDistance.instance().hDistance(mainF, compareFace.getVerts(), usedNormals, true);
-                    }else{
-                        //in case vertex-to-plane metric was used created new kd-tree to be able to get index of nearest neighbor
-                        KdTreeIndexed mainF = new KdTreeIndexed(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1().getVerts());
-                        double[] mainCurvature = new Curvature_jv(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1()).getCurvature(CurvatureType.Gaussian);
-                        double[] secondaryCurvature = new Curvature_jv(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel2()).getCurvature(CurvatureType.Gaussian);
-                        
-                        p.setDisplayName("Computing Nearest Neighbor curvature...");
-                        p.progress(90);
-                        hdDistance = NearestCurvature.instance().nearestCurvature(mainF, compareFace.getVerts(), mainCurvature, secondaryCurvature);
-                        //hdDistance = ComparisonMetrics.instance().thresholdValuesKeepSort(hdDistance, 0.99f, false);
-                    }
-
-                    tc.getViewerPanel_2Faces().getListener2().setProcrustes(false);
-
-                    tc.getProject().getSelectedComparison2Faces().setHd(hdDistance);
-                    List<Float> sortedValuesRel = SortUtils.instance().sortValues(hdDistance);
-                    List<Float> absValues = new LinkedList<>();
-                    
-                    for(Float f : hdDistance){
-                        absValues.add(Math.abs(f));
-                    }
-                    
-                    List<Float> sortedValuesAbs = SortUtils.instance().sortValues(absValues);
-                    
-                    tc.getProject().getSelectedComparison2Faces().setSortedHdValuesAbs(sortedValuesAbs);
-                    tc.getProject().getSelectedComparison2Faces().setSortedHdValuesRelative(sortedValuesRel);
-
-                    HDpaintingInfo info = new HDpaintingInfo(hdDistance, compareFace, true);
-                    float[] minColor = {0.298f, 0.0f, 0.898f};
-                    Color minCol = new Color(76, 0, 229);
-                    float[] maxColor = {0.898f, 0.1f, 0.133f};
-                    Color maxCol = new Color(229, 0, 34);
-                    info.setMinColor(minColor);
-                    info.setMaxColor(maxColor);
-
-                    HDpainting paintMain = new HDpainting(info);
-
-                    GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setHdColor1(minCol);
-                    GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setHdColor2(maxCol);
-
-                    tc.getViewerPanel_2Faces().getListener2().drawHD(true);
-                    tc.getViewerPanel_2Faces().getListener2().setHdPaint(paintMain);
-                    tc.getViewerPanel_2Faces().getListener2().setHdInfo(info);
-                    tc.getProject().getSelectedComparison2Faces().setHDP(paintMain);
-                    tc.getProject().getSelectedComparison2Faces().setHdPaintingInfo(info);
-                    
-                    tc.getProject().getSelectedComparison2Faces().setNumericalResults(setValues(hdDistance));
-                    
-                    tc.getViewerPanel_2Faces().setResultButtonVisible(true);
-                } else {
-                    //starting Procrustes analysis
-
-                    //Procrustes Analysis with database
-                    if (createDatabaseRadioButton.isSelected()) {
-                        //creating database
-                        p.setDisplayName("Processing database...");
-                        File[] files = chooser.getSelectedFiles();
-                        ModelLoader loader = new ModelLoader();
-                        Model model;
-                        List<FacialPoint> facialPoints;
-                        FeaturePointsUniverse fpUniverse;
-                        for (File file : files) {
-                            model = loader.loadModel(file, false, true);
-
-                            fpUniverse = new FeaturePointsUniverse(model);
-                            facialPoints = new ArrayList<FacialPoint>();
-
-                            PsDebug.setDebug(false);
-                            PsDebug.setError(false);
-                            PsDebug.setWarning(false);
-                            PsDebug.setMessage(false);
-                            fpUniverse.findNose();
-                            facialPoints = fpUniverse.getFacialPoints();
-                            fpUniverse.findMouth();
-                            facialPoints = fpUniverse.getFacialPoints();
-                            fpUniverse.findEyes();
-                            facialPoints = fpUniverse.getFacialPoints();
-                            PsDebug.getConsole().setVisible(false);
-
-                            tc.getProject().getSelectedComparison2Faces().addFacialPoints(facialPoints);
-                        }
-
-                    }
-
-                    p.setDisplayName("Computing coparison...");
-
-                    PApaintingInfo paInfo = new PApaintingInfo(null, null, 0);
-
-                    if (jCheckBox2.isSelected()) {
-                        tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 700);
-                        paInfo.setPointSize(30 * 3);
-                        //paInfo.setPointSize(30 / (float) (30));
-                        //tc.getViewerPanel_2Faces().getListener2().setFpSize(30 / (float) (30));
-                    } else {
-                        tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 700);
-                        paInfo.setPointSize(30 * 3);
-                        //tc.getViewerPanel_2Faces().getListener2().setFpSize(30 * 3);
-                    }
-
-                    tc.getViewerPanel_2Faces().getListener2().setProcrustes(true);
-                    //tc.getViewerPanel_2Faces().getListener2().setTypePA(0);
-
-                    //choosing type of used database
-                    if (jCheckBox1.isSelected()) {
-                        Procrustes2Models procrustes = null;
-                        try {
-                            if (deafultDatabaseRadioButton.isSelected()) {
-                                procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
-
-                            } else if (chooseDatabaseRadioButton.isSelected()) {
-                                if (!jTextField1.getText().endsWith(".txt")) {
-                                    throw new IllegalArgumentException("Cannot be used as database.");
-                                } else {
-                                    procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), jCheckBox2.isSelected());
-                                }
-                            } else {
-                                List<List<FacialPoint>> list = tc.getProject().getSelectedComparison2Faces().getDatabasePoints();
-                                procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, jCheckBox2.isSelected());
+                            if (compareFace.getVerts().size() > compareFace.getNormals().size()) {
+                                usedNormals = SurfaceComparisonProcessing.instance().recomputeVertexNormals(compareFace);
+                                compareFace.setNormals((ArrayList<Vector3f>) usedNormals);
                             }
 
-                            //                            Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                            //                                    tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
-                            String result = procrustes.compare2ModelsWithDatabase(jSlider3.getValue() / 100f);
-                            // GUIController.getConfigurationTopComponent().getPairComparisonResults().setNumericalResult(result);
-                            tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
-                            
-                            //tc.getViewerPanel_2Faces().getListener2().setGpa(procrustes.getGpa());
-                            paInfo.setGpa(procrustes.getGpa());
-                            //tc.getViewerPanel_2Faces().getListener2().setEnhance(0);
+                            if (mainF == null) {
+                                mainF = new KdTreeIndexed(mainFace.getVerts());
+                            }
 
-                        } catch (FileNotFoundException ex) {
-                            Exceptions.printStackTrace(ex);
-                            p.finish();
-                            processComparisonButton.setEnabled(true);
-                            tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
+                            p.setDisplayName("Computing Hausdorff Distance...");
+                            p.progress(90);
+                            hdDistance = HausdorffDistance.instance().hDistance(mainF, compareFace.getVerts(), usedNormals, true);
+                        } else {
+                            //in case vertex-to-plane metric was used created new kd-tree to be able to get index of nearest neighbor
+                            KdTreeIndexed mainF = new KdTreeIndexed(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1().getVerts());
+                            double[] mainCurvature = new Curvature_jv(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1()).getCurvature(CurvatureType.Gaussian);
+                            double[] secondaryCurvature = new Curvature_jv(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel2()).getCurvature(CurvatureType.Gaussian);
+
+                            p.setDisplayName("Computing Nearest Neighbor curvature...");
+                            p.progress(90);
+                            hdDistance = NearestCurvature.instance().nearestCurvature(mainF, compareFace.getVerts(), mainCurvature, secondaryCurvature);
+                            //hdDistance = ComparisonMetrics.instance().thresholdValuesKeepSort(hdDistance, 0.99f, false);
                         }
 
+                        tc.getViewerPanel_2Faces().getListener2().setProcrustes(false);
+
+                        tc.getProject().getSelectedComparison2Faces().setHd(hdDistance);
+                        List<Float> sortedValuesRel = SortUtils.instance().sortValues(hdDistance);
+                        List<Float> absValues = new LinkedList<>();
+
+                        for (Float f : hdDistance) {
+                            absValues.add(Math.abs(f));
+                        }
+
+                        List<Float> sortedValuesAbs = SortUtils.instance().sortValues(absValues);
+
+                        tc.getProject().getSelectedComparison2Faces().setSortedHdValuesAbs(sortedValuesAbs);
+                        tc.getProject().getSelectedComparison2Faces().setSortedHdValuesRelative(sortedValuesRel);
+
+                        HDpaintingInfo info = new HDpaintingInfo(hdDistance, compareFace, true);
+                        float[] minColor = {0.298f, 0.0f, 0.898f};
+                        Color minCol = new Color(76, 0, 229);
+                        float[] maxColor = {0.898f, 0.1f, 0.133f};
+                        Color maxCol = new Color(229, 0, 34);
+                        info.setMinColor(minColor);
+                        info.setMaxColor(maxColor);
+
+                        HDpainting paintMain = new HDpainting(info);
+
+                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setHdColor1(minCol);
+                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setHdColor2(maxCol);
+
+                        tc.getViewerPanel_2Faces().getListener2().drawHD(true);
+                        tc.getViewerPanel_2Faces().getListener2().setHdPaint(paintMain);
+                        tc.getViewerPanel_2Faces().getListener2().setHdInfo(info);
+                        tc.getProject().getSelectedComparison2Faces().setHDP(paintMain);
+                        tc.getProject().getSelectedComparison2Faces().setHdPaintingInfo(info);
+
+                        tc.getProject().getSelectedComparison2Faces().setNumericalResults(setValues(hdDistance));
+
+                        tc.getViewerPanel_2Faces().setResultButtonVisible(true);
                     } else {
-                        //Procrustes analysis without using database
-                        try {
-                            Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                    tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
+                        //starting Procrustes analysis
 
-                            String result = procrustes.compare2Models(jSlider3.getValue() / 100f);
-                            // GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().setDescriptionText(result);
-                            // GUIController.getConfigurationTopComponent().getPairComparisonResults().setNumericalResult(result);
-                            tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
+                        //Procrustes Analysis with database
+                        if (createDatabaseRadioButton.isSelected()) {
+                            //creating database
+                            p.setDisplayName("Processing database...");
+                            File[] files = chooser.getSelectedFiles();
+                            ModelLoader loader = new ModelLoader();
+                            Model model;
+                            List<FacialPoint> facialPoints;
+                            FeaturePointsUniverse fpUniverse;
+                            for (File file : files) {
+                                model = loader.loadModel(file, false, true);
 
-                            /*tc.getViewerPanel_2Faces().getListener2().setGpa(procrustes.getGpa());
-                             tc.getViewerPanel_2Faces().getListener2().setEnhance(0);*/
-                            paInfo.setPa(procrustes.getPa());
-                            paInfo.setPa2(procrustes.getPa2());
-                            paInfo.setGpa(procrustes.getGpa());
+                                fpUniverse = new FeaturePointsUniverse(model);
+                                facialPoints = new ArrayList<FacialPoint>();
 
-                        } catch (FileNotFoundException ex) {
-                            Exceptions.printStackTrace(ex);
-                            p.finish();
-                            processComparisonButton.setEnabled(true);
-                            tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
+                                PsDebug.setDebug(false);
+                                PsDebug.setError(false);
+                                PsDebug.setWarning(false);
+                                PsDebug.setMessage(false);
+                                fpUniverse.findNose();
+                                facialPoints = fpUniverse.getFacialPoints();
+                                fpUniverse.findMouth();
+                                facialPoints = fpUniverse.getFacialPoints();
+                                fpUniverse.findEyes();
+                                facialPoints = fpUniverse.getFacialPoints();
+                                PsDebug.getConsole().setVisible(false);
+
+                                tc.getProject().getSelectedComparison2Faces().addFacialPoints(facialPoints);
+                            }
+
                         }
+
+                        p.setDisplayName("Computing coparison...");
+
+                        PApaintingInfo paInfo = new PApaintingInfo(null, null, 0);
+
+                        if (jCheckBox2.isSelected()) {
+                            tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 700);
+                            paInfo.setPointSize(30 * 3);
+                            //paInfo.setPointSize(30 / (float) (30));
+                            //tc.getViewerPanel_2Faces().getListener2().setFpSize(30 / (float) (30));
+                        } else {
+                            tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 700);
+                            paInfo.setPointSize(30 * 3);
+                            //tc.getViewerPanel_2Faces().getListener2().setFpSize(30 * 3);
+                        }
+
+                        tc.getViewerPanel_2Faces().getListener2().setProcrustes(true);
+                        //tc.getViewerPanel_2Faces().getListener2().setTypePA(0);
+
+                        //choosing type of used database
+                        if (jCheckBox1.isSelected()) {
+                            Procrustes2Models procrustes = null;
+                            try {
+                                if (deafultDatabaseRadioButton.isSelected()) {
+                                    procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
+                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
+
+                                } else if (chooseDatabaseRadioButton.isSelected()) {
+                                    if (!jTextField1.getText().endsWith(".txt")) {
+                                        throw new IllegalArgumentException("Cannot be used as database.");
+                                    } else {
+                                        procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
+                                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), jCheckBox2.isSelected());
+                                    }
+                                } else {
+                                    List<List<FacialPoint>> list = tc.getProject().getSelectedComparison2Faces().getDatabasePoints();
+                                    procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
+                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, jCheckBox2.isSelected());
+                                }
+
+                                //                            Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
+                                //                                    tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
+                                String result = procrustes.compare2ModelsWithDatabase(jSlider3.getValue() / 100f);
+                                // GUIController.getConfigurationTopComponent().getPairComparisonResults().setNumericalResult(result);
+                                tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
+
+                                //tc.getViewerPanel_2Faces().getListener2().setGpa(procrustes.getGpa());
+                                paInfo.setGpa(procrustes.getGpa());
+                                //tc.getViewerPanel_2Faces().getListener2().setEnhance(0);
+
+                            } catch (FileNotFoundException ex) {
+                                Exceptions.printStackTrace(ex);
+                                p.finish();
+                                processComparisonButton.setEnabled(true);
+                                tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
+                            }
+
+                        } else {
+                            //Procrustes analysis without using database
+                            try {
+                                Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
+                                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
+
+                                String result = procrustes.compare2Models(jSlider3.getValue() / 100f);
+                                // GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().setDescriptionText(result);
+                                // GUIController.getConfigurationTopComponent().getPairComparisonResults().setNumericalResult(result);
+                                tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
+
+                                /*tc.getViewerPanel_2Faces().getListener2().setGpa(procrustes.getGpa());
+                             tc.getViewerPanel_2Faces().getListener2().setEnhance(0);*/
+                                paInfo.setPa(procrustes.getPa());
+                                paInfo.setPa2(procrustes.getPa2());
+                                paInfo.setGpa(procrustes.getGpa());
+
+                            } catch (FileNotFoundException ex) {
+                                Exceptions.printStackTrace(ex);
+                                p.finish();
+                                processComparisonButton.setEnabled(true);
+                                tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
+                            }
+                        }
+
+                        tc.getViewerPanel_2Faces().getListener2().setPaInfo(paInfo);
+                        tc.getViewerPanel_2Faces().getListener2().setPaPainting(new PApainting(paInfo));
+
                     }
+                    processComparisonButton.setEnabled(true);
+                    tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
+                    tc.getProject().getSelectedComparison2Faces().setState(3);
 
-                    tc.getViewerPanel_2Faces().getListener2().setPaInfo(paInfo);
-                    tc.getViewerPanel_2Faces().getListener2().setPaPainting(new PApainting(paInfo));
-
-                }
-                processComparisonButton.setEnabled(true);
-                tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
-                tc.getProject().getSelectedComparison2Faces().setState(3);
-
-                /*if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+                    /*if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
                     tc.getProject().getSelectedComparison2Faces().setResults(0);
                 } else if(((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST){
                     tc.getProject().getSelectedComparison2Faces().setResults(1);
                 }else{
                     tc.getProject().getSelectedComparison2Faces().setResults(2);
                 }*/
-                //tc.getProject().getSelectedComparison2Faces().setResults((ComparisonMethod) jComboBox1.getSelectedItem());
+                    //tc.getProject().getSelectedComparison2Faces().setResults((ComparisonMethod) jComboBox1.getSelectedItem());
+                    tc.getViewerPanel_2Faces().setResultButtonVisible(false);
 
-                tc.getViewerPanel_2Faces().setResultButtonVisible(false);
+                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addPairComparisonResults();
+                    }
 
-                if (GUIController.getSelectedProjectTopComponent() == tc) {
-                    GUIController.getConfigurationTopComponent().addPairComparisonResults();
+                    p.finish();
+                } catch (Exception ex) {
+                    p.finish();
                 }
-
-                p.finish();
-
             }
         };
         Thread t = new Thread(run);
@@ -1200,23 +1203,23 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     }
 
     public void setColors() {
-        ComparisonGLEventListener  c = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2();
+        ComparisonGLEventListener c = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2();
         Comparison2Faces tc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
         float[] color = new float[4];
         primaryColorPanel.getBackground().getRGBColorComponents(color);
-        color[3] = jCheckBox5.isSelected()?1:jSlider4.getValue() / (float) 100;
-        tc.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB),color,1));
+        color[3] = jCheckBox5.isSelected() ? 1 : jSlider4.getValue() / (float) 100;
+        tc.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
         c.setPrimaryColor(color);
 
         float[] color2 = new float[4];
         secondaryColorPanel.getBackground().getRGBColorComponents(color2);
-        color2[3] = jCheckBox6.isSelected()?1:jSlider4.getValue() / (float) 100;
-        tc.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB),color2,1));
+        color2[3] = jCheckBox6.isSelected() ? 1 : jSlider4.getValue() / (float) 100;
+        tc.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
         c.setSecondaryColor(color2);
 
         float[] color3 = new float[4];
         fogColorPanel.getBackground().getRGBColorComponents(color3);
-        
+
         c.setFogColor(color3);
     }
 

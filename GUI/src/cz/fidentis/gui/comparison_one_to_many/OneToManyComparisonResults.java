@@ -1654,103 +1654,108 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 p = ProgressHandleFactory.createHandle("Computing comparison...");
                 p.start();
 
-                if (jComboBox2.getSelectedIndex() == 1) {         //absolute is set
-                    List<Float> absolute = new ArrayList<Float>();
-                    for (Float hdDistance1 : hdDistance) {
-                        absolute.add(Math.abs(hdDistance1));
-                    }
+                try {
 
-                    hdDistance = absolute;
-                }
-
-                HDpaintingInfo info = tc.getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
-
-                if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
-                    tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
-                    info.setvType(VisualizationType.COLORMAP);
-                    tc.getOneToManyViewerPanel().getListener2().removeModel();
-                    ModelLoader l = new ModelLoader();
-                    Model modelShown = tc.getProject().getSelectedOneToManyComparison().getAvgFace();
-
-                    if (modelShown == null) {
-                        if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
-
-                            File m = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(0);
-                            modelShown = l.loadModel(m, false, false);
-                        } else {
-                            File f = tc.getProject().getSelectedOneToManyComparison().getModels().get(0);
-                            modelShown = l.loadModel(f, false, true);
+                    if (jComboBox2.getSelectedIndex() == 1) {         //absolute is set
+                        List<Float> absolute = new ArrayList<Float>();
+                        for (Float hdDistance1 : hdDistance) {
+                            absolute.add(Math.abs(hdDistance1));
                         }
+
+                        hdDistance = absolute;
                     }
 
-                    tc.getOneToManyViewerPanel().getListener2().addModel(modelShown);
+                    HDpaintingInfo info = tc.getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
 
-                }
-                if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
-                    tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
-                    info.setvType(VisualizationType.VECTORS);
-                    info.setLenghtFactor(3.0f);
-                    ModelLoader l = new ModelLoader();
+                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
+                        info.setvType(VisualizationType.COLORMAP);
+                        tc.getOneToManyViewerPanel().getListener2().removeModel();
+                        ModelLoader l = new ModelLoader();
+                        Model modelShown = tc.getProject().getSelectedOneToManyComparison().getAvgFace();
 
-                    Model modelShown = tc.getProject().getSelectedOneToManyComparison().getAvgFace();
+                        if (modelShown == null) {
+                            if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
 
-                    if (modelShown == null) {
-                        if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
-
-                            File m = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(0);
-                            modelShown = l.loadModel(m, false, false);
-                        } else {
-                            File f = tc.getProject().getSelectedOneToManyComparison().getModels().get(0);
-                            modelShown = l.loadModel(f, false, true);
+                                File m = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(0);
+                                modelShown = l.loadModel(m, false, false);
+                            } else {
+                                File f = tc.getProject().getSelectedOneToManyComparison().getModels().get(0);
+                                modelShown = l.loadModel(f, false, true);
+                            }
                         }
+
+                        tc.getOneToManyViewerPanel().getListener2().addModel(modelShown);
+
+                    }
+                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
+                        info.setvType(VisualizationType.VECTORS);
+                        info.setLenghtFactor(3.0f);
+                        ModelLoader l = new ModelLoader();
+
+                        Model modelShown = tc.getProject().getSelectedOneToManyComparison().getAvgFace();
+
+                        if (modelShown == null) {
+                            if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
+
+                                File m = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(0);
+                                modelShown = l.loadModel(m, false, false);
+                            } else {
+                                File f = tc.getProject().getSelectedOneToManyComparison().getModels().get(0);
+                                modelShown = l.loadModel(f, false, true);
+                            }
+                        }
+
+                        tc.getOneToManyViewerPanel().getListener2().setModels(modelShown);
+                    }
+                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.CROSSSECTION.toString())) {
+                        tc.getOneToManyViewerPanel().getListener2().setSecondaryListener(true);
+                        tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
+                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
+                        tc.getOneToManyViewerPanel().getListener1().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()));
+                        ModelLoader l = new ModelLoader();
+                        ArrayList<Model> models = new ArrayList<>();
+                        models.add(tc.getProject().getSelectedOneToManyComparison().getPrimaryModel());
+                        for (int i = 0; i < tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().size(); i++) {
+                            //registered models will be null if ICP wasn't used
+                            Model m = l.loadModel(tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(i), false, false);
+                            models.add(m);
+                        }
+                        tc.getOneToManyViewerPanel().getListener2().setModels(models);
+                        tc.getOneToManyViewerPanel().getListener1().setPrimaryModel();
+                        tc.getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+                        //  tc.getOneToManyViewerPanel().getListener1().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()));
+
+                        info.setvType(VisualizationType.CROSSSECTION);
+
                     }
 
-                    tc.getOneToManyViewerPanel().getListener2().setModels(modelShown);
-                }
-                if (VisualizationBox.getSelectedItem().equals(VisualizationType.CROSSSECTION.toString())) {
-                    tc.getOneToManyViewerPanel().getListener2().setSecondaryListener(true);
-                    tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
-                    tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
-                    tc.getOneToManyViewerPanel().getListener1().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()));
-                    ModelLoader l = new ModelLoader();
-                    ArrayList<Model> models = new ArrayList<>();
-                    models.add(tc.getProject().getSelectedOneToManyComparison().getPrimaryModel());
-                    for (int i = 0; i < tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().size(); i++) {
-                        //registered models will be null if ICP wasn't used
-                        Model m = l.loadModel(tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(i), false, false);
-                        models.add(m);
+                    info.setDensity(density.getValue());
+                    info.setCylLengthFactor(cylLength.getValue());
+                    info.setCylRadius(cylRadius.getValue());
+                    info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
+                    info.setRecompute(true);
+
+                    thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
+
+                    String res = setValues(thresholdedValues, origModels, jComboBox3.getSelectedIndex());
+
+                    info.setDistance(hdDistance);
+                    info.setUseRelative(jComboBox2.getSelectedIndex() == 0);
+                    tc.getProject().getSelectedOneToManyComparison().setNumericalResults(res);
+                    tc.getProject().getSelectedOneToManyComparison().setValuesTypeIndex(jComboBox2.getSelectedIndex());
+                    tc.getProject().getSelectedOneToManyComparison().setMetricTypeIndex(jComboBox3.getSelectedIndex());
+
+                    p.finish();
+
+                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addOneToManyComparisonResults();
                     }
-                    tc.getOneToManyViewerPanel().getListener2().setModels(models);
-                    tc.getOneToManyViewerPanel().getListener1().setPrimaryModel();
-                    tc.getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
-                    //  tc.getOneToManyViewerPanel().getListener1().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()));
-
-                    info.setvType(VisualizationType.CROSSSECTION);
-
+                    updateHistograms();
+                } catch (Exception ex) {
+                    p.finish();
                 }
-
-                info.setDensity(density.getValue());
-                info.setCylLengthFactor(cylLength.getValue());
-                info.setCylRadius(cylRadius.getValue());
-                info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
-                info.setRecompute(true);
-
-                thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
-
-                String res = setValues(thresholdedValues, origModels, jComboBox3.getSelectedIndex());
-
-                info.setDistance(hdDistance);
-                info.setUseRelative(jComboBox2.getSelectedIndex() == 0);
-                tc.getProject().getSelectedOneToManyComparison().setNumericalResults(res);
-                tc.getProject().getSelectedOneToManyComparison().setValuesTypeIndex(jComboBox2.getSelectedIndex());
-                tc.getProject().getSelectedOneToManyComparison().setMetricTypeIndex(jComboBox3.getSelectedIndex());
-
-                p.finish();
-
-                if (GUIController.getSelectedProjectTopComponent() == tc) {
-                    GUIController.getConfigurationTopComponent().addOneToManyComparisonResults();
-                }
-                updateHistograms();
             }
         };
 
