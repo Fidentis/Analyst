@@ -377,5 +377,49 @@ public class Icp {
         for(int i = trans.size() - 1; i >= 0; i--){
             reverseTransformations(trans.get(i), verticies, scale);
         }
+        
+        /*Matrix tran = createTransformationMat(trans, scale);
+        Matrix inv = tran.inverse();
+        
+        for(Vector3f v : verticies){
+           Matrix p = MathUtils.instance().pointToMatrix(v);
+           
+           p = inv.times(p.transpose());
+           
+           v.setX((float) p.get(0,0));
+           v.setY((float) p.get(1,0));
+           v.setZ((float) p.get(2,0));
+        }*/
+    }
+    
+    public Matrix createTransformationMat(List<ICPTransformation> trans, boolean scale){
+        float s = 1f;
+        Vector3f t = new Vector3f();
+        Quaternion r = new Quaternion(0,0,0,1);
+        Matrix sm = null, tm = null, rm = null;
+        
+        for(ICPTransformation tran : trans){
+            if(scale)
+                s *= tran.getScaleFactor();
+            
+            t.add(tran.getTranslation());            
+            
+            Quaternion q = tran.getRotation();
+            //q = new Quaternion(q.getW(), q.getX(), q.getY(), q.getZ());
+            r.mult(q);
+        }
+        
+        if(scale){
+            sm = MathUtils.instance().scaleMatrix(s);
+        }
+        
+        tm = MathUtils.instance().transMatrix(t);
+        rm = MathUtils.instance().quaternionToMatrix(r);
+            
+        if(scale){
+            return rm;
+        }
+        
+        return rm.times(tm);
     }
 }
