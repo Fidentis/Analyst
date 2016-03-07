@@ -53,6 +53,7 @@ public class OneToManyComparison {
     private Color hdColor1 = Color.green;           //redundant? take color from HDinfo instead eventually?
     private Color hdColor2 = Color.red;
     private int hausdorfTreshold = 100;            //threshold value in % (HDPainting info contains actual computed distance thresholded)
+    private boolean createAvgFace = true;          //whether to create avg face during computatio of numerical results
     private boolean fpScaling;                     //whether feature points are scaled or not
     private int fpTreshold = 30;                   //threshold for feature points (still no clue what it is for)
     private int fpSize = 20;                       //size of displayed feature points
@@ -194,6 +195,14 @@ public class OneToManyComparison {
 
     public void setNumResults(List<ArrayList<Float>> numResults) {
         this.numResults = numResults;
+    }
+
+    public boolean isCreateAvgFace() {
+        return createAvgFace;
+    }
+
+    public void setCreateAvgFace(boolean createAvgFace) {
+        this.createAvgFace = createAvgFace;
     }
     
 

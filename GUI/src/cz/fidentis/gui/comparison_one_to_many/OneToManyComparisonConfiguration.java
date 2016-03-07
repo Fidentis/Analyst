@@ -87,6 +87,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         jSlider3 = new javax.swing.JSlider();
         jLabel12 = new javax.swing.JLabel();
         processComparisonButton = new javax.swing.JButton();
+        createAvgLabel = new javax.swing.JLabel();
+        createAvgCheckBox = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jButton10 = new javax.swing.JButton();
@@ -173,17 +175,34 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(createAvgLabel, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.createAvgLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(createAvgCheckBox, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.createAvgCheckBox.text")); // NOI18N
+        createAvgCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                createAvgCheckBoxStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(processComparisonButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(createAvgLabel)
+                .addGap(18, 18, 18)
+                .addComponent(createAvgCheckBox)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(createAvgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(createAvgCheckBox))
+                .addGap(5, 5, 5)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(processComparisonButton)
@@ -212,17 +231,16 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addGap(66, 66, 66)
-                            .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -301,6 +319,9 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                             mainF = ml.loadModel(tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().getFile(), false, false);
                         }
 
+                        boolean createAvg = createAvgCheckBox.isSelected();
+                        tc.getProject().getSelectedOneToManyComparison().setCreateAvgFace(createAvg);                        
+                        
                         //TODO: pick which model is template?
                         Model template = ml.loadModel(models.get(0), Boolean.FALSE, false);
 
@@ -312,7 +333,9 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                             metric = ICPmetric.VERTEX_TO_VERTEX;
                         }
 
-                        SurfaceComparisonProcessing.instance().computeAverage(template, models, metric);
+                        if(createAvg){
+                            SurfaceComparisonProcessing.instance().computeAverage(template, models, metric);
+                        }
                         KdTree templateTree;
                         List<Float> var;
                         tc.getProject().getSelectedOneToManyComparison().setAvgFace(template);
@@ -459,10 +482,15 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
             jPanel2.setVisible(true);
+            
+            createAvgCheckBox.setVisible(false);
+            createAvgLabel.setVisible(false);
         }
         if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
             jPanel2.setVisible(false);
-
+            
+            createAvgCheckBox.setVisible(true);
+            createAvgLabel.setVisible(true);
         }
 
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod)jComboBox1.getSelectedItem());
@@ -479,6 +507,10 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 tc.getProject().getSelectedOneToManyComparison().getModels(), 
                 tc.getProject().getSelectedOneToManyComparison().getPrimaryModel(), "_1n");
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void createAvgCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_createAvgCheckBoxStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createAvgCheckBoxStateChanged
 
     public boolean getScaleEnabled() {
         return jCheckBox2.isSelected();
@@ -513,6 +545,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 jComboBox1.setSelectedIndex(i);
             }
         }
+        
+        createAvgCheckBox.setSelected(c.isCreateAvgFace());
       /*  if((c.getRegistrationMethod() == 0)){
             jComboBox1.removeItemAt(0);
         }*/
@@ -532,6 +566,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox createAvgCheckBox;
+    private javax.swing.JLabel createAvgLabel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
