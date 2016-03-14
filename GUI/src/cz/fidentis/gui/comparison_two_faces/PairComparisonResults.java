@@ -1181,6 +1181,18 @@ public class PairComparisonResults extends javax.swing.JPanel {
             shadersPanel.setVisible(false);
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getHdPaintingInfo().setvType(VisualizationType.VECTORS);
             updateHistograms();
+            
+            //Setting density param 
+            ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+            HDpaintingInfo info = tc.getProject().getSelectedComparison2Faces().getHdPaintingInfo();
+            
+            info.setvType(VisualizationType.VECTORS);
+            info.setLenghtFactor(0.5f);
+            info.setDensity(density.getValue());
+            info.setCylLengthFactor(cylLength.getValue());
+            info.setCylRadius(cylRadius.getValue());
+            info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
+            info.setRecompute(true);
         }
         GUIController.getSelectedProjectTopComponent().revalidate();
         GUIController.getSelectedProjectTopComponent().repaint();
