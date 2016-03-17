@@ -992,7 +992,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                     p.finish();
                 } catch (Exception ex) {
-                    p.finish();
+                   Exceptions.printStackTrace(ex);
+                }finally{
+                     p.finish();
                 }
             }
         };
@@ -1028,6 +1030,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             Model model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), false, true);
 
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setModels(model);
+            
+            model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), false, true);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setModels(model);
         }
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setState(1);
         GUIController.getConfigurationTopComponent().addRegistrationComponent();

@@ -45,7 +45,7 @@ public final class FileUtils {
 
     private FileUtils() {
         try {
-            createTMPfolder();
+            createTMPfolder(true);
         } catch (FileManipulationException ex) {
             Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -114,18 +114,24 @@ public final class FileUtils {
      * Creates empty TMP folder in system default temporary-file storage to
      * store temporary data from application. This folder will be deleted on
      * application exit.
+     * 
      *
+     * @param deleteIfExists - deletes tmp directory if it already exists, for example if previous run of 
+     * programme wasn't finished correctly
      * @throws FileManipulationException - if core tmp folder could not be
      * created
      */
-    public void createTMPfolder() throws FileManipulationException {
-        if (tmp == null || !tmp.exists()) {
-            try {
-                tmp = Files.createTempDirectory("fidentis").toFile();
+    public void createTMPfolder(boolean deleteIfExists) throws FileManipulationException {        
+        if (tmp == null || !tmp.exists()) {                  
+                //tmp = Files.createTempDirectory("fidentis" + File.separator + "fidentis").toFile();
+                tmp = new File(System.getProperty("java.io.tmpdir") + File.separator + "fidentis");
+                
+                if(tmp.exists() && deleteIfExists){
+                    deleteTmpFolder();
+                    tmp.mkdir();
+                }
+                
                 tmp.deleteOnExit();
-            } catch (IOException e) {
-                throw new FileManipulationException("TMP folder could not be created.");
-            }
         }
     }
      

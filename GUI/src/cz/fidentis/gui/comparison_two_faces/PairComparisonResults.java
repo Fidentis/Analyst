@@ -52,6 +52,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 import org.openide.windows.WindowManager;
 
 /**
@@ -1117,6 +1118,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     }
                     updateHistograms();
                 } catch (Exception ex) {
+                    Exceptions.printStackTrace(ex);
+                }finally{
                     p.finish();
                 }
             }

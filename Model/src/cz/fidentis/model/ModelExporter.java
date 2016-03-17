@@ -52,7 +52,7 @@ public class ModelExporter {
         }else{
             fileName = exportFile.getName().substring(0, formatIndex);
         }
-        File exportDirectory = new File(exportFile.getParent().toString() + File.separator + fileName);
+        File exportDirectory = new File(exportFile.getParent().toString() + File.separator + fileName);        
         exportDirectory.mkdir();
 
         File mtlFile = new File(exportDirectory + File.separator + fileName + ".mtl");

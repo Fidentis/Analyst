@@ -59,14 +59,13 @@ public class MeshUtils {
      * 
      * @param model - model to mirror
      * @return mirrored model
-     * @throws CloneNotSupportedException 
      */
     public Model getMirroredModel(Model model){
         Model mirroredModel = model.copy();
         float[] centroid = computeCentroid(mirroredModel.getVerts());
         
         for (Vector3f vert : mirroredModel.getVerts()) {
-            vert.x = centroid[0] - vert.x;
+            vert.setX(centroid[0] - vert.x);
         }
 
         return mirroredModel;

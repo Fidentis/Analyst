@@ -64,6 +64,7 @@ public class Comparison2Faces {
     private RegistrationMethod RegMethod;   //registration method used
     private ComparisonMethod CompareMethod; //comparison method used
     private ICPmetric icpMetric;            //either vertex-to-vert or vertex-to-mesh
+    private boolean useSymmetry;
     private int fpDistance;             //distance factor for feature points
     private boolean compareButtonEnabled = true;    //comparison button enabled means all computation of registration were finished (all threads are done)
     private String numericalResults;            //table format of numeric results
@@ -376,6 +377,14 @@ public class Comparison2Faces {
 
     public void setIcpMetric(ICPmetric icpMetric) {
         this.icpMetric = icpMetric;
+    }
+
+    public boolean isUseSymmetry() {
+        return useSymmetry;
+    }
+
+    public void setUseSymmetry(boolean useSymmetry) {
+        this.useSymmetry = useSymmetry;
     }
 
     public ComparisonMethod getComparisonMethod() {

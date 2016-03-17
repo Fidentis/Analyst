@@ -1791,6 +1791,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     public FacialPoint getFacialPoint(int index) {
         return info.getFacialPoints().get(index);
     }
+    
+    public void setModelIndex(int index, Model m){
+        info.getModels().set(index, m);
+    }
 
     public void setColorOfPoint(float[] colorOfPoint) {
         info.setColorOfPoint(colorOfPoint);

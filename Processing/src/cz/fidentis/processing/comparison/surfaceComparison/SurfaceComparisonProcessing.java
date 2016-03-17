@@ -20,6 +20,7 @@ import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.model.Model;
+import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
@@ -43,6 +44,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.*;
+import org.openide.util.Exceptions;
 
 /**
  * Handling all types of comparison provided by application. Class deals with
@@ -101,6 +103,8 @@ public class SurfaceComparisonProcessing {
     public void processOneToOne(KdTree mainF, Model compF, int numberOfIterations, boolean scale, float error,
             Methods method, Type t, float value) {
         List<Vector3f> samples = getUndersampledMesh(method, t, value, compF);
+        
+        p.setDisplayName("Aligning faces.");
 
         Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
     }
@@ -134,7 +138,15 @@ public class SurfaceComparisonProcessing {
         Model compF;
         List<File> results = new ArrayList<File>(compFs.size());
         int i = 0;
-        String tmpLoc = tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
+        
+        String projectId = "" + System.currentTimeMillis();
+        String tmpLoc = projectId + File.separator + tmpModuleFile.getName()/* + File.separator + tmpModuleFile.getName()*/;
+        
+        try {
+            FileUtils.instance().createTMPmoduleFolder(new File(tmpLoc));
+        } catch (FileManipulationException ex) {
+            Exceptions.printStackTrace(ex);
+        }
 
         for (File compF1 : compFs) {
             p.setDisplayName("Registrating face number " + (i + 1));
@@ -292,16 +304,20 @@ public class SurfaceComparisonProcessing {
         k.start();
 
         //temporary folder on disk where temporary files (like aligned faces) will be stored until application is closed
-        String tmpLoc = tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
+        String projectId = "" + System.currentTimeMillis();
+        String tmpLoc = projectId + File.separator + tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
         String currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator + tmpLoc + "_0_";
-        File tmpLocFile = new File(tmpLoc);
+        File tmpLocFile = new File(projectId + File.separator + tmpModuleFile.getName());
 
         int templateSize = template.getVerts().size();
 
         try {
-            ProcessingFileUtils.instance().copyModelsToTMP(compFs, tmpModuleFile, Boolean.FALSE);       //copy all models in 'compFs' to temporary folder, so that origianl files can still be edited without causing problem with computation
+            ProcessingFileUtils.instance().copyModelsToTMP(compFs, new File(projectId + File.separator + tmpModuleFile.getName()), Boolean.FALSE);       //copy all models in 'compFs' to temporary folder, so that origianl files can still be edited without causing problem with computation
             k.finish();
         } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+            System.err.print(ex);
+        }finally{
             k.finish();
         }
 
@@ -327,7 +343,7 @@ public class SurfaceComparisonProcessing {
                 list.add(future);
             }
 
-            currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator + tmpLoc + "_" + (i + 1) + "_";
+            currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator +  tmpLoc + "_" + (i + 1) + "_";
 
             //computes translation vector for each vertex of template face
             for (Future<List<Vector3f>> list1 : list) {
@@ -345,6 +361,9 @@ public class SurfaceComparisonProcessing {
                 templateTree = new KdTreeIndexed(template.getVerts());
                 k.finish();
             } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
+                System.err.print(ex);
+            }finally{
                 k.finish();
             }
             executor.shutdown();
@@ -356,7 +375,7 @@ public class SurfaceComparisonProcessing {
         for (int i = 0; i < compFs.size(); i++) {
             Model currentModel = ml.loadModel(new File(currentTMP + i + File.separator + tmpModuleFile.getName() + "_" + numberOfBatchIterations + "_" + i + ".obj"), Boolean.FALSE, false);
 
-            Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, error, numberOfICPiteration, scale, new File(tmpLoc), numberOfBatchIterations + 1, i));
+            Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, error, numberOfICPiteration, scale, tmpLocFile, numberOfBatchIterations + 1, i));
             list2.add(f);
         }
 
@@ -1029,15 +1048,20 @@ public class SurfaceComparisonProcessing {
      */
     public Model createSymetricalModel(Model m) {
         Model copy = (Model) m.copy();
-        Model mirror = MeshUtils.instance().getMirroredModel(copy);
+        
+        createSymetricModelNoCopy(copy);
+        
+        return copy;
+    }
+    
+    public void createSymetricModelNoCopy(Model m){
+        Model mirror = MeshUtils.instance().getMirroredModel(m);
 
         Model[] models = new Model[2];
-        models[0] = copy;
+        models[0] = m;
         models[1] = mirror;
 
-        computeAverage(copy, models, ICPmetric.VERTEX_TO_VERTEX);
-
-        return copy;
+        computeAverage(m, models, ICPmetric.VERTEX_TO_VERTEX);
     }
 
     public int findMostAvgFace(List<File> models) {

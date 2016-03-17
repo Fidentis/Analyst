@@ -21,6 +21,7 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.landmarkParser.FpModel;
 import cz.fidentis.model.Model;
+import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
@@ -114,6 +115,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         numberSpinner = new javax.swing.JSpinner();
         icpMetricLabel = new javax.swing.JLabel();
         icpMetricComboBox = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        symModCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -404,6 +407,15 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel11.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(symModCheckbox, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.symModCheckbox.text")); // NOI18N
+        symModCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                symModCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -421,21 +433,24 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
+                            .addComponent(icpMetricLabel)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel10)
-                            .addComponent(icpMetricLabel))
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(icpMetricComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(76, 76, 76)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jCheckBox9)
-                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(jSpinner1)
-                                    .addComponent(jSpinner2)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addComponent(icpMetricComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jSpinner2)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(symModCheckbox)
+                                            .addComponent(jCheckBox9))
+                                        .addGap(0, 0, Short.MAX_VALUE))))))
                     .addComponent(randomPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel14)
@@ -460,6 +475,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox9, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(symModCheckbox, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -786,7 +805,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1021, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -921,15 +940,33 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         p.start(100);
 
                         Icp.instance().setP(p);
+                        SurfaceComparisonProcessing.setP(p);
                         KdTree mainF = null;
+                        Model mFace = mainFace;
+                        Model cFace = compareFace;
 
+                        if(symModCheckbox.isSelected()){
+                            /*mFace = SurfaceComparisonProcessing.instance().createSymetricalModel(mFace);
+                            cFace = SurfaceComparisonProcessing.instance().createSymetricalModel(cFace);
+                            
+
+                            //tc.getViewerPanel_2Faces().getListener2().setModels(cFace);
+                            //tc.getViewerPanel_2Faces().getListener2().addModel(cFace);
+                            
+                            tc.getViewerPanel_2Faces().getListener1().setModels(mFace);*/
+                            
+                            SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(mFace);
+                            SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(cFace);
+                        }
+                        
                         if (icpMetricComboBox.getSelectedItem() == ICPmetric.VERTEX_TO_VERTEX) {
                             mainF = new KdTreeIndexed(mainFace.getVerts());
                         } else {
                             mainF = new KdTreeFaces(mainFace.getVerts(), mainFace.getFaces());
-                        }
-
+                        }                       
+                        
                         tc.getProject().getSelectedComparison2Faces().setMainFace(mainF);
+                        tc.getProject().getSelectedComparison2Faces().setUseSymmetry(symModCheckbox.isSelected());
 
                         Methods m = (Methods) jComboBox2.getSelectedItem();
                         Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
@@ -941,9 +978,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         p.finish();
 
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true);
-                        ModelLoader l = new ModelLoader();
-                        Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-                        tc.getViewerPanel_2Faces().getListener2().addModel(model);
+                        //ModelLoader l = new ModelLoader();
+                        //Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
+                        tc.getViewerPanel_2Faces().getListener2().addModel(mFace);
 
                         if (GUIController.getSelectedProjectTopComponent() == tc) {
                             GUIController.getConfigurationTopComponent().addComparisonComponent();
@@ -964,6 +1001,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         tc.getProject().getSelectedComparison2Faces().setType(t.ordinal());
                         tc.getProject().getSelectedComparison2Faces().setValue(value);
                     } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
+                    }finally{
                         p.finish();
                     }
                 }
@@ -1207,6 +1246,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
+
+    private void symModCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_symModCheckboxActionPerformed
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1297,6 +1340,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1330,5 +1374,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner numberSpinner;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JCheckBox symModCheckbox;
     // End of variables declaration//GEN-END:variables
 }
