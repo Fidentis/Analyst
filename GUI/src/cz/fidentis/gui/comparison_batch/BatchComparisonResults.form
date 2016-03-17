@@ -977,7 +977,7 @@
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="sizeSlider" pref="243" max="32767" attributes="0"/>
+                                      <Component id="sizeSlider" pref="254" max="32767" attributes="0"/>
                                       <Component id="jSlider2" min="-2" pref="235" max="-2" attributes="0"/>
                                   </Group>
                               </Group>

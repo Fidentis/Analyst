@@ -12,7 +12,6 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
@@ -22,16 +21,10 @@ import cz.fidentis.visualisation.procrustes.PApainting;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import javax.swing.JFileChooser;
-import static javax.swing.JFileChooser.SAVE_DIALOG;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -422,6 +415,9 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                     GUIController.setPauseButtonVisible(false);
                     GUIController.updateNavigator();
                 } catch (Exception ex) {
+                   Exceptions.printStackTrace(ex);
+                   processComparisonButton.setEnabled(true);
+                }finally{
                     p.finish();
                 }
             }

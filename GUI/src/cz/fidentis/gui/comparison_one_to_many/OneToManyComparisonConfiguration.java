@@ -8,12 +8,10 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
-import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
 import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.comparison.procrustes.Procrustes1ToMany;
-import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
@@ -21,7 +19,6 @@ import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
@@ -31,16 +28,11 @@ import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -403,6 +395,9 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                         p.finish();
                     } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
+                        
+                    }finally{
                         p.finish();
                     }
 

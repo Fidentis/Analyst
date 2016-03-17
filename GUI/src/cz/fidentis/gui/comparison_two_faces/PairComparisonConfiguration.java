@@ -10,9 +10,7 @@ import cz.fidentis.comparison.hausdorffDistance.ComparisonMetrics;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
 import cz.fidentis.comparison.hausdorffDistance.NearestCurvature;
-import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeFaces;
 import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.comparison.procrustes.Procrustes2Models;
 import cz.fidentis.controller.Comparison2Faces;
@@ -23,7 +21,6 @@ import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
@@ -38,13 +35,11 @@ import java.awt.color.ColorSpace;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.vecmath.Vector3f;
@@ -993,6 +988,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     p.finish();
                 } catch (Exception ex) {
                    Exceptions.printStackTrace(ex);
+                   processComparisonButton.setEnabled(true);
                 }finally{
                      p.finish();
                 }

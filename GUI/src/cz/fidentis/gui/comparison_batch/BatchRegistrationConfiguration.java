@@ -38,6 +38,7 @@ import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -1073,6 +1074,9 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     p.finish();
                     GUIController.updateNavigator();
                 } catch (Exception ex) {
+                    Exceptions.printStackTrace(ex);
+                    jButton1.setEnabled(true);
+                }finally{
                     p.finish();
                 }
             }

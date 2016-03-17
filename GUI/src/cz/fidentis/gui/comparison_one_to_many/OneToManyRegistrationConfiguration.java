@@ -38,6 +38,7 @@ import javax.swing.JLabel;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -932,6 +933,9 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                         p.finish();
                     } catch (Exception ex) {
+                        jButton1.setEnabled(true);
+                        Exceptions.printStackTrace(ex);
+                    }finally{
                         p.finish();
                     }
 

@@ -517,6 +517,8 @@ public class SurfaceComparisonProcessing {
             executor.shutdown();
 
         } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }finally{
             k.finish();
         }
         return results;
