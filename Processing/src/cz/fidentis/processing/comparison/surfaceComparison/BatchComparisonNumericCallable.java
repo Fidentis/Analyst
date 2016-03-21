@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cz.fidentis.processing.comparison.surfaceComparison;
 
 import cz.fidentis.comparison.ComparisonMethod;
@@ -26,9 +25,11 @@ import org.netbeans.api.progress.ProgressHandleFactory;
  *
  * @author Zuzana Ferkova
  */
-public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>>{
+public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>> {
+
     private KdTree mainF;
     private Model compMesh;
+
     public BatchComparisonNumericCallable() {
     }
 
@@ -52,38 +53,45 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
         this.compCurv = compCurv;
         this.method = method;
     }
-    
+
     /**
      * Computes numerical results for surface batch processing
+     *
      * @return numerical results for a single face
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public ArrayList<Float> call() throws Exception {
-       List<Float> result;
-       ProgressHandle p = ProgressHandleFactory.createHandle("Computing numerical results for faces " + (mainFaceNum + 1) + " and " + (compareFaceNum + 1) + ".");
-       p.start();
-        
-        ArrayList<Float> tmp = new ArrayList<Float>((int) (compMesh.getVerts().size() * thresh));
+        List<Float> result;
+        ProgressHandle p = ProgressHandleFactory.createHandle("Computing numerical results for faces " + (mainFaceNum + 1) + " and " + (compareFaceNum + 1) + ".");
+        p.start();
 
-        if (method == ComparisonMethod.HAUSDORFF_DIST) {
-            List<Vector3f> normalsUsed = compMesh.getNormals();
+        try {
 
-            if (compMesh.getVerts().size() > compMesh.getNormals().size()) {
-                normalsUsed = SurfaceComparisonProcessing.instance().recomputeVertexNormals(compMesh);
+            ArrayList<Float> tmp = new ArrayList<Float>((int) (compMesh.getVerts().size() * thresh));
+
+            if (method == ComparisonMethod.HAUSDORFF_DIST) {
+                List<Vector3f> normalsUsed = compMesh.getNormals();
+
+                if (compMesh.getVerts().size() > compMesh.getNormals().size()) {
+                    normalsUsed = SurfaceComparisonProcessing.instance().recomputeVertexNormals(compMesh);
+                }
+
+                result = HausdorffDistance.instance().hDistance(mainF, compMesh.getVerts(), normalsUsed, useRelative);
+            } else {
+                result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv.getCurvature(CurvatureType.Gaussian), compCurv.getCurvature(CurvatureType.Gaussian));
             }
-
-            result = HausdorffDistance.instance().hDistance(mainF, compMesh.getVerts(), normalsUsed, useRelative);
-        }else{
-            result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv.getCurvature(CurvatureType.Gaussian), compCurv.getCurvature(CurvatureType.Gaussian));
-        }
             result = ComparisonMetrics.instance().thresholdValues(result, thresh, useRelative);
             tmp.addAll(result);
 
             p.finish();
-        
-        return tmp;
-        
+
+            return tmp;
+        } catch (Exception ex) {
+            p.finish();
+        }
+
+        return null;
     }
-    
+
 }

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cz.fidentis.processing.comparison.surfaceComparison;
 
 import cz.fidentis.comparison.ICPmetric;
@@ -23,10 +22,11 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 
 /**
  * Class designed for multi-threading of batch regisration.
- * 
+ *
  * @author Zuzana Ferkova
  */
-public class BatchProcessingCallable implements Callable<List<Vector3f>>{
+public class BatchProcessingCallable implements Callable<List<Vector3f>> {
+
     private final Model compF;
     private final List<Vector3f> samples;
     private final Model template;
@@ -42,18 +42,22 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>>{
 
     /**
      * Data needed to perform call() method
-     * 
-     * @param compF - face to align to template and compute new average face from
+     *
+     * @param compF - face to align to template and compute new average face
+     * from
      * @param samples
      * @param template - template to create new avreage face from
      * @param templateTree - template respresented as KdTree
-     * @param error - error for ICP computation denoting when no more alignment is necessary
+     * @param error - error for ICP computation denoting when no more alignment
+     * is necessary
      * @param iterations - number of iterations for ICP
      * @param scale - whether to use scale during ICP
      * @param saveTo - address to folder to disk where to save aligned compFs
-     * @param currentModelNumber - current number of model in list of all models (to generate appropriate name when saving to disk)
+     * @param currentModelNumber - current number of model in list of all models
+     * (to generate appropriate name when saving to disk)
      * @param batchIteration - number of current batch iteration
-     * @param align - whether to use alignment or just compute average face transformations
+     * @param align - whether to use alignment or just compute average face
+     * transformations
      * @param metric - ICP metric used for alignment
      */
     public BatchProcessingCallable(Model compF, List<Vector3f> samples, Model template, KdTree templateTree, float error, int iterations, boolean scale, File saveTo, int currentModelNumber, int batchIteration, boolean align,
@@ -71,46 +75,50 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>>{
         this.align = align;
         this.metric = metric;
     }
-    
-    
+
     /**
-     * Performs ICP of compF to template, saves aligned compF to tempory folder on disk
-     * and computes parameters for creating new average face.
-     * 
+     * Performs ICP of compF to template, saves aligned compF to tempory folder
+     * on disk and computes parameters for creating new average face.
+     *
      * @return parameters for new average face
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
-    public List<Vector3f> call() throws Exception {     
+    public List<Vector3f> call() throws Exception {
         ProgressHandle p = null;
-        
+
         KdTree computeMorph;
         Vector3f near;
         List<Vector3f> trans = new ArrayList<Vector3f>(template.getVerts().size());
-        
-        if(align){
+
+        if (align) {
             p = ProgressHandleFactory.createHandle("Aligning face " + (currentModelNumber + 1) + ", Batch Iteration " + (batchIteration + 1));
             p.start();
-            Icp.instance().icp(templateTree, compF.getVerts(), samples, error, iterations, scale);
-            ProcessingFileUtils.instance().saveModelToTMP(compF, saveTo, batchIteration + 1, currentModelNumber, Boolean.FALSE);
+
+            try {
+                Icp.instance().icp(templateTree, compF.getVerts(), samples, error, iterations, scale);
+                ProcessingFileUtils.instance().saveModelToTMP(compF, saveTo, batchIteration + 1, currentModelNumber, Boolean.FALSE);
+            } catch (Exception ex) {
+                p.finish();
+            }
         }
-        
-        if(metric == ICPmetric.VERTEX_TO_VERTEX){
+
+        if (metric == ICPmetric.VERTEX_TO_VERTEX) {
             computeMorph = new KdTreeIndexed(compF.getVerts());
-        }else{
+        } else {
             computeMorph = new KdTreeFaces(compF.getVerts(), compF.getFaces());
         }
-        
+
         for (Vector3f point : template.getVerts()) {
             near = computeMorph.nearestNeighbour(point);
             trans.add(new Vector3f(near.x - point.x, near.y - point.y, near.z - point.z));
         }
-         
-        if(p != null){
+
+        if (p != null) {
             p.finish();
         }
-        
+
         return trans;
     }
-    
+
 }

@@ -26,7 +26,6 @@ import javax.swing.JFileChooser;
 import javax.swing.TransferHandler;
 import org.netbeans.api.progress.*;
 
-
 /**
  * The basic canvas for displaying models containing GLJPanel and navigation for
  * camera.
@@ -34,6 +33,7 @@ import org.netbeans.api.progress.*;
  * @author Katka
  */
 public class Canvas extends javax.swing.JPanel {
+
     ProjectTopComponent projectTopComponent;
 
     protected long startClickTime = 0;
@@ -44,7 +44,7 @@ public class Canvas extends javax.swing.JPanel {
     protected GeneralGLEventListener listener;
     protected GeneralGLEventListener listener2;
     protected boolean isPrimary = false;
-    
+
     public Canvas() {
         this.isPrimary = false;
         GLCapabilities capabilities = new GLCapabilities(GLProfile.get(GLProfile.GL2));
@@ -56,18 +56,19 @@ public class Canvas extends javax.swing.JPanel {
         glAnimatorControl.start();
         initComponents();
 
-        
         jPanel2.add(glJPanel);
         this.validate();
 
         jLabel2.setVisible(false);
-        
-        this.setTransferHandler(new TransferHandler(){
+
+        this.setTransferHandler(new TransferHandler() {
 
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
-                for(DataFlavor f : support.getDataFlavors()) {
-                    if(f.isFlavorJavaFileListType()) return true;
+                for (DataFlavor f : support.getDataFlavors()) {
+                    if (f.isFlavorJavaFileListType()) {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -76,10 +77,12 @@ public class Canvas extends javax.swing.JPanel {
             public boolean importData(TransferHandler.TransferSupport support) {
                 List<File> modelFiles = new ArrayList<File>();
                 try {
-                    List<File> files = (List<File>)support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    for(File f : files) {
+                    List<File> files = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    for (File f : files) {
                         String name = f.getName().toLowerCase();
-                        if(name.endsWith(".obj") || name.endsWith(".ply") || name.endsWith(".stl")) modelFiles.add(f);
+                        if (name.endsWith(".obj") || name.endsWith(".ply") || name.endsWith(".stl")) {
+                            modelFiles.add(f);
+                        }
                     }
                 } catch (UnsupportedFlavorException ex) {
                     return false;
@@ -87,10 +90,10 @@ public class Canvas extends javax.swing.JPanel {
                     return false;
                 }
                 addModel(modelFiles.toArray(new File[modelFiles.size()]));
-                
+
                 return false;
             }
-            
+
         });
     }
 
@@ -103,7 +106,7 @@ public class Canvas extends javax.swing.JPanel {
 
     }
 
-    public Canvas(ProjectTopComponent tc){
+    public Canvas(ProjectTopComponent tc) {
         this.projectTopComponent = tc;
 
         this.isPrimary = false;
@@ -116,18 +119,19 @@ public class Canvas extends javax.swing.JPanel {
         glAnimatorControl.start();
         initComponents();
 
-        
         jPanel2.add(glJPanel);
         this.validate();
 
         jLabel2.setLocation(this.getWidth() / 2 - 35, this.getHeight() / 2 - 40);
-        
-        this.setTransferHandler(new TransferHandler(){
+
+        this.setTransferHandler(new TransferHandler() {
 
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
-                for(DataFlavor f : support.getDataFlavors()) {
-                    if(f.isFlavorJavaFileListType()) return true;
+                for (DataFlavor f : support.getDataFlavors()) {
+                    if (f.isFlavorJavaFileListType()) {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -136,10 +140,12 @@ public class Canvas extends javax.swing.JPanel {
             public boolean importData(TransferHandler.TransferSupport support) {
                 List<File> modelFiles = new ArrayList<File>();
                 try {
-                    List<File> files = (List<File>)support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    for(File f : files) {
+                    List<File> files = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    for (File f : files) {
                         String name = f.getName().toLowerCase();
-                        if(name.endsWith(".obj") || name.endsWith(".ply") || name.endsWith(".stl")) modelFiles.add(f);
+                        if (name.endsWith(".obj") || name.endsWith(".ply") || name.endsWith(".stl")) {
+                            modelFiles.add(f);
+                        }
                     }
                 } catch (UnsupportedFlavorException ex) {
                     return false;
@@ -147,10 +153,10 @@ public class Canvas extends javax.swing.JPanel {
                     return false;
                 }
                 addModel(modelFiles.toArray(new File[modelFiles.size()]));
-                
+
                 return false;
             }
-            
+
         });
     }
 
@@ -165,7 +171,6 @@ public class Canvas extends javax.swing.JPanel {
         jLabel2.setLocation(this.getWidth() / 2 - 35, this.getHeight() / 2 - 40);
 
     }
-       
 
     public void addGLEventListener(GeneralGLEventListener generalGLlistener) {
         listener = generalGLlistener;
@@ -205,7 +210,7 @@ public class Canvas extends javax.swing.JPanel {
         zTextField.setText("-");
         jTextArea1.setText("-");
     }
-    
+
     public void triggerAdd() {
         this.jLabel2MouseClicked(null);
     }
@@ -735,7 +740,7 @@ public class Canvas extends javax.swing.JPanel {
         }
         int result = jFileChooser1.showOpenDialog(projectTopComponent);
         if (result == JFileChooser.APPROVE_OPTION) {
-            if(jFileChooser1.isMultiSelectionEnabled()) {
+            if (jFileChooser1.isMultiSelectionEnabled()) {
                 this.addModel(jFileChooser1.getSelectedFiles());
             } else {
                 File[] fileArray = new File[1];
@@ -753,14 +758,15 @@ public class Canvas extends javax.swing.JPanel {
     public String getDescriptionText() {
         return textPane.getText();
     }
-    
-    public void showResultIcon(){
+
+    public void showResultIcon() {
         jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
     }
-    public void showModelIcon(){
-         jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
+
+    public void showModelIcon() {
+        jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
     }
-    
+
     public void createResultIcon() {
         int width = glJPanel.getWidth();
         int height = glJPanel.getHeight();
@@ -773,10 +779,12 @@ public class Canvas extends javax.swing.JPanel {
         projectTopComponent.getProject().getSelectedComparison2Faces().setResultIcon(i);
 
     }
-    
+
     private void addModel(final File[] files) {
-        if(files.length <= 0) return;
-        
+        if (files.length <= 0) {
+            return;
+        }
+
         if (projectTopComponent.getProject().getSelectedPart() == 2) {
             Runnable run = new Runnable() {
                 @Override
@@ -786,38 +794,43 @@ public class Canvas extends javax.swing.JPanel {
                     p.start();
                     p.switchToIndeterminate();
 
-                    if (isPrimary) {
-                        ModelLoader loader = new ModelLoader();
-                        Model model = loader.loadModel(new File(files[0].getPath()), true, true);
+                    try {
 
-                        projectTopComponent.getProject().getSelectedComparison2Faces().setModel1(model);
-                        projectTopComponent.getViewerPanel_2Faces().setModel1(model);
-                        projectTopComponent.getProject().setSelectedPart(2);
-                        GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+                        if (isPrimary) {
+                            ModelLoader loader = new ModelLoader();
+                            Model model = loader.loadModel(new File(files[0].getPath()), true, true);
 
-                    } else {
-                        ModelLoader loader = new ModelLoader();
-                        Model model = loader.loadModel(new File(files[0].getPath()), true, true);
+                            projectTopComponent.getProject().getSelectedComparison2Faces().setModel1(model);
+                            projectTopComponent.getViewerPanel_2Faces().setModel1(model);
+                            projectTopComponent.getProject().setSelectedPart(2);
+                            GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
 
-                        projectTopComponent.getProject().getSelectedComparison2Faces().setModel2(model);
-                        projectTopComponent.getViewerPanel_2Faces().setModel2(model);
-                        projectTopComponent.getProject().setSelectedPart(2);
-                        GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
-                        int width = glJPanel.getWidth();
-                        int height = glJPanel.getHeight();
-                        glJPanel.display();
-                        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-                        Graphics2D g = img.createGraphics();
-                        glJPanel.printAll(g);
-                        img.flush();
-                        ImageIcon i = new ImageIcon(img.getScaledInstance(90, 108, Image.SCALE_SMOOTH));
-                        jButton1.setIcon(i);
-                        projectTopComponent.getProject().getSelectedComparison2Faces().setModelIcon(i);
+                        } else {
+                            ModelLoader loader = new ModelLoader();
+                            Model model = loader.loadModel(new File(files[0].getPath()), true, true);
+
+                            projectTopComponent.getProject().getSelectedComparison2Faces().setModel2(model);
+                            projectTopComponent.getViewerPanel_2Faces().setModel2(model);
+                            projectTopComponent.getProject().setSelectedPart(2);
+                            GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+                            int width = glJPanel.getWidth();
+                            int height = glJPanel.getHeight();
+                            glJPanel.display();
+                            BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                            Graphics2D g = img.createGraphics();
+                            glJPanel.printAll(g);
+                            img.flush();
+                            ImageIcon i = new ImageIcon(img.getScaledInstance(90, 108, Image.SCALE_SMOOTH));
+                            jButton1.setIcon(i);
+                            projectTopComponent.getProject().getSelectedComparison2Faces().setModelIcon(i);
+                        }
+
+                        p.finish();
+
+                        GUIController.updateNavigator();
+                    } catch (Exception ex) {
+                        p.finish();
                     }
-
-                    p.finish();
-
-                    GUIController.updateNavigator();
                 }
             };
 
@@ -837,7 +850,7 @@ public class Canvas extends javax.swing.JPanel {
             } else {
                 for (File file : files) {
                     projectTopComponent.getProject().getSelectedOneToManyComparison().addModel(file);
-                    
+
                 }
                 File file = projectTopComponent.getProject().getSelectedOneToManyComparison().getModel(0);
                 ModelLoader loader = new ModelLoader();
@@ -871,18 +884,17 @@ public class Canvas extends javax.swing.JPanel {
                 projectTopComponent.getViewerPanel_2Faces().getListener2().setModels(model);
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
             } else {
-             //   ModelLoader l = new ModelLoader();
-              //  Model model = l.loadModel(projectTopComponent.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
+                //   ModelLoader l = new ModelLoader();
+                //  Model model = l.loadModel(projectTopComponent.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
                 Model model = projectTopComponent.getViewerPanel_2Faces().getListener1().getModel();
                 projectTopComponent.getViewerPanel_2Faces().getListener2().addModel(model);
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
 
             }
         } else {
-            if(projectTopComponent.getViewerPanel_2Faces().getListener2().isPaintHD()){
-              jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());  
-            }
-            else{
+            if (projectTopComponent.getViewerPanel_2Faces().getListener2().isPaintHD()) {
+                jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
+            } else {
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
             }
             projectTopComponent.getViewerPanel_2Faces().getListener2().setPaintHD(

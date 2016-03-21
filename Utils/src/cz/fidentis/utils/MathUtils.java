@@ -108,6 +108,24 @@ public class MathUtils {
         return m;
     }
     
+    public Matrix scaleMatrix(float scale){
+        Matrix s = new Matrix(new double[] {scale, 0, 0 , 0,
+                                            0, scale, 0, 0,
+                                            0, 0, scale, 0,
+                                            0, 0, 0, 1}, 4);
+        
+        return s;
+    }
+    
+    public Matrix transMatrix(Vector3f t){
+        Matrix m = new Matrix(new double[] {1, 0, 0 , t.x,
+                                            0, 1, 0, t.y,
+                                            0, 0, 1, t.z,
+                                            0, 0, 0, 1}, 4);
+        
+        return m;
+    }
+    
     /**
      * Creates vector from two points. Does not normalize results
      * @param a - first point

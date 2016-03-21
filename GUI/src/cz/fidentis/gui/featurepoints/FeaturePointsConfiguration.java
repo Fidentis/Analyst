@@ -289,21 +289,19 @@ public class FeaturePointsConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void angleToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_angleToggleButtonActionPerformed
-        if(angleToggleButton.isSelected()){
+        if (angleToggleButton.isSelected()) {
             distanceToggleButton.setSelected(false);
             GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().poitsSetAngleMeasurement(true);
-        }
-        else{
+        } else {
             GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().poitsSetAngleMeasurement(false);
         }
     }//GEN-LAST:event_angleToggleButtonActionPerformed
 
     private void distanceToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_distanceToggleButtonActionPerformed
-        if(distanceToggleButton.isSelected()){
+        if (distanceToggleButton.isSelected()) {
             angleToggleButton.setSelected(false);
             GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().poitsSetDistanceMeasurement(true);
-        }
-        else{
+        } else {
             GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().poitsSetDistanceMeasurement(false);
         }
     }//GEN-LAST:event_distanceToggleButtonActionPerformed
@@ -316,20 +314,25 @@ public class FeaturePointsConfiguration extends javax.swing.JPanel {
                 ProgressHandle p;
                 p = ProgressHandleFactory.createHandle("Computing...");
 
-                p.start();
-                
-                jButton1.setEnabled(false);
-                GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.initComputation();
-                GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.getAllPoints();
-                jButton1.setEnabled(true);
-                jCheckBox1.setEnabled(true);
-                jCheckBox2.setEnabled(true);
-                jLabel3.setEnabled(true);
-                colorPanel.setEnabled(true);
-                jLabel4.setEnabled(true);
-                jSlider1.setEnabled(true);
-                
-                p.finish();
+                try {
+
+                    p.start();
+
+                    jButton1.setEnabled(false);
+                    GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.initComputation();
+                    GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.getAllPoints();
+                    jButton1.setEnabled(true);
+                    jCheckBox1.setEnabled(true);
+                    jCheckBox2.setEnabled(true);
+                    jLabel3.setEnabled(true);
+                    colorPanel.setEnabled(true);
+                    jLabel4.setEnabled(true);
+                    jSlider1.setEnabled(true);
+
+                    p.finish();
+                } catch (Exception ex) {
+                    p.finish();
+                }
             }
         };
 
@@ -355,23 +358,23 @@ public class FeaturePointsConfiguration extends javax.swing.JPanel {
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         setShowInfo();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
-    
-    private void setShowInfo(){
-         GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().setShowInfo(jCheckBox1.isSelected());
+
+    private void setShowInfo() {
+        GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().setShowInfo(jCheckBox1.isSelected());
     }
-    
-    private void setPointsEditable(){
+
+    private void setPointsEditable() {
         GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().setPointsEditable(jCheckBox2.isSelected());
     }
-    
-    private void setColor(){
+
+    private void setColor() {
         GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
     }
-    
-    private void setFacialPointRadius(){
-        GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.setFacialPointRadius(jSlider1.getValue()/10.0f);
+
+    private void setFacialPointRadius() {
+        GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.setFacialPointRadius(jSlider1.getValue() / 10.0f);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton angleToggleButton;
     private javax.swing.JDialog colorDialog;

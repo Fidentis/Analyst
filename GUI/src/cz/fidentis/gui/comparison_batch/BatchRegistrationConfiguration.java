@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -43,6 +44,7 @@ import org.openide.util.Cancellable;
  * @author Katka
  */
 public class BatchRegistrationConfiguration extends javax.swing.JPanel {
+
     private Thread runningTask;
     private final Cancellable cancelTask;
 
@@ -881,23 +883,22 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
                     FpResultsBatch res = FpProcessing.instance().calculatePointsBatch(cancelTask,
                             tc.getProject().getSelectedBatchComparison().getModels());
-                    
+
                     //move to GUI manipulation eventually
                     tc.getProject().getSelectedBatchComparison().setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
                     tc.getViewerPanel_Batch().getListener().setFacialPoints(
-                        tc.getProject().getSelectedBatchComparison().getFacialPoints(
-                                tc.getViewerPanel_Batch().getListener().getModel().getName()
-                        ));
+                            tc.getProject().getSelectedBatchComparison().getFacialPoints(
+                                    tc.getViewerPanel_Batch().getListener().getModel().getName()
+                            ));
                     tc.getProject().getSelectedBatchComparison().setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
-                    
-                    
+
                     jButton1.setEnabled(areFPCalculated(tc));
                     jButton7.setEnabled(areFPCalculated(tc));
                 }
             };
             runningTask = new Thread(run);
             runningTask.start();
-        }      
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -934,138 +935,146 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             @Override
             public void run() {
                 ProgressHandle p = ProgressHandleFactory.createHandle("Registrating faces...");
-                if (jComboBox6.getSelectedIndex() == 1) {
-                    p.start();
 
-                    Icp.instance().setP(null);
-                    SurfaceComparisonProcessing.setP(p);
+                try {
+                    if (jComboBox6.getSelectedIndex() == 1) {
+                        p.start();
 
-                    List<File> models = tc.getProject().getSelectedBatchComparison().getModels();
-                    ModelLoader ml = new ModelLoader();
-                    
-                    int selectedModelTemplate = facesComboBox.getSelectedIndex();
-                    
-                    switch (selectedModelTemplate) {
-                        case 0:
-                            Random r = new Random();
-                            selectedModelTemplate = r.nextInt(models.size());
-                            break;
-                        case 1:
-                            //most avg
-                            selectedModelTemplate = SurfaceComparisonProcessing.instance().findMostAvgFace(models);
-                            break;
-                        case 2:
-                            //least avg
-                            selectedModelTemplate = SurfaceComparisonProcessing.instance().findLeastAvgFace(models);
-                            break;
-                        default:
-                            //some specific model was used
-                            selectedModelTemplate -= 3; //there are 3 options at the beginning that are not models
-                            break;
-                    }
-                    
-                    Model template = ml.loadModel(models.get(selectedModelTemplate), Boolean.FALSE, true);
-                    tc.getProject().getSelectedBatchComparison().setTemplateIndex(selectedModelTemplate);
-                    
-                    
-                    tc.getViewerPanel_Batch().getListener().setModels(template);
-                    List<File> results;
+                        Icp.instance().setP(null);
+                        SurfaceComparisonProcessing.setP(p);
 
-                    try {
-                        Methods m = (Methods) jComboBox2.getSelectedItem();
-                        Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
-                        float value = getUndersampleValue(m, t);
-                        ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
-                        
-                        results = SurfaceComparisonProcessing.instance().processManyToMany(template, models, (int) jSpinner3.getValue(), (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
-                                  m, t, value, metric);
-                        
-                        tc.getProject().getSelectedBatchComparison().setIcpMetric(metric);
-                        tc.getProject().getSelectedBatchComparison().setMethod(m.ordinal());
-                        tc.getProject().getSelectedBatchComparison().setType(t.ordinal());
-                        tc.getProject().getSelectedBatchComparison().setValue(value);
-                        tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
-                        tc.getProject().getSelectedBatchComparison().setAverageFace(template);
-                    } catch (FileManipulationException ex) {
-                        //osefuj vynimku
-                        jButton1.setEnabled(true);
-                    }
+                        List<File> models = tc.getProject().getSelectedBatchComparison().getModels();
+                        ModelLoader ml = new ModelLoader();
 
-                } else if (jComboBox6.getSelectedIndex() == 0) {
-                    int size = tc.getProject().getSelectedBatchComparison().getModels().size();
-                    p.start(size);
-                    //TODO Procrustes
-                    List<List<FacialPoint>> list = new ArrayList();
-                    List<ArrayList<Vector3f>> verts = new ArrayList();
+                        int selectedModelTemplate = facesComboBox.getSelectedIndex();
 
-                    for (int i = 0; i < size; i++) {
-                        List<FacialPoint> facialPoints = tc.getProject().getSelectedBatchComparison().getFacialPoints(
-                                tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
-                        list.add(facialPoints);
-
-                        verts.add(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getVerts());
-                    }
-
-                    ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, jCheckBox11.isSelected());
-
-                    //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
-                    procrustes.alignBatch(jSlider3.getValue() / 100f);
-
-                    List<File> results;
-
-                    for (int i = 0; i < tc.getProject().getSelectedBatchComparison().getPreregiteredModels().size(); i++) {
-                        tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).setVerts(procrustes.getGpa().getPA(i).getVertices());
-                        procrustes.getGpa().getPA(i).updateFacialPoints(tc.getProject().getSelectedBatchComparison().getFacialPoints(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName()));
-
-                        if (tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
-                            tc.getViewerPanel_Batch().getListener().setModels(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i));
+                        switch (selectedModelTemplate) {
+                            case 0:
+                                Random r = new Random();
+                                selectedModelTemplate = r.nextInt(models.size());
+                                break;
+                            case 1:
+                                //most avg
+                                selectedModelTemplate = SurfaceComparisonProcessing.instance().findMostAvgFace(models);
+                                break;
+                            case 2:
+                                //least avg
+                                selectedModelTemplate = SurfaceComparisonProcessing.instance().findLeastAvgFace(models);
+                                break;
+                            default:
+                                //some specific model was used
+                                selectedModelTemplate -= 3; //there are 3 options at the beginning that are not models
+                                break;
                         }
 
-                    }
+                        Model template = ml.loadModel(models.get(selectedModelTemplate), Boolean.FALSE, true);
+                        tc.getProject().getSelectedBatchComparison().setTemplateIndex(selectedModelTemplate);
 
-                    if (jCheckBox11.isSelected()) {
-                        //tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 7);
-                        tc.getViewerPanel_Batch().getListener().setFacialPointRadius(jSlider1.getValue()/30f);
-                    } /*else {
+                        tc.getViewerPanel_Batch().getListener().setModels(template);
+                        List<File> results;
+
+                        try {
+                            Methods m = (Methods) jComboBox2.getSelectedItem();
+                            Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
+                            float value = getUndersampleValue(m, t);
+                            ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
+
+                            results = SurfaceComparisonProcessing.instance().processManyToMany(template, models, (int) jSpinner3.getValue(), (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
+                                    m, t, value, metric);
+
+                            tc.getProject().getSelectedBatchComparison().setIcpMetric(metric);
+                            tc.getProject().getSelectedBatchComparison().setMethod(m.ordinal());
+                            tc.getProject().getSelectedBatchComparison().setType(t.ordinal());
+                            tc.getProject().getSelectedBatchComparison().setValue(value);
+                            tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
+                            tc.getProject().getSelectedBatchComparison().setAverageFace(template);
+                        } catch (FileManipulationException ex) {
+                            //osefuj vynimku
+                            jButton1.setEnabled(true);
+                        }
+
+                    } else if (jComboBox6.getSelectedIndex() == 0) {
+                        int size = tc.getProject().getSelectedBatchComparison().getModels().size();
+                        p.start(size);
+                        //TODO Procrustes
+                        List<List<FacialPoint>> list = new ArrayList();
+                        List<ArrayList<Vector3f>> verts = new ArrayList();
+
+                        for (int i = 0; i < size; i++) {
+                            List<FacialPoint> facialPoints = tc.getProject().getSelectedBatchComparison().getFacialPoints(
+                                    tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
+                            list.add(facialPoints);
+
+                            verts.add(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getVerts());
+                        }
+
+                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, jCheckBox11.isSelected());
+
+                        //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
+                        procrustes.alignBatch(jSlider3.getValue() / 100f);
+
+                        List<File> results;
+
+                        for (int i = 0; i < tc.getProject().getSelectedBatchComparison().getPreregiteredModels().size(); i++) {
+                            tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).setVerts(procrustes.getGpa().getPA(i).getVertices());
+                            procrustes.getGpa().getPA(i).updateFacialPoints(tc.getProject().getSelectedBatchComparison().getFacialPoints(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName()));
+
+                            if (tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
+                                tc.getViewerPanel_Batch().getListener().setModels(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i));
+                            }
+
+                        }
+
+                        if (jCheckBox11.isSelected()) {
+                            //tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 7);
+                            tc.getViewerPanel_Batch().getListener().setFacialPointRadius(jSlider1.getValue() / 30f);
+                        }
+                        /*else {
                         tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
                        // tc.getViewerPanel_Batch().getListener().setFacialPointRadius(jSlider1.getValue());
                     }*/
-                    try {
                         ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
-                        k.start();
 
-                        File tmpModuleFile = new File("compF");
-                        results = ProcessingFileUtils.instance().saveModelsToTMP(tc.getProject().getSelectedBatchComparison().getPreregiteredModels(), tmpModuleFile, Boolean.FALSE);
-                        k.finish();
+                        try {
 
-                        tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
+                            k.start();
 
-                    } catch (FileManipulationException ex) {
-                        //osefuj vynimku
-                        jButton1.setEnabled(true);
+                            File tmpModuleFile = new File("compF");
+                            results = ProcessingFileUtils.instance().saveModelsToTMP(tc.getProject().getSelectedBatchComparison().getPreregiteredModels(), tmpModuleFile, Boolean.FALSE);
+                            k.finish();
+
+                            tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
+
+                        } catch (FileManipulationException ex) {
+                            //osefuj vynimku
+                            jButton1.setEnabled(true);
+                            k.finish();
+                        }
+                        tc.getViewerPanel_Batch().getListener().setFacialPoints(
+                                tc.getProject().getSelectedBatchComparison().getFacialPoints(
+                                        tc.getViewerPanel_Batch().getListener().getModel().getName()
+                                ));
+
                     }
-                    tc.getViewerPanel_Batch().getListener().setFacialPoints(
-                            tc.getProject().getSelectedBatchComparison().getFacialPoints(
-                                    tc.getViewerPanel_Batch().getListener().getModel().getName()
-                            ));
 
+                    //pre istotu
+                    jButton1.setEnabled(true);
+                    tc.getProject().getSelectedBatchComparison().setRegisterButtonEnabled(true);
+                    //tc.getProject().getSelectedBatchComparison().setAverageRegisteredFace(tc.getViewerPanel_Batch().getListener().getModel());
+
+                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
+                    }
+                    tc.getProject().getSelectedBatchComparison().setState(2);
+
+                    if (jCheckBox10.isSelected()) {
+                        GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().computeComparison(tc);
+                    }
+                    p.finish();
+                    GUIController.updateNavigator();
+                } catch (Exception ex) {
+                    p.finish();
                 }
-
-                //pre istotu
-                jButton1.setEnabled(true);
-                tc.getProject().getSelectedBatchComparison().setRegisterButtonEnabled(true);
-                //tc.getProject().getSelectedBatchComparison().setAverageRegisteredFace(tc.getViewerPanel_Batch().getListener().getModel());
-
-                if (GUIController.getSelectedProjectTopComponent() == tc) {
-                    GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
-                }
-                tc.getProject().getSelectedBatchComparison().setState(2);
-
-                if (jCheckBox10.isSelected()) {
-                    GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().computeComparison(tc);
-                }
-                p.finish();
-                GUIController.updateNavigator();
             }
         };
 
@@ -1075,8 +1084,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private int getUndersampleValue(Methods m, Type t){
-        
+    private int getUndersampleValue(Methods m, Type t) {
+
         if (m == Methods.Curvature || m == Methods.Random) {
             switch (t) {
                 case PERCENTAGE:
@@ -1086,48 +1095,47 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 default:
                     return -1;
             }
-        }else if(m == Methods.Disc){
+        } else if (m == Methods.Disc) {
             return jSlider2.getValue();
         }
-        
+
         return -1;
     }
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        
+
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<FpModel> loaded = FPImportExport.instance().importPoints(tc, true);
-        
-        if(loaded == null || loaded.isEmpty()){
+
+        if (loaded == null || loaded.isEmpty()) {
             //nothing loaded
             return;
         }
-        
+
         tc.getProject().getSelectedBatchComparison().clearFacialPoints();
-        
-        
+
         List<File> models = new ArrayList<>();
         List<Model> loadedModels = new ArrayList<>();
         ModelLoader ml = new ModelLoader();
-        
+
         models.addAll(tc.getProject().getSelectedBatchComparison().getModels());
         FPImportExport.instance().alignPointsToModels(loaded, models);
-        
-        for(FpModel model : loaded){
-            if(tc.getViewerPanel_Batch().getListener().getModel().getName().equals(model.getModelName())){
+
+        for (FpModel model : loaded) {
+            if (tc.getViewerPanel_Batch().getListener().getModel().getName().equals(model.getModelName())) {
                 tc.getViewerPanel_Batch().getListener().setFacialPoints(model.getFacialPoints());
             }
-            
+
             tc.getProject().getSelectedBatchComparison().addFacialPoints(
-                                    model.getModelName(), model.getFacialPoints());
+                    model.getModelName(), model.getFacialPoints());
         }
-        
-        for(File f: models){
+
+        for (File f : models) {
             loadedModels.add(ml.loadModel(f, false, true));
         }
-        
+
         tc.getProject().getSelectedBatchComparison().setPreregiteredModels((ArrayList<Model>) loadedModels);
-        
+
         jButton1.setEnabled(areFPCalculated(tc));
         jButton7.setEnabled(areFPCalculated(tc));
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -1207,16 +1215,16 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_numberSpinnerStateChanged
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        switch((Methods)jComboBox2.getSelectedItem()){
+        switch ((Methods) jComboBox2.getSelectedItem()) {
             case Random: //Random
                 randomPanel.setVisible(true);
                 discPanel.setVisible(false);
                 break;
-            case Disc: 
+            case Disc:
                 randomPanel.setVisible(false);
                 discPanel.setVisible(true);
                 break;
-            case None: 
+            case None:
                 randomPanel.setVisible(false);
                 discPanel.setVisible(false);
                 break;
@@ -1229,12 +1237,12 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-         percentageSpinner.setEnabled(false);
+        percentageSpinner.setEnabled(false);
         numberSpinner.setEnabled(true);
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void facesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_facesComboBoxActionPerformed
-        
+
     }//GEN-LAST:event_facesComboBoxActionPerformed
 
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
@@ -1279,24 +1287,23 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             jButton7.setEnabled(true);
         }
         populateFacesComboBox();
-        
 
     }
-    
+
     //adds items to combo box for choosing the template for avg face.
     //Random, Most Avg, Least Avg are first then all the faces loaded
-    public void populateFacesComboBox(){
-         facesComboBox.removeAllItems();
-         
+    public void populateFacesComboBox() {
+        facesComboBox.removeAllItems();
+
         facesComboBox.addItem("Random");
         facesComboBox.addItem("Most Average");
         facesComboBox.addItem("Least Average");
-         
-         List<File> models = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels();
+
+        List<File> models = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels();
         for (File model : models) {
             facesComboBox.addItem(model.getName());
         }
-       
+
     }
 
     public void updateRegisterButtonEnabled() {

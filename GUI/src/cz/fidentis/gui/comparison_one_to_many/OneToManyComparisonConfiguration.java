@@ -274,8 +274,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
             @Override
             public void run() {
-                if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST ||
-                       ((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
+                if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
+                        || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
                     //Computing Hausdorff Distance
 
                     ProgressHandle p;
@@ -283,109 +283,109 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                     p = ProgressHandleFactory.createHandle("Computing comparison...");
                     p.start();
 
-                    SurfaceComparisonProcessing.setP(p);
+                    try {
+                        SurfaceComparisonProcessing.setP(p);
 
-                    List<Float> results;
-                    List<ArrayList<Float>> numResults;
-                    List<File> models = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels();
-                    List<File> origModels = tc.getProject().getSelectedOneToManyComparison().getModels();
-                    
-                    if (models == null) {
-                        models = tc.getProject().getSelectedOneToManyComparison().getModels();
-                    }
+                        List<Float> results;
+                        List<ArrayList<Float>> numResults;
+                        List<File> models = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels();
+                        List<File> origModels = tc.getProject().getSelectedOneToManyComparison().getModels();
 
-                    Model mainF = tc.getOneToManyViewerPanel().getListener1().getModel();
-                    ModelLoader ml = new ModelLoader();
-                    if(tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod()==RegistrationMethod.NO_REGISTRATION){
-                        mainF = ml.loadModel(tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().getFile(),false,false);
-                    }
-                    
-                    //TODO: pick which model is template?
-                    Model template = ml.loadModel(models.get(0), Boolean.FALSE, false);
+                        if (models == null) {
+                            models = tc.getProject().getSelectedOneToManyComparison().getModels();
+                        }
 
-                    tc.getOneToManyViewerPanel().getListener2().removeModel();
-                    tc.getOneToManyViewerPanel().getListener2().setModels(template);
-                    
-                    ICPmetric metric = tc.getProject().getSelectedOneToManyComparison().getIcpMetric();
-                    if(metric == null){
-                        metric = ICPmetric.VERTEX_TO_VERTEX;
-                    }
-                    
-                    SurfaceComparisonProcessing.instance().computeAverage(template, models, metric);
-                    KdTree templateTree;
-                    List<Float> var;
-                    tc.getProject().getSelectedOneToManyComparison().setAvgFace(template);
-                    
-                    if(((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST){
-                        
-                        if(metric == ICPmetric.VERTEX_TO_VERTEX){
+                        Model mainF = tc.getOneToManyViewerPanel().getListener1().getModel();
+                        ModelLoader ml = new ModelLoader();
+                        if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
+                            mainF = ml.loadModel(tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().getFile(), false, false);
+                        }
+
+                        //TODO: pick which model is template?
+                        Model template = ml.loadModel(models.get(0), Boolean.FALSE, false);
+
+                        tc.getOneToManyViewerPanel().getListener2().removeModel();
+                        tc.getOneToManyViewerPanel().getListener2().setModels(template);
+
+                        ICPmetric metric = tc.getProject().getSelectedOneToManyComparison().getIcpMetric();
+                        if (metric == null) {
+                            metric = ICPmetric.VERTEX_TO_VERTEX;
+                        }
+
+                        SurfaceComparisonProcessing.instance().computeAverage(template, models, metric);
+                        KdTree templateTree;
+                        List<Float> var;
+                        tc.getProject().getSelectedOneToManyComparison().setAvgFace(template);
+
+                        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+
+                            if (metric == ICPmetric.VERTEX_TO_VERTEX) {
+                                templateTree = new KdTreeIndexed(template.getVerts());
+                            } else {
+                                templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
+                            }
+
+                            results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, ComparisonMethod.HAUSDORFF_DIST);
+                            numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_DIST);
+                        } else {
                             templateTree = new KdTreeIndexed(template.getVerts());
-                        }else{
-                            templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
-                        }                       
-                        
-                        results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, ComparisonMethod.HAUSDORFF_DIST);
-                        numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_DIST);
-                    }else{
-                        templateTree = new KdTreeIndexed(template.getVerts());
-                        metric = ICPmetric.VERTEX_TO_VERTEX;
-                        
-                        Curvature_jv mainCurv = new Curvature_jv(mainF);
-                        results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, 
-                                mainCurv.getCurvature(CurvatureType.Gaussian), ComparisonMethod.HAUSDORFF_CURV);
-                        numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_CURV);
-                        
+                            metric = ICPmetric.VERTEX_TO_VERTEX;
+
+                            Curvature_jv mainCurv = new Curvature_jv(mainF);
+                            results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true,
+                                    mainCurv.getCurvature(CurvatureType.Gaussian), ComparisonMethod.HAUSDORFF_CURV);
+                            numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_CURV);
+
+                        }
+
+                        var = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, 1.f, 0, true);
+                        List<Float> sortedResRes = SortUtils.instance().sortValues(results);
+                        List<Float> sortedResAbs;
+                        List<Float> absVal = new LinkedList<>();
+
+                        for (Float f : results) {
+                            absVal.add(Math.abs(f));
+                        }
+
+                        sortedResAbs = SortUtils.instance().sortValues(absVal);
+
+                        tc.getProject().getSelectedOneToManyComparison().setSortedHdAbs(sortedResAbs);
+                        tc.getProject().getSelectedOneToManyComparison().setSortedHdRel(sortedResRes);
+
+                        String strRes = setValues(var, origModels, mainF.getName(), 0);
+
+                        tc.getProject().getSelectedOneToManyComparison().setNumResults(numResults);
+                        tc.getProject().getSelectedOneToManyComparison().setNumericalResults(strRes);
+
+                        tc.getProject().getSelectedOneToManyComparison().setHd(results);
+
+                        HDpaintingInfo info = new HDpaintingInfo(results, tc.getOneToManyViewerPanel().getListener1().getModel(), true);
+                        float[] minColor = {0.298f, 0.0f, 0.898f};
+                        Color minCol = new Color(76, 0, 229);
+                        float[] maxColor = {0.898f, 0.1f, 0.133f};
+                        Color maxCol = new Color(229, 0, 34);
+                        info.setMinColor(minColor);
+                        info.setMaxColor(maxColor);
+
+                        HDpainting hd = new HDpainting(info);
+
+                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHdColor1(minCol);
+                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHdColor2(maxCol);
+
+                        tc.getOneToManyViewerPanel().getListener1().drawHD(true);
+                        tc.getOneToManyViewerPanel().getListener1().setHdPaint(hd);
+                        tc.getOneToManyViewerPanel().getListener1().setHdInfo(info);
+                        tc.getProject().getSelectedOneToManyComparison().setHDP(hd);
+                        tc.getProject().getSelectedOneToManyComparison().setHdPaintingInfo(info);
+
+                        p.finish();
+                    } catch (Exception ex) {
+                        p.finish();
                     }
-                    
-                    
-                    
-                    var = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults,1.f, 0, true);
-                    List<Float> sortedResRes = SortUtils.instance().sortValues(results);
-                    List<Float> sortedResAbs;
-                    List<Float> absVal = new LinkedList<>();
-                    
-                    for(Float f: results){
-                        absVal.add(Math.abs(f));
-                    }
-                    
-                    sortedResAbs = SortUtils.instance().sortValues(absVal);
-                    
-                    tc.getProject().getSelectedOneToManyComparison().setSortedHdAbs(sortedResAbs);
-                    tc.getProject().getSelectedOneToManyComparison().setSortedHdRel(sortedResRes);     
-                    
-                    String strRes = setValues(var, origModels, mainF.getName(), 0);
-
-                    tc.getProject().getSelectedOneToManyComparison().setNumResults(numResults);
-                    tc.getProject().getSelectedOneToManyComparison().setNumericalResults(strRes);
-
-                    tc.getProject().getSelectedOneToManyComparison().setHd(results);
-
-                    HDpaintingInfo info = new HDpaintingInfo(results, tc.getOneToManyViewerPanel().getListener1().getModel(), true);
-                    float[] minColor = {0.298f, 0.0f, 0.898f};
-                    Color minCol = new Color(76, 0, 229);
-                    float[] maxColor = {0.898f, 0.1f, 0.133f};
-                    Color maxCol = new Color(229, 0, 34);
-                    info.setMinColor(minColor);
-                    info.setMaxColor(maxColor);
-                    
-                    HDpainting hd = new HDpainting(info);
-
-                    
-                    GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHdColor1(minCol);
-                    GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHdColor2(maxCol);
-
-                    tc.getOneToManyViewerPanel().getListener1().drawHD(true);
-                    tc.getOneToManyViewerPanel().getListener1().setHdPaint(hd);
-                    tc.getOneToManyViewerPanel().getListener1().setHdInfo(info);
-                    tc.getProject().getSelectedOneToManyComparison().setHDP(hd);
-                    tc.getProject().getSelectedOneToManyComparison().setHdPaintingInfo(info);
-                    
-                    p.finish();
 
                 } else {
 
                     //Starting Procrustes Comparison
-
                     List<List<FacialPoint>> list = new ArrayList();
                     int size = tc.getProject().getSelectedOneToManyComparison().getModels().size();
                     for (int i = 0; i < size; i++) {
@@ -393,9 +393,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                                 tc.getProject().getSelectedOneToManyComparison().getModels().get(i).getName());
                         list.add(facialPoints);
                     }
-                    
-                    //Created list of points
 
+                    //Created list of points
                     Procrustes1ToMany procrustes = new Procrustes1ToMany(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints(),
                             list, jCheckBox2.isSelected());
 
@@ -406,7 +405,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                     // GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getCanvas2().setDescriptionText(result);
                     tc.getOneToManyViewerPanel().getListener2().setProcrustes(true);
-                    
+
                     PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), procrustes.getPa(), 1);
                     /*tc.getOneToManyViewerPanel().getListener2().setTypePA(1);
                     tc.getOneToManyViewerPanel().getListener2().setPa(procrustes.getPa());
@@ -423,7 +422,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         paInfo.setPointSize(30 * 3);
                         //tc.getOneToManyViewerPanel().getListener2().setFpSize(30 * 3);
                     }
-                    
+
                     tc.getOneToManyViewerPanel().getListener2().setPaInfo(paInfo);
                     tc.getOneToManyViewerPanel().getListener2().setPaPainting(new PApainting(paInfo));
 
@@ -431,7 +430,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 }
 
                 tc.getProject().getSelectedOneToManyComparison().setState(3);
-                tc.getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod)jComboBox1.getSelectedItem());
+                tc.getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
 
                 /*if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
                     tc.getProject().getSelectedOneToManyComparison().setResults(0);
@@ -440,7 +439,6 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 }else{
                     tc.getProject().getSelectedOneToManyComparison().setResults(2);
                 }*/
-                
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
                     GUIController.getConfigurationTopComponent().addOneToManyComparisonResults();
                 }
@@ -452,7 +450,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         t.start();
 
     }
-    
+
     private void processComparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processComparisonButtonActionPerformed
         computeComparison(GUIController.getSelectedProjectTopComponent());
         

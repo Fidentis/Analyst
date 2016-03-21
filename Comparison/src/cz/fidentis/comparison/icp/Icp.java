@@ -374,8 +374,36 @@ public class Icp {
      * @param scale - whether scale was used
      */
     public void reverseAllTransformations(List<ICPTransformation> trans, List<Vector3f> verticies, boolean scale){
-        for(int i = trans.size() - 1; i >= 0; i--){
+        /*for(int i = trans.size() - 1; i >= 0; i--){
             reverseTransformations(trans.get(i), verticies, scale);
+        }*/
+        
+        ICPTransformation finalTrans = createFinalTrans(trans, scale);
+        reverseTransformations(finalTrans, verticies, scale);
+    }
+    
+    /**
+     * Create final transformation combining all transformations in the list.
+     * 
+     * @param trans - transformations to combine
+     * @param scale - whether scale was used
+     * @return final transformation combining all listed transformations
+     */
+    public ICPTransformation createFinalTrans(List<ICPTransformation> trans, boolean scale){
+        float s = 1f;
+        Vector3f t = new Vector3f();
+        Quaternion r = new Quaternion(0,0,0,1);
+        
+        for(ICPTransformation tran : trans){
+            if(scale)
+                s *= tran.getScaleFactor();
+            
+            t.add(tran.getTranslation());            
+            
+            Quaternion q = tran.getRotation();
+            r.mult(q);
         }
+        
+        return new ICPTransformation(t, s, r, 0.0f);
     }
 }

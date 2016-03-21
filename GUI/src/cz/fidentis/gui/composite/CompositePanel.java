@@ -50,6 +50,7 @@ import org.openide.util.Exceptions;
  */
 @SuppressWarnings("rawtypes")
 public class CompositePanel extends javax.swing.JPanel {
+
     private ProjectTopComponent projectComponent;
 
     private int ageBottomLimit = 0;
@@ -78,10 +79,9 @@ public class CompositePanel extends javax.swing.JPanel {
     private Map<Object, ImageIcon> headIcons = new HashMap<Object, ImageIcon>();
     private Map<Object, ModelInfo> headModels = new HashMap<Object, ModelInfo>();
     private RandomFacePlacement facePlacement = null;
-    
+
     private static final boolean ALLOW_RANDOMFACE_SCALE = true;
     private static final String numPattern = "[^0-9]";
-    
 
     /**
      * Creates new form CompositePanel
@@ -858,12 +858,12 @@ public class CompositePanel extends javax.swing.JPanel {
 
             @Override
             public void run() {
-                if(facePlacement == null){
+                if (facePlacement == null) {
                     createFacePlacement();
                 }
-                
+
                 facePlacement.pickRandomPart(sex, ageBottomLimit, ageTopLimit);
-                
+
                 GUIController.getConfigurationTopComponent().getCompositConfigurationPanel().setIsEditing(true);
 
                 updateListener();
@@ -881,12 +881,12 @@ public class CompositePanel extends javax.swing.JPanel {
 
             @Override
             public void run() {
-                 if(facePlacement == null){
+                if (facePlacement == null) {
                     createFacePlacement();
                 }
-                
+
                 facePlacement.createRandomFace(sex, ageBottomLimit, ageTopLimit);
- 
+
                 updateListener();
 
                 GUIController.getConfigurationTopComponent().getCompositConfigurationPanel().setIsEditing(true);
@@ -941,46 +941,51 @@ public class CompositePanel extends javax.swing.JPanel {
                 final ProgressHandle p;
                 p = ProgressHandleFactory.createHandle("Merging ");
 
-                ProgressObserver progressObserver = new ProgressObserver() {
-
-                    public StringBuilder m;
-
-                    @Override
-                    public void updateTotalUnits(int units) {
-                        p.start(units);
-                    }
-
-                    @Override
-                    public void updateProgress(String description, int currentUnits) {
-                        p.progress(description, currentUnits);
-                    }
-
-                    public void setMeasurement(StringBuilder measurement) {
-                        m = measurement;
-                    }
-
-                    public String getMeasurement() {
-                        return m.toString();
-                    }
-                };
-
-                merger.merge(list, progressObserver);
-                Model result = merger.getResult().toModel(materials);
-                p.switchToIndeterminate();
-                TextureMerger mrgr = new TextureMerger(result);
                 try {
-                    mrgr.mergeModel();
-                } catch (IOException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
-                p.finish();
-                selectedComposite.setHeadAndClearParts(result);
-                listener.updateModelList();
 
-                //uncment belowe code to get measuremts of performance during merging
-                /*JTextArea textarea = new JTextArea(mod.toString() + "\n\n" + progressObserver.getMeasurement());
+                    ProgressObserver progressObserver = new ProgressObserver() {
+
+                        public StringBuilder m;
+
+                        @Override
+                        public void updateTotalUnits(int units) {
+                            p.start(units);
+                        }
+
+                        @Override
+                        public void updateProgress(String description, int currentUnits) {
+                            p.progress(description, currentUnits);
+                        }
+
+                        public void setMeasurement(StringBuilder measurement) {
+                            m = measurement;
+                        }
+
+                        public String getMeasurement() {
+                            return m.toString();
+                        }
+                    };
+
+                    merger.merge(list, progressObserver);
+                    Model result = merger.getResult().toModel(materials);
+                    p.switchToIndeterminate();
+                    TextureMerger mrgr = new TextureMerger(result);
+                    try {
+                        mrgr.mergeModel();
+                    } catch (IOException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                    p.finish();
+                    selectedComposite.setHeadAndClearParts(result);
+                    listener.updateModelList();
+
+                    //uncment belowe code to get measuremts of performance during merging
+                    /*JTextArea textarea = new JTextArea(mod.toString() + "\n\n" + progressObserver.getMeasurement());
                  textarea.setEditable(true);
                  JOptionPane.showMessageDialog(null, textarea);*/
+                } catch (Exception ex) {
+                    p.finish();
+                }
             }
 
         };
@@ -993,13 +998,13 @@ public class CompositePanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_sexComboBoxInputMethodTextChanged
 
-    private void createFacePlacement(){
+    private void createFacePlacement() {
         facePlacement = new RandomFacePlacement(compositeData, ALLOW_RANDOMFACE_SCALE,
-                                                forheadModels, eyesModels, earsModels,
-                                                eyebrowsModels, noseModels, mouthModels, 
-                                                chinModels, headModels);
+                forheadModels, eyesModels, earsModels,
+                eyebrowsModels, noseModels, mouthModels,
+                chinModels, headModels);
     }
-    
+
     //Updates composite listener to draw new model
     private void updateListener() {
         //update models in GLEvaneListener
