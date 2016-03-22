@@ -55,6 +55,7 @@ public class BatchComparison {
     private int ICPmaxIteration = 10;      //max number of iteration used in ICP algorithm -- used when editing registration criteria
     private int ICPnumberOfHeads = 3;   //number of average faces created -- used when editing registration criteria
     private int templateIndex = 0;      //index of mesh picked as a base for average face
+    private boolean useSymmetry;
     private RegistrationMethod RegMethod ;  //used registration method
     private ComparisonMethod CompareMethod; //used comparison method
     private ICPmetric icpMetric;        //ICP metric used for registration
@@ -340,6 +341,15 @@ public class BatchComparison {
     public void setCompareButtonEnabled(boolean compareButtonEnabled) {
         this.compareButtonEnabled = compareButtonEnabled;
     }
+
+    public boolean isUseSymmetry() {
+        return useSymmetry;
+    }
+
+    public void setUseSymmetry(boolean useSymmetry) {
+        this.useSymmetry = useSymmetry;
+    }
+    
 
     
      public int getState() {

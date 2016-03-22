@@ -60,6 +60,7 @@ public class OneToManyComparison {
     private float ICPerrorRate = 0.05f;            //used error rate during alignment for ICP -- used when editing registration criteria
     private int ICPmaxIteration = 10;               //used number of iteration for ICP -- used when editing registration criteria
     private int templateIndex = 0;                 //index of mesh chosen to be a base for the avgFace
+    private boolean useSymmetry;
     private RegistrationMethod RegMethod;           //registration method used
     private ComparisonMethod CompareMethod;         //comparison method used
     private ICPmetric icpMetric = null;                    //ICP metric used for registration
@@ -293,6 +294,15 @@ public class OneToManyComparison {
     public void setTemplateIndex(int templateIndex) {
         this.templateIndex = templateIndex;
     }
+
+    public boolean isUseSymmetry() {
+        return useSymmetry;
+    }
+
+    public void setUseSymmetry(boolean useSymmetry) {
+        this.useSymmetry = useSymmetry;
+    }
+    
    
 
     public int getFpDistance() {

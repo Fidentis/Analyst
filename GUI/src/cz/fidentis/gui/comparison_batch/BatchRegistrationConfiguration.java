@@ -115,6 +115,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         facesComboBox = new javax.swing.JComboBox();
         icpMetricLabel = new javax.swing.JLabel();
         icpMetricComboBox = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        symModelsCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -421,6 +423,15 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel16.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(symModelsCheckbox, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.symModelsCheckbox.text")); // NOI18N
+        symModelsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                symModelsCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -461,14 +472,20 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(facesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(jCheckBox9)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(icpMetricLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(icpMetricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(jCheckBox9))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(symModelsCheckbox)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -488,6 +505,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         .addComponent(icpMetricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox9)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel16)
+                    .addComponent(symModelsCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -811,7 +832,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1004, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -970,6 +991,11 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                         Model template = ml.loadModel(models.get(selectedModelTemplate), Boolean.FALSE, true);
                         tc.getProject().getSelectedBatchComparison().setTemplateIndex(selectedModelTemplate);
+                        
+                        if(symModelsCheckbox.isSelected()){
+                            SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(template);
+                            models = SurfaceComparisonProcessing.instance().createSymModelAndSave(models);
+                        }
 
                         tc.getViewerPanel_Batch().getListener().setModels(template);
                         List<File> results;
@@ -984,6 +1010,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                     m, t, value, metric);
 
                             tc.getProject().getSelectedBatchComparison().setIcpMetric(metric);
+                            tc.getProject().getSelectedBatchComparison().setUseSymmetry(symModelsCheckbox.isSelected());
                             tc.getProject().getSelectedBatchComparison().setMethod(m.ordinal());
                             tc.getProject().getSelectedBatchComparison().setType(t.ordinal());
                             tc.getProject().getSelectedBatchComparison().setValue(value);
@@ -1252,6 +1279,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
+
+    private void symModelsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModelsCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_symModelsCheckboxActionPerformed
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setPointColor(colorPanel.getBackground());
@@ -1361,6 +1392,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1392,5 +1424,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner numberSpinner;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JCheckBox symModelsCheckbox;
     // End of variables declaration//GEN-END:variables
 }

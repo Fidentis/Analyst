@@ -296,7 +296,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
                         List<File> models = tc.getProject().getSelectedBatchComparison().getRegistrationResults();
                         if (models == null) {
-                            models = tc.getProject().getSelectedBatchComparison().getModels();
+                            models = originalModels;
                         }
                         ModelLoader ml = new ModelLoader();
                         Model template = ml.loadModel(models.get(tc.getProject().getSelectedBatchComparison().getTemplateIndex()), false, false);
