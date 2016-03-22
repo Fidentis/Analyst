@@ -101,6 +101,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         icpMetricLabel = new javax.swing.JLabel();
         icpMetricComboBox = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        symModelsCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -389,6 +391,15 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel11.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(symModelsCheckbox, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.symModelsCheckbox.text")); // NOI18N
+        symModelsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                symModelsCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -409,9 +420,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel7)
                             .addComponent(jLabel10)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -420,7 +432,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                                     .addComponent(jCheckBox9)
                                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jSpinner2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(symModelsCheckbox)))
                             .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(discPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -446,6 +459,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel10)
                     .addComponent(jCheckBox9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11)
+                    .addComponent(symModelsCheckbox))
+                .addGap(9, 9, 9)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -908,8 +925,16 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         }
 
                         List<File> models = tc.getProject().getSelectedOneToManyComparison().getModels();
+                                          
                         List<File> results;
                         Model template = tc.getOneToManyViewerPanel().getListener1().getModel();
+                       
+                        
+                        if(symModelsCheckbox.isSelected()){
+                            models = SurfaceComparisonProcessing.instance().createSymModelAndSave(models);
+                            SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(template);
+                        }
+                        
 
                         ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
                         Methods m = (Methods) jComboBox2.getSelectedItem();
@@ -1226,6 +1251,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
+
+    private void symModelsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModelsCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_symModelsCheckboxActionPerformed
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1314,6 +1343,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1347,5 +1377,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner numberSpinner;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JCheckBox symModelsCheckbox;
     // End of variables declaration//GEN-END:variables
 }

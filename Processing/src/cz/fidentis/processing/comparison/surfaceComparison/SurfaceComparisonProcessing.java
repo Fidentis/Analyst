@@ -33,6 +33,7 @@ import cz.fidentis.utilsException.FileManipulationException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -1064,6 +1065,30 @@ public class SurfaceComparisonProcessing {
         models[1] = mirror;
 
         computeAverage(m, models, ICPmetric.VERTEX_TO_VERTEX);
+    }
+    
+    public List<File> createSymModelAndSave(List<File> models){
+        List<File> savedTo = new LinkedList<>();
+        String projectId = "" + System.currentTimeMillis();
+        File saveFolder = new File(projectId + File.separator + tmpModuleFile.getName());
+        ModelLoader ml = new ModelLoader();
+        
+        try {
+            FileUtils.instance().createTMPmoduleFolder(saveFolder);
+            
+            for(int i = 0; i < models.size(); i++){
+            Model m = ml.loadModel(models.get(i), false, Boolean.TRUE);
+            createSymetricModelNoCopy(m);
+            
+            savedTo.add(ProcessingFileUtils.instance().saveModelToTMP(m, saveFolder, -2, i, false));
+        }
+        } catch (FileManipulationException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        
+        
+        
+        return savedTo;
     }
 
     public int findMostAvgFace(List<File> models) {
