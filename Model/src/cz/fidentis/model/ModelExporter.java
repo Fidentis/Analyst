@@ -139,7 +139,7 @@ public class ModelExporter {
                 for (int j = 0; j < model.getFaces().getNumFaces(); j++) {
                     String currentMaterialName;
                     currentMaterialName = model.getFaces().findMaterial(j);
-                    if (!previousMaterialName.equals(currentMaterialName)) {
+                    if (currentMaterialName != null && !previousMaterialName.equals(currentMaterialName)) {
                         previousMaterialName = currentMaterialName;
                         out.write("usemtl " + currentMaterialName + "\n");
                         out.write("g " + currentMaterialName + "\n" + "s 1" + "\n");
