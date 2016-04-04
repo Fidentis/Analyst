@@ -42,6 +42,8 @@ import org.openide.util.Exceptions;
 public class FpProcessing {
 
     private static FpProcessing instance;
+    private static KdTree mainF;
+    
 
     public static FpProcessing instance() {
         if (instance == null) {
@@ -52,10 +54,6 @@ public class FpProcessing {
     }
 
     private FpProcessing() {
-    }
-
-    //register face to generic face in frankfurt position, returns transformations performed during ICP process
-    private List<ICPTransformation> faceRegistration(Model compareFace) {
         String genericFacePath = "";
         try {
             genericFacePath = new java.io.File(".").getCanonicalPath();
@@ -65,12 +63,20 @@ public class FpProcessing {
         if (!genericFacePath.equals("")) {
             genericFacePath = genericFacePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "average_face.obj";
             Model genericFace = new ModelLoader().loadModel(new File(genericFacePath), false, true);
-            KdTree mainF = new KdTreeIndexed(genericFace.getVerts());
-            List<ICPTransformation> trans = Icp.instance().icp(mainF, compareFace.getVerts(), compareFace.getVerts(), 0.f, 20, true);
-            return trans;
+            mainF = new KdTreeIndexed(genericFace.getVerts());
         }
+    }
 
-        return null;
+    //register face to generic face in frankfurt position, returns transformations performed during ICP process
+    public List<ICPTransformation> faceRegistration(Model compareFace) {
+        if(mainF == null){
+            //error
+            return null;
+        }
+        
+        List<ICPTransformation> trans = Icp.instance().icp(mainF, compareFace.getVerts(), compareFace.getVerts(), 0.f, 20, true);
+        return trans;
+        
     }
 
     //computes center of the given face and its mirror
@@ -78,7 +84,7 @@ public class FpProcessing {
         Model mirroredModel = MeshUtils.instance().getMirroredModel(model);
 
         if (registrate) {
-            KdTree mainF = new KdTreeIndexed(model.getVerts());
+            //KdTree mainF = new KdTreeIndexed(model.getVerts());
             Icp.instance().icp(mainF, mirroredModel.getVerts(), mirroredModel.getVerts(), 0.f, 20, true);
         }
 
