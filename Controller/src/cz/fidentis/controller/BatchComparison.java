@@ -41,6 +41,8 @@ public class BatchComparison {
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
+    private List<ICPTransformation> trans;
+    
     private boolean showPointInfo = true;   //whether to show description of the feature points
     private Color pointColor = Color.red;   //color of displayed feature points
     private Color hdColor1 = Color.green;   //redundant? take color from HDinfo instead eventually?
@@ -95,6 +97,29 @@ public class BatchComparison {
 
     public void setHDinfo(HDpaintingInfo HDinfo) {
         this.HDinfo = HDinfo;
+    }
+
+    public ICPTransformation getTrans(int i) {
+        return trans.get(i);
+    }
+    
+    public void setTransSize(int i){
+        trans = new ArrayList<>(i);
+        for(int j = 0; j < i; j++){
+            trans.add(null);
+        }
+    }
+
+    public void addTrans(ICPTransformation trans, int i) {
+        this.trans.set(i,trans);
+    }
+    
+    public void clearTrans(){
+        this.trans.clear();
+    }
+    
+    public List<ICPTransformation> getTrans(){
+        return this.trans;
     }
     
     public String getNumericalResults() {

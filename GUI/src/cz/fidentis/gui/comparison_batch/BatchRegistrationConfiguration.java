@@ -966,6 +966,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         SurfaceComparisonProcessing.setP(p);
 
                         List<File> models = tc.getProject().getSelectedBatchComparison().getModels();
+                        tc.getProject().getSelectedBatchComparison().setTransSize(models.size());
                         ModelLoader ml = new ModelLoader();
 
                         int selectedModelTemplate = facesComboBox.getSelectedIndex();
@@ -993,12 +994,16 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         tc.getProject().getSelectedBatchComparison().setTemplateIndex(selectedModelTemplate);
                         
                         if(symModelsCheckbox.isSelected()){
+                            long time = System.currentTimeMillis();
+                            
                             SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(template);
                             models = SurfaceComparisonProcessing.instance().createSymModelAndSave(models);
+                            
+                            System.out.println((System.currentTimeMillis() - time) * 0.001f);
                         }
 
                         tc.getViewerPanel_Batch().getListener().setModels(template);
-                        List<File> results;
+                        List<File> results = models;
 
                         try {
                             Methods m = (Methods) jComboBox2.getSelectedItem();
@@ -1007,7 +1012,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
 
                             results = SurfaceComparisonProcessing.instance().processManyToMany(template, models, (int) jSpinner3.getValue(), (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
-                                    m, t, value, metric);
+                                    m, t, value, metric, tc.getProject().getSelectedBatchComparison());
 
                             tc.getProject().getSelectedBatchComparison().setIcpMetric(metric);
                             tc.getProject().getSelectedBatchComparison().setUseSymmetry(symModelsCheckbox.isSelected());
@@ -1016,7 +1021,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             tc.getProject().getSelectedBatchComparison().setValue(value);
                             tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
                             tc.getProject().getSelectedBatchComparison().setAverageFace(template);
-                        } catch (FileManipulationException ex) {
+                       } catch (FileManipulationException ex) {
                             //osefuj vynimku
                             jButton1.setEnabled(true);
                         }
@@ -1083,6 +1088,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                         tc.getViewerPanel_Batch().getListener().getModel().getName()
                                 ));
 
+                    }else{
+                        tc.getProject().getSelectedBatchComparison().setRegistrationResults(tc.getProject().getSelectedBatchComparison().getModels());
                     }
 
                     //pre istotu

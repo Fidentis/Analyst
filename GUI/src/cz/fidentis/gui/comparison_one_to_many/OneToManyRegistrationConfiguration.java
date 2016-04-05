@@ -949,7 +949,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         }
 
                         results = SurfaceComparisonProcessing.instance().processOneToMany(mainF, models, (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
-                                m, t, value);
+                                m, t, value, tc.getProject().getSelectedOneToManyComparison());
                         tc.getProject().getSelectedOneToManyComparison().setRegisteredModels(results);
                         tc.getProject().getSelectedOneToManyComparison().setUseSymmetry(symModelsCheckbox.isSelected());
                         tc.getProject().getSelectedOneToManyComparison().setIcpMetric(metric);

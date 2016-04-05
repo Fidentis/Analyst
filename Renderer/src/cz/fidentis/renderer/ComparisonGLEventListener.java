@@ -684,6 +684,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         return info.isShowVectors();
     }
 
+    public ComparisonListenerInfo getInfo() {
+        return info;
+    }
+
     public void setShowVectors(boolean showVectors) {
         info.setShowVectors(showVectors);
     }

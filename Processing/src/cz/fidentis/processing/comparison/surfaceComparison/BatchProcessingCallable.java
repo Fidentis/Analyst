@@ -6,10 +6,12 @@
 package cz.fidentis.processing.comparison.surfaceComparison;
 
 import cz.fidentis.comparison.ICPmetric;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
 import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.model.Model;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import java.io.File;
@@ -19,6 +21,7 @@ import java.util.concurrent.Callable;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 /**
  * Class designed for multi-threading of batch regisration.
@@ -39,6 +42,7 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
     private final boolean scale;
     private final boolean align;
     private final ICPmetric metric;
+    private final BatchComparison data;
 
     /**
      * Data needed to perform call() method
@@ -61,7 +65,7 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
      * @param metric - ICP metric used for alignment
      */
     public BatchProcessingCallable(Model compF, List<Vector3f> samples, Model template, KdTree templateTree, float error, int iterations, boolean scale, File saveTo, int currentModelNumber, int batchIteration, boolean align,
-            ICPmetric metric) {
+            ICPmetric metric, BatchComparison data) {
         this.compF = compF;
         this.samples = samples;
         this.templateTree = templateTree;
@@ -74,6 +78,7 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
         this.currentModelNumber = currentModelNumber;
         this.align = align;
         this.metric = metric;
+        this.data = data;
     }
 
     /**
@@ -96,10 +101,20 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
             p.start();
 
             try {
-                Icp.instance().icp(templateTree, compF.getVerts(), samples, error, iterations, scale);
+                List<ICPTransformation> tran = Icp.instance().icp(templateTree, compF.getVerts(), samples, error, iterations, scale);
+                
+                if(data != null){
+                    if(batchIteration > 0){
+                        tran.add(0, data.getTrans(currentModelNumber));
+                    }
+                
+                    data.addTrans(Icp.instance().createFinalTrans(tran, scale), currentModelNumber);
+                }                
+                
                 ProcessingFileUtils.instance().saveModelToTMP(compF, saveTo, batchIteration + 1, currentModelNumber, Boolean.FALSE);
             } catch (Exception ex) {
                 p.finish();
+                Exceptions.printStackTrace(ex);
             }
         }
 

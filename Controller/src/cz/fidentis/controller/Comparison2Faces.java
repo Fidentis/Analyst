@@ -42,7 +42,12 @@ public class Comparison2Faces {
     private Node node_2;
     private ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
     
+    private ICPTransformation compFTransformations;
+    
     private ArrayList<List<FacialPoint>> databaseFacialPoints = new ArrayList<List<FacialPoint>>();         //database of FPs is currently not used within the application
+    private List<FacialPoint> mainFp;
+    private List<FacialPoint> secondaryFp;
+    private boolean editPoints;         //DON'T need to save in project
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     
     private boolean showPointInfo = true;           //whether to show description of the feature points
@@ -85,6 +90,14 @@ public class Comparison2Faces {
         this.valuesTypeIndex = valuesTypeIndex;
     }
 
+    public ICPTransformation getCompFTransformations() {
+        return compFTransformations;
+    }
+
+    public void setCompFTransformations(ICPTransformation compFTransformations) {
+        this.compFTransformations = compFTransformations;
+    }
+
     public HDpaintingInfo getHdPaintingInfo() {
         return hdPaintingInfo;
     }
@@ -103,6 +116,14 @@ public class Comparison2Faces {
 
     public List<Float> getSortedHdValuesRelative() {
         return sortedHdValuesRelative;
+    }
+
+    public boolean isEditPoints() {
+        return editPoints;
+    }
+
+    public void setEditPoints(boolean editPoints) {
+        this.editPoints = editPoints;
     }
 
     public void setSortedHdValuesRelative(List<Float> sortedHdValuesRelative) {
@@ -139,6 +160,22 @@ public class Comparison2Faces {
 
     public void setValue(float value) {
         this.value = value;
+    }
+
+    public List<FacialPoint> getMainFp() {
+        return mainFp;
+    }
+
+    public void setMainFp(List<FacialPoint> mainFp) {
+        this.mainFp = mainFp;
+    }
+
+    public List<FacialPoint> getSecondaryFp() {
+        return secondaryFp;
+    }
+
+    public void setSecondaryFp(List<FacialPoint> secondaryFp) {
+        this.secondaryFp = secondaryFp;
     }
     
     

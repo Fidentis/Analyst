@@ -17,11 +17,13 @@ import cz.fidentis.comparison.icp.KdTreeFaces;
 import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.controller.Comparison2Faces;
+import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
+import cz.fidentis.processing.featurePoints.FpProcessing;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -102,12 +104,14 @@ public class SurfaceComparisonProcessing {
      * @param value - value of undersampling from GUI
      */
     public void processOneToOne(KdTree mainF, Model compF, int numberOfIterations, boolean scale, float error,
-            Methods method, Type t, float value) {
+            Methods method, Type t, float value, Comparison2Faces data) {
         List<Vector3f> samples = getUndersampledMesh(method, t, value, compF);
         
         p.setDisplayName("Aligning faces.");
 
-        Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+        List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+        
+        data.setCompFTransformations(Icp.instance().createFinalTrans(trans, scale));
     }
 
     /**
@@ -134,7 +138,7 @@ public class SurfaceComparisonProcessing {
      * @return list containing files with aligned faces
      */
     public List<File> processOneToMany(KdTree mainF, List<File> compFs, int numberOfIterations, boolean scale, float error,
-            Methods m, Type t, float value) {
+            Methods m, Type t, float value, OneToManyComparison data) {
         ModelLoader ml = new ModelLoader();
         Model compF;
         List<File> results = new ArrayList<File>(compFs.size());
@@ -154,7 +158,8 @@ public class SurfaceComparisonProcessing {
             compF = ml.loadModel(compF1, Boolean.FALSE, true);
             List<Vector3f> samples = getUndersampledMesh(m, t, value, compF);
 
-            Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+            List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+            data.addTrans(Icp.instance().createFinalTrans(trans, scale));
 
             results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.FALSE));
 
@@ -283,7 +288,7 @@ public class SurfaceComparisonProcessing {
      * temporary files on disk
      */
     public List<File> processManyToMany(Model template, List<File> compFs, int numberOfBatchIterations, int numberOfICPiteration, boolean scale, float error,
-            Methods m, Type t, float value, ICPmetric metric) throws FileManipulationException {
+            Methods m, Type t, float value, ICPmetric metric, BatchComparison data) throws FileManipulationException {
 
         List<File> results = new ArrayList<File>(compFs.size());
         List<Vector3f> trans = new ArrayList<Vector3f>(template.getVerts().size());
@@ -340,7 +345,7 @@ public class SurfaceComparisonProcessing {
                 List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);
 
                 Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(currentModel, samples, template, templateTree,
-                        error, numberOfICPiteration, scale, tmpLocFile, j, i, Boolean.TRUE, metric));
+                        error, numberOfICPiteration, scale, tmpLocFile, j, i, Boolean.TRUE, metric, data));
                 list.add(future);
             }
 
@@ -887,7 +892,7 @@ public class SurfaceComparisonProcessing {
     //computes parameters for avg face and adds it to list of future results
     private void runAvgFaceComputation(ExecutorService executor, Model comp, Model template, List<Future<List<Vector3f>>> list, ICPmetric metric) {
         Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(comp, null, template, null,
-                0f, 0, Boolean.FALSE, null, -2, -2, Boolean.FALSE, metric));
+                0f, 0, Boolean.FALSE, null, -2, -2, Boolean.FALSE, metric, null));
         list.add(future);
     }
 
@@ -1057,14 +1062,25 @@ public class SurfaceComparisonProcessing {
         return copy;
     }
     
-    public void createSymetricModelNoCopy(Model m){
-        Model mirror = MeshUtils.instance().getMirroredModel(m);
-
+    public void createSymetricModelNoCopy(Model m){        
+        ProgressHandle p = ProgressHandleFactory.createHandle("Creating symmetrical model...");
+        p.start(100);
+        Icp.instance().setP(p);
+        
+        Model mirror = MeshUtils.instance().getMirroredModel(m); 
+       
+        //Icp.instance().icp(new KdTreeIndexed(m.getVerts()), mirror.getVerts(), mirror.getVerts(), 0.05f, 20, false);
+        //List<ICPTransformation> trans = FpProcessing.instance().faceRegistration(m);           
+        
+        p.finish();
+           
         Model[] models = new Model[2];
         models[0] = m;
         models[1] = mirror;
 
         computeAverage(m, models, ICPmetric.VERTEX_TO_VERTEX);
+        
+        //Icp.instance().reverseAllTransformations(trans, m.getVerts(), true);
     }
     
     public List<File> createSymModelAndSave(List<File> models){
@@ -1085,8 +1101,6 @@ public class SurfaceComparisonProcessing {
         } catch (FileManipulationException ex) {
             Exceptions.printStackTrace(ex);
         }
-        
-        
         
         return savedTo;
     }
