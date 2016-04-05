@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.visualization;
+package cz.fidentis.visualizationProcessing;
 
 import cz.fidentis.model.Graph2;
 import cz.fidentis.model.Model;
@@ -11,6 +11,7 @@ import cz.fidentis.model.VertexInfo;
 import cz.fidentis.utils.IntersectionUtils;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.visualisation.ComparisonListenerInfo;
+
 import java.util.ArrayList;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
