@@ -358,7 +358,7 @@ public class Icp {
            /*oldV = MathUtils.instance().multiply(reverse, oldV);
            oldV = MathUtils.instance().multiply(oldV, trans.getRotation());*/
            oldV = MathUtils.instance().multiply(reverse, oldV);
-           oldV = MathUtils.instance().multiply(oldV, reverCon);
+           oldV = MathUtils.instance().multiply(reverCon, oldV);
            
            v.setX(oldV.getX());
            v.setY(oldV.getY());

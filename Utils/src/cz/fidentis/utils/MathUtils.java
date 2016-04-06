@@ -92,6 +92,28 @@ public class MathUtils {
     }
     
     /**
+     * Creates quaternion from matrix
+     * 
+     * @param m - 3x3 rotational matrix
+     * @return quaternion created from given matrix
+     */
+    public Quaternion matrixToQuaternion(Matrix m){
+        double[][] mat = m.getArray();
+        float[] finalMat = new float[9];
+        Quaternion q = new Quaternion();
+        
+        for(int i = 0; i < mat.length; i++){
+            for(int j = 0; j < mat[i].length; j++){
+                finalMat[i * 3 + j] = (float) mat[i][j];
+            }
+        }
+        
+        q.setFromMatrix(finalMat);
+        
+        return q;
+    }
+    
+    /**
      * Returns matrix representation of given point. This will be 1x4 matrix.
      * 
      * @param p Vector to be turned into matrix

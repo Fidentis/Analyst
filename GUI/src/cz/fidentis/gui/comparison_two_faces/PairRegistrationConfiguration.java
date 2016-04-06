@@ -1040,7 +1040,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
                 procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
-
             } catch (FileNotFoundException ex) {
                 System.err.println(ex);
                 Exceptions.printStackTrace(ex);

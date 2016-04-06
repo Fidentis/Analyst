@@ -2,8 +2,11 @@ package cz.fidentis.comparison.procrustes;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
+import com.jogamp.graph.math.Quaternion;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
+import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -521,7 +524,7 @@ public class ProcrustesAnalysis implements Serializable {
      *
      * @param pa2 another configuration
      */
-    public void rotate(ProcrustesAnalysis pa2) {
+    public Quaternion rotate(ProcrustesAnalysis pa2) {
         Matrix transConf2;
         Matrix origConf1;
         Matrix svdMat;
@@ -532,7 +535,7 @@ public class ProcrustesAnalysis implements Serializable {
         List<FacialPointType> cor = getFPtypeCorrespondence(pa2);
         
         if(cor.isEmpty()){
-            return;
+            return null;
         }
 
         //transConf2 = pa2.getConfig().transpose();
@@ -557,7 +560,8 @@ public class ProcrustesAnalysis implements Serializable {
         if (vertices != null) {
             vertices = vertices.times(r);
         }
-
+        
+        return MathUtils.instance().matrixToQuaternion(r);
     }
 
     /**
@@ -566,11 +570,14 @@ public class ProcrustesAnalysis implements Serializable {
      * @param pa2 another configuration
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    private void superimpose(ProcrustesAnalysis pa2, boolean scaling) {
+    private ICPTransformation superimpose(ProcrustesAnalysis pa2, boolean scaling) {
        this.normalize(scaling);
-        pa2.normalize(scaling);
+       pa2.normalize(scaling);
 
-        pa2.rotate(this);
+       Quaternion q = pa2.rotate(this);
+       ICPTransformation trans = new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f);      //procrustes only uses rotation matrix, scaling can be infered
+       
+       return trans;
     }
 
 
@@ -642,15 +649,17 @@ public class ProcrustesAnalysis implements Serializable {
      * @param scaling says if algorithm should set size to 1 or keep it
      * @return distance Procrustes distance
      */
-    public void doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
+    public ICPTransformation doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
         float distance;
 
-        this.superimpose(config2, scaling);
+        ICPTransformation trans = this.superimpose(config2, scaling);
         setVisMatrix();
         config2.setVisMatrix();
         //distance = this.countDistance(config2);
 
         //return distance;
+        
+        return trans;
     }
 
 
