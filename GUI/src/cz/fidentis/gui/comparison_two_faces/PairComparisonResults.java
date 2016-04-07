@@ -484,7 +484,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                            .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                             .addGroup(shadersPanelLayout.createSequentialGroup()
                                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -646,7 +646,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(colormapPanelLayout.createSequentialGroup()
@@ -693,7 +693,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         cylRadius.setMinimum(1);
         cylRadius.setPaintLabels(true);
         cylRadius.setPaintTicks(true);
-        cylRadius.setValue(1);
+        cylRadius.setValue(5);
         cylRadius.setVisible(false);
         cylRadiusLabel.setVisible(false);
 
@@ -703,7 +703,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         cylLength.setPaintLabels(true);
         cylLength.setPaintTicks(true);
         cylLength.setSnapToTicks(true);
-        cylLength.setValue(1);
+        cylLength.setValue(5);
         cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
 
         org.openide.awt.Mnemonics.setLocalizedText(cylLengthLabel, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.cylLengthLabel.text")); // NOI18N

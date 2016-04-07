@@ -280,10 +280,10 @@ public class HDpainting {
             Vector3f vecE = new Vector3f(vecB);
             float sig = (distanceCopy.get(info.indicesForNormals[0][k] - 1 ));
             sig = Math.signum(sig);
-            vecN.scale((info.getCylLengthFactor() * distanceCopy.get(info.indicesForNormals[0][k] - 1 )) + sig);
+            vecN.scale((info.getCylLengthFactor() * 0.2f * distanceCopy.get(info.indicesForNormals[0][k] - 1 )) + sig);
             vecE.add(vecN);
 
-            info.c.addCylider(vecB, vecE, info.getCylRadius(), 10, sig);
+            info.c.addCylider(vecB, vecE, info.getCylRadius() * 0.2f, 10, sig);
         }
             info.c.prepareBuffer();
             info.c.prepareVBO();

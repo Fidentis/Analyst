@@ -636,7 +636,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         cylLength.setPaintLabels(true);
         cylLength.setPaintTicks(true);
         cylLength.setSnapToTicks(true);
-        cylLength.setValue(1);
+        cylLength.setValue(5);
         cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
 
         cylRadius.setMajorTickSpacing(1);
@@ -644,7 +644,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         cylRadius.setMinimum(1);
         cylRadius.setPaintLabels(true);
         cylRadius.setPaintTicks(true);
-        cylRadius.setValue(1);
+        cylRadius.setValue(5);
         cylRadius.setVisible(false);
         cylRadiusLabel.setVisible(false);
 
@@ -674,7 +674,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -774,7 +774,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addComponent(sizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                             .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(sizeLabel))
                 .addContainerGap())
@@ -1249,7 +1249,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
                     .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         colormapPanelLayout.setVerticalGroup(

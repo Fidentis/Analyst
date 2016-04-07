@@ -993,7 +993,7 @@
                     <Property name="minimum" type="int" value="1"/>
                     <Property name="paintLabels" type="boolean" value="true"/>
                     <Property name="paintTicks" type="boolean" value="true"/>
-                    <Property name="value" type="int" value="1"/>
+                    <Property name="value" type="int" value="5"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cylRadius.setVisible(false);&#xd;&#xa;cylRadiusLabel.setVisible(false);"/>
@@ -1007,7 +1007,7 @@
                     <Property name="paintLabels" type="boolean" value="true"/>
                     <Property name="paintTicks" type="boolean" value="true"/>
                     <Property name="snapToTicks" type="boolean" value="true"/>
-                    <Property name="value" type="int" value="1"/>
+                    <Property name="value" type="int" value="5"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cylLength.setVisible(false);  cylLengthLabel.setVisible(false);"/>

@@ -90,7 +90,7 @@ public class Cylinder {
     public void draw() {
         gl.glDisable(gl.GL_CULL_FACE);
         float[] color = new float[4];
-        color[0] = 0.5f; color[1] = 0.0f; color[2] = 0.0f; color[3] = 1.0f;
+        color[0] = 0.0f; color[1] = 0.0f; color[2] = 0.0f; color[3] = 1.0f;
         float colorDiff[] = new float[4];
         colorDiff[0] = 1f; colorDiff[1] = 1f; colorDiff[2] = 1f; colorDiff[3] = 1f;
         if(numVertsF >0) {
@@ -101,7 +101,7 @@ public class Cylinder {
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo[0]);
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, numVertsF);
         }
-        color[0] = 0.0f; color[1] = 0.0f; color[2] = 0.5f; color[3] = 1.0f;
+        color[0] = 0.0f; color[1] = 0.0f; color[2] = 0.0f; color[3] = 1.0f;
         
         if(numVertsB >0) {
         gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
