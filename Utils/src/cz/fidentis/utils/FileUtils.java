@@ -125,6 +125,7 @@ public final class FileUtils {
         if (tmp == null || !tmp.exists()) {                  
                 //tmp = Files.createTempDirectory("fidentis" + File.separator + "fidentis").toFile();
                 tmp = new File(System.getProperty("java.io.tmpdir") + File.separator + "fidentis");
+                tmp.mkdir();
                 
                 if(tmp.exists() && deleteIfExists){
                     deleteTmpFolder();
@@ -136,24 +137,36 @@ public final class FileUtils {
     }
      
     /**
-     * Creates tempory folder for given modul within tmp folder. Tmp folder does not need to exist. Can create hierarchical folders.
+     * Creates temporary folder for given module within tmp folder. Tmp folder does not need to exist. Can create hierarchical folders.
      * 
-     * @param moduleTMPfolder - File representing tempory folder to be created
+     * @param moduleTMPfolder - File representing temporary folder to be created
+     * @return created folder
      * @throws FileManipulationException - when either module tmp file couldn't be created or there wasn't tmp folder created before 
-     *                                      and programme failed to create it.
+     *                                      and program failed to create it.
      */
-    public void createTMPmoduleFolder(File moduleTMPfolder) throws FileManipulationException{        
+    public File createTMPmoduleFolder(File moduleTMPfolder) throws FileManipulationException{        
         boolean success = true;
         File completePath = new File(tmp.getAbsolutePath() + File.separator + moduleTMPfolder.getPath());
 
-        
-        if(!completePath.exists()){
-            success =  completePath.mkdirs();
+        if (!completePath.exists()) {
+            success = completePath.mkdirs();
         }
-        
-        if(!success){
-          throw new FileManipulationException(moduleTMPfolder.getName() + " could not be created in TMP folder.");
-      }
+
+        if (!success) {
+            throw new FileManipulationException(moduleTMPfolder.getName() + " could not be created in TMP folder.");
+        } else {
+            return completePath;
+        }
+    }
+    
+    /**
+     * Creates temporary folder with given name within tmp folder. Tmp folder does not need to exist. Can create hierarchical folders.
+     * @param name name of directory to create
+     * @return created directory
+     * @throws FileManipulationException - when either module tmp file couldn't be created or there wasn't tmp folder created before and program failed to create it.
+     */
+    public File createTMPmoduleFolder(String name) throws FileManipulationException {
+        return createTMPmoduleFolder(new File(name));
     }
     
     public String getTempDirectoryPath() {
