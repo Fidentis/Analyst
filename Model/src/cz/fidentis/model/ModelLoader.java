@@ -58,8 +58,7 @@ public class ModelLoader {
 
             //br.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);     //???
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, e);
         }
 
         if (centralize) {
@@ -128,13 +127,11 @@ public class ModelLoader {
             model.setHasTCs3D(false);
             // br.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, e);
         }
 
         if (!isLoaded) {
-            System.out.println("Error loading model");
-            System.exit(1);
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, "Error loading model");
         } else {
             model.getModelDims().setBoundingBox(model.getModelDims().getCentralizedBoundingBox());
         }
@@ -263,15 +260,11 @@ public class ModelLoader {
             //closed in method from which it has been called
             //br.close();
         } catch (IOException e) {
-            //System.out.println(e.getMessage());
-
-            //da what?
-            System.exit(1);
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, e);
         }
 
         if (!isLoaded) {
-            //System.out.println("Error loading model");
-            System.exit(1);
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, "Error loading model");
         } else {
             model.getModelDims().setBoundingBox(model.getModelDims().getCentralizedBoundingBox());
         }

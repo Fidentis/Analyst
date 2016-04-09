@@ -2141,7 +2141,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
         } catch (IOException ex) {
             Logger.getLogger(ComparisonGLEventListener.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(1);
         }
 
         int vertexShaderSMId = initShader(gl, GL_VERTEX_SHADER, SMvertexShaderList);
@@ -2305,7 +2304,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             String error = new String(infoLogBytes, 0, infoLogLength[0]);
 
             System.err.println(error);
-            System.exit(errorCode);
         }
     }
 
@@ -2334,7 +2332,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
             System.out.println(error);
             System.err.println(error);
-            System.exit(errorCode);
         }
     }
 

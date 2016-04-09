@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -1253,19 +1255,16 @@ public class CompositePanel extends javax.swing.JPanel {
 
                 }
             } catch (IOException e) {
-                System.out.println(e.getMessage());
-                System.exit(1);     //???
+                Exceptions.printStackTrace(e);
             }
 
             if (!isLoaded) {
-                System.out.println("Error loading model data");
-                System.exit(1);     //??
+                Logger.getLogger(CompositePanel.class.getName()).log(Level.SEVERE, "Error loading model");
             }
 
             br.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
+            Exceptions.printStackTrace(e);
         }
         return i;
     }  // end of loadModel()
