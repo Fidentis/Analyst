@@ -11,6 +11,8 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.NavigatorTopComponent;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.ButtonHelper;
+import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utilsException.FileManipulationException;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
+import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
@@ -102,6 +105,12 @@ public final class NewProjectWizardAction extends AbstractAction implements Pres
 
             project.setName((String) wiz.getProperty("name"));
             project.setLocation((String) wiz.getProperty("project_path"));
+            try {
+                project.setTempDirectory(FileUtils.instance()
+                        .createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
+            } catch (FileManipulationException ex) {
+                Exceptions.printStackTrace(ex);
+            }
 
           //  projectTopComponent.showEmptyView();
 

@@ -125,6 +125,7 @@ public final class OpenProject implements ActionListener {
 
         Element root = doc.getDocumentElement();
         final Project p = new Project(root.getAttribute("name"));
+        p.setTempDirectory(tempFile);
         ntc.setProject(p);
         
         NodeList topNodes = root.getChildNodes();

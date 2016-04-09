@@ -29,6 +29,8 @@ public class Project {
     private Ageing selectedAgeing;
     private FeaturePoints selectedFeaturePoints;
     private Viewer selectedViewer;
+    
+    private File tempDirectory;
 
     
         /**
@@ -240,6 +242,29 @@ public class Project {
         tree.getRoot().setData(name);
       //  hierarchy.add(0, this);
 
+    }
+
+    /**
+     * Gets the temporary directory that *SHOULD* be used to store any temporary
+     * files that are related to this project.
+     * @return 
+     */
+    public File getTempDirectory() {
+        return tempDirectory;
+    }
+
+    /**
+     * Sets the temporary directory that *SHOULD* be used to store any temporary
+     * files that are related to this project.
+     * @param tempDirectory 
+     * @throws IllegalArgumentException if passed tempDirectory is not an existing
+     * readable directory.
+     */
+    public void setTempDirectory(File tempDirectory) {
+        if(tempDirectory == null || !tempDirectory.isDirectory()) {
+            throw new IllegalArgumentException("TempDirectory must be an existing directory.");
+        }
+        this.tempDirectory = tempDirectory;
     }
 
     /**

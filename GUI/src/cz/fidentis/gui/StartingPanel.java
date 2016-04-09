@@ -8,10 +8,13 @@ package cz.fidentis.gui;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.Project;
 import cz.fidentis.gui.actions.ButtonHelper;
+import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utilsException.FileManipulationException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.WindowManager;
 
@@ -297,6 +300,12 @@ public class StartingPanel extends javax.swing.JPanel {
             Date date = new Date();
             Project project = new Project("Project " + dateFormat.format(date));
             project.setName("Project " + dateFormat.format(date));
+            try {
+                project.setTempDirectory(FileUtils.instance()
+                        .createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
+            } catch (FileManipulationException ex) {
+                Exceptions.printStackTrace(ex);
+            }
 
             tc.setProject(project);
             tc.setDisplayName(project.getName());
