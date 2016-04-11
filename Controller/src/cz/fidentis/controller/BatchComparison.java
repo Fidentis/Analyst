@@ -49,7 +49,8 @@ public class BatchComparison {
     private Color hdColor2 = Color.red;
     private int valuesTypeIndex = 0;        //relative, absolute
     private int metricTypeIndex = 0;        //RMS, min, max etc.
-    private int hausdorfTreshold = 100;     //threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private boolean fpScaling;          //whether feature points configuration were scaled
     private int fpTreshold = 30;        //threshold for feature points (still no clue what it's for)
     private int fpSize = 20;            //size of displayed feature points
@@ -282,14 +283,22 @@ public class BatchComparison {
         this.hdColor2 = hdColor2;
     }
 
-    public int getHausdorfTreshold() {
-        return hausdorfTreshold;
+    public int getHausdorfMaxTreshold() {
+        return hausdorfMaxTreshold;
     }
 
-    public void setHausdorfTreshold(int hausdorfTreshold) {
-        this.hausdorfTreshold = hausdorfTreshold;
+    public void setHausdorfMaxTreshold(int hausdorfMaxTreshold) {
+        this.hausdorfMaxTreshold = hausdorfMaxTreshold;
     }
 
+    public int getHausdorfMinTreshold() {
+        return hausdorfMinTreshold;
+    }
+
+    public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
+        this.hausdorfMinTreshold = hausdorfMinTreshold;
+    }
+    
     public boolean isFpScaling() {
         return fpScaling;
     }

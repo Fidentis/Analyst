@@ -24,8 +24,8 @@ public class HDpainting {
 
     private final HDpaintingInfo info;
     private float maxThresh = Float.NEGATIVE_INFINITY;
+    private float minThresh = Float.POSITIVE_INFINITY;
 
-    ;
 
     
     
@@ -127,10 +127,16 @@ public class HDpainting {
         }
         List<Float> sorted = SortUtils.instance().sortValues(distanceCopy);
 
-        if (info.getThreshValue() == Float.POSITIVE_INFINITY) {
+        if (info.getMaxThreshValue() == Float.POSITIVE_INFINITY) {
             maxThresh = sorted.get(sorted.size() - 1);
         } else {
-            maxThresh = info.getThreshValue();
+            maxThresh = info.getMaxThreshValue();
+        }
+        
+        if (info.getMinThreshValue() == Float.NEGATIVE_INFINITY) {
+            minThresh = sorted.get(0);
+        } else {
+            minThresh = info.getMinThreshValue();
         }
 
         float[] color = new float[3];
@@ -152,7 +158,8 @@ public class HDpainting {
                     color[1] = 0.5f;
                     color[2] = 0.5f;
                 }
-                else if (info.getDistance().get(facesInd[f] - 1) <= maxThresh && maxThresh != Float.NEGATIVE_INFINITY) {
+                else if (info.getDistance().get(facesInd[f] - 1) <= maxThresh && maxThresh != Float.NEGATIVE_INFINITY
+                        && info.getDistance().get(facesInd[f] - 1) >= minThresh && minThresh != Float.POSITIVE_INFINITY) {
                     color = chooseColorHSVMapping(info.getDistance().get(facesInd[f] - 1), maxThresh, sorted.get(0));
                 } else {
                     color[0] = 0.5f;
@@ -280,10 +287,10 @@ public class HDpainting {
             Vector3f vecE = new Vector3f(vecB);
             float sig = (distanceCopy.get(info.indicesForNormals[0][k] - 1 ));
             sig = Math.signum(sig);
-            vecN.scale((info.getCylLengthFactor() * 0.2f * distanceCopy.get(info.indicesForNormals[0][k] - 1 )) + sig);
+            vecN.scale((info.getCylLengthFactor() * distanceCopy.get(info.indicesForNormals[0][k] - 1 )) + sig);
             vecE.add(vecN);
 
-            info.c.addCylider(vecB, vecE, info.getCylRadius() * 0.2f, 10, sig);
+            info.c.addCylider(vecB, vecE, info.getCylRadius(), 10, sig);
         }
             info.c.prepareBuffer();
             info.c.prepareVBO();

@@ -533,7 +533,7 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfTreshold()));
+        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -645,7 +645,7 @@ public final class SaveProject implements ActionListener {
     private void appendHdInfo(HDpaintingInfo info, Element parent) {
         Element hdE = parent.getOwnerDocument().createElement("hdInfo");
         parent.appendChild(hdE);
-        hdE.setAttribute("treshValue", String.valueOf(info.getThreshValue()));
+        hdE.setAttribute("treshValue", String.valueOf(info.getMaxThreshValue()));
         hdE.setAttribute("minSelection", String.valueOf(info.getMinSelection()));
         hdE.setAttribute("maxSelection", String.valueOf(info.getMaxSelection()));
         hdE.setAttribute("isSelection", String.valueOf(info.isIsSelection()));

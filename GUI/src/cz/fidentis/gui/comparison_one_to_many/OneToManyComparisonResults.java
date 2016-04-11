@@ -931,7 +931,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(colorMapPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(colorMapPanelLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
@@ -945,7 +945,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addGap(8, 8, 8)
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, 0, 90, Short.MAX_VALUE)
+                        .addComponent(jComboBox1, 0, 75, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -1130,7 +1130,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         cylLength.setPaintLabels(true);
         cylLength.setPaintTicks(true);
         cylLength.setSnapToTicks(true);
-        cylLength.setValue(5);
+        cylLength.setValue(1);
         cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
 
         cylRadius.setMajorTickSpacing(1);
@@ -1138,7 +1138,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         cylRadius.setMinimum(1);
         cylRadius.setPaintLabels(true);
         cylRadius.setPaintTicks(true);
-        cylRadius.setValue(5);
+        cylRadius.setValue(1);
         cylRadius.setVisible(false);
         cylRadiusLabel.setVisible(false);
 
@@ -1523,7 +1523,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         }
 
         HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
-        info.setThreshValue(usedValues);
+        info.setMaxThreshValue(usedValues);
         updateHistograms();
 
         tresholdValueChanged = false;
@@ -1785,7 +1785,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         List<Float> l = jComboBox2.getSelectedIndex() == 0 ? GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdRel() : GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdAbs();
         int count = 0;
         for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) < GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().getThreshValue()) {
+            if (l.get(i) < GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().getMaxThreshValue()) {
                 count++;
             } else {
                 break;

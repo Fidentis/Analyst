@@ -811,7 +811,7 @@ public final class OpenProject implements ActionListener {
         }
         attr = projectE.getAttribute("haussdorfTreshold");
         if (attr != null && !attr.isEmpty()) {
-            comparison.setHausdorfTreshold(Integer.parseInt(attr));
+            comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {
@@ -1044,7 +1044,7 @@ public final class OpenProject implements ActionListener {
         info.setMinColor(hdColor1.getRGBColorComponents(null));
         info.setMinColor(hdColor2.getRGBColorComponents(null));
 
-        info.setThreshValue(Float.parseFloat(hdInfoE.getAttribute("treshValue")));
+        info.setMaxThreshValue(Float.parseFloat(hdInfoE.getAttribute("treshValue")));
         info.setMinSelection(Float.parseFloat(hdInfoE.getAttribute("minSelection")));
         info.setMaxSelection(Float.parseFloat(hdInfoE.getAttribute("maxSelection")));
         info.setIsSelection(Boolean.parseBoolean(hdInfoE.getAttribute("isSelection")));

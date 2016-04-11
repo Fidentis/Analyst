@@ -195,6 +195,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private int maxColorUniform;
     private int minDistanceUniform;
     private int globalMaxDistanceUniform;
+    private int globalMinDistanceUniform;
     private int maxDistanceUniform;
     private int curDistanceAttrib;
     private int selectionUniform;
@@ -453,6 +454,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         }
         gl.glUniform1i(colorSchemeUniform,info.getHdInfo().getColorScheme().ordinal());
         gl.glUniform1f(globalMaxDistanceUniform, info.getHdInfo().getMaxDistance());
+        gl.glUniform1f(globalMinDistanceUniform, info.getHdInfo().getMinDistance());
         gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         gl.glUseProgram(0);
@@ -2236,6 +2238,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         minDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "minDistance");
         maxDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "maxDistance");
         globalMaxDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "maxThreshDistance");
+        globalMinDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "minThreshDistance");
+
 
         checkProgramStatus(gl, ColorMapReductionShadersId, 3);
 

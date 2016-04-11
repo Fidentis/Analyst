@@ -923,7 +923,7 @@ public class PairComparisonPanel extends javax.swing.JPanel {
             usedValues = list.get(index - 1);
         }
 
-        info.setThreshValue(usedValues);
+        info.setMaxThreshValue(usedValues);
 
         updateHistograms();
         tresholdValueChanged = false;
@@ -941,7 +941,7 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         List<Float> l = sorted;
         int count = 0;
         for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) < info.getThreshValue()) {
+            if (l.get(i) < info.getMaxThreshValue()) {
                 count++;
             } else {
                 break;
