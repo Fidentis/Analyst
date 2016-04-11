@@ -318,8 +318,8 @@ public class histogramPanel extends JComponent {
                 Color c1;
                 Color c2;
                 if (5 + (i * stepWidth) <= slider1Tip.x && 5 + (i * stepWidth)>= slider2Tip.x) {
-                    c1 = s.chooseColor(0, slider1Tip.x - 5, (i * stepWidth), hdp.getColorScheme());
-                    c2 = s.chooseColor(0, slider1Tip.x - 5, ((i + 1) * stepWidth), hdp.getColorScheme());
+                    c1 = s.chooseColor(slider2Tip.x - 5, slider1Tip.x - 5, (i * stepWidth), hdp.getColorScheme());
+                    c2 = s.chooseColor(slider2Tip.x - 5, slider1Tip.x - 5, ((i + 1) * stepWidth), hdp.getColorScheme());
                     //  c1 =new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), hdp.chooseColorHSVMapping((i * stepWidth),slider1Tip.x-5, 0), 1);
                     //   c2 =new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), hdp.chooseColorHSVMapping(((i + 1) * stepWidth), slider1Tip.x-5, 0), 1);
                 } else {

@@ -224,7 +224,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("secondaryColor", String.valueOf(comparison.getSecondaryColor().getRGB()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfTreshold()));
+        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        
+        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -384,7 +386,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("hdColor2", String.valueOf(comparison.getHdColor2().getRGB()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfTreshold()));
+        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        
+        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -533,7 +537,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        
+        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 

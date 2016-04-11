@@ -360,7 +360,11 @@ public final class OpenProject implements ActionListener {
         }
         attr = projectE.getAttribute("haussdorfTreshold");
         if (attr != null && !attr.isEmpty()) {
-            comparison.setHausdorfTreshold(Integer.parseInt(attr));
+            comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMinTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {
@@ -559,9 +563,17 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setHdColor2(new Color(Integer.parseInt(attr)));
         }
-        attr = projectE.getAttribute("haussdorfTreshold");
+        attr = projectE.getAttribute("haussdorfMinTreshold");
         if (attr != null && !attr.isEmpty()) {
-            comparison.setHausdorfTreshold(Integer.parseInt(attr));
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMaxTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMinTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {
@@ -809,9 +821,13 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setMetricTypeIndex(Integer.parseInt(attr));
         }
-        attr = projectE.getAttribute("haussdorfTreshold");
+        attr = projectE.getAttribute("haussdorfMaxTreshold");
         if (attr != null && !attr.isEmpty()) {
             comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMinTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {

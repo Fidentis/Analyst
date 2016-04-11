@@ -992,7 +992,8 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         histogram1.setValues(f);
         histogram1.recomputeSliderPosition();
 
-        histogram1.validate();
+        histogram1.revalidate();
+        histogram1.repaint();
 
         //    histogramPanel2.repaint();
     }

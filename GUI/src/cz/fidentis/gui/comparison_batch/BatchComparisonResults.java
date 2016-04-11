@@ -664,7 +664,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        minThreshSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 0, 1));
+        minThreshSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
         minThreshSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 minThreshSpinnerStateChanged(evt);
@@ -1417,15 +1417,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             setMaxThreshValue();
         }
-
-        /*HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
-        if (info != null) {
-            //        info.setThreshPecent(jSlider1.getValue() / (float) 100);
-        }*/
-        histogramPanel1.repaint();
-        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
-        histogram1.revalidate();
-        histogram1.repaint();
         updateHistograms();
 
     }//GEN-LAST:event_jSlider1StateChanged
@@ -1620,15 +1611,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             setMaxThreshValue();
         }
-
-        /*HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
-        if (info != null) {
-            //        info.setThreshPecent(jSlider1.getValue() / (float) 100);
-        }*/
-        histogramPanel1.repaint();
-        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
-        histogram1.revalidate();
-        histogram1.repaint();
         updateHistograms();
     }//GEN-LAST:event_jSpinner1StateChanged
 
@@ -2181,10 +2163,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         int count = 0;
         int count2 = 0;
         for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) < GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMaxThreshValue()) {
+            if (l.get(i) <= GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMaxThreshValue()) {
                 count++;
             } 
-            if (l.get(i) > GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMinThreshValue()) {
+            if (l.get(i) >= GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMinThreshValue()) {
                 count2++;
             } 
             
@@ -2252,15 +2234,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             setMinThreshValue();
         }
-
-        /*HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
-        if (info != null) {
-            //        info.setThreshPecent(jSlider1.getValue() / (float) 100);
-        }*/
-        histogramPanel1.repaint();
-        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
-        histogram1.revalidate();
-        histogram1.repaint();
         updateHistograms();
     }//GEN-LAST:event_minThreshSliderStateChanged
 
@@ -2272,15 +2245,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             setMinThreshValue();
         }
-
-        /*HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
-        if (info != null) {
-            //        info.setThreshPecent(jSlider1.getValue() / (float) 100);
-        }*/
-        histogramPanel1.repaint();
-        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
-        histogram1.revalidate();
-        histogram1.repaint();
         updateHistograms();
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
@@ -2297,6 +2261,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         thickness.setValue(10);
         jSlider1.setValue(c.getHausdorfMaxTreshold());
         jSpinner1.setValue(c.getHausdorfMaxTreshold());
+        minThreshSlider.setValue(c.getHausdorfMinTreshold());
+        minThreshSpinner.setValue(c.getHausdorfMinTreshold());
         jComboBox2.setSelectedIndex(c.getMetricTypeIndex());
         jComboBox4.setSelectedIndex(c.getValuesTypeIndex());
 
@@ -2341,15 +2307,16 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         histogramPanel1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
         histogramPanel1.recomputeSliderPosition();
         histogramPanel1.setValues(f);
-        histogramPanel1.validate();
+        histogramPanel1.revalidate();
+        histogramPanel1.repaint();
 
-        // histogramPanel1.repaint();
         histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
         histogram1.setValues(f);
         histogram1.recomputeSliderPosition();
-        histogram1.validate();
+        histogram1.revalidate();
+        histogram1.repaint();
 
-        //    histogramPanel2.repaint();
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -54,7 +54,8 @@ public class OneToManyComparison {
     private Color pointColor = Color.red;           //color for displayed feature points
     private Color hdColor1 = Color.green;           //redundant? take color from HDinfo instead eventually?
     private Color hdColor2 = Color.red;
-    private int hausdorfTreshold = 100;            //threshold value in % (HDPainting info contains actual computed distance thresholded)
+    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private boolean createAvgFace = true;          //whether to create avg face during computatio of numerical results
     private boolean fpScaling;                     //whether feature points are scaled or not
     private int fpTreshold = 30;                   //threshold for feature points (still no clue what it is for)
@@ -204,13 +205,22 @@ public class OneToManyComparison {
         this.hdColor2 = hdColor2;
     }
 
-    public int getHausdorfTreshold() {
-        return hausdorfTreshold;
+    public int getHausdorfMaxTreshold() {
+        return hausdorfMaxTreshold;
     }
 
-    public void setHausdorfTreshold(int hausdorfTreshold) {
-        this.hausdorfTreshold = hausdorfTreshold;
+    public void setHausdorfMaxTreshold(int hausdorfTreshold) {
+        this.hausdorfMaxTreshold = hausdorfTreshold;
     }
+
+    public int getHausdorfMinTreshold() {
+        return hausdorfMinTreshold;
+    }
+
+    public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
+        this.hausdorfMinTreshold = hausdorfMinTreshold;
+    }   
+    
 
     public List<ArrayList<Float>> getNumResults() {
         return numResults;
