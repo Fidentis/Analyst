@@ -158,6 +158,14 @@ public class ProcrustesAnalysis implements Serializable {
     public /*Matrix*/ Map<FacialPointType, FacialPoint> getConfig() {
         return config;
     }
+    
+    public List<FacialPoint> getFacialPoints(){
+        List<FacialPoint> fp = new LinkedList<>();
+        
+        fp.addAll(config.values());
+
+        return fp;
+    }
 
     
     public boolean containsPoint(FacialPointType ft){

@@ -81,8 +81,12 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
      }*/
 
-    public void setResultButtonVisible(boolean b) {
-        canvas2.setResultButtonVisible(b);
+    public void setResultButtonVisible(boolean b, int canvasNumber) {
+        if(canvasNumber == 0){
+            canvas1.setResultButtonVisible(b);
+        }else{
+            canvas2.setResultButtonVisible(b);
+        }       
     }
 
     public Canvas getCanvas1() {

@@ -954,9 +954,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
             if (GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().getScaleEnabled()) {
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getPaInfo().setPointSize(sizeSlider.getValue() / (float) (30));
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFpSize(sizeSlider.getValue() / (float) (30));
-                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
             } else {
-                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFpSize(sizeSlider.getValue() * 3);
             }
         }
@@ -965,7 +965,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider2StateChanged
 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getPaInfo().setEnhance(jSlider2.getValue());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getPaInfo().setEnhance(jSlider2.getValue());
         repaint();
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpDistance(jSlider2.getValue());
     }//GEN-LAST:event_jSlider2StateChanged
@@ -1009,22 +1009,22 @@ public class PairComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener2(), 1920, 1920);
+        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(), 1920, 1920);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setState(2);
         GUIController.getConfigurationTopComponent().addComparisonComponent();
 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().drawHD(false);
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setProcrustes(false);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().drawHD(false);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setProcrustes(false);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setModel1(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setModel2(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel2());
 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().addModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().rotationAndSizeRestart();
 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged

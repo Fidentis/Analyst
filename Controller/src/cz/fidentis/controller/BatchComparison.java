@@ -122,6 +122,10 @@ public class BatchComparison {
         return this.trans;
     }
     
+    public void setTrans(List<ICPTransformation> trans){
+        this.trans = trans;
+    }
+    
     public String getNumericalResults() {
         return numericalResults;
     }

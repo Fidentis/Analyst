@@ -804,15 +804,7 @@ public class Canvas extends javax.swing.JPanel {
                             projectTopComponent.getViewerPanel_2Faces().setModel1(model);
                             projectTopComponent.getProject().setSelectedPart(2);
                             GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
-
-                        } else {
-                            ModelLoader loader = new ModelLoader();
-                            Model model = loader.loadModel(new File(files[0].getPath()), true, true);
-
-                            projectTopComponent.getProject().getSelectedComparison2Faces().setModel2(model);
-                            projectTopComponent.getViewerPanel_2Faces().setModel2(model);
-                            projectTopComponent.getProject().setSelectedPart(2);
-                            GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+                            
                             int width = glJPanel.getWidth();
                             int height = glJPanel.getHeight();
                             glJPanel.display();
@@ -823,6 +815,16 @@ public class Canvas extends javax.swing.JPanel {
                             ImageIcon i = new ImageIcon(img.getScaledInstance(90, 108, Image.SCALE_SMOOTH));
                             jButton1.setIcon(i);
                             projectTopComponent.getProject().getSelectedComparison2Faces().setModelIcon(i);
+
+                        } else {
+                            ModelLoader loader = new ModelLoader();
+                            Model model = loader.loadModel(new File(files[0].getPath()), true, true);
+
+                            projectTopComponent.getProject().getSelectedComparison2Faces().setModel2(model);
+                            projectTopComponent.getViewerPanel_2Faces().setModel2(model);
+                            projectTopComponent.getProject().setSelectedPart(2);
+                            GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+                            
                         }
 
                         p.finish();
@@ -879,26 +881,26 @@ public class Canvas extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (projectTopComponent.getProject().getSelectedComparison2Faces().getState() == 2) {
 
-            if (projectTopComponent.getViewerPanel_2Faces().getListener2().getNumberOfModels() > 1) {
-                Model model = projectTopComponent.getViewerPanel_2Faces().getListener2().getModel();
-                projectTopComponent.getViewerPanel_2Faces().getListener2().setModels(model);
+            if (projectTopComponent.getViewerPanel_2Faces().getListener1().getNumberOfModels() > 1) {
+                Model model = projectTopComponent.getViewerPanel_2Faces().getListener1().getModel();
+                projectTopComponent.getViewerPanel_2Faces().getListener1().setModels(model);
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
             } else {
                 //   ModelLoader l = new ModelLoader();
                 //  Model model = l.loadModel(projectTopComponent.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-                Model model = projectTopComponent.getViewerPanel_2Faces().getListener1().getModel();
-                projectTopComponent.getViewerPanel_2Faces().getListener2().addModel(model);
+                Model model = projectTopComponent.getViewerPanel_2Faces().getListener2().getModel();
+                projectTopComponent.getViewerPanel_2Faces().getListener1().addModel(model);
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
 
             }
         } else {
-            if (projectTopComponent.getViewerPanel_2Faces().getListener2().isPaintHD()) {
+            if (projectTopComponent.getViewerPanel_2Faces().getListener1().isPaintHD()) {
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
             } else {
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
             }
-            projectTopComponent.getViewerPanel_2Faces().getListener2().setPaintHD(
-                    !projectTopComponent.getViewerPanel_2Faces().getListener2().isPaintHD());
+            projectTopComponent.getViewerPanel_2Faces().getListener1().setPaintHD(
+                    !projectTopComponent.getViewerPanel_2Faces().getListener1().isPaintHD());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

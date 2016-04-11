@@ -808,7 +808,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private Boolean areFPCalculated(ProjectTopComponent comp) {
         List<FacialPoint> facialPoints = comp.getViewerPanel_2Faces().getListener1().getFacialPoints();
         List<FacialPoint> facialPoints2 = comp.getViewerPanel_2Faces().getListener2().getFacialPoints();
-        if (facialPoints.isEmpty() || facialPoints2.isEmpty()) {
+        if (facialPoints == null || facialPoints2 == null ||
+                facialPoints.isEmpty() || facialPoints2.isEmpty()) {
             return false;
         }
         return true;
@@ -976,20 +977,20 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                         p.finish();
 
-                        tc.getViewerPanel_2Faces().setResultButtonVisible(true);
+                        tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                         //ModelLoader l = new ModelLoader();
                         //Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-                        tc.getViewerPanel_2Faces().getListener2().addModel(mFace);
+                        tc.getViewerPanel_2Faces().getListener1().addModel(cFace);
 
                         if (GUIController.getSelectedProjectTopComponent() == tc) {
                             GUIController.getConfigurationTopComponent().addComparisonComponent();
                         }
                         jButton1.setEnabled(true);
                         tc.getProject().getSelectedComparison2Faces().setState(2);
-                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true);
+                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
 
-                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().createResultIcon();
-                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().showModelIcon();
+                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+                        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
 
                         if (continueComparisonCheckbox.isSelected()) {
                             GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
@@ -1044,6 +1045,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
                 procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
                 
+                /*tc.getViewerPanel_2Faces().getListener1().setFacialPoints(procrustes.getPa().getFacialPoints());
+                tc.getViewerPanel_2Faces().getListener2().setFacialPoints(procrustes.getPa2().getFacialPoints());*/
+                
                 tc.getProject().getSelectedComparison2Faces().setCompFTransformations(trans);
                 
                 
@@ -1060,14 +1064,14 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
             //nacitaj prvy model otoceny!!
             //   Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-            Model model = tc.getViewerPanel_2Faces().getListener1().getModel();
-            tc.getViewerPanel_2Faces().getListener2().addModel(model);
+            Model model = tc.getViewerPanel_2Faces().getListener2().getModel();
+            tc.getViewerPanel_2Faces().getListener1().addModel(model);
 
             tc.getProject().getSelectedComparison2Faces().setState(2);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
 
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().createResultIcon();
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().showModelIcon();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
             if (continueComparisonCheckbox.isSelected()) {
                 GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
             }
@@ -1077,14 +1081,14 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 GUIController.getConfigurationTopComponent().addComparisonComponent();
             }
             ModelLoader l = new ModelLoader();
-            Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-            tc.getViewerPanel_2Faces().getListener2().addModel(model);
+            Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel2().getFile(), false, true);
+            tc.getViewerPanel_2Faces().getListener1().addModel(model);
 
             tc.getProject().getSelectedComparison2Faces().setState(2);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
 
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().createResultIcon();
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().showModelIcon();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
 
             if (continueComparisonCheckbox.isSelected()) {
                 GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);

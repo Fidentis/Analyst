@@ -199,7 +199,7 @@ public final class OpenProject implements ActionListener {
                 ntc.getViewerPanel_2Faces().getCanvas2().setImportLabelVisible(false);
                 ntc.getViewerPanel_2Faces().getListener2().setModels(comparison2f.getModel2());
                 if (comparison2f.getResultIcon() != null) {
-                    ntc.getViewerPanel_2Faces().setResultButtonVisible(true);
+                    ntc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                     ntc.getViewerPanel_2Faces().getCanvas2().showResultIcon();
                 }
             }
