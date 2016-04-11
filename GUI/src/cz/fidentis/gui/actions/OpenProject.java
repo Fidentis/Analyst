@@ -200,18 +200,23 @@ public final class OpenProject implements ActionListener {
                 ntc.getViewerPanel_2Faces().getListener2().setModels(comparison2f.getModel2());
                 if (comparison2f.getResultIcon() != null) {
                     ntc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
-                    ntc.getViewerPanel_2Faces().getCanvas2().showResultIcon();
+                    ntc.getViewerPanel_2Faces().getCanvas1().showResultIcon();
                 }
             }
             if (comparison2f.getState() >= 3) {
+                if (comparison2f.getResultIcon() != null) {
+                    ntc.getViewerPanel_2Faces().setResultButtonVisible(false, 0);
+                    ntc.getViewerPanel_2Faces().getCanvas1().showResultIcon();
+                }
+                
                 if (comparison2f.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-                    ntc.getViewerPanel_2Faces().getListener2().setProcrustes(true);
+                    ntc.getViewerPanel_2Faces().getListener1().setProcrustes(true);
                 } else {
-                    ntc.getViewerPanel_2Faces().getListener2().setModels(comparison2f.getHdPaintingInfo().getModel());
-                    ntc.getViewerPanel_2Faces().getListener2().setHdInfo(comparison2f.getHdPaintingInfo());
-                    ntc.getViewerPanel_2Faces().getListener2().setHdPaint(comparison2f.getHDP());
-                    ntc.getViewerPanel_2Faces().getListener2().setPaintHD(true);
-                    ntc.getViewerPanel_2Faces().getListener2().drawHD(true);
+                    ntc.getViewerPanel_2Faces().getListener1().setModels(comparison2f.getHdPaintingInfo().getModel());
+                    ntc.getViewerPanel_2Faces().getListener1().setHdInfo(comparison2f.getHdPaintingInfo());
+                    ntc.getViewerPanel_2Faces().getListener1().setHdPaint(comparison2f.getHDP());
+                    ntc.getViewerPanel_2Faces().getListener1().setPaintHD(true);
+                    ntc.getViewerPanel_2Faces().getListener1().drawHD(true);
                 }
             }
             ntc.show2FacesViewer();
@@ -457,7 +462,7 @@ public final class OpenProject implements ActionListener {
 
         if (hdInfoE != null) {
             boolean useRelative = Boolean.parseBoolean(hdInfoE.getAttribute("useRelative"));
-            HDpaintingInfo info = parseHdInfo(hdInfoE, useRelative, comparison.getHd(), comparison.getModel2(), comparison.getHdColor1(), comparison.getHdColor2());
+            HDpaintingInfo info = parseHdInfo(hdInfoE, useRelative, comparison.getHd(), comparison.getModel1(), comparison.getHdColor1(), comparison.getHdColor2());
 
             comparison.setHdPaintingInfo(info);
             comparison.setHDP(new HDpainting(info));
