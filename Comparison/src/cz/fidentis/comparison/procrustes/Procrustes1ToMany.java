@@ -6,9 +6,11 @@
 
 package cz.fidentis.comparison.procrustes;
 
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.vecmath.Vector3f;
 
@@ -98,12 +100,16 @@ public class Procrustes1ToMany {
         return distances;
     }
     
-    public void align1withN(){
+    public List<ICPTransformation> align1withN(){
+        List<ICPTransformation> trans = new LinkedList<>();
+        
         pa.normalize(scaling);
         
         for (ProcrustesAnalysis currentPA : pa2) {
-            pa.doProcrustesAnalysis(currentPA, scaling);        //slightly moves pa too, in each iteration due to superimposition method
+            trans.add(pa.doProcrustesAnalysis(currentPA, scaling));        //slightly moves pa too, in each iteration due to superimposition method
         }
+        
+        return trans;
     }
     
     public String compare1toN(float threshold, String mainFace, List<File> models){

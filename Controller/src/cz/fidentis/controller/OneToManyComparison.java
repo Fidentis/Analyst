@@ -127,6 +127,10 @@ public class OneToManyComparison {
     public List<ICPTransformation> getTrans(){
         return this.trans;
     }
+    
+    public void setTrans(List<ICPTransformation> trans){
+        this.trans = trans;
+    }
 
     public HDpaintingInfo getHdPaintingInfo() {
         return hdPaintingInfo;

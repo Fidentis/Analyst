@@ -6,6 +6,7 @@
 
 package cz.fidentis.comparison.procrustes;
 
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import java.io.File;
 import java.util.ArrayList;
@@ -88,9 +89,9 @@ public class ProcrustesBatchProcessing {
      * 
      * @param treshold - to determine when to stop GPA alignment
      */
-    public void alignBatch(float treshold){
+    public List<ICPTransformation> alignBatch(float treshold){
         gpa.setScaling(scaling);
-        gpa.doGPA(treshold);
+        return gpa.doGPA(treshold);
     }
     
     /**

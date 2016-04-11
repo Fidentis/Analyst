@@ -7,6 +7,7 @@ package cz.fidentis.gui.comparison_one_to_many;
 
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
@@ -984,7 +985,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             list, verts, jCheckBox11.isSelected());
 
                     //procrustes.compare1WithN(jSlider3.getValue() / 100f);
-                    procrustes.align1withN();
+                    List<ICPTransformation> trans = procrustes.align1withN();
+                    tc.getProject().getSelectedOneToManyComparison().setTrans(trans);
 
                     tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().setVerts(procrustes.getPa().getVertices());
                     procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints());

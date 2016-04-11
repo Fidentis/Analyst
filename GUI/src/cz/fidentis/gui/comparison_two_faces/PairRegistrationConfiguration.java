@@ -5,8 +5,10 @@
  */
 package cz.fidentis.gui.comparison_two_faces;
 
+import Jama.Matrix;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
@@ -33,6 +35,7 @@ import java.util.Hashtable;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
@@ -1017,7 +1020,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getGpa().getPA(0).getVertices());
                 tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getGpa().getPA(1).getVertices());*/
-                procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
+                ICPTransformation trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
                 tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getPa().getVertices());
                 tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getPa2().getVertices());
 
@@ -1040,6 +1043,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
                 procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
+                
+                tc.getProject().getSelectedComparison2Faces().setCompFTransformations(trans);
+                
+                
             } catch (FileNotFoundException ex) {
                 System.err.println(ex);
                 Exceptions.printStackTrace(ex);

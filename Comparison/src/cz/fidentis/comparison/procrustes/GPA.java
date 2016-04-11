@@ -1,6 +1,8 @@
 package cz.fidentis.comparison.procrustes;
 
 import Jama.Matrix;
+import com.jogamp.graph.math.Quaternion;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import java.io.BufferedWriter;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.vecmath.Vector3f;
@@ -143,12 +146,15 @@ public class GPA implements Serializable {
         rotateAll();
     }
     
-    private void rotateAll(){
+    private List<Quaternion> rotateAll(){
+        List<Quaternion> rotations = new ArrayList<>(configs.size());
         ProcrustesAnalysis mean = this.countMeanConfig();
         
         for(int i = 0; i < this.getConfigs().size(); i++){
-            configs.get(i).rotate(mean);                    
+           rotations.add(configs.get(i).rotate(mean));                    
         }
+        
+        return rotations;
     }
     
     
@@ -157,8 +163,9 @@ public class GPA implements Serializable {
      * @param treshold      accuracy
      */
     
-    public void doGPA(float treshold){                  //registration step, return mean config?
+    public List<ICPTransformation> doGPA(float treshold){                  //registration step, return mean config?
         List<ProcrustesAnalysis> helpList = new ArrayList();
+        List<ICPTransformation> trans = new ArrayList<>();
         
         this.normalizeAll();
         
@@ -168,7 +175,8 @@ public class GPA implements Serializable {
         double newDistance = 0;
         
         for(int i = 1; i < configs.size(); i++){
-            configs.get(i).rotate(oldMean);                              
+            Quaternion q = configs.get(i).rotate(oldMean);  
+            trans.add(new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f));
         }
         
         newMean = this.countMeanConfig();
@@ -181,7 +189,10 @@ public class GPA implements Serializable {
             oldDistance = newDistance;
             oldMean = newMean;
             //this.superimpose();
-            rotateAll();
+            List<Quaternion> q = rotateAll();
+            
+            trans = createNewTransformations(q, trans);
+            
             newMean = this.countMeanConfig();
             newDistance = newMean.countDistance(oldMean, scaling);
             if(oldDistance < newDistance){
@@ -190,6 +201,23 @@ public class GPA implements Serializable {
                 break;
             }
         }
+        
+        return trans;
+    }
+    
+    private List<ICPTransformation> createNewTransformations(List<Quaternion> q, List<ICPTransformation> trans){
+        if(q.size() != trans.size()){
+            return null;
+        }
+        
+        List<ICPTransformation> newTrans = new LinkedList<>();
+        
+        for(int i = 0; i <  q.size(); i++){
+            q.get(i).mult(trans.get(i).getRotation());
+            newTrans.add(new ICPTransformation(new Vector3f(), 1.0f, q.get(i), 0.0f));
+        }
+        
+        return newTrans;
     }
    
     

@@ -8,6 +8,7 @@ package cz.fidentis.gui.comparison_batch;
 
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.procrustes.ProcrustesBatchProcessing;
 import cz.fidentis.controller.BatchComparison;
@@ -1044,7 +1045,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, jCheckBox11.isSelected());
 
                         //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
-                        procrustes.alignBatch(jSlider3.getValue() / 100f);
+                        List<ICPTransformation> trans = procrustes.alignBatch(jSlider3.getValue() / 100f);
+                        tc.getProject().getSelectedBatchComparison().setTrans(trans);
 
                         List<File> results;
 
