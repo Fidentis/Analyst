@@ -972,6 +972,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getHdPaintingInfo().setMaxThreshValue(maxUsedValues);
 
         maxTresholdValueChanged = false;
+         minTresholdValueChanged = false;
 
     }
 
@@ -998,6 +999,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getHdPaintingInfo().setMinThreshValue(minUsedValues);
         minTresholdValueChanged = false;
+        maxTresholdValueChanged = false;
 
     }
 

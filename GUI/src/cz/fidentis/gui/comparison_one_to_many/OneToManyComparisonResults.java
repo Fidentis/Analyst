@@ -25,6 +25,7 @@ import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -1296,7 +1297,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
         if (result != null) {
             jPanel4.setVisible(true);
-
+            pairComparisonPanel1.clear();
             setHeatPlotLabels();
 
             pairFrame.setTitle(
@@ -1308,7 +1309,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             pairFrame.setVisible(
                     true);
             pairFrame.setSize(
-                    1000, 500);
+                    1000, 700);
             pairFrame.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
 
         }
@@ -1359,6 +1360,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             l.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    pairFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     OneToManyComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
                     ModelLoader ml = new ModelLoader();
                     // pairComparisonPanel1.clear();
@@ -1384,6 +1386,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     pairComparisonPanel1.getListener().setPaintHD(true);
                     pairComparisonPanel1.revalidate();
                     pairComparisonPanel1.repaint();
+                    pairFrame.setCursor(Cursor.getDefaultCursor());
                 }
 
             }

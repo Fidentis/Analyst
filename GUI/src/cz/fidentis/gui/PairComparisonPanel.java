@@ -34,7 +34,8 @@ public class PairComparisonPanel extends javax.swing.JPanel {
     private ComparisonGLEventListener listener;
     JPanel activeColorPanel;
     String result;
-    private boolean tresholdValueChanged;
+    private boolean maxTresholdValueChanged;
+    private boolean minTresholdValueChanged;
     private float mouseDraggedX;
     private float mouseDraggedY;
     private boolean selection;
@@ -119,6 +120,8 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
         jSpinner1 = new javax.swing.JSpinner();
+        minThreshSlider = new javax.swing.JSlider();
+        minThreshSpinner = new javax.swing.JSpinner();
         canvasPanel = new javax.swing.JPanel();
         canvas1 = new cz.fidentis.gui.Canvas();
         jComboBox3 = new javax.swing.JComboBox();
@@ -497,6 +500,24 @@ public class PairComparisonPanel extends javax.swing.JPanel {
             }
         });
 
+        minThreshSlider.setMajorTickSpacing(20);
+        minThreshSlider.setMinorTickSpacing(5);
+        minThreshSlider.setPaintLabels(true);
+        minThreshSlider.setPaintTicks(true);
+        minThreshSlider.setValue(0);
+        minThreshSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                minThreshSliderStateChanged(evt);
+            }
+        });
+
+        minThreshSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        minThreshSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                minThreshSpinnerStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout colormapPanelLayout = new javax.swing.GroupLayout(colormapPanel);
         colormapPanel.setLayout(colormapPanelLayout);
         colormapPanelLayout.setHorizontalGroup(
@@ -507,6 +528,11 @@ public class PairComparisonPanel extends javax.swing.JPanel {
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
+                .addComponent(jLabel21)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -514,17 +540,16 @@ public class PairComparisonPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(colormapPanelLayout.createSequentialGroup()
-                .addComponent(jLabel21)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(colormapPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colormapPanelLayout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         colormapPanelLayout.setVerticalGroup(
             colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -543,7 +568,11 @@ public class PairComparisonPanel extends javax.swing.JPanel {
                         .addComponent(jLabel5)
                         .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(histogram1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -641,12 +670,12 @@ public class PairComparisonPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 469, Short.MAX_VALUE)
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 469, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -901,14 +930,67 @@ public class PairComparisonPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox6ActionPerformed
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
-        if (!tresholdValueChanged) {
-            tresholdValueChanged = true;
+        if (!maxTresholdValueChanged) {
+            maxTresholdValueChanged = true;
             jSpinner1.setValue((int) jSlider1.getValue());
-            setMaxUsedValue();
-        }
+            setMaxthreshValue();
+        }       
+        updateHistograms();
     }//GEN-LAST:event_jSlider1StateChanged
 
-    private void setMaxUsedValue() {
+
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        if (!maxTresholdValueChanged) {
+            maxTresholdValueChanged = true;
+            jSlider1.setValue((int) jSpinner1.getValue());
+            setMaxthreshValue();
+        }
+        
+        updateHistograms();
+    }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
+        List<Float> l = sorted;
+        int count = 0;
+        int count2 = 0;
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i) <= info.getMaxThreshValue()) {
+                count++;
+            }
+            if (l.get(i) >= info.getMinThreshValue()) {
+                count2++;
+            }
+
+        }
+        float percent = count / (float) l.size();
+        jSlider1.setValue((int) (percent * 100));
+
+        float percent2 = count2 / (float) l.size();
+        minThreshSlider.setValue(100 - (int) (percent2 * 100));
+    }//GEN-LAST:event_histogram1MouseDragged
+
+    private void minThreshSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSliderStateChanged
+        if (!minTresholdValueChanged) {
+            minTresholdValueChanged = true;
+            minThreshSpinner.setValue((int)minThreshSlider.getValue());
+
+            setMinThreshValue();
+        }
+        updateHistograms();
+    }//GEN-LAST:event_minThreshSliderStateChanged
+
+    private void minThreshSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSpinnerStateChanged
+        if (!minTresholdValueChanged) {
+            minTresholdValueChanged = true;
+            minThreshSlider.setValue((int)minThreshSpinner.getValue());
+
+            setMinThreshValue();
+        }
+        updateHistograms();
+    }//GEN-LAST:event_minThreshSpinnerStateChanged
+
+    
+    private void setMaxthreshValue() {
         float usedValues;
         List<Float> list;
 
@@ -924,38 +1006,37 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         }
 
         info.setMaxThreshValue(usedValues);
-
-        updateHistograms();
-        tresholdValueChanged = false;
+        maxTresholdValueChanged = false;
     }
+    
+     private void setMinThreshValue() {
 
-    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        if (!tresholdValueChanged) {
-            tresholdValueChanged = true;
-            jSlider1.setValue((int) jSpinner1.getValue());
-            setMaxUsedValue();
+        List<Float> list;
+
+        list = SortUtils.instance().sortValues(info.getDistance());;
+
+        int size = list.size();
+
+        float minUsedValues;
+        int index = (int) (size * (minThreshSlider.getValue() / 100f));
+
+        if (index == 0) {
+            minUsedValues = list.get(0);
+        } else {
+            minUsedValues = list.get(index - 1);
         }
-    }//GEN-LAST:event_jSpinner1StateChanged
 
-    private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
-        List<Float> l = sorted;
-        int count = 0;
-        for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) < info.getMaxThreshValue()) {
-                count++;
-            } else {
-                break;
-            }
-        }
-        float percent = count / (float) l.size();
-        jSlider1.setValue((int) (percent * 100));
-        jSpinner1.setValue((int) (percent * 100));
-    }//GEN-LAST:event_histogram1MouseDragged
+        info.setMinThreshValue(minUsedValues);
+        minTresholdValueChanged = false;
 
+    }
+    
+    
     public void clear() {
 
         listener.removeModel();
-        tresholdValueChanged = false;
+        maxTresholdValueChanged = false;
+        minTresholdValueChanged = false;
         selection = false;
         VisualizationBox.setSelectedIndex(0);
         jComboBox2.setSelectedIndex(0);
@@ -1039,6 +1120,8 @@ public class PairComparisonPanel extends javax.swing.JPanel {
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider3;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSlider minThreshSlider;
+    private javax.swing.JSpinner minThreshSpinner;
     private javax.swing.JRadioButton noneRadioButton;
     private javax.swing.JPanel primaryColorPanel;
     private javax.swing.JPanel secondaryColorPanel;

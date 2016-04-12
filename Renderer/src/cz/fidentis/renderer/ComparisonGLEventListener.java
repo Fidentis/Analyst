@@ -561,7 +561,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
          gl.glEnd();
          */
         if (info.isShowSamplingRays()) {
-            gl.glColor3f(0, 0, 0);
+             gl.glColor4fv(info.getColorOfCut(),0);
 
             //intersections/normals
             gl.glBegin(GL_LINES);
