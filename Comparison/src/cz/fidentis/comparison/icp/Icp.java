@@ -308,8 +308,8 @@ public class Icp {
                 Quaternion point = new Quaternion(p1.getX(), p1.getY(), p1.getZ(), 1);
                 
                 if(compF.size() > 1){
-                    qCopy = MathUtils.instance().multiply(conjugateQ(transformation.getRotation()), point);
-                    qCopy = MathUtils.instance().multiply(qCopy, transformation.getRotation());
+                    qCopy = MathUtils.instance().multiply(point, conjugateQ(transformation.getRotation()));
+                    qCopy = MathUtils.instance().multiply(transformation.getRotation(), qCopy);
                     //qCopy = MathUtils.instance().multiply(qq,point);
                 }else{
                     qCopy = point;
@@ -350,9 +350,9 @@ public class Icp {
         }
         
         //Quaternion reverse = conjugateQ(trans.getRotation());
-        Quaternion reverse = new Quaternion(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
+        //Quaternion reverse = new Quaternion(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
         //reverse.inverse();
-        Quaternion reverCon = conjugateQ(reverse);
+        Quaternion reverCon = conjugateQ(trans.getRotation());
         
         Quaternion oldV;
         
@@ -360,8 +360,8 @@ public class Icp {
            oldV = new Quaternion(v.x, v.y, v.z, 1);
            /*oldV = MathUtils.instance().multiply(reverse, oldV);
            oldV = MathUtils.instance().multiply(oldV, trans.getRotation());*/
-           oldV = MathUtils.instance().multiply(trans.getRotation(), oldV);
-           oldV = MathUtils.instance().multiply(oldV, reverCon);
+           oldV = MathUtils.instance().multiply(oldV, trans.getRotation());
+           oldV = MathUtils.instance().multiply(reverCon, oldV);
            //oldV = MathUtils.instance().multiply(trans.getRotation(), oldV);
            
            v.setX(oldV.getX());
@@ -394,17 +394,19 @@ public class Icp {
      * @return final transformation combining all listed transformations
      */
     public ICPTransformation createFinalTrans(List<ICPTransformation> trans, boolean scale){
-        float s = 1f;
+        float s = 1;
         Vector3f t = new Vector3f();
         Quaternion r = new Quaternion(0,0,0,1);
         
-        for(int i = trans.size() - 1; i >= 0; i--/*ICPTransformation tran : trans*/){
-            ICPTransformation tran = trans.get(i);
+        for(ICPTransformation tran : trans){
+            //ICPTransformation tran = trans.get(i);
             
             if(scale)
                 s *= tran.getScaleFactor();
-            
-            t.add(tran.getTranslation());            
+    
+            t.x += tran.getTranslation().x;
+            t.y += tran.getTranslation().y;
+            t.z += tran.getTranslation().z;
             
             Quaternion q = tran.getRotation();
             r.mult(q);

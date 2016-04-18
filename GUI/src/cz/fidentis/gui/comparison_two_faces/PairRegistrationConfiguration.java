@@ -1050,6 +1050,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 
                 tc.getProject().getSelectedComparison2Faces().setCompFTransformations(trans);
                 
+                //Icp.instance().reverseTransformations(trans, tc.getViewerPanel_2Faces().getListener2().getModel().getVerts(), false);
+                
                 
             } catch (FileNotFoundException ex) {
                 System.err.println(ex);

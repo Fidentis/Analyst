@@ -560,6 +560,7 @@ public class ProcrustesAnalysis implements Serializable {
         //config = config.times(r);
         origConf1 = origConf1.times(r);
         
+        
         for(int i = 0; i < cor.size(); i++){
             FacialPoint newPoint = new FacialPoint(cor.get(i), new Vector3f((float) origConf1.get(i, 0), (float) origConf1.get(i, 1), (float) origConf1.get(i, 2)));
             config.put(cor.get(i), newPoint);
