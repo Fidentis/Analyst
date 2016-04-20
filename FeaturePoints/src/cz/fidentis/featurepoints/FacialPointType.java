@@ -51,5 +51,18 @@ public enum FacialPointType {
     OBI_L,
     PRA_R,
     PRA_L,
+    PUP_R,
+    PUP_L,
+    GNA,
+    GO2_R,
+    GO2_L,
+    V,
+    O,
+    RN_R,
+    RN_L,
+    EU2_R,
+    EU2_L,
+    RM_R,
+    RM_L,
     unspecified
 }
