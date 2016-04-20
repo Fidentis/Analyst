@@ -41,4 +41,17 @@ OBI_R;Otobasion inferius R;The point where the earlobe attaches to the cheek ski
 OBI_L;Otobasion inferius L;The point where the earlobe attaches to the cheek skin (lower attachment). The point is bilateral.
 PRA_R;Praeaurale R;The point at the intersection of the line between Otobasion superius and Otobasion inferius points, at the level of the Postaurale point. The point is bilateral.
 PRA_L;Praeaurale L;The point at the intersection of the line between Otobasion superius and Otobasion inferius points, at the level of the Postaurale point. The point is bilateral.
+PUP_R;Pupila R;No information
+PUP_L;Pupila L;No information
+GNA;Gnathion;No information
+GO2_R;Gonion II R;No information
+GO2_L;Gonion II L;No information
+V;Vertex;No information
+O;Ophryon;No information
+RN_R;Radix nasi R;No information
+RN_L;Radix nasi L;No information
+EU2_R;Euryon II R;No information
+EU2_L;Euryon II L;No information
+RM_R;Ramus mandibulae R;No information
+RM_L;Ramus mandibulae L;No information
 unspecified;Unspecified point;No information

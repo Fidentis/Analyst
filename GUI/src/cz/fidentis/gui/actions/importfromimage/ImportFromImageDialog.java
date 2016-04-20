@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.gui.actions;
+package cz.fidentis.gui.actions.importfromimage;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import javax.vecmath.TexCoord3f;
  *
  * @author Marek Zuzi
  */
-public class ImportFromImageDialog extends javax.swing.JDialog {
+public class ImportFromImageDialog extends javax.swing.JDialog implements PropertyChangeListener {
 
     private File imageFile;
     private final List<FacialPoint> featurePoints = new ArrayList<>();
@@ -34,7 +36,6 @@ public class ImportFromImageDialog extends javax.swing.JDialog {
     public ImportFromImageDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        initFeaturePoints();
 
         tc = GUIController.getSelectedProjectTopComponent();
         int part = tc.getProject().getSelectedPart();
@@ -45,10 +46,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog {
             radio_secondary.setText("Compared model");
         }
         canvas.setPoints(featurePoints);
-    }
-
-    private void initFeaturePoints() {
-        featurePoints.add(new FacialPoint(FacialPointType.AL_L, new TexCoord3f(10, 10, 0)));
+        canvas.addPropertyChangeListener("featurePoints", this);
     }
 
     public File getImageFile() {
@@ -71,6 +69,11 @@ public class ImportFromImageDialog extends javax.swing.JDialog {
         return this.canceled;
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        but_ok.setEnabled(featurePoints.size() >= 3);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,7 +91,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog {
         radio_primary = new javax.swing.JRadioButton();
         but_ok = new javax.swing.JButton();
         but_cancel = new javax.swing.JButton();
-        canvas = new cz.fidentis.gui.actions.ImageFpCanvas();
+        canvas = new cz.fidentis.gui.actions.importfromimage.ImageFpCanvas();
         jLabel1 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
 
@@ -157,7 +160,6 @@ public class ImportFromImageDialog extends javax.swing.JDialog {
         });
 
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        org.openide.awt.Mnemonics.setLocalizedText(canvas, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.canvas.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.jLabel1.text")); // NOI18N
 
@@ -275,7 +277,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog {
     private javax.swing.JButton but_loadFp;
     private javax.swing.JButton but_ok;
     private javax.swing.ButtonGroup buttonGroup1;
-    private cz.fidentis.gui.actions.ImageFpCanvas canvas;
+    private cz.fidentis.gui.actions.importfromimage.ImageFpCanvas canvas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JPanel panel_primarySecondary;
