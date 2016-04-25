@@ -34,19 +34,21 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
     }
 
     private boolean useRelative;
-    private Float thresh;
+    private Float upperTreshold;
+    private Float lowerTreshold;
     private int mainFaceNum;
     private int compareFaceNum;
     private Curvature_jv mainCurv;
     private Curvature_jv compCurv;
     private ComparisonMethod method;
 
-    public BatchComparisonNumericCallable(KdTree mainF, Model compMesh, boolean useRelative, Float thresh, int mainFaceNum, int compareFaceNum,
+    public BatchComparisonNumericCallable(KdTree mainF, Model compMesh, boolean useRelative, Float upperTreshold, Float lowerTreshold,  int mainFaceNum, int compareFaceNum,
             Curvature_jv mainCurv, Curvature_jv compCurv, ComparisonMethod method) {
         this.mainF = mainF;
         this.compMesh = compMesh;
         this.useRelative = useRelative;
-        this.thresh = thresh;
+        this.upperTreshold = upperTreshold;
+        this.lowerTreshold = lowerTreshold;
         this.mainFaceNum = mainFaceNum;
         this.compareFaceNum = compareFaceNum;
         this.mainCurv = mainCurv;
@@ -68,7 +70,7 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
 
         try {
 
-            ArrayList<Float> tmp = new ArrayList<Float>((int) (compMesh.getVerts().size() * thresh));
+            ArrayList<Float> tmp = new ArrayList<Float>((int) (compMesh.getVerts().size() * upperTreshold));
 
             if (method == ComparisonMethod.HAUSDORFF_DIST) {
                 List<Vector3f> normalsUsed = compMesh.getNormals();
@@ -81,7 +83,7 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
             } else {
                 result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv.getCurvature(CurvatureType.Gaussian), compCurv.getCurvature(CurvatureType.Gaussian));
             }
-            result = ComparisonMetrics.instance().thresholdValues(result, thresh, useRelative);
+            result = ComparisonMetrics.instance().thresholdValues(result, upperTreshold, lowerTreshold, useRelative);
             tmp.addAll(result);
 
             p.finish();

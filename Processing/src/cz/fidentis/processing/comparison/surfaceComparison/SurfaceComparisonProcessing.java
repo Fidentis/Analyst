@@ -244,17 +244,17 @@ public class SurfaceComparisonProcessing {
      * Computes thresholded variance from pre-computed numeric values.
      *
      * @param results - pre-computed 1:N numeric results
-     * @param thresh - threshold value
+     * @param upperTreshold - threshold value
      * @param variationMethod - method of variation to compute
      * @param useRelative - whether to use signed distance or not
      * @return recomputed numeric results
      */
-    public List<Float> compareOneToManyVariation(List<ArrayList<Float>> results, float thresh, int variationMethod, boolean useRelative) {
+    public List<Float> compareOneToManyVariation(List<ArrayList<Float>> results, float upperTreshold, float lowerTreshold, int variationMethod, boolean useRelative) {
         List<Float> res = new ArrayList<Float>();
         List<Float> thresholdedValues;
 
         for (ArrayList<Float> list : results) {
-            thresholdedValues = ComparisonMetrics.instance().thresholdValues(list, thresh, useRelative);
+            thresholdedValues = ComparisonMetrics.instance().thresholdValues(list, upperTreshold, lowerTreshold, useRelative);
 
             res.add(computeSingleVariation(thresholdedValues, variationMethod, useRelative));
         }
@@ -543,14 +543,15 @@ public class SurfaceComparisonProcessing {
      * @param varianceMethod variance method to compute final results with
      * @param useRelative whether relative distance should be employed (with
      * sign), or whether classical Euclidean distance should be used instead
-     * @param thresh - allows to only use certain amount of coputed numerical
+     * @param upperTreshold - allows to only use certain amount of coputed numerical
      * result values, by setting parameter in range of [0, 1]
      * @param auxiliaryResultsFile BatchComparison processing class to store
      * computed results to
      * @return matrix of size models.size X models.size contraining numerical
      * result for each-to-each comparison
      */
-    public ArrayList<ArrayList<Float>> batchCompareNumericalResults(List<File> models, int varianceMethod, boolean useRelative, Float thresh, ComparisonMethod method, BatchComparison auxiliaryResultsFile) {
+    public ArrayList<ArrayList<Float>> batchCompareNumericalResults(List<File> models, int varianceMethod, boolean useRelative, Float upperTreshold, 
+            Float lowerTreshold, ComparisonMethod method, BatchComparison auxiliaryResultsFile) {
         ArrayList<ArrayList<Float>> computedVariance = new ArrayList<ArrayList<Float>>(models.size());
         List<Future<ArrayList<Float>>> list = new ArrayList<Future<ArrayList<Float>>>(models.size());
         Curvature_jv mainCurv = null;
@@ -590,7 +591,7 @@ public class SurfaceComparisonProcessing {
                 mainCurv = new Curvature_jv(current);
             }
 
-            batchRawResultsToSingle(models, i, ml, executor, mainFace, mainCurv, useRelative, thresh, list, method);
+            batchRawResultsToSingle(models, i, ml, executor, mainFace, mainCurv, useRelative, upperTreshold, lowerTreshold, list, method);
             batchVariance(list, uncomputedCollumn, computedVariance, varianceMethod, useRelative);
 
             //saves temporary results to disk to save up memory usage
@@ -626,7 +627,7 @@ public class SurfaceComparisonProcessing {
 
     //give executor data to compute numerical results
     private void batchRawResultsToSingle(List<File> models, int i, ModelLoader ml, ExecutorService executor, KdTree mainFace, Curvature_jv mainCurv, boolean useRelative,
-            Float thresh, List<Future<ArrayList<Float>>> list, ComparisonMethod method) {
+            Float upperTreshold, Float lowerTreshold, List<Future<ArrayList<Float>>> list, ComparisonMethod method) {
         Model compF;
         Curvature_jv compCurv = null;
         //compute raw comparison results
@@ -637,7 +638,7 @@ public class SurfaceComparisonProcessing {
             if (method == ComparisonMethod.HAUSDORFF_CURV) {
                 compCurv = new Curvature_jv(compF);
             }
-            Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, thresh, j, i, mainCurv, compCurv, method));
+            Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, upperTreshold, lowerTreshold, j, i, mainCurv, compCurv, method));
             list.add(fut);
             compF = null;
         }
@@ -651,11 +652,12 @@ public class SurfaceComparisonProcessing {
      * @param varianceMethod variance method used, this parameter only serves to
      * inform user of the method they picked for final numerical results
      * @param originalModels list containing URLs to original models to be used to name columns in the table
-     * @param threshold threshold used to compute results
+     * @param upperTreshold upper threshold used to compute results 
+     * @param lowerTreshold lower threshold used to compute results
      * @return string representation of computed results
      */
-    public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels, float threshold) {
-        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + " " + (threshold * 100) + "% treshold;");
+    public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels, float upperTreshold, float lowerTreshold) {
+        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + " Lower: " + (lowerTreshold * 100) + "% Upper: " + (upperTreshold * 100) + "% treshold;");
 
         for (int i = 0; i < results.size(); i++) {
             strResults.append(originalModels.get(i).getName()).append(';');
@@ -808,14 +810,14 @@ public class SurfaceComparisonProcessing {
      * @param varianceMethod variance method to be used for recomputing
      * numerical results
      * @param numOfModels number of models that were compared
-     * @param thresh allows to only use certain amount of pre-computed values,
+     * @param upperTreshold allows to only use certain amount of pre-computed values,
      * thresh should be in range [0, 1]
      * @param useRelative whether to use relative distance (with sign) or
      * classical, Euclidean, distance
      * @return list containing recoputed numerical results, based on given
      * parameters
      */
-    public List<ArrayList<Float>> recomputeNumericResults(File precomputedResultsFile, int varianceMethod, int numOfModels, float thresh, boolean useRelative) {
+    public List<ArrayList<Float>> recomputeNumericResults(File precomputedResultsFile, int varianceMethod, int numOfModels, float upperTreshold, float lowerTreshold, boolean useRelative) {
         List<ArrayList<Float>> finalMatrix = new ArrayList<ArrayList<Float>>(numOfModels);
         List<Float> thresholdedValues;
         ArrayList<ArrayList<Float>> csv;
@@ -826,7 +828,7 @@ public class SurfaceComparisonProcessing {
 
             //recompute data
             for (int j = 0; j < csv.size(); j++) {
-                thresholdedValues = ComparisonMetrics.instance().thresholdValues(csv.get(j), thresh, useRelative);
+                thresholdedValues = ComparisonMetrics.instance().thresholdValues(csv.get(j), upperTreshold, lowerTreshold, useRelative);
                 singleLine.add(computeSingleVariation(thresholdedValues, varianceMethod, useRelative));
             }
             finalMatrix.add((ArrayList<Float>) singleLine);
@@ -1148,7 +1150,7 @@ public class SurfaceComparisonProcessing {
 
             KdTree mainFace = new KdTreeIndexed(current.getVerts());
 
-            batchRawResultsToSingle(models, i, ml, executor, mainFace, null, false, 1.0f, list, ComparisonMethod.HAUSDORFF_DIST);
+            batchRawResultsToSingle(models, i, ml, executor, mainFace, null, false, 1.0f, 0.0f, list, ComparisonMethod.HAUSDORFF_DIST);
             batchVariance(list, uncomputedCollumn, res, 0, false);
         }
 

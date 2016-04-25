@@ -937,7 +937,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (result != null) {
-            String[][] values = TableProcessing.instance().parseTableAddHeader(result, new String[]{GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getUpperHDTreshold() * 100 + "% treshold",
+            String[][] values = TableProcessing.instance().parseTableAddHeader(result, new String[]{
+                "Lower: " + GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getLowerHDTreshold() * 100 + "% Upper: " + 
+                         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getUpperHDTreshold() * 100 + "% treshold",
                 GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel2().getName()});
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -1137,7 +1139,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
                     info.setRecompute(true);
 
-                    thresholdedValues = ComparisonMetrics.instance().thresholdValues(hdDistance, ((Integer) jSpinner1.getValue()) / 100f, jComboBox2.getSelectedIndex() == 0);
+                    thresholdedValues = ComparisonMetrics.instance().thresholdValues(hdDistance, ((Integer) jSpinner1.getValue()) / 100f, ((Integer) minThreshSpinner.getValue()) / 100f, jComboBox2.getSelectedIndex() == 0);
 
                     String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, jComboBox2.getSelectedIndex() == 0);
                     

@@ -353,7 +353,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                         }
 
-                        var = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, 1.f, 0, true);
+                        var = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, 1.f, 0.0f, 0, true);
                         List<Float> sortedResRes = SortUtils.instance().sortValues(results);
                         List<Float> sortedResAbs;
                         List<Float> absVal = new LinkedList<>();
@@ -525,7 +525,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     }
 
     private String setValues(List<Float> hdDistance, List<File> models, String mainFace, int varianceMethod) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " 100% treshold;");
+        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Upper: 100% Lower: 0% treshold;");
         
         for(int i = 0; i < hdDistance.size(); i++){
             strResults.append(models.get(i).getName()).append(';');

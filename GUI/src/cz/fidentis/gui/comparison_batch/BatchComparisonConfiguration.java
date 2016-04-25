@@ -338,11 +338,11 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
                             //numerical results
                             numResults = SurfaceComparisonProcessing.instance().batchCompareNumericalResults(models, 0, true,
-                                    (Integer) 100 / 100f, (ComparisonMethod) jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
+                                    1.0f, 0.0f, (ComparisonMethod) jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
 
                             List<Float> sortedHd = SortUtils.instance().sortValues(variance);
 
-                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels, 1f));
+                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels, 1f, 0f));
                             tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
 
                         } catch (FileManipulationException ex) {

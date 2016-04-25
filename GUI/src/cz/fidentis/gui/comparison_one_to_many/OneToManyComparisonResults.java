@@ -1290,7 +1290,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<ArrayList<Float>> numResults = tc.getProject().getSelectedOneToManyComparison().getNumResults();
         List<Float> thresholdedValues;
-        thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
+        thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f,
+                (int) minThreshSpinner.getValue() / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
         ResultExports.instance().exportCSVnumericOrder(tc, thresholdedValues, tc.getProject().getSelectedOneToManyComparison().getModels());
     }//GEN-LAST:event_exportOrderedResultsButtonActionPerformed
 
@@ -1718,9 +1719,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
                     info.setRecompute(true);
 
-                    thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
+                    thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f,
+                            (int) minThreshSpinner.getValue() / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
 
-                    String res = setValues(thresholdedValues, origModels, jComboBox3.getSelectedIndex(), (int) jSpinner1.getValue() / 100f);
+                    String res = setValues(thresholdedValues, origModels, jComboBox3.getSelectedIndex(), (int) jSpinner1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f);
 
                     info.setDistance(hdDistance);
                     info.setUseRelative(jComboBox2.getSelectedIndex() == 0);
@@ -2039,8 +2041,9 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         minTresholdValueChanged = false;
     }
 
-    private String setValues(List<Float> hdDistance, List<File> models, int varianceMethod, float threshold) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " " + (threshold * 100) +"% treshold;");
+    private String setValues(List<Float> hdDistance, List<File> models, int varianceMethod, float upperTreshold, float lowerTreshold) {
+        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Lower: " + 
+                (lowerTreshold * 100) +"% Upper: " + (upperTreshold * 100) + "% treshold;");
 
         for (int i = 0; i < hdDistance.size(); i++) {
             strResults.append(models.get(i).getName()).append(';');

@@ -1698,9 +1698,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     info.setUseRelative(jComboBox4.getSelectedIndex() == 0);
 
                     numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(tc.getProject().getSelectedBatchComparison().getHdCSVresults(),
-                            jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
+                            jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, 
+                            (int) minThreshSpinner.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
                     tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().
-                            batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels, (int) jSpinner1.getValue() / 100f));
+                            batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels, (int) jSpinner1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f));
                     tc.getProject().getSelectedBatchComparison().setValuesTypeIndex(jComboBox4.getSelectedIndex());
                     tc.getProject().getSelectedBatchComparison().setMetricTypeIndex(jComboBox2.getSelectedIndex());
                     tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
@@ -1938,7 +1939,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void exportSymetricResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportSymetricResultsActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().exportSymetricRes(tc, tc.getProject().getSelectedBatchComparison().getNumericalResults(),
-                jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels(), jSlider1.getValue());
+                jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels(), (int) jSlider1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f);
     }//GEN-LAST:event_exportSymetricResultsActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed

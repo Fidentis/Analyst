@@ -235,16 +235,18 @@ public class ComparisonMetrics {
      * of results and not from 100% of vertices of the mesh.
      * Method sorts values in least from smallest to largest and changes ordering in the given list (does NOT create a copy)
      * Does NOT sort values if threshold == 1.0
+     * If upperTreshold is <= to lowerTreshold, list containing single value (0.0) is returned.
      *
      * @param values - list containing values to be thresholded
-     * @param threshold - percentage of entries to be thresholded, in interval [0..1]
+     * @param upperTreshold - percentage of entries to be thresholded from right side, in interval [0..1]
+     * @param lowerTreshold - percentage of entries to be thresholded from left side, in interval [0..1]
      * @param useRelative - defines whether relative values were used when computing list or not
      * @return thresholded list
      */
-    public List<Float> thresholdValues(List<Float> values, float threshold, boolean useRelative) {
-        if (threshold == 1.0) {
+    public List<Float> thresholdValues(List<Float> values, float upperTreshold, float lowerTreshold, boolean useRelative) {
+        if (upperTreshold == 1.0 && lowerTreshold == 0.0) {
             return values;
-        } else if (threshold == 0.0) {
+        } else if (upperTreshold <= lowerTreshold) {
             List<Float> empty = new ArrayList<Float>();
             empty.add(0.0F);
             return empty;
@@ -257,21 +259,25 @@ public class ComparisonMetrics {
         } else {
             sortedValues.addAll(values);
         }
+        
         sortedValues = SortUtils.instance().sortValues(sortedValues);
-        int threshIndexMin;
-        int threshIndexMax;
-        if (useRelative) {
-            threshIndexMin = (int) ((sortedValues.size() * ((1.0 - threshold) / 2.0)) + 0.5);
-            threshIndexMax = (int) ((sortedValues.size() * ((1.0 + threshold) / 2.0)) - 0.5);
+        int threshIndexMin = (int) ((sortedValues.size() * lowerTreshold) - 0.5);
+        int threshIndexMax = (int) ((sortedValues.size() * upperTreshold) - 0.5);
+        
+        /*if (useRelative) {
+            threshIndexMin = (int) ((sortedValues.size() * ((1.0 - upperTreshold) / 2.0)) + 0.5);
+            threshIndexMax = (int) ((sortedValues.size() * ((1.0 + upperTreshold) / 2.0)) - 0.5);
         } else {
             threshIndexMin = 0;
-            threshIndexMax = (int) ((sortedValues.size() * threshold) - 0.5);
-        }
+            threshIndexMax = (int) ((sortedValues.size() * upperTreshold) - 0.5);
+        }*/
+        
+        
         return sortedValues.subList(threshIndexMin, threshIndexMax);
     }
     
-    public List<Float> thresholdValuesKeepSort(List<Float> values, float threshold, boolean useRelative){
-        List<Float> sorted = thresholdValues(values, threshold, useRelative);
+    public List<Float> thresholdValuesKeepSort(List<Float> values, float upperTreshold, float lowerTreshold, boolean useRelative){
+        List<Float> sorted = thresholdValues(values, upperTreshold, lowerTreshold, useRelative);
         List<Float> thresholded = new ArrayList<>();
         
         for(Float f: values){
