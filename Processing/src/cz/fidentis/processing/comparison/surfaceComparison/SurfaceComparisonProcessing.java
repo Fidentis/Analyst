@@ -650,10 +650,12 @@ public class SurfaceComparisonProcessing {
      * @param results computed numerical results to be displayed
      * @param varianceMethod variance method used, this parameter only serves to
      * inform user of the method they picked for final numerical results
+     * @param originalModels list containing URLs to original models to be used to name columns in the table
+     * @param threshold threshold used to compute results
      * @return string representation of computed results
      */
-    public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels) {
-        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + ";");
+    public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels, float threshold) {
+        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + " " + (threshold * 100) + "% treshold;");
 
         for (int i = 0; i < results.size(); i++) {
             strResults.append(originalModels.get(i).getName()).append(';');
@@ -1037,10 +1039,11 @@ public class SurfaceComparisonProcessing {
      *
      * @param hdDistance - thresholded values
      * @param useRelative - whether to use signed distance or not
+     * @param threshold - used threshold
      * @return string representing results of 1:1 comparison
      */
     public String getNumericResults(List<Float> hdDistance, boolean useRelative) {
-        return ("Min;" + ComparisonMetrics.instance().findMinDistance(hdDistance, useRelative) + "\n"
+        return (  "Min;" + ComparisonMetrics.instance().findMinDistance(hdDistance, useRelative) + "\n"
                 + "Max;" + ComparisonMetrics.instance().findMaxDistance(hdDistance, useRelative) + "\n"
                 + "RMS;" + ComparisonMetrics.instance().rootMeanSqr(hdDistance, useRelative) + "\n"
                 + "Arithmetic Mean;" + ComparisonMetrics.instance().aritmeticMean(hdDistance, useRelative) + "\n"

@@ -342,7 +342,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
                             List<Float> sortedHd = SortUtils.instance().sortValues(variance);
 
-                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels));
+                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels, 1f));
                             tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
 
                         } catch (FileManipulationException ex) {

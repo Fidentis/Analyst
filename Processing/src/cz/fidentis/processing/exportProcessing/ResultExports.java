@@ -165,7 +165,7 @@ public class ResultExports {
      * @param originalModels - list of URLs containing models before alignment,
      * to use in table naming
      */
-    public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels) {
+    public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels, final float threshold) {
         if (precomputedRes == null) {
             //error
             return;
@@ -187,7 +187,7 @@ public class ResultExports {
                 try {
 
                     List<ArrayList<Float>> symRes = MathUtils.instance().symetricMatrix(precomputedRes);
-                    String res = SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable((ArrayList<ArrayList<Float>>) symRes, varianceMethod, originalModels);
+                    String res = SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable((ArrayList<ArrayList<Float>>) symRes, varianceMethod, originalModels, threshold);
 
                     writeStringToFile(tc, filePath, res);
 

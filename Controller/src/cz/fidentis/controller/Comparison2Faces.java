@@ -60,6 +60,8 @@ public class Comparison2Faces {
     
    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
     private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
+    private float lowerHDTreshold;
+    private float upperHDTreshold;
     private boolean fpScaling;          //whether feature points are scaled or not
     private int useDatabase;        //0 - dont use, 1 - default, 2 - data file, 3 - create  -- database currently not used in software
     private ArrayList<File> databaseFiles;      //database of feature points stored on disk -- database currently not used in software 
@@ -106,6 +108,23 @@ public class Comparison2Faces {
     public void setHdPaintingInfo(HDpaintingInfo hdPaintingInfo) {
         this.hdPaintingInfo = hdPaintingInfo;
     }
+
+    public float getLowerHDTreshold() {
+        return lowerHDTreshold;
+    }
+
+    public void setLowerHDTreshold(float lowerHDTreshold) {
+        this.lowerHDTreshold = lowerHDTreshold;
+    }
+
+    public float getUpperHDTreshold() {
+        return upperHDTreshold;
+    }
+
+    public void setUpperHDTreshold(float upperHDTreshold) {
+        this.upperHDTreshold = upperHDTreshold;
+    }
+    
     
     public String getNumericalResults() {
         return numericalResults;

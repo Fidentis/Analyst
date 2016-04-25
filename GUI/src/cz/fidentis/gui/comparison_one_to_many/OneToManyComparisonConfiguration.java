@@ -525,7 +525,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     }
 
     private String setValues(List<Float> hdDistance, List<File> models, String mainFace, int varianceMethod) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + ";");
+        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " 100% treshold;");
         
         for(int i = 0; i < hdDistance.size(); i++){
             strResults.append(models.get(i).getName()).append(';');

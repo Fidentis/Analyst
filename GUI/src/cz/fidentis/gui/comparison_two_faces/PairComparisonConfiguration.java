@@ -858,6 +858,8 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         tc.getProject().getSelectedComparison2Faces().setHdPaintingInfo(info);
 
                         tc.getProject().getSelectedComparison2Faces().setNumericalResults(setValues(hdDistance));
+                        tc.getProject().getSelectedComparison2Faces().setLowerHDTreshold(0.0f);
+                        tc.getProject().getSelectedComparison2Faces().setUpperHDTreshold(1f);
 
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                     } else {
