@@ -25,6 +25,7 @@ import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import cz.fidentis.utils.SortUtils;
@@ -126,6 +127,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jCheckBox7 = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
         jCheckBox6 = new javax.swing.JCheckBox();
+        exportLandmarksButton = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
         dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
@@ -582,6 +584,13 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 .addComponent(jRadioButton4))
         );
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.exportLandmarksButton.text")); // NOI18N
+        exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportLandmarksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -601,14 +610,16 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                 .addComponent(jLabel3))
                             .addGap(18, 18, 18)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(visualizationPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(exportLandmarksButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)))
+                .addContainerGap(293, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -634,8 +645,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportLandmarksButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(jPanel3);
@@ -644,11 +657,11 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1141,6 +1154,15 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         setColors();
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
+    private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        FPImportExport.instance().exportTwoFaces(tc,
+                tc.getViewerPanel_2Faces().getListener1().getFacialPoints(),
+                tc.getViewerPanel_2Faces().getListener1().getModel(),
+                tc.getViewerPanel_2Faces().getListener2().getFacialPoints(),
+                tc.getViewerPanel_2Faces().getListener2().getModel());
+    }//GEN-LAST:event_exportLandmarksButtonActionPerformed
+
     public boolean getScaleEnabled() {
         return jCheckBox2.isSelected();
     }
@@ -1175,8 +1197,14 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
     }
 
-    public void setConfiguration() {
+    public void setConfiguration() {        
         Comparison2Faces c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
+        if(c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES){
+            exportLandmarksButton.setVisible(true);
+        }else{
+            exportLandmarksButton.setVisible(false);
+        }
+        
         jCheckBox2.setSelected(c.isFpScaling());
         primaryColorPanel.setBackground(new Color(c.getPrimaryColor().getRed(), c.getPrimaryColor().getGreen(), c.getPrimaryColor().getBlue()));
         secondaryColorPanel.setBackground(new Color(c.getSecondaryColor().getRed(), c.getSecondaryColor().getGreen(), c.getSecondaryColor().getBlue()));
@@ -1254,6 +1282,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JDialog colorDialog;
     private javax.swing.JRadioButton createDatabaseRadioButton;
     private javax.swing.JRadioButton deafultDatabaseRadioButton;
+    private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fogColorPanel;
     private javax.swing.JButton jButton1;

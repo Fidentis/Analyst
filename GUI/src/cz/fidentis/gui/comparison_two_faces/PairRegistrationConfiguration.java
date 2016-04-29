@@ -1027,6 +1027,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 tc.getViewerPanel_2Faces().getListener1().setModels(tc.getProject().getSelectedComparison2Faces().getModel1());
                 tc.getViewerPanel_2Faces().getListener2().setModels(tc.getProject().getSelectedComparison2Faces().getModel2());
+                
+                tc.getViewerPanel_2Faces().getListener1().setFacialPoints(procrustes.getPa().getFacialPoints());
+                tc.getViewerPanel_2Faces().getListener2().setFacialPoints(procrustes.getPa2().getFacialPoints());
+                tc.getProject().getSelectedComparison2Faces().setMainFp(procrustes.getPa().getFacialPoints());
+                tc.getProject().getSelectedComparison2Faces().setSecondaryFp(procrustes.getPa2().getFacialPoints());
 
                 if (fpScaleCheckBox.isSelected()) {
                     //tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 7);

@@ -404,13 +404,3 @@ class MatrixException extends RuntimeException {
 		super(string);
 	}
 }
-
-/**
- * Data holder class that contains a set of eigenvalues and their corresponding eigenvectors.
- * @author	Kushal Ranjan
- * @version 051413
- */
-class EigenSet {
-	double[] values;
-	double[][] vectors;
-}
