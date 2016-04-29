@@ -14,6 +14,7 @@ import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.utils.SortUtils;
 import cz.fidentis.utilsException.FileManipulationException;
@@ -78,6 +79,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         jButton2 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        exportLandmarksButton = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.jLabel2.text")); // NOI18N
@@ -194,6 +196,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.exportLandmarksButton.text")); // NOI18N
+        exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportLandmarksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -212,11 +221,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         .addGap(281, 281, 281)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(exportLandmarksButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(processComparisonButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,8 +253,10 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportLandmarksButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(jPanel1);
@@ -471,6 +484,11 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 tc.getProject().getSelectedBatchComparison().getModels(), "_batch");
     }//GEN-LAST:event_jButton10ActionPerformed
 
+    private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        FPImportExport.instance().exportBatch(tc, tc.getProject().getSelectedBatchComparison());
+    }//GEN-LAST:event_exportLandmarksButtonActionPerformed
+
     public Boolean getScaleEnabled() {
         return jCheckBox2.isSelected();
     }
@@ -499,6 +517,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        
+        if(c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES){
+            exportLandmarksButton.setVisible(true);
+        }else{
+            exportLandmarksButton.setVisible(false);
+        }
+        
         jCheckBox2.setSelected(c.isFpScaling());
         setupComparisonMethods(c);
         jButton2.setVisible((c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF));
@@ -516,6 +541,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;

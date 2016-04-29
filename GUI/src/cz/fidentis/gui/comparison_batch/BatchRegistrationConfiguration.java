@@ -1047,15 +1047,23 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
                         List<ICPTransformation> trans = procrustes.alignBatch(jSlider3.getValue() / 100f);
                         tc.getProject().getSelectedBatchComparison().setTrans(trans);
+                        
+                        tc.getProject().getSelectedBatchComparison().clearFacialPoints();
 
                         List<File> results;
 
                         for (int i = 0; i < tc.getProject().getSelectedBatchComparison().getPreregiteredModels().size(); i++) {
+                            tc.getProject().getSelectedBatchComparison().addFacialPoints(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName(),
+                                    procrustes.getGpa().getPA(i).getFacialPoints());
+                            
                             tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).setVerts(procrustes.getGpa().getPA(i).getVertices());
                             procrustes.getGpa().getPA(i).updateFacialPoints(tc.getProject().getSelectedBatchComparison().getFacialPoints(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName()));
-
+                            
+                            
+                            
                             if (tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
                                 tc.getViewerPanel_Batch().getListener().setModels(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i));
+                                tc.getViewerPanel_Batch().getListener().setFacialPoints(tc.getProject().getSelectedBatchComparison().getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
                             }
 
                         }
