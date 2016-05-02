@@ -42,7 +42,7 @@ public class Comparison2Faces {
     private Node node_2;
     private ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
     
-    private ICPTransformation compFTransformations;
+    private List<ICPTransformation> compFTransformations;
     
     private ArrayList<List<FacialPoint>> databaseFacialPoints = new ArrayList<List<FacialPoint>>();         //database of FPs is currently not used within the application
     private List<FacialPoint> mainFp;
@@ -93,11 +93,11 @@ public class Comparison2Faces {
         this.valuesTypeIndex = valuesTypeIndex;
     }
 
-    public ICPTransformation getCompFTransformations() {
+    public List<ICPTransformation> getCompFTransformations() {
         return compFTransformations;
     }
 
-    public void setCompFTransformations(ICPTransformation compFTransformations) {
+    public void setCompFTransformations(List<ICPTransformation> compFTransformations) {
         this.compFTransformations = compFTransformations;
     }
 

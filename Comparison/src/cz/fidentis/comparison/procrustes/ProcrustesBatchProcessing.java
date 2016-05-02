@@ -89,7 +89,7 @@ public class ProcrustesBatchProcessing {
      * 
      * @param treshold - to determine when to stop GPA alignment
      */
-    public List<ICPTransformation> alignBatch(float treshold){
+    public List<List<ICPTransformation>> alignBatch(float treshold){
         gpa.setScaling(scaling);
         return gpa.doGPA(treshold);
     }

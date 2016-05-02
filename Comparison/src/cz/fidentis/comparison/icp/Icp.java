@@ -378,7 +378,7 @@ public class Icp {
      * @param scale - whether scale was used
      */
     public void reverseAllTransformations(List<ICPTransformation> trans, List<Vector3f> verticies, boolean scale){
-        for(int i = trans.size() - 1; i >= 0; i--){
+       for(int i = trans.size() - 1; i >= 0; i--){
             reverseTransformations(trans.get(i), verticies, scale);
         }
         
@@ -398,15 +398,29 @@ public class Icp {
         Vector3f t = new Vector3f();
         Quaternion r = new Quaternion(0,0,0,1);
         
-        for(ICPTransformation tran : trans){
-            //ICPTransformation tran = trans.get(i);
+        for(int i = 0; i < trans.size(); i++){
+            ICPTransformation tran = trans.get(i);
             
             if(scale)
                 s *= tran.getScaleFactor();
-    
-            t.x += tran.getTranslation().x;
-            t.y += tran.getTranslation().y;
-            t.z += tran.getTranslation().z;
+            
+            //i = 0, t = tran.get(i)
+            //t = trans.getTranslation() + tran.getRotation(tran.getScaleFactor() * t)
+            if(i == 0){
+                t = tran.getTranslation();
+            }
+            
+            if(scale && i > 0)
+                t = MathUtils.instance().multiplyVectorByNumber(t, tran.getScaleFactor());
+            Quaternion qt = new Quaternion(t.x,t.y,t.z,1);
+            Quaternion conjugate = conjugateQ(tran.getRotation());
+            qt = MathUtils.instance().multiply(tran.getRotation(), qt);
+            qt = MathUtils.instance().multiply(qt, conjugate);
+            
+            t.x = qt.getX() + tran.getTranslation().x;
+            t.y = qt.getY() + tran.getTranslation().y;
+            t.z = qt.getZ() + tran.getTranslation().z;
+           
             
             Quaternion q = tran.getRotation();
             r.mult(q);

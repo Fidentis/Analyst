@@ -987,7 +987,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             list, verts, jCheckBox11.isSelected());
 
                     //procrustes.compare1WithN(jSlider3.getValue() / 100f);
-                    List<ICPTransformation> trans = procrustes.align1withN();
+                    List<List<ICPTransformation>> trans = procrustes.align1withN();
                     tc.getProject().getSelectedOneToManyComparison().setTrans(trans);
 
                     tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().setVerts(procrustes.getPa().getVertices());

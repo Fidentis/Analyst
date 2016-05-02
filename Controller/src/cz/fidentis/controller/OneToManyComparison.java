@@ -48,7 +48,7 @@ public class OneToManyComparison {
     private Node node_result;
     private ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
     
-    private List<ICPTransformation> trans = new ArrayList<>();
+    private List<List<ICPTransformation>> trans = new ArrayList<>();
       
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
@@ -113,11 +113,11 @@ public class OneToManyComparison {
         this.sortedHdAbs = sortedHdAbs;
     }
 
-    public ICPTransformation getTrans(int i) {
+    public List<ICPTransformation> getTrans(int i) {
         return trans.get(i);
     }
 
-    public void addTrans(ICPTransformation trans) {
+    public void addTrans(List<ICPTransformation> trans) {
         this.trans.add(trans);
     }
     
@@ -125,11 +125,11 @@ public class OneToManyComparison {
         this.trans.clear();
     }
     
-    public List<ICPTransformation> getTrans(){
+    public List<List<ICPTransformation>> getTrans(){
         return this.trans;
     }
     
-    public void setTrans(List<ICPTransformation> trans){
+    public void setTrans(List<List<ICPTransformation>> trans){
         this.trans = trans;
     }
 

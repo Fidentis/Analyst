@@ -100,8 +100,8 @@ public class Procrustes1ToMany {
         return distances;
     }
     
-    public List<ICPTransformation> align1withN(){
-        List<ICPTransformation> trans = new LinkedList<>();
+    public List<List<ICPTransformation>> align1withN(){
+        List<List<ICPTransformation>> trans = new LinkedList<>();
         
         pa.normalize(scaling);
         

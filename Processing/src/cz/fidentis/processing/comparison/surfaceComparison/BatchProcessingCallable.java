@@ -103,12 +103,8 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
             try {
                 List<ICPTransformation> tran = Icp.instance().icp(templateTree, compF.getVerts(), samples, error, iterations, scale);
                 
-                if(data != null){
-                    if(batchIteration > 0){
-                        tran.add(0, data.getTrans(currentModelNumber));
-                    }
-                
-                    data.addTrans(Icp.instance().createFinalTrans(tran, scale), currentModelNumber);
+                if(data != null){                
+                    data.addTrans(tran, currentModelNumber);
                 }                
                 
                 ProcessingFileUtils.instance().saveModelToTMP(compF, saveTo, batchIteration + 1, currentModelNumber, Boolean.FALSE);

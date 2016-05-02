@@ -163,9 +163,9 @@ public class GPA implements Serializable {
      * @param treshold      accuracy
      */
     
-    public List<ICPTransformation> doGPA(float treshold){                  //registration step, return mean config?
+    public List<List<ICPTransformation>> doGPA(float treshold){                  //registration step, return mean config?
         List<ProcrustesAnalysis> helpList = new ArrayList();
-        List<ICPTransformation> trans = new ArrayList<>();
+        List<List<ICPTransformation>> trans = new ArrayList<>();
         
         this.normalizeAll();
         
@@ -176,7 +176,10 @@ public class GPA implements Serializable {
         
         for(int i = 0; i < configs.size(); i++){
             Quaternion q = configs.get(i).rotate(oldMean);  
-            trans.add(new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f));
+            List<ICPTransformation> t = new ArrayList<>();
+            t.add(new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f));
+            
+            trans.add(t);
         }
         
         newMean = this.countMeanConfig();
@@ -205,19 +208,20 @@ public class GPA implements Serializable {
         return trans;
     }
     
-    private List<ICPTransformation> createNewTransformations(List<Quaternion> q, List<ICPTransformation> trans){
+    private List<List<ICPTransformation>> createNewTransformations(List<Quaternion> q, List<List<ICPTransformation>> trans){
         if(q.size() != trans.size()){
             return null;
         }
         
-        List<ICPTransformation> newTrans = new LinkedList<>();
+        //List<ICPTransformation> newTrans = new LinkedList<>();
         
         for(int i = 0; i <  q.size(); i++){
-            q.get(i).mult(trans.get(i).getRotation());
-            newTrans.add(new ICPTransformation(new Vector3f(), 1.0f, q.get(i), 0.0f));
+            //q.get(i).mult(trans.get(i).getRotation());
+            //newTrans.add(new ICPTransformation(new Vector3f(), 1.0f, q.get(i), 0.0f));
+            trans.get(i).add(new ICPTransformation(new Vector3f(), 1.0f, q.get(i), 0.0f));
         }
         
-        return newTrans;
+        return trans;
     }
    
     

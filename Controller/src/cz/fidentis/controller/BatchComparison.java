@@ -41,7 +41,7 @@ public class BatchComparison {
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
-    private List<ICPTransformation> trans;
+    private List<List<ICPTransformation>> trans;
     
     private boolean showPointInfo = true;   //whether to show description of the feature points
     private Color pointColor = Color.red;   //color of displayed feature points
@@ -100,7 +100,7 @@ public class BatchComparison {
         this.HDinfo = HDinfo;
     }
 
-    public ICPTransformation getTrans(int i) {
+    public List<ICPTransformation> getTrans(int i) {
         return trans.get(i);
     }
     
@@ -111,7 +111,7 @@ public class BatchComparison {
         }
     }
 
-    public void addTrans(ICPTransformation trans, int i) {
+    public void addTrans(List<ICPTransformation> trans, int i) {
         this.trans.set(i,trans);
     }
     
@@ -119,11 +119,11 @@ public class BatchComparison {
         this.trans.clear();
     }
     
-    public List<ICPTransformation> getTrans(){
+    public List<List<ICPTransformation>> getTrans(){
         return this.trans;
     }
     
-    public void setTrans(List<ICPTransformation> trans){
+    public void setTrans(List<List<ICPTransformation>> trans){
         this.trans = trans;
     }
     

@@ -1045,7 +1045,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, jCheckBox11.isSelected());
 
                         //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
-                        List<ICPTransformation> trans = procrustes.alignBatch(jSlider3.getValue() / 100f);
+                        List<List<ICPTransformation>> trans = procrustes.alignBatch(jSlider3.getValue() / 100f);
                         tc.getProject().getSelectedBatchComparison().setTrans(trans);
                         
                         tc.getProject().getSelectedBatchComparison().clearFacialPoints();

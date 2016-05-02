@@ -658,8 +658,9 @@ public class ProcrustesAnalysis implements Serializable {
      * @param scaling says if algorithm should set size to 1 or keep it
      * @return distance Procrustes distance
      */
-    public ICPTransformation doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
+    public List<ICPTransformation> doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
         float distance;
+        List<ICPTransformation> t = new LinkedList<>();
 
         ICPTransformation trans = this.superimpose(config2, scaling);
         setVisMatrix();
@@ -667,8 +668,9 @@ public class ProcrustesAnalysis implements Serializable {
         //distance = this.countDistance(config2);
 
         //return distance;
+        t.add(trans);
         
-        return trans;
+        return t;
     }
 
 

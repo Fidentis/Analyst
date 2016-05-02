@@ -1021,7 +1021,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getGpa().getPA(0).getVertices());
                 tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getGpa().getPA(1).getVertices());*/
-                ICPTransformation trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
+                List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
                 tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getPa().getVertices());
                 tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getPa2().getVertices());
 

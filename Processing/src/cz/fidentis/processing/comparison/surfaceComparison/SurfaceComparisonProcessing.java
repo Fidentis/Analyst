@@ -111,7 +111,7 @@ public class SurfaceComparisonProcessing {
 
         List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
         
-        data.setCompFTransformations(Icp.instance().createFinalTrans(trans, scale));
+        data.setCompFTransformations(trans);
     }
 
     /**
@@ -159,7 +159,7 @@ public class SurfaceComparisonProcessing {
             List<Vector3f> samples = getUndersampledMesh(m, t, value, compF);
 
             List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
-            data.addTrans(Icp.instance().createFinalTrans(trans, scale));
+            data.addTrans(trans);
 
             results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.FALSE));
 
