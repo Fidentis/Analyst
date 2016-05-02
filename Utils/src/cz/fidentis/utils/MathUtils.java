@@ -84,7 +84,7 @@ public class MathUtils {
         
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
-                m.set(i,j, matrix[i+j]);
+                m.set(i,j, matrix[i * 4 + j]);
             }
         }
         
