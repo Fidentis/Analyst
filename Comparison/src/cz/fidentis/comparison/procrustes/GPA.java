@@ -174,7 +174,7 @@ public class GPA implements Serializable {
         double oldDistance = Float.MAX_VALUE;
         double newDistance = 0;
         
-        for(int i = 1; i < configs.size(); i++){
+        for(int i = 0; i < configs.size(); i++){
             Quaternion q = configs.get(i).rotate(oldMean);  
             trans.add(new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f));
         }

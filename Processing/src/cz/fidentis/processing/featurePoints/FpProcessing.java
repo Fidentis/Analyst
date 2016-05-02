@@ -356,10 +356,11 @@ public class FpProcessing {
      */
     public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models) {
         int size = models.size();
+        float unit = 100f / size; 
 
         ProgressHandle p;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...", cancelTask);
-        p.start(size);
+        p.start();
 
         ModelLoader loader = new ModelLoader();
         Model model;
@@ -379,7 +380,7 @@ public class FpProcessing {
             registeredModels.add(model);            //needed?
             allFPs.put(model.getName(), facialPoints);
 
-            p.progress(i * 100 / size);
+            //p.progress((int) (unit * (i + 1)));
         }
 
         res = new FpResultsBatch(allFPs, registeredModels);
