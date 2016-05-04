@@ -146,8 +146,8 @@ public class GPA implements Serializable {
         rotateAll();
     }
     
-    private List<Quaternion> rotateAll(){
-        List<Quaternion> rotations = new ArrayList<>(configs.size());
+    private List<ICPTransformation> rotateAll(){
+        List<ICPTransformation> rotations = new ArrayList<>(configs.size());
         ProcrustesAnalysis mean = this.countMeanConfig();
         
         for(int i = 0; i < this.getConfigs().size(); i++){
@@ -175,9 +175,9 @@ public class GPA implements Serializable {
         double newDistance = 0;
         
         for(int i = 0; i < configs.size(); i++){
-            Quaternion q = configs.get(i).rotate(oldMean);  
+            ICPTransformation tran = configs.get(i).rotate(oldMean);  
             List<ICPTransformation> t = new ArrayList<>();
-            t.add(new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f));
+            t.add(tran);
             
             trans.add(t);
         }
@@ -192,7 +192,7 @@ public class GPA implements Serializable {
             oldDistance = newDistance;
             oldMean = newMean;
             //this.superimpose();
-            List<Quaternion> q = rotateAll();
+            List<ICPTransformation> q = rotateAll();
             
             trans = createNewTransformations(q, trans);
             
@@ -208,7 +208,7 @@ public class GPA implements Serializable {
         return trans;
     }
     
-    private List<List<ICPTransformation>> createNewTransformations(List<Quaternion> q, List<List<ICPTransformation>> trans){
+    private List<List<ICPTransformation>> createNewTransformations(List<ICPTransformation> q, List<List<ICPTransformation>> trans){
         if(q.size() != trans.size()){
             return null;
         }
@@ -218,7 +218,7 @@ public class GPA implements Serializable {
         for(int i = 0; i <  q.size(); i++){
             //q.get(i).mult(trans.get(i).getRotation());
             //newTrans.add(new ICPTransformation(new Vector3f(), 1.0f, q.get(i), 0.0f));
-            trans.get(i).add(new ICPTransformation(new Vector3f(), 1.0f, q.get(i), 0.0f));
+            trans.get(i).add(q.get(i));
         }
         
         return trans;

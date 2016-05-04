@@ -274,7 +274,7 @@ public class FpProcessing {
         ProgressHandle p;
         FpResultsOneToMany results = null;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...");
-        p.start(100);
+        p.start();
 
         try {
 
@@ -296,7 +296,7 @@ public class FpProcessing {
                 registeredModels.add(model);            //needed?
                 allFPs.put(model.getName(), facialPoints);
 
-                p.progress(i * 100 / size);
+                //p.progress(i * 100 / size);
 
             }
 

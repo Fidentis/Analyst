@@ -6,6 +6,7 @@
 
 package cz.fidentis.comparison.icp;
 
+import Jama.Matrix;
 import com.jogamp.graph.math.Quaternion;
 import javax.vecmath.Vector3f;
 
@@ -18,12 +19,28 @@ public class ICPTransformation {
     private float scaleFactor;
     private Vector3f translation;
     private float meanD;
+    private Matrix transMatrix;
     
-    public ICPTransformation(Vector3f translation, float scaleFactor, Quaternion rotation, float meanD){
+    /**
+     * Data holding transformation parameters, in case procrustes was performed everything besides Matrix may be null or have invalid data
+     * In case ICP was performed Matrix will be null.
+     * 
+     * @param translation
+     * @param scaleFactor
+     * @param rotation
+     * @param meanD
+     * @param transformationMatrix 
+     */
+    public ICPTransformation(Vector3f translation, float scaleFactor, Quaternion rotation, float meanD, Matrix transformationMatrix){
         this.translation = translation;
         this.scaleFactor = scaleFactor;
         this.rotation = rotation;
         this.meanD = meanD;
+        this.transMatrix = transformationMatrix;
+    }
+
+    public Matrix getTransMatrix() {
+        return transMatrix;
     }
 
     public Quaternion getRotation() {

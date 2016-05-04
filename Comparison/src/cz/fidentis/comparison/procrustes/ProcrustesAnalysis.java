@@ -532,7 +532,7 @@ public class ProcrustesAnalysis implements Serializable {
      *
      * @param pa2 another configuration
      */
-    public Quaternion rotate(ProcrustesAnalysis pa2) {
+    public ICPTransformation rotate(ProcrustesAnalysis pa2) {
         Matrix transConf2;
         Matrix origConf1;
         Matrix svdMat;
@@ -570,7 +570,7 @@ public class ProcrustesAnalysis implements Serializable {
             vertices = vertices.times(r);
         }
         
-        return MathUtils.instance().matrixToQuaternion(r);
+        return new ICPTransformation(null, 1.0f, null, 0.0f, r);
     }
 
     /**
@@ -583,8 +583,7 @@ public class ProcrustesAnalysis implements Serializable {
        this.normalize(scaling);
        pa2.normalize(scaling);
 
-       Quaternion q = pa2.rotate(this);
-       ICPTransformation trans = new ICPTransformation(new Vector3f(), 1.0f, q, 0.0f);      //procrustes only uses rotation matrix, scaling can be infered
+       ICPTransformation trans = pa2.rotate(this);
        
        return trans;
     }

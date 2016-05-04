@@ -1054,7 +1054,7 @@ public final class OpenProject implements ActionListener {
             float qz = Float.parseFloat(t.getAttribute("qZ"));
             float qw = Float.parseFloat(t.getAttribute("qW"));
             Quaternion q = new Quaternion(qw, qx, qy, qz);
-            transforms.add(new ICPTransformation(translation, scale, q, meanD));
+            transforms.add(new ICPTransformation(translation, scale, q, meanD, null));
         }
         return transforms;
 

@@ -26,7 +26,7 @@ public class Procrustes2Models {
         pa = new ProcrustesAnalysis(fps,verts);
         pa2 = new ProcrustesAnalysis(fps2,verts2);
         this.scaling = scaling;
-        dfw = new DatabaseWorker(this.scaling);
+        //dfw = new DatabaseWorker(this.scaling);
     }
     
     
