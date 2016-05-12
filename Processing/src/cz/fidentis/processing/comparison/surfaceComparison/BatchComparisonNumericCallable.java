@@ -38,12 +38,12 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
     private Float lowerTreshold;
     private int mainFaceNum;
     private int compareFaceNum;
-    private Curvature_jv mainCurv;
-    private Curvature_jv compCurv;
+    private double[] mainCurv;
+    private double[] compCurv;
     private ComparisonMethod method;
 
     public BatchComparisonNumericCallable(KdTree mainF, Model compMesh, boolean useRelative, Float upperTreshold, Float lowerTreshold,  int mainFaceNum, int compareFaceNum,
-            Curvature_jv mainCurv, Curvature_jv compCurv, ComparisonMethod method) {
+            double[] mainCurv, double[] compCurv, ComparisonMethod method) {
         this.mainF = mainF;
         this.compMesh = compMesh;
         this.useRelative = useRelative;
@@ -81,7 +81,7 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
 
                 result = HausdorffDistance.instance().hDistance(mainF, compMesh.getVerts(), normalsUsed, useRelative);
             } else {
-                result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv.getCurvature(CurvatureType.Gaussian), compCurv.getCurvature(CurvatureType.Gaussian));
+                result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv, compCurv);
             }
             result = ComparisonMetrics.instance().thresholdValues(result, upperTreshold, lowerTreshold, useRelative);
             tmp.addAll(result);

@@ -317,7 +317,7 @@ public class ResultExports {
 
         bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_3BYTE_BGR);
         g = bi.createGraphics();
-        picture.paint(g);
+        picture.paintComponents(g);
 
         try {
             ImageIO.write(bi, "png", new File(path));

@@ -554,7 +554,7 @@ public class SurfaceComparisonProcessing {
             Float lowerTreshold, ComparisonMethod method, BatchComparison auxiliaryResultsFile) {
         ArrayList<ArrayList<Float>> computedVariance = new ArrayList<ArrayList<Float>>(models.size());
         List<Future<ArrayList<Float>>> list = new ArrayList<Future<ArrayList<Float>>>(models.size());
-        Curvature_jv mainCurv = null;
+        double[] mainCurv = null;
 
         KdTree mainFace;
         ModelLoader ml = new ModelLoader();
@@ -588,10 +588,13 @@ public class SurfaceComparisonProcessing {
             }
 
             if (method == ComparisonMethod.HAUSDORFF_CURV) {
-                mainCurv = new Curvature_jv(current);
+                mainCurv = new Curvature_jv(current).getCurvature(CurvatureType.Gaussian);
             }
 
             batchRawResultsToSingle(models, i, ml, executor, mainFace, mainCurv, useRelative, upperTreshold, lowerTreshold, list, method);
+            
+            executor.shutdown();
+            
             batchVariance(list, uncomputedCollumn, computedVariance, varianceMethod, useRelative);
 
             //saves temporary results to disk to save up memory usage
@@ -599,8 +602,9 @@ public class SurfaceComparisonProcessing {
             uncomputedCollumn = null;
             current = null;
             mainFace = null;
+            executor = null;
 
-            executor.shutdown();
+            //executor.shutdown();
         }
 
         //save path where csvs are to use to recompute numerical results fasters
@@ -626,19 +630,19 @@ public class SurfaceComparisonProcessing {
     }
 
     //give executor data to compute numerical results
-    private void batchRawResultsToSingle(List<File> models, int i, ModelLoader ml, ExecutorService executor, KdTree mainFace, Curvature_jv mainCurv, boolean useRelative,
+    private void batchRawResultsToSingle(List<File> models, int i, ModelLoader ml, ExecutorService executor, KdTree mainFace, double[] mainCurv, boolean useRelative,
             Float upperTreshold, Float lowerTreshold, List<Future<ArrayList<Float>>> list, ComparisonMethod method) {
         Model compF;
-        Curvature_jv compCurv = null;
+        double[] compCurvVals = null;
         //compute raw comparison results
         for (int j = 0; j < models.size(); j++) {
             p.setDisplayName("Computing numerical results for faces " + (i + 1) + " and " + (j + 1) + ".");
             compF = ml.loadModel(models.get(j), Boolean.FALSE, false);
 
             if (method == ComparisonMethod.HAUSDORFF_CURV) {
-                compCurv = new Curvature_jv(compF);
+                compCurvVals = new Curvature_jv(compF).getCurvature(CurvatureType.Gaussian);
             }
-            Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, upperTreshold, lowerTreshold, j, i, mainCurv, compCurv, method));
+            Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, upperTreshold, lowerTreshold, j, i, mainCurv, compCurvVals, method));
             list.add(fut);
             compF = null;
         }
@@ -1074,7 +1078,7 @@ public class SurfaceComparisonProcessing {
         
         Model mirror = MeshUtils.instance().getMirroredModel(m); 
        
-        //Icp.instance().icp(new KdTreeIndexed(m.getVerts()), mirror.getVerts(), mirror.getVerts(), 0.05f, 20, false);
+        Icp.instance().icp(new KdTreeIndexed(m.getVerts()), mirror.getVerts(), mirror.getVerts(), 0.05f, 20, false);
         //List<ICPTransformation> trans = FpProcessing.instance().faceRegistration(m);           
         
         p.finish();
