@@ -16,7 +16,7 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;

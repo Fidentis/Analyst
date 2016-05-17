@@ -3,6 +3,7 @@ package cz.fidentis.featurepoints;
 import cz.fidentis.*;
 import java.io.Serializable;
 import javax.vecmath.Point3f;
+import javax.vecmath.Tuple3d;
 import javax.vecmath.Tuple3f;
 import javax.vecmath.Vector3f;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -47,14 +48,20 @@ public class FacialPoint implements Serializable {
 
     
     public FacialPoint(FacialPointType type, Tuple3f coords) {        
-        this.pos = new Vector3f();
+        this.pos = new Vector3f(coords);
         
-        setCoords(coords);
         this.type = type;
-
         this.name = FpTexter.getInstance().getFPname(type);
         this.info = FpTexter.getInstance().getFPinfo(type);
     }
+    
+    public FacialPoint(FacialPointType type, Tuple3d coords) {        
+        this.pos = new Vector3f(coords);
+        
+        this.type = type;
+        this.name = FpTexter.getInstance().getFPname(type);
+        this.info = FpTexter.getInstance().getFPinfo(type);
+    }    
 
     public String getName() {
         return name;
@@ -79,9 +86,7 @@ public class FacialPoint implements Serializable {
     }
     
     public void setCoords(Tuple3f coords) {        
-        this.pos.x = coords.x;
-        this.pos.y = coords.y;
-        this.pos.z = coords.z;
+        this.pos = new Vector3f(coords);
     }
     
     public Point3f getCoords() {

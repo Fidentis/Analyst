@@ -14,7 +14,7 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.landmarkParser.DTAparser;
 import cz.fidentis.landmarkParser.FPparser;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.landmarkParser.PPparser;
 import cz.fidentis.landmarkParser.PTSparser;
 import cz.fidentis.model.Model;

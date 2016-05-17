@@ -5,6 +5,7 @@ import cz.fidentis.featurepoints.FacialPointType;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
@@ -36,9 +37,11 @@ public class SymmetryPlane {
         symmetryPlanePoints = new LinkedList<>();
     }
 
-    public SymmetryPlane(List<FacialPoint> facialPoints, LinkedList<Point3f> symmetryPlanePoints) {
+    public SymmetryPlane(List<FacialPoint> facialPoints, LinkedList<Point3d> symmetryPlanePoints) {
         this.facialPoints = facialPoints;
-        this.symmetryPlanePoints = symmetryPlanePoints;
+        for (Point3d p : symmetryPlanePoints) {
+            this.symmetryPlanePoints.add(new Point3f(p));
+        }
     }
     
     public List<FacialPoint> findAllSymmetryPlaneFPs(){

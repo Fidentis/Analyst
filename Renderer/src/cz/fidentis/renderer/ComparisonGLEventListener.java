@@ -15,7 +15,7 @@ import cz.fidentis.composite.ModelSelector;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Graph2;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.VertexInfo;

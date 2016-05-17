@@ -23,7 +23,7 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
 import cz.fidentis.landmarkParser.CSVparser;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;

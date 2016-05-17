@@ -29,7 +29,7 @@ import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import java.io.FileInputStream;

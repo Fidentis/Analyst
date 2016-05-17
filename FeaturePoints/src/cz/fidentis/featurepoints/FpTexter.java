@@ -5,7 +5,6 @@
  */
 package cz.fidentis.featurepoints;
 
-import cz.fidentis.featurepoints.FacialPointType;
 import java.io.BufferedReader;
 import static java.io.File.separatorChar;
 import java.io.FileNotFoundException;

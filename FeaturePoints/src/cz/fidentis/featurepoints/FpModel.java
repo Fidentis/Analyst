@@ -4,10 +4,8 @@
  * and open the template in the editor.
  */
 
-package cz.fidentis.landmarkParser;
+package cz.fidentis.featurepoints;
 
-import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import java.io.File;
