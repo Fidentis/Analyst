@@ -265,6 +265,7 @@ public class FpDetector {
                 newFPs.add(fp);
             }
         }
+        
         facialPoints = newFPs;
     }
 }
