@@ -40,6 +40,13 @@ public class Project {
         tree = new ProjectTree(name);
         this.name = name;
     }
+    
+    public void addAgeing(String name) {
+        Ageing ageing = new Ageing();
+        ageing.setName(name);
+        selectedAgeing = ageing;
+        ageing.setNode(tree.getRoot().addChild(ageing));
+    }
 
     public void addComposite(String name){
         Composite composite = new Composite();
@@ -193,7 +200,8 @@ public class Project {
  
     /**
      *
-     * @return 1 - composite, 2 - 2facescomparison, 3 - one to many comparison, 4 - batch comparison
+     * @return 1 - composite, 2 - 2facescomparison, 3 - one to many comparison,
+     * 4 - batch comparison, 6 - ageing
      */
     public int getSelectedPart() {
         return selectedPart;
@@ -202,7 +210,7 @@ public class Project {
     /**
      *
      * @param SelectedPart 1 - composite, 2 - comparison, 3 - ageing, 4 -
-     * feature points, 5 - viewer
+     * feature points, 5 - viewer, 6 - ageing
      */
     public void setSelectedPart(int SelectedPart) {
         this.selectedPart = SelectedPart;

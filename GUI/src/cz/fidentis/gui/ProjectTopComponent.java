@@ -8,6 +8,7 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.Project;
 import cz.fidentis.gui.actions.ButtonHelper;
+import cz.fidentis.gui.ageing.AgeingViewerPanel;
 import cz.fidentis.gui.composite.CompositePanel;
 import cz.fidentis.gui.featurepoints.FeaturePointsPanel;
 import cz.fidentis.gui.comparison_two_faces.ViewerPanel_2Faces;
@@ -51,6 +52,7 @@ public final class ProjectTopComponent extends TopComponent {
     private ViewerPanel_Batch batchViewerPanel;
     private StartingPanel startingPanel;
     private ViewerPanel_1toN oneToManyViewerPanel;
+    private AgeingViewerPanel ageingViewerPanel;
 
     public ProjectTopComponent() {
         initComponents();
@@ -60,6 +62,7 @@ public final class ProjectTopComponent extends TopComponent {
         viewerPanel = new ViewerPanel_2Faces(this);
         batchViewerPanel = new ViewerPanel_Batch(this);
         oneToManyViewerPanel = new ViewerPanel_1toN(this);
+        ageingViewerPanel = new AgeingViewerPanel(this);
         
 
         setName(Bundle.CTL_ProjectTopComponent());
@@ -139,6 +142,10 @@ public final class ProjectTopComponent extends TopComponent {
                 break;
             case 4:
                 batchViewerPanel.getCanvas1().triggerAdd();
+                break;
+            case 6:
+                ageingViewerPanel.getOriginCanvas().triggerAdd();
+                GUIController.getConfigurationTopComponent().getAgeingConfiguration().setConfiguration();
                 break;
         }
     }
@@ -239,6 +246,17 @@ public final class ProjectTopComponent extends TopComponent {
         this.validate();
         this.repaint();
     }
+    
+    public void showAgeing() {
+        ButtonHelper.setExportEnabled(false);
+        this.removeAll();
+
+        this.add(ageingViewerPanel);
+        GUIController.getConfigurationTopComponent().addAgeingComponent();
+
+        this.validate();
+        this.repaint();
+    }
 
     public void showEmptyView() {
         this.add(viewerPanel);
@@ -273,6 +291,9 @@ public final class ProjectTopComponent extends TopComponent {
                     break;
                 case 4:
                     showBatchViewer();
+                    break;
+                case 6:
+                    showAgeing();
                     break;
             }
         } else {
@@ -319,6 +340,14 @@ public final class ProjectTopComponent extends TopComponent {
     public void setViewerPanel(ViewerPanel_2Faces viewerPanel) {
         this.viewerPanel = viewerPanel;
     }
+    
+    public AgeingViewerPanel getAgeingViewerPanel() {
+        return this.ageingViewerPanel;
+    }
+    
+    public void setAgeingViewerPanel(AgeingViewerPanel panel) {
+        this.ageingViewerPanel = panel;
+    }
 
     public void clearPanel() {
         this.removeAll();
@@ -330,6 +359,7 @@ public final class ProjectTopComponent extends TopComponent {
         viewerPanel.setTextureRendering(b);
         batchViewerPanel.setTextureRendering(b);
         oneToManyViewerPanel.setTextureRendering(b);
+        ageingViewerPanel.setTextureRendering(b);
     }
 
     @Override
