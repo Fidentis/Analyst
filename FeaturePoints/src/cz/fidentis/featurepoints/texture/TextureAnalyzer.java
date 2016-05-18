@@ -1,4 +1,4 @@
-package cz.fidentis.featurepoints.texture;
+/*package cz.fidentis.featurepoints.texture;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import org.openimaj.image.processing.transform.AffineSimulation;
  *
  * @author Galvanizze
  */
-public class TextureAnalyzer {
+/*public class TextureAnalyzer {
 
     private FImage textureIntensityImage;
     private MBFImage textureRGBImage;
@@ -86,4 +86,4 @@ public class TextureAnalyzer {
 
     }
 
-}
+}*/

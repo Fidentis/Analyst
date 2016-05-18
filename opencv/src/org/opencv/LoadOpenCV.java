@@ -6,7 +6,11 @@
 package org.opencv;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 
 /**
  *
@@ -34,8 +38,20 @@ public class LoadOpenCV {
     }
     
     private static String getRoot() throws URISyntaxException{
-        File f = new File(LoadOpenCV.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-        String root = f.getParent() + File.separator + "lib" + File.separator;
+        ProtectionDomain a = LoadOpenCV.class.getProtectionDomain();
+        CodeSource b = a.getCodeSource();
+        URL c = b.getLocation();
+        URI d = c.toURI();
+        String s = d.toString();
+        
+        if(!s.startsWith("/")){
+            s = "/" + s.split("/", 2)[1];
+        }
+        
+        /*String s;
+        s = .getCodeSource().getLocation().toURI().getPath();*/
+        File f = new File(s);
+        String root = f.getAbsoluteFile().getParent() + File.separator + "lib" + File.separator;
         
         return root;
     }
