@@ -1,5 +1,7 @@
 package cz.fidentis.featurepoints.texture;
 
+import static java.io.File.separatorChar;
+import java.io.IOException;
 import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
@@ -16,7 +18,7 @@ import org.opencv.objdetect.Objdetect;
  */
 public class HaarCascade {
 
-    private static final String HAARCASCADE_PATH = "resources/haarcascades/";
+    private String haarcascadePath;
 
     // Oci
     private static final String HAARCASCADE_EYES = "haarcascade_eye.xml";
@@ -41,14 +43,18 @@ public class HaarCascade {
     private static final String HAARCASCADE_EAR_R = "haarcascade_mcs_rightear.xml";
 
     private final Mat image;
-
-    static {
-//      System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        System.load("/Library/Java/Extensions/opencv-3.0.0/lib/libopencv_java300.dylib");
-    }
-
+    
     public HaarCascade(Mat image) {
         this.image = image;
+         haarcascadePath = "";
+        try {
+            haarcascadePath = new java.io.File(".").getCanonicalPath();
+        } catch (IOException ex) {
+//            Exceptions.printStackTrace(ex);
+        }
+        if (!haarcascadePath.equals("")) {
+            haarcascadePath = haarcascadePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "haarcascades" + separatorChar;
+        }
     }
 
     public Rect detectEyes() {
@@ -140,7 +146,7 @@ public class HaarCascade {
     }
 
     private String getHaarCascade(String cascade) {
-        return HAARCASCADE_PATH + cascade;
+        return haarcascadePath + cascade;
     }
 
 }

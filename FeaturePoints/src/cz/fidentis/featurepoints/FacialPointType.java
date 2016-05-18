@@ -64,5 +64,7 @@ public enum FacialPointType {
     EU2_L,
     RM_R,
     RM_L,
+    P_L,
+    P_R,
     unspecified
 }

@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cz.fidentis.featurepoints;
 
 import cz.fidentis.model.Model;
@@ -102,6 +96,10 @@ public class FpModel {
     
     public boolean containsPoints(){
         return !facialPoints.isEmpty();
+    }
+    
+    public boolean containsPoint(FacialPointType type) {
+        return getFacialPoint(type) != null;
     }
     
     //centralize points based on centralization performed on given model

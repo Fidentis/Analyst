@@ -6,6 +6,7 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import java.util.ArrayList;
 import java.util.List;
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -284,7 +285,7 @@ public class ImageAnalyzer {
             return null;
         }
         FacialPoint fp = objFPmodel.getFacialPoint(type);
-        Point imagePoint = textureMapper.getImagePoint(fp.getCoords());
+        Point imagePoint = textureMapper.getImagePoint(new Point3d(fp.getCoords()));
         imagePoint.x *= originalImage.height();
         imagePoint.y = imagePoint.y;
         imagePoint.y *= originalImage.width();

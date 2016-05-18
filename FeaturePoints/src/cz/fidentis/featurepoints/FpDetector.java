@@ -4,8 +4,11 @@ import cz.fidentis.model.Material;
 import cz.fidentis.model.Model;
 import cz.fidentis.featurepoints.symmetryplane.Midline;
 import cz.fidentis.featurepoints.texture.ImageAnalyzer;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.vecmath.Vector3f;
 import jv.object.PsDebug;
 import org.opencv.core.Mat;
@@ -40,9 +43,14 @@ public class FpDetector {
     private static final float[] FP_COLOR_MIDLINE = new float[]{1f, 0f, 1f, 1.0f};
     private static final float[] FP_COLOR_TEXTURE = new float[]{0f, 1f, 1f, 1.0f};
 
-    static {
-        LoadOpenCV.LoadLibrary();
-    }
+//    static {
+//        try {
+//            LoadOpenCV.loadOSXlib();
+//            LoadOpenCV.loadWindowsLib();
+//        } catch (URISyntaxException ex) {
+//            Logger.getLogger(FpDetector.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     
     public FpDetector(String modelName) {
         this.modelName = modelName;
@@ -77,7 +85,11 @@ public class FpDetector {
         computeModelFPs();
         computeMidlineFPs(centerPoints);
         computeTextureFPs();
-
+        
+        // niektore body mozu byt najdene viacnasobne, preto ich odfiltrujeme
+        // podla uspesnosti spracovania algoritmov
+        filterFPs();
+        
         allFacialPoints.addAll(modelFacialPoints);
         allFacialPoints.addAll(midlineFacialPoints);
         allFacialPoints.addAll(textureFacialPoints);
@@ -112,7 +124,7 @@ public class FpDetector {
         if (decentralize) {
             decentralizeFPs(modelFacialPoints);
         }
-
+        
         modelFPs = new FpModel(modelName);
         modelFPs.setFacialpoints(modelFacialPoints);
     }
@@ -217,5 +229,42 @@ public class FpDetector {
 
     public Mat getAnalyzedImage() {
         return analyzedImage;
+    }
+    
+    // filtrovat body, podla toho ci sa nasli v jednotlivych castiach algoritmu
+    private void filterFPs() {
+        // body Ektokantion a Ektokantion pouzit z textury, ak sa nasli
+        if (textureFPs.containsPoint(FacialPointType.EN_L))
+            deleteFPs(modelFacialPoints, FacialPointType.EN_L);
+        if (textureFPs.containsPoint(FacialPointType.EN_R))
+            deleteFPs(modelFacialPoints, FacialPointType.EN_R);
+        if (textureFPs.containsPoint(FacialPointType.EX_L))
+            deleteFPs(modelFacialPoints, FacialPointType.EX_L);
+        if (textureFPs.containsPoint(FacialPointType.EX_R))
+            deleteFPs(modelFacialPoints, FacialPointType.EX_R);
+        
+        // body Pronasale a Stomion pouzit zo zakrivenia, ak sa nasli
+        if (modelFPs.containsPoint(FacialPointType.PRN))
+            deleteFPs(midlineFacialPoints, FacialPointType.PRN);
+        if (modelFPs.containsPoint(FacialPointType.STO))
+            deleteFPs(midlineFacialPoints, FacialPointType.STO);
+    }
+    
+    // vymaze FP specifikovane v parametri
+    private void deleteFPs(List<FacialPoint> facialPoints, FacialPointType... types) {
+        List<FacialPoint> newFPs = new ArrayList<>();
+        for (FacialPoint fp : facialPoints) {
+            boolean found = false;
+            
+            for (FacialPointType type : types) {
+                if (fp.getType() == type)
+                    found = true;
+            }
+            
+            if (!found) {
+                newFPs.add(fp);
+            }
+        }
+        facialPoints = newFPs;
     }
 }

@@ -24,7 +24,8 @@ public class Registrator {
     private static final int DEFALT_ITERATIONS = 20;
     private static final boolean SCALE = true;
     private static final float ERROR = 0.f;
-    private static final String AVERAGE_FACE_PATH = "./resources/averageFace10000.obj";
+    // zatial sa nepouziva, ak sa bude, tak doplnit cestu pre priemernu tvar
+    private static final String AVERAGE_FACE_PATH = ""; //"./models/resources/average_face.obj";
 
     private Model mainModel;
     private Model comparedModel;
