@@ -235,23 +235,23 @@ public class FpDetector {
     private void filterFPs() {
         // body Ektokantion a Ektokantion pouzit z textury, ak sa nasli
         if (textureFPs.containsPoint(FacialPointType.EN_L))
-            deleteFPs(modelFacialPoints, FacialPointType.EN_L);
+            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_L);
         if (textureFPs.containsPoint(FacialPointType.EN_R))
-            deleteFPs(modelFacialPoints, FacialPointType.EN_R);
+            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_R);
         if (textureFPs.containsPoint(FacialPointType.EX_L))
-            deleteFPs(modelFacialPoints, FacialPointType.EX_L);
+            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_L);
         if (textureFPs.containsPoint(FacialPointType.EX_R))
-            deleteFPs(modelFacialPoints, FacialPointType.EX_R);
+            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_R);
         
         // body Pronasale a Stomion pouzit zo zakrivenia, ak sa nasli
         if (modelFPs.containsPoint(FacialPointType.PRN))
-            deleteFPs(midlineFacialPoints, FacialPointType.PRN);
+            midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.PRN);
         if (modelFPs.containsPoint(FacialPointType.STO))
-            deleteFPs(midlineFacialPoints, FacialPointType.STO);
+            midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.STO);
     }
     
     // vymaze FP specifikovane v parametri
-    private void deleteFPs(List<FacialPoint> facialPoints, FacialPointType... types) {
+    private List<FacialPoint> deleteFPs(List<FacialPoint> facialPoints, FacialPointType... types) {
         List<FacialPoint> newFPs = new ArrayList<>();
         for (FacialPoint fp : facialPoints) {
             boolean found = false;
@@ -266,6 +266,6 @@ public class FpDetector {
             }
         }
         
-        facialPoints = newFPs;
+        return newFPs;
     }
 }
