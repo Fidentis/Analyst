@@ -54,10 +54,6 @@
                 <binary-origin>release/modules/ext/jvx.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/opencv-310.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/opencv-310.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/javaview.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/javaview.jar</binary-origin>
             </class-path-extension>
