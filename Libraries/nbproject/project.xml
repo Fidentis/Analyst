@@ -42,20 +42,24 @@
                 <package>jvx.vector</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/javaview.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/javaview.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/Jama-1.0.3.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/Jama-1.0.3.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/vecmath-1.5.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/vecmath-1.5.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jvx.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jvx.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/vecmath-1.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/vecmath-1.5.1.jar</binary-origin>
+                <runtime-relative-path>ext/opencv-310.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/opencv-310.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/javaview.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/javaview.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

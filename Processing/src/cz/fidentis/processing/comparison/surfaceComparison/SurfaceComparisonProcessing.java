@@ -643,6 +643,8 @@ public class SurfaceComparisonProcessing {
                 compCurvVals = new Curvature_jv(compF).getCurvature(CurvatureType.Gaussian);
             }
             Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, upperTreshold, lowerTreshold, j, i, mainCurv, compCurvVals, method));
+            //compute variance here?
+            
             list.add(fut);
             compF = null;
         }

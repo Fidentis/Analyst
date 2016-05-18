@@ -11,11 +11,13 @@ import cz.fidentis.utilsException.FileManipulationException;
 import cz.fidentis.validator.OSValidator;
 import java.awt.Color;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.opencv.LoadOpenCV;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
@@ -28,8 +30,10 @@ public class Installer extends ModuleInstall {
         Controller controller = new Controller();
         //GUIController guiController = new GUIController();
         // povodne  
+        
+        
 
-        try {
+        try {            
             //set Nimbus Look And Feel
             if (OSValidator.isWindows()) {
                 for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -38,6 +42,11 @@ public class Installer extends ModuleInstall {
                         break;
                     }
                 }
+                
+                
+                LoadOpenCV.loadWindowsLib();
+            } else if(OSValidator.isMac()){
+                LoadOpenCV.loadOSXlib();
             }
         } //set Nimbus LAF primary colors
         /*      
@@ -62,7 +71,7 @@ public class Installer extends ModuleInstall {
          UIManager.put("nimbusRed", new Color(169, 46, 34));
          UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
          UIManager.put("nimbusSelectionBackground", new Color(104, 93, 156));
-         UIManager.put("text", new Color(0, 0, 0));}*/ catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
+         UIManager.put("text", new Color(0, 0, 0));}*/ catch (URISyntaxException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
             Exceptions.printStackTrace(ex);
         }
 

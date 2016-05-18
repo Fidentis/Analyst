@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -90,6 +91,7 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
 
             return tmp;
         } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
             p.finish();
         }
 
