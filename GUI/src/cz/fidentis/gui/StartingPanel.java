@@ -8,6 +8,8 @@ package cz.fidentis.gui;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.Project;
 import cz.fidentis.gui.actions.ButtonHelper;
+import cz.fidentis.gui.observer.ProgressHandleMaster;
+import cz.fidentis.gui.observer.ProgressHandleObserver;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
 import java.text.DateFormat;
@@ -301,8 +303,24 @@ public class StartingPanel extends javax.swing.JPanel {
             Project project = new Project("Project " + dateFormat.format(date));
             project.setName("Project " + dateFormat.format(date));
             try {
+                ProgressHandleMaster master = new ProgressHandleMaster();
+                final ProgressHandleObserver obs = new ProgressHandleObserver("Deleting tmp files");
+                master.addObserver(obs);
+                
+                Runnable run = new Runnable() {
+                    @Override
+                    public void run() {
+                        obs.startHandle();
+                    }
+                };
+                
+                Thread t = new Thread(run);
+                t.start();                    
+                
                 project.setTempDirectory(FileUtils.instance()
                         .createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
+                
+                master.updateObservers();
             } catch (FileManipulationException ex) {
                 Exceptions.printStackTrace(ex);
             }

@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.netbeans.api.progress.*;
 
 /**
  *
@@ -67,7 +68,6 @@ public final class FileUtils {
         }
         
         deleteFolder(completePath);
-        
     }
     
     //deletes given folder

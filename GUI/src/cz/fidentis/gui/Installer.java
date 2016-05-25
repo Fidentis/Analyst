@@ -42,11 +42,6 @@ public class Installer extends ModuleInstall {
                         break;
                     }
                 }
-                
-                
-                LoadOpenCV.loadWindowsLib();
-            } else if(OSValidator.isMac()){
-                LoadOpenCV.loadOSXlib();
             }
         } //set Nimbus LAF primary colors
         /*      
@@ -71,7 +66,7 @@ public class Installer extends ModuleInstall {
          UIManager.put("nimbusRed", new Color(169, 46, 34));
          UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
          UIManager.put("nimbusSelectionBackground", new Color(104, 93, 156));
-         UIManager.put("text", new Color(0, 0, 0));}*/ catch (URISyntaxException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
+         UIManager.put("text", new Color(0, 0, 0));}*/ catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
             Exceptions.printStackTrace(ex);
         }
 
