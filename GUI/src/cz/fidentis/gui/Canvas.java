@@ -873,6 +873,13 @@ public class Canvas extends javax.swing.JPanel {
             projectTopComponent.getViewerPanel_Batch().getListener().setModels(model);
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().updateRegisterButtonEnabled();
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().populateFacesComboBox();
+        } else if (projectTopComponent.getProject().getSelectedPart() == 6) {
+            ModelLoader loader = new ModelLoader();
+            Model m = loader.loadModel(files[0], true, true);
+            
+            projectTopComponent.getProject().getSelectedAgeing().setOriginModel(m);
+            projectTopComponent.getAgeingViewerPanel().getListenerOrigin().setModels(m);
+            GUIController.getConfigurationTopComponent().getAgeingConfiguration().setConfiguration();
         }
         jLabel2.setVisible(false);
         GUIController.getNavigatorTopComponent().update();

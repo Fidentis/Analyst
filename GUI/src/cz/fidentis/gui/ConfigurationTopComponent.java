@@ -5,6 +5,7 @@
 package cz.fidentis.gui;
 
 
+import cz.fidentis.gui.ageing.AgeingConfiguration;
 import cz.fidentis.gui.comparison_batch.BatchComparisonConfiguration;
 import cz.fidentis.gui.comparison_batch.BatchComparisonResults;
 import cz.fidentis.gui.comparison_batch.BatchRegistrationConfiguration;
@@ -48,6 +49,7 @@ import org.openide.windows.TopComponent;
 })
 public final class ConfigurationTopComponent extends TopComponent {
 
+    private AgeingConfiguration ageingConfig;
     private CompositeConfiguration compositeConfiguration;
     private PairComparisonConfiguration comparisonConfiguration;
     private FeaturePointsConfiguration featurePointsConfiguration;
@@ -64,6 +66,7 @@ public final class ConfigurationTopComponent extends TopComponent {
     public ConfigurationTopComponent() {
         initComponents();
         
+        ageingConfig = new AgeingConfiguration();
         registrationConfiguration = new PairRegistrationConfiguration();
         compositeConfiguration = new CompositeConfiguration();
         comparisonConfiguration = new PairComparisonConfiguration();
@@ -128,6 +131,14 @@ public final class ConfigurationTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    
+    public void addAgeingComponent() {
+        this.removeAll();
+        this.add(ageingConfig);
+        ageingConfig.setConfiguration();
+        this.revalidate();
+        this.repaint();
     }
 
     public void addBatchComparisonResults() {
@@ -232,6 +243,11 @@ public final class ConfigurationTopComponent extends TopComponent {
         this.revalidate();
 
     }
+    
+    public AgeingConfiguration getAgeingConfiguration() {
+        return ageingConfig;
+    }
+    
     public PairRegistrationConfiguration getRegistrationConfiguration() {
         return registrationConfiguration;
     }
