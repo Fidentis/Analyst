@@ -15,10 +15,12 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 public class ProgressHandleObserver implements Observable{
     private ProgressHandle p;
     private boolean isStarted;
+    private boolean isFinished;
 
     public ProgressHandleObserver(String handleMsg) {
         p = ProgressHandleFactory.createSystemHandle(handleMsg);
         isStarted = false;
+        isFinished = false;
     }
     
     public void startHandle(){
@@ -28,10 +30,11 @@ public class ProgressHandleObserver implements Observable{
    
     @Override
     public void update() {
-        if(isStarted)
+        if(isStarted && !isFinished)
             p.finish();
         
         isStarted = false;
+        isFinished = true;
     }
     
 }
