@@ -51,11 +51,10 @@ public class FpDetector {
 //            Logger.getLogger(FpDetector.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-    
     public FpDetector(String modelName) {
         this.modelName = modelName;
     }
-    
+
     public FpDetector(Model model, String modelName) {
         this.model = model;
         this.modelName = modelName;
@@ -71,7 +70,7 @@ public class FpDetector {
 
         isMaterial();
     }
-    
+
     public FpDetector(Model model) {
         this(model, "");
     }
@@ -85,11 +84,11 @@ public class FpDetector {
         computeModelFPs();
         computeMidlineFPs(centerPoints);
         computeTextureFPs();
-        
+
         // niektore body mozu byt najdene viacnasobne, preto ich odfiltrujeme
         // podla uspesnosti spracovania algoritmov
         filterFPs();
-        
+
         allFacialPoints.addAll(modelFacialPoints);
         allFacialPoints.addAll(midlineFacialPoints);
         allFacialPoints.addAll(textureFacialPoints);
@@ -114,17 +113,16 @@ public class FpDetector {
         PsDebug.getConsole().setVisible(false);
 
 //        setFPcolors(modelFacialPoints, FP_COLOR_MODEL);
-        
         // Kvoli decentralizacii a davkovemu spracovaniu je potrebne pracovat
         // s centralizovanymi bodmi, je to hlavne z dovodu pouzitia bodov
         // v analyze textury
         centralizedModelFPs = new FpModel(modelName);
         centralizedModelFPs.setFacialpoints(modelFacialPoints);
-        
+
         if (decentralize) {
             decentralizeFPs(modelFacialPoints);
         }
-        
+
         modelFPs = new FpModel(modelName);
         modelFPs.setFacialpoints(modelFacialPoints);
     }
@@ -132,13 +130,12 @@ public class FpDetector {
     public void computeMidlineFPs(List<Vector3f> centerPoints) {
         Midline midlineAnalyzer = new Midline(model, centerPoints);
 //        midlineAnalyzer.setDoRegister(false);
-        
+
         midlineAnalyzer.analyze();
 
         midlineFacialPoints = midlineAnalyzer.getFacialPoints();
 
 //        setFPcolors(midlineFacialPoints, FP_COLOR_MIDLINE);
-
         if (decentralize) {
             decentralizeFPs(midlineFacialPoints);
         }
@@ -166,7 +163,6 @@ public class FpDetector {
         textureFacialPoints = analyzer.get3DfacialPoints();
 
 //        setFPcolors(textureFacialPoints, FP_COLOR_TEXTURE);
-
         if (decentralize) {
             decentralizeFPs(textureFacialPoints);
         }
@@ -188,7 +184,7 @@ public class FpDetector {
         } else {
             isMaterial = true;
         }
-        
+
         return isMaterial;
     }
 
@@ -197,7 +193,6 @@ public class FpDetector {
 //            fp.setColor(color);
 //        }
 //    }
-
     private void decentralizeFPs(List<FacialPoint> facialPoints) {
         Vector3f center = model.getModelDims().getOriginalCenter();
         for (FacialPoint facialPoint : facialPoints) {
@@ -206,7 +201,7 @@ public class FpDetector {
             facialPoint.getPosition().z += center.z;
         }
     }
-    
+
     public FpModel getModelFPs() {
         return modelFPs;
     }
@@ -230,42 +225,54 @@ public class FpDetector {
     public Mat getAnalyzedImage() {
         return analyzedImage;
     }
-    
+
     // filtrovat body, podla toho ci sa nasli v jednotlivych castiach algoritmu
     private void filterFPs() {
         // body Ektokantion a Ektokantion pouzit z textury, ak sa nasli
-        if (textureFPs.containsPoint(FacialPointType.EN_L))
-            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_L);
-        if (textureFPs.containsPoint(FacialPointType.EN_R))
-            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_R);
-        if (textureFPs.containsPoint(FacialPointType.EX_L))
-            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_L);
-        if (textureFPs.containsPoint(FacialPointType.EX_R))
-            modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_R);
-        
+        if (textureFPs != null) {
+            if (textureFPs.containsPoint(FacialPointType.EN_L)) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_L);
+            }
+            if (textureFPs.containsPoint(FacialPointType.EN_R)) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_R);
+            }
+            if (textureFPs.containsPoint(FacialPointType.EX_L)) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_L);
+            }
+            if (textureFPs.containsPoint(FacialPointType.EX_R)) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_R);
+            }
+        }
+
         // body Pronasale a Stomion pouzit zo zakrivenia, ak sa nasli
-        if (modelFPs.containsPoint(FacialPointType.PRN))
-            midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.PRN);
-        if (modelFPs.containsPoint(FacialPointType.STO))
-            midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.STO);
+        if (modelFPs != null) {
+            if (modelFPs.containsPoint(FacialPointType.PRN)) {
+                midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.PRN);
+            }
+            if (modelFPs.containsPoint(FacialPointType.STO)) {
+                midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.STO);
+            }
+        }
+
     }
-    
+
     // vymaze FP specifikovane v parametri
     private List<FacialPoint> deleteFPs(List<FacialPoint> facialPoints, FacialPointType... types) {
         List<FacialPoint> newFPs = new ArrayList<>();
         for (FacialPoint fp : facialPoints) {
             boolean found = false;
-            
+
             for (FacialPointType type : types) {
-                if (fp.getType() == type)
+                if (fp.getType() == type) {
                     found = true;
+                }
             }
-            
+
             if (!found) {
                 newFPs.add(fp);
             }
         }
-        
+
         return newFPs;
     }
 }
