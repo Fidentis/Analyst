@@ -1261,7 +1261,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jSlider3StateChanged
 
     public void setColors() {
-        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2();
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
         float[] color = new float[4];
         primaryColorPanel.getBackground().getRGBColorComponents(color);
         color[3] = jCheckBox3.isSelected() ? 1 : jSlider3.getValue() / (float) 100;
@@ -1278,35 +1278,35 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setInnerSurfaceVisible(jCheckBox1.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(jCheckBox1.isSelected());
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void noneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noneRadioButtonActionPerformed
         if (noneRadioButton.isSelected()) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFogVersion(0);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(0);
         }
     }//GEN-LAST:event_noneRadioButtonActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         if (jRadioButton2.isSelected()) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFogVersion(1);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(1);
         }
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         if (jRadioButton3.isSelected()) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFogVersion(2);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(2);
         }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         if (jRadioButton4.isSelected()) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFogVersion(3);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(3);
         }
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setUseGlyphs(jCheckBox2.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(jCheckBox2.isSelected());
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void fogColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fogColorPanelMouseClicked
@@ -1316,7 +1316,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_fogColorPanelMouseClicked
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setContours(jCheckBox7.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(jCheckBox7.isSelected());
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
     private void selectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionButtonActionPerformed
