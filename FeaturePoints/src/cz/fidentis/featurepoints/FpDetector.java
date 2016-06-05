@@ -20,7 +20,7 @@ import org.opencv.LoadOpenCV;
  */
 public class FpDetector {
 
-    private static final boolean CENTRALIZE = true;
+    private static final boolean CENTRALIZE = false;
 
     private Model model;
     private FeaturePointsUniverse fpUniverse;
@@ -119,9 +119,9 @@ public class FpDetector {
         centralizedModelFPs = new FpModel(modelName);
         centralizedModelFPs.setFacialpoints(modelFacialPoints);
 
-        if (decentralize) {
+        /*if (decentralize) {
             decentralizeFPs(modelFacialPoints);
-        }
+        }*/
 
         modelFPs = new FpModel(modelName);
         modelFPs.setFacialpoints(modelFacialPoints);
