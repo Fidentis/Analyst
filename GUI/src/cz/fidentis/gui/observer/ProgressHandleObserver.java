@@ -24,7 +24,8 @@ public class ProgressHandleObserver implements Observable{
     }
     
     public void startHandle(){
-        p.start();
+        if(!isFinished)
+            p.start();
 
     }
    

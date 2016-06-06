@@ -7,6 +7,7 @@ package cz.fidentis.gui;
 import cz.fidentis.controller.Controller;
 import static cz.fidentis.gui.GUIController.addProjectTopComponent;
 import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utils.LoadLibraries;
 import cz.fidentis.utilsException.FileManipulationException;
 import cz.fidentis.validator.OSValidator;
 import java.awt.Color;
@@ -34,6 +35,8 @@ public class Installer extends ModuleInstall {
         
 
         try {                
+            LoadLibraries.loadOpenCV();
+            
             //set Nimbus Look And Feel
             if (OSValidator.isWindows()) {
                 for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -66,7 +69,7 @@ public class Installer extends ModuleInstall {
          UIManager.put("nimbusRed", new Color(169, 46, 34));
          UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
          UIManager.put("nimbusSelectionBackground", new Color(104, 93, 156));
-         UIManager.put("text", new Color(0, 0, 0));}*/ catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
+         UIManager.put("text", new Color(0, 0, 0));}*/ catch (URISyntaxException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
             Exceptions.printStackTrace(ex);
         }
 
