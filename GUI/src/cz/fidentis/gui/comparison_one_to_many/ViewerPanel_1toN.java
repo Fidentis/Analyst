@@ -4,17 +4,13 @@
  */
 package cz.fidentis.gui.comparison_one_to_many;
 
-import cz.fidentis.gui.comparison_two_faces.*;
-import cz.fidentis.controller.Viewer;
 import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.gui.actions.ButtonHelper;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.renderer.ComparisonGLEventListener;
-import cz.fidentis.renderer.GeneralGLEventListener;
 import cz.fidentis.utils.IntersectionUtils;
 import cz.fidentis.utils.MathUtils;
 import java.awt.Dimension;
@@ -25,14 +21,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Vector3f;
-import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
-import org.openide.awt.StatusDisplayer;
-import org.openide.windows.WindowManager;
 
 /**
  *
