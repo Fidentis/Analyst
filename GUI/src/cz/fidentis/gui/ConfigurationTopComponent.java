@@ -66,26 +66,6 @@ public final class ConfigurationTopComponent extends TopComponent {
     public ConfigurationTopComponent() {
         initComponents();
         
-        /*ageingConfig = new AgeingConfiguration();
-        registrationConfiguration = new PairRegistrationConfiguration();
-        compositeConfiguration = new CompositeConfiguration();
-        comparisonConfiguration = new PairComparisonConfiguration();
-        featurePointsConfiguration = new FeaturePointsConfiguration();
-        viewerConfiguration = new ViewerConfiguration();
-        batchComparisonConfiguration = new BatchComparisonConfiguration();
-        batchRegistrationConfiguration = new BatchRegistrationConfiguration();
-        oneToManyRegistrationConfiguration = new OneToManyRegistrationConfiguration();
-        oneToManyComparisonConfiguration = new OneToManyComparisonConfiguration();
-        pairComparisonResults = new PairComparisonResults();
-        oneToManyComparisonResults = new OneToManyComparisonResults();
-        batchComparisonResults = new BatchComparisonResults();*/
-//        FoldingPanel panel = new FoldingPanel();
-//        panel.addPanel("Registration Configuration", registrationConfiguration);
-//        panel.addPanel("Comparison", oneToManyComparisonConfiguration);
-//        this.add(panel);
-//        this.repaint();
-//        this.revalidate();
-        
         setName(Bundle.CTL_ConfigurationTopComponent());
         setToolTipText(Bundle.HINT_ConfigurationTopComponent());
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
