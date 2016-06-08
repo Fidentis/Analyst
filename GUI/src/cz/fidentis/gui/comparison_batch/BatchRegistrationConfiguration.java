@@ -1322,6 +1322,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+
         jSpinner1.setValue(c.getICPerrorRate());
         jSpinner2.setValue(c.getICPmaxIteration());
         jSpinner3.setValue(c.getICPnumberOfHeads());
@@ -1339,6 +1340,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             jButton7.setEnabled(true);
         }
         populateFacesComboBox();
+        
+        if(c.getModels().size() > 0)
+            facesComboBox.setSelectedIndex(c.getTemplateIndex() + 3);
+        
 
     }
 
