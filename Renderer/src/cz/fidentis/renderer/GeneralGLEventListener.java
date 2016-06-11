@@ -5,10 +5,13 @@
 package cz.fidentis.renderer;
 
 import cz.fidentis.model.Model;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import javax.media.opengl.GL;
 import static javax.media.opengl.GL.GL_FALSE;
@@ -528,5 +531,39 @@ public class GeneralGLEventListener implements GLEventListener {
      */
     public void setDrawTextures(boolean drawTextures) {
         this.drawTextures = drawTextures;
+    }
+    
+    
+    public GL2 getContext(){
+        return gl;
+    }
+    
+    public BufferedImage screenShot(int width, int height){
+         int i = gl.glGetError();
+        
+        gl.glFinish();
+        gl.glReadBuffer(gl.GL_BACK); // or GL.GL_BACK
+
+        i = gl.glGetError();
+        
+        ByteBuffer glBB = ByteBuffer.allocate(3 * width * height);
+        gl.glReadPixels(0, 0, width, height, gl.GL_BGR, gl.GL_BYTE, glBB);
+        
+        i = gl.glGetError();
+        
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        int[] bd = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int b = 2 * glBB.get();
+                int g = 2 * glBB.get();
+                int r = 2 * glBB.get();
+
+                bd[(height - y - 1) * width + x] = (r << 16) | (g << 8) | b | 0xFF000000;
+            }
+        }
+        return bi;
     }
 }

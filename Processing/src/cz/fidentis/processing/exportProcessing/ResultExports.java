@@ -17,10 +17,12 @@ import cz.fidentis.utils.SortUtils;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -33,6 +35,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+
+import javax.media.opengl.GL2;
+import com.jogamp.opengl.util.awt.Screenshot;
 
 /**
  *
@@ -291,6 +296,73 @@ public class ResultExports {
 
         savePicture(filePath, tc, canvas, width, height);
 
+    }
+
+    public void exportVisualResults(Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
+        String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
+
+        if (filePath == null) {
+            //selection of folder wasn't approved, nothing happens
+            return;
+        }
+
+        savePicture(filePath, tc, canvas, gl, width, height);
+
+    }
+
+    //saves picture as PNG file to given path, of given size
+    private void savePicture(String path, Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
+        if (path.contains(".png")) {
+        } else {
+            path = path + ".png";
+        }
+
+        int i = gl.glGetError();
+        
+        gl.glFinish();
+        gl.glReadBuffer(gl.GL_BACK); // or GL.GL_BACK
+
+        i = gl.glGetError();
+        
+        ByteBuffer glBB = ByteBuffer.allocate(3 * width * height);
+        gl.glReadPixels(0, 0, width, height, gl.GL_BGR, gl.GL_BYTE, glBB);
+        
+        i = gl.glGetError();
+        
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        int[] bd = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int b = 2 * glBB.get();
+                int g = 2 * glBB.get();
+                int r = 2 * glBB.get();
+
+                bd[(height - y - 1) * width + x] = (r << 16) | (g << 8) | b | 0xFF000000;
+            }
+        }
+
+        //bi.setRGB(0, 0, width, height, bd, 0, width);
+        
+        Graphics g;
+        JFrame newFrame = new JFrame();
+        GLJPanel picture = new GLJPanel();
+
+        newFrame.setSize(width, height);
+        newFrame.add(picture);
+        newFrame.setVisible(true);
+
+        picture.setSize(width, height);
+        picture.repaint();
+        //g = bi.createGraphics();
+        //picture.paint(g);
+
+        try {
+            ImageIO.write(bi, "png", new File(path));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(tc, "Saving image failed.");
+        }
     }
 
     //saves picture as PNG file to given path, of given size
