@@ -1205,6 +1205,22 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             exportLandmarksButton.setVisible(false);
         }
         
+        //setup overlay options
+        primaryColorPanel.setBackground(Color.yellow);
+        jCheckBox6.setSelected(false);
+        
+        secondaryColorPanel.setBackground(new Color(51,153,255));
+        jCheckBox5.setSelected(false);
+        
+        fogColorPanel.setBackground(new Color(255,102,204));
+        jSlider4.setValue(100);
+        jCheckBox3.setSelected(true);
+        jCheckBox4.setSelected(false);
+        jCheckBox7.setSelected(true);
+        
+        noneRadioButton.setSelected(true);
+        //end overlay options
+        
         jCheckBox2.setSelected(c.isFpScaling());
         primaryColorPanel.setBackground(new Color(c.getPrimaryColor().getRed(), c.getPrimaryColor().getGreen(), c.getPrimaryColor().getBlue()));
         secondaryColorPanel.setBackground(new Color(c.getSecondaryColor().getRed(), c.getSecondaryColor().getGreen(), c.getSecondaryColor().getBlue()));
