@@ -86,6 +86,7 @@ public final class OpenProject implements ActionListener {
 
     private final byte[] buffer = new byte[1024];
     private File tempFile;
+    private List<FpModel> loadedFps;
 
     public void openProject(File file, final ProjectTopComponent ntc) throws ParserConfigurationException, SAXException, IOException {
         tempFile = new File(FileUtils.instance().getTempDirectoryPath() + File.separator + String.valueOf(System.currentTimeMillis()));
@@ -163,19 +164,61 @@ public final class OpenProject implements ActionListener {
     
     private void updateGui(ProjectTopComponent ntc, Project p) {
         GUIController.getBlankProject(); // create panel for new project
-        
+
         ntc.setProject(p);
         ntc.setName(String.valueOf(GUIController.getProjects().size()));
         ntc.setDisplayName(p.getName());
         p.setIndex(GUIController.getProjects().size());
-        ntc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
         Controller.addProjcet(p);
         ntc.open();
         GUIController.setSelectedProjectTopComponent(ntc);
 
         ConfigurationTopComponent ctc = GUIController.getConfigurationTopComponent();
+        
+        boolean isMissingModel = false;
+        List<File> modelsList = null;
+        if(p.getSelectedOneToManyComparison() != null) {
+            modelsList = p.getSelectedOneToManyComparison().getModels();
+        }
+        if(p.getSelectedBatchComparison() != null) {
+            modelsList = p.getSelectedBatchComparison().getModels();
+        }
+        if(modelsList != null) {
+            for(File modelFile : modelsList) {
+                if(!modelFile.isFile()) {
+                    isMissingModel = true;
+                    break;
+                }
+            }
+        }
+        if(isMissingModel == true) {
+            ResolveMissingModels dialog = new ResolveMissingModels(null, true);
+            dialog.setLocationRelativeTo(ntc);
+            dialog.setFiles(modelsList);
+            dialog.setVisible(true);
+            if(dialog.getResult() != null) {
+                // remove models for the sake of keeping the right project tree
+                int filesCount = modelsList.size();
+                for (int i = filesCount - 1; i >= 0; i--) {
+                    if (p.getSelectedOneToManyComparison() != null) {
+                        p.getSelectedOneToManyComparison().removeModel(i);
+                    } else {
+                        p.getSelectedBatchComparison().removeModel(i);
+                    }
+                }
+
+                for(File origFile : dialog.getResult().keySet()) {
+                    if (p.getSelectedOneToManyComparison() != null) {
+                        p.getSelectedOneToManyComparison().addModel(dialog.getResult().get(origFile));
+                    } else {
+                        p.getSelectedBatchComparison().addModel(dialog.getResult().get(origFile));
+                    }
+                }
+            }
+        }
 
         if (p.getSelectedComposite() != null) {
+            ntc.showComposite();
             ButtonHelper.setCompositeEnabled(true);
             ButtonHelper.setViewerEnabled(true);
             ButtonHelper.setTexturesEnabled(true);
@@ -189,7 +232,8 @@ public final class OpenProject implements ActionListener {
 
         }
         if (p.getSelectedComparison2Faces() != null) {
-                        Comparison2Faces comparison2f = p.getSelectedComparison2Faces();
+            ntc.show2FacesViewer();
+            Comparison2Faces comparison2f = p.getSelectedComparison2Faces();
             p.setSelectedPart(2);
             if (comparison2f.getModel1() != null) {
                 ntc.getViewerPanel_2Faces().getCanvas1().setImportLabelVisible(false);
@@ -208,7 +252,7 @@ public final class OpenProject implements ActionListener {
                     ntc.getViewerPanel_2Faces().setResultButtonVisible(false, 0);
                     ntc.getViewerPanel_2Faces().getCanvas1().showResultIcon();
                 }
-                
+
                 if (comparison2f.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
                     ntc.getViewerPanel_2Faces().getListener1().setProcrustes(true);
                 } else {
@@ -222,6 +266,7 @@ public final class OpenProject implements ActionListener {
             ntc.show2FacesViewer();
         }
         if (p.getSelectedOneToManyComparison() != null) {
+            ntc.show1toNViewer();
             OneToManyComparison comparison1N = p.getSelectedOneToManyComparison();
             p.setSelectedPart(3);
             if (comparison1N.getPrimaryModel() != null) {
@@ -230,27 +275,38 @@ public final class OpenProject implements ActionListener {
             }
             if (!comparison1N.getModels().isEmpty()) {
                 ntc.getOneToManyViewerPanel().getCanvas2().setImportLabelVisible(false);
-                ModelLoader loader = new ModelLoader();
-                ntc.getOneToManyViewerPanel().getListener2().setModels(loader.loadModel(comparison1N.getModel(0), true, true));
+            }
+            if (loadedFps != null) {
+                FPImportExport.instance().alignPointsToModels(loadedFps, comparison1N.getModels());
+                for (FpModel model : loadedFps) {
+                    comparison1N.addFacialPoints(model.getModelName(), model.getFacialPoints());
+                }
             }
             if (comparison1N.getState() >= 3) {
                 if (comparison1N.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-                    ntc.getOneToManyViewerPanel().getListener2().setProcrustes(true);
+                    ntc.getOneToManyViewerPanel().getListener1().setProcrustes(true);
                 } else {
-                    ntc.getOneToManyViewerPanel().getListener2().setModels(comparison1N.getHdPaintingInfo().getModel());
-                    ntc.getOneToManyViewerPanel().getListener2().setHdInfo(comparison1N.getHdPaintingInfo());
-                    ntc.getOneToManyViewerPanel().getListener2().setHdPaint(comparison1N.getHDP());
-                    ntc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
-                    ntc.getOneToManyViewerPanel().getListener2().drawHD(true);
+                    ntc.getOneToManyViewerPanel().getListener1().setModels(comparison1N.getHdPaintingInfo().getModel());
+                    ntc.getOneToManyViewerPanel().getListener1().setHdInfo(comparison1N.getHdPaintingInfo());
+                    ntc.getOneToManyViewerPanel().getListener1().setHdPaint(comparison1N.getHDP());
+                    ntc.getOneToManyViewerPanel().getListener1().setPaintHD(true);
+                    ntc.getOneToManyViewerPanel().getListener1().drawHD(true);
                 }
             }
             ntc.show1toNViewer();
         }
         if (p.getSelectedBatchComparison() != null) {
+            ntc.showBatchViewer();
             BatchComparison comparison = p.getSelectedBatchComparison();
             p.setSelectedPart(4);
             if (!comparison.getModels().isEmpty()) {
                 ntc.getViewerPanel_Batch().getCanvas1().setImportLabelVisible(false);
+            }
+            if (loadedFps != null) {
+                FPImportExport.instance().alignPointsToModels(loadedFps, comparison.getModels());
+                for (FpModel model : loadedFps) {
+                    comparison.addFacialPoints(model.getModelName(), model.getFacialPoints());
+                }
             }
             if (comparison.getState() >= 3) {
                 if (comparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
@@ -265,6 +321,7 @@ public final class OpenProject implements ActionListener {
             }
             ntc.showBatchViewer();
         }
+        ntc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
         GUIController.updateNavigator();
         ntc.requestActive();
     }
@@ -674,11 +731,7 @@ public final class OpenProject implements ActionListener {
 
         if (fpE != null) {
             String fileName = tempFile.getAbsolutePath() + File.separator + fpE.getAttribute("file");
-            List<FpModel> fpModels = CSVparser.load(fileName);
-            FPImportExport.instance().alignPointsToModels(fpModels, comparison.getModels());
-            for (FpModel model : fpModels) {
-                comparison.addFacialPoints(model.getModelName(), model.getFacialPoints());
-            }
+            loadedFps = CSVparser.load(fileName);
         }
 
         if (icpTransE != null) {
@@ -696,16 +749,14 @@ public final class OpenProject implements ActionListener {
 
         if (hdInfoE != null) {
             boolean isRelative = comparison.getValuesTypeIndex() == 0;
-            ModelLoader modelLoader = new ModelLoader();
+            /*ModelLoader modelLoader = new ModelLoader();
             File modelFile = null;
             if (comparison.getRegisteredModels() != null) {
                 modelFile = comparison.getRegisteredModels().get(comparison.getTemplateIndex());
             } else {
                 modelFile = comparison.getModel(comparison.getTemplateIndex());
-            }
-            Model template = modelLoader.loadModel(modelFile, false, false);
-
-            HDpaintingInfo info = parseHdInfo(hdInfoE, isRelative, comparison.getHd(), template, comparison.getHdColor1(), comparison.getHdColor2());
+            }*/
+            HDpaintingInfo info = parseHdInfo(hdInfoE, isRelative, comparison.getHd(), comparison.getPrimaryModel(), comparison.getHdColor1(), comparison.getHdColor2());
             comparison.setHdPaintingInfo(info);
             comparison.setHDP(new HDpainting(info));
         }
@@ -933,11 +984,7 @@ public final class OpenProject implements ActionListener {
 
         if (fpE != null) {
             String fileName = tempFile.getAbsolutePath() + File.separator + fpE.getAttribute("file");
-            List<FpModel> fpModels = CSVparser.load(fileName);
-            FPImportExport.instance().alignPointsToModels(fpModels, comparison.getModels());
-            for (FpModel model : fpModels) {
-                comparison.addFacialPoints(model.getModelName(), model.getFacialPoints());
-            }
+            loadedFps = CSVparser.load(fileName);
         }
 
         if (icpTransE != null) {
