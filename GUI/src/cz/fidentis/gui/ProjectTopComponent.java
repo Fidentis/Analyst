@@ -56,9 +56,13 @@ public final class ProjectTopComponent extends TopComponent {
     private AgeingViewerPanel ageingViewerPanel;
 
     public ProjectTopComponent(){
+        this(ProjectType.DEFAULT);
+    }
+    
+    public ProjectTopComponent(ProjectType t) {
         initComponents();
         
-        createProjectType(ProjectType.DEFAULT);
+        createProjectType(t);
 
         setName(Bundle.CTL_ProjectTopComponent());
         setToolTipText(Bundle.HINT_ProjectTopComponent());
@@ -69,10 +73,6 @@ public final class ProjectTopComponent extends TopComponent {
         if (Controller.getProjects().isEmpty()) {
             GUIController.setSelectedProjectTopComponent(this);
         }
-    }
-    
-    public ProjectTopComponent(ProjectType t) {
-        
     }
     
     private void createProjectType(ProjectType t){
