@@ -62,7 +62,6 @@ public class OneToManyComparison {
     private int fpSize = 20;                       //size of displayed feature points
     private float ICPerrorRate = 0.05f;            //used error rate during alignment for ICP -- used when editing registration criteria
     private int ICPmaxIteration = 10;               //used number of iteration for ICP -- used when editing registration criteria
-    private int templateIndex = 0;                 //index of mesh chosen to be a base for the avgFace
     private boolean useSymmetry;
     private RegistrationMethod RegMethod;           //registration method used
     private ComparisonMethod CompareMethod;         //comparison method used
