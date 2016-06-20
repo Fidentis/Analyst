@@ -400,8 +400,6 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("icpMaxIteration", String.valueOf(comparison.getICPmaxIteration()));
 
-        comparisonE.setAttribute("templateIndex", String.valueOf(comparison.getTemplateIndex()));
-
         if (comparison.getRegistrationMethod() != null) {
             comparisonE.setAttribute("registrationMethod", comparison.getRegistrationMethod().name());
         }

@@ -657,10 +657,6 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setICPmaxIteration(Integer.parseInt(attr));
         }
-        attr = projectE.getAttribute("templateIndex");
-        if (attr != null && !attr.isEmpty()) {
-            comparison.setTemplateIndex(Integer.parseInt(attr));
-        }
         attr = projectE.getAttribute("registrationMethod");
         if (attr != null && !attr.isEmpty()) {
             comparison.setRegistrationMethod(RegistrationMethod.valueOf(attr));

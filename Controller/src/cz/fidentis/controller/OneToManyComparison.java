@@ -319,14 +319,6 @@ public class OneToManyComparison {
         this.metricTypeIndex = metricTypeIndex;
     }
 
-    public int getTemplateIndex() {
-        return templateIndex;
-    }
-
-    public void setTemplateIndex(int templateIndex) {
-        this.templateIndex = templateIndex;
-    }
-
     public boolean isUseSymmetry() {
         return useSymmetry;
     }
