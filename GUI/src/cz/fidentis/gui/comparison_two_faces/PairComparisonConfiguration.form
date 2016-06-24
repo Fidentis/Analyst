@@ -499,9 +499,9 @@
                                       <Component id="jSlider4" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="secondaryColorPanel" max="32767" attributes="0"/>
+                                              <Component id="primaryColorPanel" max="32767" attributes="0"/>
                                               <Component id="fogColorPanel" alignment="0" pref="50" max="32767" attributes="0"/>
-                                              <Component id="primaryColorPanel" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="secondaryColorPanel" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -541,7 +541,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel9" min="-2" pref="23" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="secondaryColorPanel" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="primaryColorPanel" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jCheckBox6" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -554,7 +554,7 @@
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="jCheckBox5" max="32767" attributes="0"/>
-                                      <Component id="primaryColorPanel" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="secondaryColorPanel" alignment="1" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -597,7 +597,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Container class="javax.swing.JPanel" name="primaryColorPanel">
+                <Container class="javax.swing.JPanel" name="secondaryColorPanel">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="99" red="33" type="rgb"/>
@@ -609,7 +609,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="primaryColorPanelMouseClicked"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="secondaryColorPanelMouseClicked"/>
                   </Events>
 
                   <Layout>
@@ -632,7 +632,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Container class="javax.swing.JPanel" name="secondaryColorPanel">
+                <Container class="javax.swing.JPanel" name="primaryColorPanel">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="0" green="ff" red="ff" type="rgb"/>
@@ -644,7 +644,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="secondaryColorPanelMouseClicked"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="primaryColorPanelMouseClicked"/>
                   </Events>
 
                   <Layout>

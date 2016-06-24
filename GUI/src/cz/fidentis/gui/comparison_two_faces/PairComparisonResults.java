@@ -671,7 +671,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                                 .addComponent(minThreshSpinner))))))
-            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(colormapPanelLayout.createSequentialGroup()
@@ -931,7 +931,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1459, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1617, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1431,6 +1431,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
         result = c.getNumericalResults();
 
         jSlider1.setValue(c.getHausdorfMaxTreshold());
+        minThreshSlider.setValue(c.getHausdorfMinTreshold());
+        minThreshSpinner.setValue(c.getHausdorfMinTreshold());
         jSpinner1.setValue(c.getHausdorfMaxTreshold());
         jSlider2.setValue(c.getFpDistance());
         sizeSlider.setValue(c.getFpSize());
