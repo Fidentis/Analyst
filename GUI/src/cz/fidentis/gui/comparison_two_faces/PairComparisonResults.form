@@ -445,7 +445,7 @@
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jSlider3" pref="224" max="32767" attributes="0"/>
+                                          <Component id="jSlider3" pref="202" max="32767" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                   <Component id="primaryColorPanel" max="32767" attributes="0"/>
@@ -801,7 +801,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <Component id="histogram1" alignment="1" pref="330" max="32767" attributes="0"/>
+                          <Component id="histogram1" alignment="1" pref="308" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">

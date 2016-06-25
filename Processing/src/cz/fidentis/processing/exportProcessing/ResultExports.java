@@ -17,12 +17,10 @@ import cz.fidentis.utils.SortUtils;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -36,116 +34,111 @@ import javax.swing.JOptionPane;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 
-import javax.media.opengl.GL2;
-import com.jogamp.opengl.util.awt.Screenshot;
-
 /**
  *
  * @author Zuzana Ferkova
  */
 public class ResultExports {
-
     private static ResultExports instance;
-
-    private static final String[] FILE_EXTENSIONS_MODEL = new String[]{"obj"};
-    private static final String[] FILE_EXTENSIONS_RESULTS = new String[]{"csv"};
-    private static final String[] FILE_EXTENSIONS_PIC = new String[]{"png"};
-
-    private ResultExports() {
-    }
-
-    public static ResultExports instance() {
-        if (instance == null) {
+    
+    private static final String[] FILE_EXTENSIONS_MODEL = new String[] {"obj"};
+    private static final String[] FILE_EXTENSIONS_RESULTS = new String[] {"csv"};
+    private static final String[] FILE_EXTENSIONS_PIC = new String[] {"png"};
+    
+    private ResultExports(){}
+    
+    public static ResultExports instance(){
+        if(instance == null){
             instance = new ResultExports();
         }
-
+        
         return instance;
     }
-
+    
     /**
-     * Exports aligned models from 1:1 comparison to the disk. Opens dialog
-     * options to choose save location
-     *
+     * Exports aligned models from 1:1 comparison to the disk. Opens dialog options to choose
+     * save location
+     * 
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param mainF - main face of 1:1 comparison
      * @param compF - secondary face of 1:1 comparison
      */
-    public void exportModels(Component tc, Model mainF, Model compF) {
-        if (mainF == null || compF == null) {
+    public void exportModels(Component tc, Model mainF, Model compF){
+        if(mainF == null || compF == null){
             //error TODO
             return;
         }
-
+        
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "OBJ Models", FILE_EXTENSIONS_MODEL, true);
-
-        if (filePath == null) {
+        
+        if(filePath == null){
             //selection of folder wasn't approved, nothing happens
             return;
         }
-
+        
         exportFace(mainF, filePath);
         exportFace(compF, filePath);
     }
-
+    
     //exports single face to filePath. Name of the exported model is name of
     //the original model + '_twoFaces_reg.obj'
-    private void exportFace(Model face, String filePath) {
+    private void exportFace(Model face, String filePath){
         String modelName = getFileName(face.getName());
-
+        
         ModelExporter me = new ModelExporter(face);
         File f = new File(filePath + File.separator + modelName + "_twoFaces_reg.obj");
         me.exportModelToObj(f, false);
     }
-
+    
     /**
      * Exports numeric results of 1:1 comparison, given as string, to the disk.
      * Opens dialog option to choose save location.
-     *
+     * 
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param results - string representation of 1:1 numerical results
      */
-    public void exportCSVnumeric(Component tc, String results) {
-        if (results == null) {
+    public void exportCSVnumeric(Component tc, String results){
+        if(results == null){
             //error TODO
             return;
         }
-
+        
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "CSV files", FILE_EXTENSIONS_RESULTS, false);
-
-        if (filePath == null) {
+        
+        if(filePath == null){
             //selection of folder wasn't approved, nothing happens
             return;
         }
-
-        writeStringToFile(tc, filePath, results);
+        
+        writeStringToFile(tc, filePath, results);        
     }
-
-    public void exportCSVnumericOrder(Component tc, List<Float> results, List<File> models) {
-        if (results == null) {
+    
+    public void exportCSVnumericOrder(Component tc, List<Float> results, List<File> models){
+        if(results == null){
             //error TODO
             return;
         }
-
+        
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "CSV files", FILE_EXTENSIONS_RESULTS, false);
-
-        if (filePath == null) {
+        
+        if(filePath == null){
             //selection of folder wasn't approved, nothing happens
             return;
         }
-
+        
         List<Integer> order = ListUtils.instance().populateList(results.size());
         order = SortUtils.instance().sortIndices(results, order);
         List<Float> res = SortUtils.instance().sortListFromIndices(results, order);
         //res = ListUtils.instance().reverseList(res);
         String resStr = setValues(res, order, models);
-
-        writeStringToFile(tc, filePath, resStr);
+        
+        writeStringToFile(tc, filePath, resStr);       
     }
-
+    
     private String setValues(List<Float> hdDistance, List<Integer> indices, List<File> models) {
         StringBuilder strResults = new StringBuilder(";");
 
-        for (int i = 0; i < indices.size(); i++) {
+        for (int i = 0; i < indices.size() ; i++) {
             strResults.append(models.get(indices.get(i)).getName()).append(';');
         }
 
@@ -157,25 +150,25 @@ public class ResultExports {
 
         return strResults.toString();
     }
-
+    
     /**
-     * Computes and export symmetric result matrix from given precomputed
-     * results.
-     *
-     * @param tc - GUI top component, usually window from which the export
-     * button was called
+     * Computes and export symmetric result matrix from given precomputed results.
+     * 
+     * @param tc - GUI top component, usually window from which the export button was called
      * @param precomputedRes - table format of computed results
-     * @param varianceMethod - variance method to be used to get asymmetric
-     * result table
-     * @param originalModels - list of URLs containing models before alignment,
-     * to use in table naming
+     * @param varianceMethod - variance method to be used to get asymmetric result table
+     * @param originalModels - list of URLs containing models before alignment, to use in table naming
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels) {
 =======
     public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels, 
             final float upperTreshold, final float lowerTreshold) {
 >>>>>>> refs/remotes/origin/development
+=======
+    public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels){
+>>>>>>> 7ce8ff9f35e26af83f0400dac86de86a7720aa2f
         if (precomputedRes == null) {
             //error
             return;
@@ -194,6 +187,7 @@ public class ResultExports {
                 ProgressHandle p = ProgressHandleFactory.createHandle("Computing symmetric nummerical results...");
                 p.start();
 
+<<<<<<< HEAD
                 try {
 
                     List<ArrayList<Float>> symRes = MathUtils.instance().symetricMatrix(precomputedRes);
@@ -205,11 +199,14 @@ public class ResultExports {
 >>>>>>> refs/remotes/origin/development
 
                     writeStringToFile(tc, filePath, res);
+=======
+                List<ArrayList<Float>> symRes = MathUtils.instance().symetricMatrix(precomputedRes);
+                String res = SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable((ArrayList<ArrayList<Float>>) symRes, varianceMethod, originalModels);
+>>>>>>> 7ce8ff9f35e26af83f0400dac86de86a7720aa2f
 
-                    p.finish();
-                } catch (Exception ex) {
-                    p.finish();
-                }
+                writeStringToFile(tc, filePath, res);
+                
+                p.finish();
             }
 
         };
@@ -217,87 +214,87 @@ public class ResultExports {
         Thread t = new Thread(r);
         t.start();
     }
-
+    
     //writes given string to path as csv
-    private void writeStringToFile(Component tc, String path, String result) {
+    private void writeStringToFile(Component tc, String path, String result){
         if (!(path.contains(".csv"))) {
-            path = path.concat(".csv");
-        }
-        File file = new File(path);
-        BufferedWriter bw = null;
-        FileWriter fw;
-
-        try {
-            fw = new FileWriter(file);
-            bw = new BufferedWriter(fw);
-            bw.write(result);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(tc, "Saving failed.");
-        } finally {
-            try {
-                if (bw != null) {
-                    bw.close();
+                    path = path.concat(".csv");
                 }
-            } catch (IOException i) {
-                JOptionPane.showMessageDialog(tc, "Saving failed.");
-            }
-        }
-    }
+                File file = new File(path);
+                BufferedWriter bw = null;
+                FileWriter fw;
 
+                try {
+                    fw = new FileWriter(file);
+                    bw = new BufferedWriter(fw);
+                    bw.write(result);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(tc, "Saving failed.");
+                } finally {
+                    try {
+                        if (bw != null) {
+                            bw.close();
+                        }
+                    } catch (IOException i) {
+                        JOptionPane.showMessageDialog(tc, "Saving failed.");
+                    }
+                }
+    }
+    
     /**
      * Write auxiliary results to disk.
-     *
+     * 
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param results - auxiliary results
      * @param modelName - name of the main model
      * @param useRelative - whether to use signed distance or not
      */
-    public void writeAuxResults(Component tc, List<Float> results, String modelName, boolean useRelative) {
+    public void writeAuxResults(Component tc, List<Float> results, String modelName, boolean useRelative){
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "CSV files", FILE_EXTENSIONS_RESULTS, false);
-
-        if (filePath == null) {
+        
+        if(filePath == null){
             //selection of folder wasn't approved, nothing happens
             return;
         }
-
+        
         writeListToFile(filePath, modelName, useRelative, results);
     }
-
+    
     //writes list of floats to the disk, uses modelName to note which model was main in comparison
-    private void writeListToFile(String path, String modelName, boolean useRelative, List<Float> results) {
+    private void writeListToFile(String path, String modelName, boolean useRelative, List<Float> results){
         if (!path.contains(".csv")) {
-            path += ".csv";
-        }
+                    path += ".csv";
+                }
 
-        modelName = getFileName(modelName);
+                modelName = getFileName(modelName);
 
-        FileUtils.instance().savePairComparisonAuxResults(path, results,
-                useRelative, modelName);
+                FileUtils.instance().savePairComparisonAuxResults(path, results,
+                        useRelative, modelName);
 
     }
-
+    
     //deletes file format from name of the model
-    private String getFileName(String fileName) {
+    private String getFileName(String fileName){
         int formatStartIndex = fileName.lastIndexOf(".");
-
-        if (formatStartIndex > 0) {
+        
+        if(formatStartIndex > 0){
             fileName = fileName.substring(0, formatStartIndex);
         }
-
+        
         return fileName;
-
+            
     }
-
+    
     /**
      * Exports visual results to disk. Creates snapshot of given canvas
-     *
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param canvas - canvas containing results to be saved
      * @param width - max width of the picture
      * @param height - max height of the picture
      */
-    public void exportVisualResults(Component tc, GLEventListener canvas, int width, int height) {
+    public void exportVisualResults(Component tc, GLEventListener canvas, int width, int height){        
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
+<<<<<<< HEAD
 
         if (filePath == null) {
             //selection of folder wasn't approved, nothing happens
@@ -336,77 +333,43 @@ public class ResultExports {
 
 <<<<<<< HEAD
         int i = gl.glGetError();
+=======
         
-        gl.glFinish();
-        gl.glReadBuffer(gl.GL_BACK); // or GL.GL_BACK
-
-        i = gl.glGetError();
-        
-        ByteBuffer glBB = ByteBuffer.allocate(3 * width * height);
-        gl.glReadPixels(0, 0, width, height, gl.GL_BGR, gl.GL_BYTE, glBB);
-        
-        i = gl.glGetError();
-        
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        int[] bd = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int b = 2 * glBB.get();
-                int g = 2 * glBB.get();
-                int r = 2 * glBB.get();
-
-                bd[(height - y - 1) * width + x] = (r << 16) | (g << 8) | b | 0xFF000000;
-            }
+        if(filePath == null){
+            //selection of folder wasn't approved, nothing happens
+            return;
         }
-
-        //bi.setRGB(0, 0, width, height, bd, 0, width);
+>>>>>>> 7ce8ff9f35e26af83f0400dac86de86a7720aa2f
         
-        Graphics g;
-        JFrame newFrame = new JFrame();
-        GLJPanel picture = new GLJPanel();
-
-        newFrame.setSize(width, height);
-        newFrame.add(picture);
-        newFrame.setVisible(true);
-
-        picture.setSize(width, height);
-        picture.repaint();
-        //g = bi.createGraphics();
-        //picture.paint(g);
-
-        try {
-            ImageIO.write(bi, "png", new File(path));
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(tc, "Saving image failed.");
-        }
+        savePicture(filePath, tc, canvas, width, height);
+        
     }
-
+    
     //saves picture as PNG file to given path, of given size
-    private void savePicture(String path, Component tc, GLEventListener canvas, int width, int height) {
+    private void savePicture(String path, Component tc, GLEventListener canvas, int width, int height){
         if (path.contains(".png")) {
-        } else {
-            path = path + ".png";
-        }
+            } else {
+                path = path + ".png";
+            }
 
-        BufferedImage bi;
-        Graphics g;
-        JFrame newFrame = new JFrame();
-        GLJPanel picture = new GLJPanel();
-        int[] size = new int[]{width, height};
+            BufferedImage bi;
+            Graphics g;
+            JFrame newFrame = new JFrame();
+            GLJPanel picture = new GLJPanel();
+            int[] size = new int[]{width, height};
 
-        newFrame.setSize(size[0], size[1]);
-        picture.addGLEventListener(canvas);
-        newFrame.add(picture);
-        newFrame.setVisible(true);
-        picture.setSize(size[0], size[1]);
-        picture.repaint();
+            newFrame.setSize(size[0], size[1]);
+            picture.addGLEventListener(canvas);
+            newFrame.add(picture);
+            newFrame.setVisible(true);
+            picture.setSize(size[0], size[1]);
+            picture.repaint();
 
-        bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_3BYTE_BGR);
-        g = bi.createGraphics();
-        picture.paint(g);
+            bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_3BYTE_BGR);
+            g = bi.createGraphics();
+            picture.paint(g);
 
+<<<<<<< HEAD
 =======
         BufferedImage bi;
         Graphics g;
@@ -431,71 +394,76 @@ public class ResultExports {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(tc, "Saving image failed.");
         }
+=======
+            try {
+                ImageIO.write(bi, "png", new File(path));
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(tc, "Saving image failed.");
+            }
+>>>>>>> 7ce8ff9f35e26af83f0400dac86de86a7720aa2f
     }
-
+    
     /**
-     * Save auxiliary result from 1:N comparison to disk.
-     *
+     * Save auxiliary result from 1:N comparison to disk. 
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param results - auxiliary results for 1:N comparison
-     * @param avgFaceResults - auxiliary results for 1:1 comparison between main
-     * face and average face
+     * @param avgFaceResults - auxiliary results for 1:1 comparison between main face and average face
      * @param models - list of N models
      * @param mainModelName - name of the main model
      * @param useRelative - whether to use signed distance or not
      */
-    public void saveAuxOneToMany(Component tc, List<ArrayList<Float>> results, List<Float> avgFaceResults, List<File> models, String mainModelName, boolean useRelative) {
-        if (results == null || avgFaceResults == null) {
+    public void saveAuxOneToMany(Component tc, List<ArrayList<Float>> results, List<Float> avgFaceResults, List<File> models, String mainModelName, boolean useRelative){
+        if(results == null || avgFaceResults == null){
             //error TODO
             return;
         }
-
+        
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "CSV files", FILE_EXTENSIONS_RESULTS, false);
-
-        if (filePath == null) {
-            //choice of folder wasn't approved nothing happens
+        
+        if(filePath == null){
+           //choice of folder wasn't approved nothing happens
             return;
         }
-
+        
         //save aux results for each face
         writeListListToDisk(results, models, mainModelName, useRelative, filePath, "_1n");
-
+        
         String avgFacePath = filePath + File.separator + "Average Face Visual";
-
+        
         //save aux results for average face
         writeListToFile(avgFacePath, "Average Face Visual", useRelative, avgFaceResults);
-    }
-
+    }    
+    
     //write list of array list of floats to disk. Name of the resulting csv is mainModelName + mode
-    private void writeListListToDisk(List<ArrayList<Float>> numRes, List<File> models, String modelName, boolean useRelative, String path, String mode) {
-        modelName = getFileName(modelName);
-        FileUtils.instance().saveMatrixToCSV((ArrayList<ArrayList<Float>>) numRes, path, modelName, mode, models, useRelative);
-    }
+   private void writeListListToDisk(List<ArrayList<Float>> numRes, List<File> models, String modelName, boolean useRelative, String path, String mode){
+       modelName = getFileName(modelName);
+       FileUtils.instance().saveMatrixToCSV((ArrayList<ArrayList<Float>>) numRes, path, modelName, mode, models, useRelative);
+   }
+   
+   /**
+    * Copies list of registered models from disk to another place in disk.
+    * 
+    * @param tc - GUI component which opens the dialog (usually active project)
+    * @param models - list of models to copy with their URL on disk
+    * @param originalModels - preregistered models, used to name copied models
+    * @param mainF - main face in 1:N comparison
+    * @param mode 
+    */
+   public void saveRegisteredModelsOneToMany(Component tc, List<File> models, List<File> originalModels, Model mainF, String mode){
+       String filePath = saveRegisteredModelsBatch(tc, models, originalModels, mode);
+       
+       if(filePath == null){
+           //save canceled nothing happenes
+           return;
+       }
+       
+       String mainModelName = getFileName(mainF.getName());
+       
+       //save single model
+       saveSingleModel(filePath, mainF, mainModelName, mode);
+   }
 
-    /**
-     * Copies list of registered models from disk to another place in disk.
-     *
-     * @param tc - GUI component which opens the dialog (usually active project)
-     * @param models - list of models to copy with their URL on disk
-     * @param originalModels - preregistered models, used to name copied models
-     * @param mainF - main face in 1:N comparison
-     * @param mode
-     */
-    public void saveRegisteredModelsOneToMany(Component tc, List<File> models, List<File> originalModels, Model mainF, String mode) {
-        String filePath = saveRegisteredModelsBatch(tc, models, originalModels, mode);
-
-        if (filePath == null) {
-            //save canceled nothing happenes
-            return;
-        }
-
-        String mainModelName = getFileName(mainF.getName());
-
-        //save single model
-        saveSingleModel(filePath, mainF, mainModelName, mode);
-    }
-
-    //copy list of models from their location to new location. Name of copied model is in format originalModelName + mode + "_reg.obj"
+   //copy list of models from their location to new location. Name of copied model is in format originalModelName + mode + "_reg.obj"
     private void copyModelsToDisk(Component tc, List<File> models, List<File> originalModels, String mode, String folderOut) {
         boolean all = false;
         boolean cancel = false;
@@ -547,102 +515,93 @@ public class ResultExports {
         File f = new File(path + File.separator + modelName + mode);
         me.exportModelToObj(f, false);
     }
-
+    
     /**
      * Reads auxiliary results from disk and saves them to user defined path
-     *
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param models - list of URLs to registered models
      * @param visualRes - listList of visual results
      * @param useRelative - whether to use signed distance or not
      * @param tmpDirPath - URL to tempory file
      */
-    public void saveAuxBatch(Component tc, List<File> models, ArrayList<ArrayList<Float>> visualRes, boolean useRelative, String tmpDirPath) {
-        if (models == null || visualRes == null || tmpDirPath == null) {
+    public void saveAuxBatch(Component tc, List<File> models, ArrayList<ArrayList<Float>> visualRes, boolean useRelative, String tmpDirPath){
+        if(models == null || visualRes == null || tmpDirPath == null){
             //error TODO
             return;
         }
-
+        
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "CSV files", FILE_EXTENSIONS_RESULTS, true);
-
+        
         ProgressHandle p = ProgressHandleFactory.createHandle("Saving axuiliary results, please wait a moment...");
         p.start();
-
-        try {
-
-            if (filePath == null) {
-                //choice of folder wasn't approved nothing happens
-                return;
-            }
-
-            writeAuxBatch(models, visualRes, useRelative, tmpDirPath, filePath);
-
-            p.finish();
-        } catch (Exception ex) {
-            p.finish();
+        
+        if(filePath == null){
+           //choice of folder wasn't approved nothing happens
+            return;
         }
+        
+        writeAuxBatch(models, visualRes, useRelative, tmpDirPath, filePath);
+        
+        p.finish();
     }
-
+    
     //reads tmp files with aux batch results and save them to user defined URL on disk
-    private void writeAuxBatch(List<File> models, ArrayList<ArrayList<Float>> visualRes, boolean useRelative, String tmpDirPath, String savePath) {
-        int numOfModels = models.size();
-        String mode = "_batchResults";
+    private void writeAuxBatch(List<File> models, ArrayList<ArrayList<Float>> visualRes, boolean useRelative, String tmpDirPath, String savePath){
+                int numOfModels = models.size();
+                String mode = "_batchResults";
 
-        for (int i = 0; i < numOfModels; i++) {
-            ArrayList<ArrayList<Float>> newOut = FileUtils.instance().readFolderWithCSV(tmpDirPath + File.separator + (i + 1),
-                    numOfModels, i, useRelative);
-
-            writeListListToDisk(newOut, models, models.get(i).getName(), useRelative, savePath, mode);
-        }
-
-        //save avg face aux results
-        FileUtils.instance().saveMatrixToCSV(visualRes,
-                savePath, "averageFace", mode, models, useRelative);
-    }
-
+                for (int i = 0; i < numOfModels; i++) {
+                    ArrayList<ArrayList<Float>> newOut = FileUtils.instance().readFolderWithCSV(tmpDirPath + File.separator + (i + 1),
+                            numOfModels, i, useRelative);
+                    
+                    writeListListToDisk(newOut, models, models.get(i).getName(), useRelative, savePath, mode);
+                }
+                
+                //save avg face aux results
+                FileUtils.instance().saveMatrixToCSV(visualRes,
+                        savePath, "averageFace", mode, models, useRelative);
+   }
+    
     /**
      * Saves registered models to disk
-     *
      * @param tc - GUI component which opens the dialog (usually active project)
-     * @param models - list of URLs containing path to tmp folder with
-     * registered models
+     * @param models - list of URLs containing path to tmp folder with registered models
      * @param originalModels - list of file with pre-registered models
      * @param mode - which mode was the computation made in (_1n, _batch, etc.)
      * @return file path chosen by user or null if no path was chosen
      */
-    public String saveRegisteredModelsBatch(Component tc, List<File> models, List<File> originalModels, String mode) {
-        if (models == null || originalModels == null) {
-            //error TODO
-            return null;
-        }
-
-        String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "OBJ models", FILE_EXTENSIONS_MODEL, true);
-
-        if (filePath == null) {
-            //choice of folder wasn't approved nothing happens
-            return null;
-        }
-
-        //copy N models
-        copyModelsToDisk(tc, models, originalModels, mode, filePath);
-
-        return filePath;
+    public String saveRegisteredModelsBatch(Component tc, List<File> models, List<File> originalModels, String mode){
+        if(models == null || originalModels == null){
+           //error TODO
+           return null;
+       }
+       
+       String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "OBJ models", FILE_EXTENSIONS_MODEL, true);
+       
+       if(filePath == null){
+           //choice of folder wasn't approved nothing happens
+           return null;
+       }
+       
+       //copy N models
+       copyModelsToDisk(tc, models, originalModels, mode, filePath);
+       
+       return filePath;
     }
-
+    
     /**
      * Saves average face to disk
-     *
      * @param tc - GUI component which opens the dialog (usually active project)
      * @param avgFace - average face
      * @param mode - which mode was the computation made in (_1n, _batch, etc.)
      */
-    public void saveAvgFace(Component tc, Model avgFace, String mode) {
-        if (avgFace == null) {
+    public void saveAvgFace(Component tc, Model avgFace, String mode){
+        if(avgFace == null){
             return;
         }
-        String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "OBJ models", FILE_EXTENSIONS_MODEL, true);
+       String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "OBJ models", FILE_EXTENSIONS_MODEL, true);
 
-        //save single model
-        saveSingleModel(filePath, avgFace, "Average Face", mode);
+       //save single model
+       saveSingleModel(filePath, avgFace, "Average Face", mode);
     }
 }
