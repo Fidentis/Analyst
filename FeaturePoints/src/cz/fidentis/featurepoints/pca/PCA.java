@@ -10,7 +10,7 @@ import javax.vecmath.Vector3f;
  * @author	Kushal Ranjan
  * @version	051313
  */
-class PCA {
+public class PCA {
 	private double[][] matrix; //matrix[i] is the ith row; matrix[i][j] is the ith row, jth column
 	/**
 	 * Constructs a new data matrix.

@@ -16,6 +16,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,7 +63,7 @@ public class ProcessingFileUtils {
         for (int i = 0; i < models.size(); i++) {
             currentModel = ml.loadModel(models.get(i), texture,true);
 
-            saveModelToTMP(currentModel, new File(FileUtils.instance().getTempDirectoryPath() + File.separator + moduleTMPfile.getName()), 0, i, texture);
+            saveModelToTMP(currentModel, new File(/*FileUtils.instance().getTempDirectoryPath() + File.separator +*/ moduleTMPfile.getPath()), 0, i, texture);
         }
     }
     
@@ -84,7 +85,7 @@ public class ProcessingFileUtils {
         for (int i = 0; i < models.size(); i++) {
             currentModel = models.get(i);
 
-            files.add(saveModelToTMP(currentModel, new File(FileUtils.instance().getTempDirectoryPath() + File.separator + moduleTMPfile.getName()), 0, i, texture));
+            files.add(saveModelToTMP(currentModel, new File(/*FileUtils.instance().getTempDirectoryPath() + File.separator + */moduleTMPfile.getName()), 0, i, texture));
         }
         return files;
     }
@@ -99,9 +100,13 @@ public class ProcessingFileUtils {
      * @return 
      */
     public File saveModelToTMP(Model model, File moduleTMPfolder, int i, int j, boolean textures) {
-        ModelExporter me;
-        String fPath = FileUtils.instance().getTempDirectoryPath() + File.separator + moduleTMPfolder.getName() + File.separator + moduleTMPfolder.getName() + "_" + i + "_" + j;
+        ModelExporter me;      
+        
+        String fPath = FileUtils.instance().getTempDirectoryPath() + File.separator + moduleTMPfolder.getPath() + File.separator + moduleTMPfolder.getName() + "_" + i + "_" + j;
+        //String fPath = moduleTMPfolder.getPath() + File.separator + moduleTMPfolder.getName() + "_" + i + "_" + j;
         File f = new File(fPath + ".ftmp");
+        
+        
 
         me = new ModelExporter(model);
         me.exportModelToObj(f, textures);

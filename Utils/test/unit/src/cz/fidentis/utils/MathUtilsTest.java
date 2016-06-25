@@ -5,6 +5,7 @@
  */
 package cz.fidentis.utils;
 
+import Jama.Matrix;
 import com.jogamp.graph.math.Quaternion;
 import java.io.BufferedReader;
 import java.io.File;
@@ -135,6 +136,43 @@ public class MathUtilsTest {
         Vector3f b = new Vector3f(4,8,10);
         
         assertTrue(a.dot(b) == 122);
+    }
+    
+    @Test
+    public void testQuaternionMultiplication(){
+        Quaternion q1 = new Quaternion(1,0,1,0);
+        Quaternion q2 = new Quaternion(1f, 0.5f, 0.5f, 0.75f);
+        Quaternion result = MathUtils.instance().multiply(q1, q2);
+        
+        assert(result.getX() == 0.25);
+        assert(result.getY() == 0.5);
+        assert(result.getZ() == 1.25);
+        assert(result.getW() == -1.5);
+    }
+    
+    private Matrix arrayToColumnMatrix(float[] matrix){
+        Matrix m = new Matrix(4,4);
+        
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                m.set(i,j, matrix[i * 4 + j]);
+            }
+        }
+        
+        return m;
+    }
+    
+    @Test
+    public void toMatrixTest(){
+        float[] matrix = new float[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+        
+        Matrix m = arrayToColumnMatrix(matrix);
+        
+        assert(m.get(0,0) == 1);
+        assert(m.get(2,2) == 11);
+        assert(m.get(3,3) == 16);
+        assert(m.get(1,3) == 8);
+        assert(m.get(3,1) == 14);
     }
     
 }

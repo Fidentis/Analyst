@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 import jv.geom.PgElementSet;
@@ -41,6 +42,10 @@ public class FeaturePointsUniverse {
     private ThresholdArea thresArea;
     private PwSimplify simplify;
     
+    Set<Integer> noseTip;
+    Set<Integer> mouth;
+    Set<Integer> eyes;
+
     private double threshold;
     private Set<Integer> thresholdFaces;
     private Set<Integer> mathMorfoVertices;
@@ -250,7 +255,7 @@ public class FeaturePointsUniverse {
     //FEATURE POINTS EXTRACTION
     
     public void findNoseTipArea() {
-        thresArea.findNoseTip(thresholdFaces);
+        noseTip = thresArea.findNoseTip(thresholdFaces);
         setFacialPoint(thresArea.getPronasaleFP());
         pronasale = thresArea.getPronasale();
     }
@@ -439,17 +444,37 @@ public class FeaturePointsUniverse {
     }
     
     public void setMathMorfoVertices() {
-        Set<Integer> faces;
+        Set<Integer> morfoFaces;
         if (mathMorfoFaces.isEmpty() || mathMorfoFaces == null) {
-            faces = new HashSet<>(thresholdFaces);
+            morfoFaces = new HashSet<>(thresholdFaces);
         } else {
-            faces = new HashSet<>(mathMorfoFaces);
+            morfoFaces = new HashSet<>(mathMorfoFaces);
         }
-        mathMorfoVertices = thresArea.getThresholdVertices(faces);
+        mathMorfoVertices = thresArea.getThresholdVertices(morfoFaces);
     }
     
     //MESH SIMPLIFY
+    public void computeSimplify() {
+        // Ak je pocet polygonov vacsi ako 12000 tak zmensit
+        if (elementSet.getNumElements() > 12000) {
+            computeSimplify(false, false, false, false, true, 10000);
+        }
     
+        JavaViewBoundary jVboundary = new JavaViewBoundary(elementSet);
+        boundaryEdges = jVboundary.getBoundaryEdges();
+        boundaryVertices = jVboundary.getBoundaryVertices();
+
+        cornerTable = new CornerTable(elementSet);
+        thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);
+        biDenoise = new BilateralDenoise(elementSet, cornerTable);
+
+        elementSet.makeElementNormals();
+        elementSet.makeVertexNormals();
+
+        // Aj do povodneho modelu skopirovat zmenseny
+        originalElementSet.copy(elementSet);
+    }
+
     public void computeSimplify(boolean checkAngles, boolean checkNormals, boolean flipEdges,
                                 boolean forceSimplify, boolean keepBoundary, int remainElements){
         initSimplify(); 
@@ -481,16 +506,22 @@ public class FeaturePointsUniverse {
         simplify.reset();
     }
     
-    public LinkedList<Point3f> getSymmetryPlanePoints(ArrayList<Vector3f> centerPoints){
-        LinkedList<Point3f> symmetryPlanePoints = Intersection.computeSymmetryPlanePoints(model, boundaryEdges, cornerTable, centerPoints);
+    // SYMETRY PLANE 
+    public LinkedList<Point3d> getSymmetryPlanePoints(ArrayList<Vector3f> centerPoints) {
+        LinkedList<Point3d> symmetryPlanePoints = Intersection.computeSymmetryPlanePoints(model, cornerTable, centerPoints);
         
         return symmetryPlanePoints;
     }
     
-    public List<FacialPoint> getSymmetryPlaneFPs(ArrayList<Vector3f> centerPoints){
-        LinkedList<Point3f> symmetryPlanePoints = Intersection.computeSymmetryPlanePoints(model, boundaryEdges, cornerTable, centerPoints);
+    public List<FacialPoint> getSymmetryPlaneFPs(ArrayList<Vector3f> centerPoints) {
+        LinkedList<Point3d> symmetryPlanePoints = Intersection.computeSymmetryPlanePoints(model, cornerTable, centerPoints);
         SymmetryPlane symmetryPlane = new SymmetryPlane(facialPoints, symmetryPlanePoints);
         facialPoints = symmetryPlane.findAllSymmetryPlaneFPs();
         return facialPoints;
     }
+
+    public List<FacialPoint> getAllPoints() {
+        return facialPoints;
+}
+
 }

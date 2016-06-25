@@ -5,6 +5,7 @@
  */
 package cz.fidentis.landmarkParser;
 
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import java.io.File;

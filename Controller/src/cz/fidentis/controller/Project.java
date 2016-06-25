@@ -29,6 +29,8 @@ public class Project {
     private Ageing selectedAgeing;
     private FeaturePoints selectedFeaturePoints;
     private Viewer selectedViewer;
+    
+    private File tempDirectory;
 
     
         /**
@@ -37,6 +39,13 @@ public class Project {
     public Project(String name) {
         tree = new ProjectTree(name);
         this.name = name;
+    }
+    
+    public void addAgeing(String name) {
+        Ageing ageing = new Ageing();
+        ageing.setName(name);
+        selectedAgeing = ageing;
+        ageing.setNode(tree.getRoot().addChild(ageing));
     }
 
     public void addComposite(String name){
@@ -191,7 +200,8 @@ public class Project {
  
     /**
      *
-     * @return 1 - composite, 2 - 2facescomparison, 3 - one to many comparison, 4 - batch comparison
+     * @return 1 - composite, 2 - 2facescomparison, 3 - one to many comparison,
+     * 4 - batch comparison, 6 - ageing
      */
     public int getSelectedPart() {
         return selectedPart;
@@ -200,7 +210,7 @@ public class Project {
     /**
      *
      * @param SelectedPart 1 - composite, 2 - comparison, 3 - ageing, 4 -
-     * feature points, 5 - viewer
+     * feature points, 5 - viewer, 6 - ageing
      */
     public void setSelectedPart(int SelectedPart) {
         this.selectedPart = SelectedPart;
@@ -240,6 +250,29 @@ public class Project {
         tree.getRoot().setData(name);
       //  hierarchy.add(0, this);
 
+    }
+
+    /**
+     * Gets the temporary directory that *SHOULD* be used to store any temporary
+     * files that are related to this project.
+     * @return 
+     */
+    public File getTempDirectory() {
+        return tempDirectory;
+    }
+
+    /**
+     * Sets the temporary directory that *SHOULD* be used to store any temporary
+     * files that are related to this project.
+     * @param tempDirectory 
+     * @throws IllegalArgumentException if passed tempDirectory is not an existing
+     * readable directory.
+     */
+    public void setTempDirectory(File tempDirectory) {
+        if(tempDirectory == null || !tempDirectory.isDirectory()) {
+            throw new IllegalArgumentException("TempDirectory must be an existing directory.");
+        }
+        this.tempDirectory = tempDirectory;
     }
 
     /**

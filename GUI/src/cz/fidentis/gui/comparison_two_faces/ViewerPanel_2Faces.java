@@ -4,32 +4,16 @@
  */
 package cz.fidentis.gui.comparison_two_faces;
 
-import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
-import cz.fidentis.controller.Viewer;
 import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.gui.actions.ButtonHelper;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelLoader;
-import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.renderer.ComparisonGLEventListener;
-import cz.fidentis.renderer.GeneralGLEventListener;
-import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
-import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
-import org.openide.awt.StatusDisplayer;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -97,8 +81,12 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
      }*/
 
-    public void setResultButtonVisible(boolean b) {
-        canvas2.setResultButtonVisible(b);
+    public void setResultButtonVisible(boolean b, int canvasNumber) {
+        if(canvasNumber == 0){
+            canvas1.setResultButtonVisible(b);
+        }else{
+            canvas2.setResultButtonVisible(b);
+        }       
     }
 
     public Canvas getCanvas1() {

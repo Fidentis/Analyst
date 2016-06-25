@@ -52,6 +52,8 @@ public class NearestCurvature {
                 Logger.getLogger(HausdorffDistance.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+         
+         executor.shutdown();
 
         return distance;
         

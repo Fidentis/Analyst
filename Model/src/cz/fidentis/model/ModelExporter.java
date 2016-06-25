@@ -52,7 +52,7 @@ public class ModelExporter {
         }else{
             fileName = exportFile.getName().substring(0, formatIndex);
         }
-        File exportDirectory = new File(exportFile.getParent().toString() + File.separator + fileName);
+        File exportDirectory = new File(exportFile.getParent().toString() + File.separator + fileName);        
         exportDirectory.mkdir();
 
         File mtlFile = new File(exportDirectory + File.separator + fileName + ".mtl");
@@ -139,7 +139,7 @@ public class ModelExporter {
                 for (int j = 0; j < model.getFaces().getNumFaces(); j++) {
                     String currentMaterialName;
                     currentMaterialName = model.getFaces().findMaterial(j);
-                    if (!previousMaterialName.equals(currentMaterialName)) {
+                    if (currentMaterialName != null && !previousMaterialName.equals(currentMaterialName)) {
                         previousMaterialName = currentMaterialName;
                         out.write("usemtl " + currentMaterialName + "\n");
                         out.write("g " + currentMaterialName + "\n" + "s 1" + "\n");

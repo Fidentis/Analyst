@@ -17,10 +17,13 @@ import cz.fidentis.comparison.icp.KdTreeFaces;
 import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.controller.Comparison2Faces;
+import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.model.Model;
+import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
+import cz.fidentis.processing.featurePoints.FpProcessing;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -32,6 +35,7 @@ import cz.fidentis.utilsException.FileManipulationException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -43,6 +47,10 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.*;
+<<<<<<< HEAD
+=======
+import org.openide.util.Exceptions;
+>>>>>>> refs/remotes/origin/development
 
 /**
  * Handling all types of comparison provided by application. Class deals with
@@ -99,10 +107,18 @@ public class SurfaceComparisonProcessing {
      * @param value - value of undersampling from GUI
      */
     public void processOneToOne(KdTree mainF, Model compF, int numberOfIterations, boolean scale, float error,
+<<<<<<< HEAD
             Methods method, Type t, float value) {
+=======
+            Methods method, Type t, float value, Comparison2Faces data) {
+>>>>>>> refs/remotes/origin/development
         List<Vector3f> samples = getUndersampledMesh(method, t, value, compF);
+        
+        p.setDisplayName("Aligning faces.");
 
-        Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+        List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+        
+        data.setCompFTransformations(trans);
     }
 
     /**
@@ -129,19 +145,40 @@ public class SurfaceComparisonProcessing {
      * @return list containing files with aligned faces
      */
     public List<File> processOneToMany(KdTree mainF, List<File> compFs, int numberOfIterations, boolean scale, float error,
+<<<<<<< HEAD
             Methods m, Type t, float value) {
+=======
+            Methods m, Type t, float value, OneToManyComparison data) {
+>>>>>>> refs/remotes/origin/development
         ModelLoader ml = new ModelLoader();
         Model compF;
         List<File> results = new ArrayList<File>(compFs.size());
         int i = 0;
+<<<<<<< HEAD
         String tmpLoc = tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
+=======
+        
+        String projectId = "" + System.currentTimeMillis();
+        String tmpLoc = projectId + File.separator + tmpModuleFile.getName()/* + File.separator + tmpModuleFile.getName()*/;
+        
+        try {
+            FileUtils.instance().createTMPmoduleFolder(new File(tmpLoc));
+        } catch (FileManipulationException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+>>>>>>> refs/remotes/origin/development
 
         for (File compF1 : compFs) {
             p.setDisplayName("Registrating face number " + (i + 1));
             compF = ml.loadModel(compF1, Boolean.FALSE, true);
             List<Vector3f> samples = getUndersampledMesh(m, t, value, compF);
 
+<<<<<<< HEAD
             Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+=======
+            List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
+            data.addTrans(trans);
+>>>>>>> refs/remotes/origin/development
 
             results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.FALSE));
 
@@ -226,17 +263,25 @@ public class SurfaceComparisonProcessing {
      * Computes thresholded variance from pre-computed numeric values.
      *
      * @param results - pre-computed 1:N numeric results
-     * @param thresh - threshold value
+     * @param upperTreshold - threshold value
      * @param variationMethod - method of variation to compute
      * @param useRelative - whether to use signed distance or not
      * @return recomputed numeric results
      */
+<<<<<<< HEAD
     public List<Float> compareOneToManyVariation(List<ArrayList<Float>> results, float thresh, int variationMethod, boolean useRelative) {
+=======
+    public List<Float> compareOneToManyVariation(List<ArrayList<Float>> results, float upperTreshold, float lowerTreshold, int variationMethod, boolean useRelative) {
+>>>>>>> refs/remotes/origin/development
         List<Float> res = new ArrayList<Float>();
         List<Float> thresholdedValues;
 
         for (ArrayList<Float> list : results) {
+<<<<<<< HEAD
             thresholdedValues = ComparisonMetrics.instance().thresholdValues(list, thresh, useRelative);
+=======
+            thresholdedValues = ComparisonMetrics.instance().thresholdValues(list, upperTreshold, lowerTreshold, useRelative);
+>>>>>>> refs/remotes/origin/development
 
             res.add(computeSingleVariation(thresholdedValues, variationMethod, useRelative));
         }
@@ -270,7 +315,11 @@ public class SurfaceComparisonProcessing {
      * temporary files on disk
      */
     public List<File> processManyToMany(Model template, List<File> compFs, int numberOfBatchIterations, int numberOfICPiteration, boolean scale, float error,
+<<<<<<< HEAD
             Methods m, Type t, float value, ICPmetric metric) throws FileManipulationException {
+=======
+            Methods m, Type t, float value, ICPmetric metric, BatchComparison data) throws FileManipulationException {
+>>>>>>> refs/remotes/origin/development
 
         List<File> results = new ArrayList<File>(compFs.size());
         List<Vector3f> trans = new ArrayList<Vector3f>(template.getVerts().size());
@@ -292,16 +341,32 @@ public class SurfaceComparisonProcessing {
         k.start();
 
         //temporary folder on disk where temporary files (like aligned faces) will be stored until application is closed
+<<<<<<< HEAD
         String tmpLoc = tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
         String currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator + tmpLoc + "_0_";
         File tmpLocFile = new File(tmpLoc);
+=======
+        String projectId = "" + System.currentTimeMillis();
+        String tmpLoc = projectId + File.separator + tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
+        String currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator + tmpLoc + "_0_";
+        File tmpLocFile = new File(projectId + File.separator + tmpModuleFile.getName());
+>>>>>>> refs/remotes/origin/development
 
         int templateSize = template.getVerts().size();
 
         try {
+<<<<<<< HEAD
             ProcessingFileUtils.instance().copyModelsToTMP(compFs, tmpModuleFile, Boolean.FALSE);       //copy all models in 'compFs' to temporary folder, so that origianl files can still be edited without causing problem with computation
             k.finish();
         } catch (Exception ex) {
+=======
+            ProcessingFileUtils.instance().copyModelsToTMP(compFs, new File(projectId + File.separator + tmpModuleFile.getName()), Boolean.FALSE);       //copy all models in 'compFs' to temporary folder, so that origianl files can still be edited without causing problem with computation
+            k.finish();
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+            System.err.print(ex);
+        }finally{
+>>>>>>> refs/remotes/origin/development
             k.finish();
         }
 
@@ -323,11 +388,19 @@ public class SurfaceComparisonProcessing {
                 List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);
 
                 Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(currentModel, samples, template, templateTree,
+<<<<<<< HEAD
                         error, numberOfICPiteration, scale, tmpLocFile, j, i, Boolean.TRUE, metric));
                 list.add(future);
             }
 
             currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator + tmpLoc + "_" + (i + 1) + "_";
+=======
+                        error, numberOfICPiteration, scale, tmpLocFile, j, i, Boolean.TRUE, metric, data));
+                list.add(future);
+            }
+
+            currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator +  tmpLoc + "_" + (i + 1) + "_";
+>>>>>>> refs/remotes/origin/development
 
             //computes translation vector for each vertex of template face
             for (Future<List<Vector3f>> list1 : list) {
@@ -345,6 +418,12 @@ public class SurfaceComparisonProcessing {
                 templateTree = new KdTreeIndexed(template.getVerts());
                 k.finish();
             } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+                Exceptions.printStackTrace(ex);
+                System.err.print(ex);
+            }finally{
+>>>>>>> refs/remotes/origin/development
                 k.finish();
             }
             executor.shutdown();
@@ -356,7 +435,11 @@ public class SurfaceComparisonProcessing {
         for (int i = 0; i < compFs.size(); i++) {
             Model currentModel = ml.loadModel(new File(currentTMP + i + File.separator + tmpModuleFile.getName() + "_" + numberOfBatchIterations + "_" + i + ".obj"), Boolean.FALSE, false);
 
+<<<<<<< HEAD
             Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, error, numberOfICPiteration, scale, new File(tmpLoc), numberOfBatchIterations + 1, i));
+=======
+            Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, error, numberOfICPiteration, scale, tmpLocFile, numberOfBatchIterations + 1, i));
+>>>>>>> refs/remotes/origin/development
             list2.add(f);
         }
 
@@ -483,6 +566,7 @@ public class SurfaceComparisonProcessing {
 
                 Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonVisualCallable(computeMorph, template, useRelative, morphCurv, templateCurv, method));
                 list.add(fut);
+<<<<<<< HEAD
             }
 
             //create matrix with final results
@@ -493,11 +577,28 @@ public class SurfaceComparisonProcessing {
                     Logger.getLogger(SurfaceComparisonProcessing.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+=======
+            }
+
+            //create matrix with final results
+            for (Future<ArrayList<Float>> f : list) {
+                try {
+                    results.add(f.get());
+                } catch (InterruptedException | ExecutionException ex) {
+                    Logger.getLogger(SurfaceComparisonProcessing.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+>>>>>>> refs/remotes/origin/development
             k.finish();
 
             executor.shutdown();
 
         } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+            Exceptions.printStackTrace(ex);
+        }finally{
+>>>>>>> refs/remotes/origin/development
             k.finish();
         }
         return results;
@@ -516,17 +617,29 @@ public class SurfaceComparisonProcessing {
      * @param varianceMethod variance method to compute final results with
      * @param useRelative whether relative distance should be employed (with
      * sign), or whether classical Euclidean distance should be used instead
+<<<<<<< HEAD
      * @param thresh - allows to only use certain amount of coputed numerical
+=======
+     * @param upperTreshold - allows to only use certain amount of coputed numerical
+>>>>>>> refs/remotes/origin/development
      * result values, by setting parameter in range of [0, 1]
      * @param auxiliaryResultsFile BatchComparison processing class to store
      * computed results to
      * @return matrix of size models.size X models.size contraining numerical
      * result for each-to-each comparison
      */
+<<<<<<< HEAD
     public ArrayList<ArrayList<Float>> batchCompareNumericalResults(List<File> models, int varianceMethod, boolean useRelative, Float thresh, ComparisonMethod method, BatchComparison auxiliaryResultsFile) {
         ArrayList<ArrayList<Float>> computedVariance = new ArrayList<ArrayList<Float>>(models.size());
         List<Future<ArrayList<Float>>> list = new ArrayList<Future<ArrayList<Float>>>(models.size());
         Curvature_jv mainCurv = null;
+=======
+    public ArrayList<ArrayList<Float>> batchCompareNumericalResults(List<File> models, int varianceMethod, boolean useRelative, Float upperTreshold, 
+            Float lowerTreshold, ComparisonMethod method, BatchComparison auxiliaryResultsFile) {
+        ArrayList<ArrayList<Float>> computedVariance = new ArrayList<ArrayList<Float>>(models.size());
+        List<Future<ArrayList<Float>>> list = new ArrayList<Future<ArrayList<Float>>>(models.size());
+        double[] mainCurv = null;
+>>>>>>> refs/remotes/origin/development
 
         KdTree mainFace;
         ModelLoader ml = new ModelLoader();
@@ -557,6 +670,7 @@ public class SurfaceComparisonProcessing {
                 mainFace = new KdTreeFaces(current.getVerts(), current.getFaces());
             } else {
                 mainFace = new KdTreeIndexed(current.getVerts());
+<<<<<<< HEAD
             }
 
             if (method == ComparisonMethod.HAUSDORFF_CURV) {
@@ -564,6 +678,18 @@ public class SurfaceComparisonProcessing {
             }
 
             batchRawResultsToSingle(models, i, ml, executor, mainFace, mainCurv, useRelative, thresh, list, method);
+=======
+            }
+
+            if (method == ComparisonMethod.HAUSDORFF_CURV) {
+                mainCurv = new Curvature_jv(current).getCurvature(CurvatureType.Gaussian);
+            }
+
+            batchRawResultsToSingle(models, i, ml, executor, mainFace, mainCurv, useRelative, upperTreshold, lowerTreshold, list, method);
+            
+            executor.shutdown();
+            
+>>>>>>> refs/remotes/origin/development
             batchVariance(list, uncomputedCollumn, computedVariance, varianceMethod, useRelative);
 
             //saves temporary results to disk to save up memory usage
@@ -571,8 +697,14 @@ public class SurfaceComparisonProcessing {
             uncomputedCollumn = null;
             current = null;
             mainFace = null;
+<<<<<<< HEAD
 
             executor.shutdown();
+=======
+            executor = null;
+
+            //executor.shutdown();
+>>>>>>> refs/remotes/origin/development
         }
 
         //save path where csvs are to use to recompute numerical results fasters
@@ -598,19 +730,25 @@ public class SurfaceComparisonProcessing {
     }
 
     //give executor data to compute numerical results
-    private void batchRawResultsToSingle(List<File> models, int i, ModelLoader ml, ExecutorService executor, KdTree mainFace, Curvature_jv mainCurv, boolean useRelative,
-            Float thresh, List<Future<ArrayList<Float>>> list, ComparisonMethod method) {
+    private void batchRawResultsToSingle(List<File> models, int i, ModelLoader ml, ExecutorService executor, KdTree mainFace, double[] mainCurv, boolean useRelative,
+            Float upperTreshold, Float lowerTreshold, List<Future<ArrayList<Float>>> list, ComparisonMethod method) {
         Model compF;
-        Curvature_jv compCurv = null;
+        double[] compCurvVals = null;
         //compute raw comparison results
         for (int j = 0; j < models.size(); j++) {
             p.setDisplayName("Computing numerical results for faces " + (i + 1) + " and " + (j + 1) + ".");
             compF = ml.loadModel(models.get(j), Boolean.FALSE, false);
 
             if (method == ComparisonMethod.HAUSDORFF_CURV) {
+<<<<<<< HEAD
                 compCurv = new Curvature_jv(compF);
+=======
+                compCurvVals = new Curvature_jv(compF).getCurvature(CurvatureType.Gaussian);
+>>>>>>> refs/remotes/origin/development
             }
-            Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, thresh, j, i, mainCurv, compCurv, method));
+            Future<ArrayList<Float>> fut = executor.submit(new BatchComparisonNumericCallable(mainFace, compF, useRelative, upperTreshold, lowerTreshold, j, i, mainCurv, compCurvVals, method));
+            //compute variance here?
+            
             list.add(fut);
             compF = null;
         }
@@ -623,10 +761,20 @@ public class SurfaceComparisonProcessing {
      * @param results computed numerical results to be displayed
      * @param varianceMethod variance method used, this parameter only serves to
      * inform user of the method they picked for final numerical results
+<<<<<<< HEAD
      * @return string representation of computed results
      */
     public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels) {
         StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + ";");
+=======
+     * @param originalModels list containing URLs to original models to be used to name columns in the table
+     * @param upperTreshold upper threshold used to compute results 
+     * @param lowerTreshold lower threshold used to compute results
+     * @return string representation of computed results
+     */
+    public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels, float upperTreshold, float lowerTreshold) {
+        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + " Lower: " + (lowerTreshold * 100) + "% Upper: " + (upperTreshold * 100) + "% treshold;");
+>>>>>>> refs/remotes/origin/development
 
         for (int i = 0; i < results.size(); i++) {
             strResults.append(originalModels.get(i).getName()).append(';');
@@ -779,14 +927,22 @@ public class SurfaceComparisonProcessing {
      * @param varianceMethod variance method to be used for recomputing
      * numerical results
      * @param numOfModels number of models that were compared
+<<<<<<< HEAD
      * @param thresh allows to only use certain amount of pre-computed values,
+=======
+     * @param upperTreshold allows to only use certain amount of pre-computed values,
+>>>>>>> refs/remotes/origin/development
      * thresh should be in range [0, 1]
      * @param useRelative whether to use relative distance (with sign) or
      * classical, Euclidean, distance
      * @return list containing recoputed numerical results, based on given
      * parameters
      */
+<<<<<<< HEAD
     public List<ArrayList<Float>> recomputeNumericResults(File precomputedResultsFile, int varianceMethod, int numOfModels, float thresh, boolean useRelative) {
+=======
+    public List<ArrayList<Float>> recomputeNumericResults(File precomputedResultsFile, int varianceMethod, int numOfModels, float upperTreshold, float lowerTreshold, boolean useRelative) {
+>>>>>>> refs/remotes/origin/development
         List<ArrayList<Float>> finalMatrix = new ArrayList<ArrayList<Float>>(numOfModels);
         List<Float> thresholdedValues;
         ArrayList<ArrayList<Float>> csv;
@@ -797,7 +953,7 @@ public class SurfaceComparisonProcessing {
 
             //recompute data
             for (int j = 0; j < csv.size(); j++) {
-                thresholdedValues = ComparisonMetrics.instance().thresholdValues(csv.get(j), thresh, useRelative);
+                thresholdedValues = ComparisonMetrics.instance().thresholdValues(csv.get(j), upperTreshold, lowerTreshold, useRelative);
                 singleLine.add(computeSingleVariation(thresholdedValues, varianceMethod, useRelative));
             }
             finalMatrix.add((ArrayList<Float>) singleLine);
@@ -865,7 +1021,7 @@ public class SurfaceComparisonProcessing {
     //computes parameters for avg face and adds it to list of future results
     private void runAvgFaceComputation(ExecutorService executor, Model comp, Model template, List<Future<List<Vector3f>>> list, ICPmetric metric) {
         Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(comp, null, template, null,
-                0f, 0, Boolean.FALSE, null, -2, -2, Boolean.FALSE, metric));
+                0f, 0, Boolean.FALSE, null, -2, -2, Boolean.FALSE, metric, null));
         list.add(future);
     }
 
@@ -1010,10 +1166,15 @@ public class SurfaceComparisonProcessing {
      *
      * @param hdDistance - thresholded values
      * @param useRelative - whether to use signed distance or not
+     * @param threshold - used threshold
      * @return string representing results of 1:1 comparison
      */
     public String getNumericResults(List<Float> hdDistance, boolean useRelative) {
+<<<<<<< HEAD
         return ("Min;" + ComparisonMetrics.instance().findMinDistance(hdDistance, useRelative) + "\n"
+=======
+        return (  "Min;" + ComparisonMetrics.instance().findMinDistance(hdDistance, useRelative) + "\n"
+>>>>>>> refs/remotes/origin/development
                 + "Max;" + ComparisonMetrics.instance().findMaxDistance(hdDistance, useRelative) + "\n"
                 + "RMS;" + ComparisonMetrics.instance().rootMeanSqr(hdDistance, useRelative) + "\n"
                 + "Arithmetic Mean;" + ComparisonMetrics.instance().aritmeticMean(hdDistance, useRelative) + "\n"
@@ -1029,16 +1190,66 @@ public class SurfaceComparisonProcessing {
      */
     public Model createSymetricalModel(Model m) {
         Model copy = (Model) m.copy();
+<<<<<<< HEAD
         Model mirror = MeshUtils.instance().getMirroredModel(copy);
 
+=======
+        
+        createSymetricModelNoCopy(copy);
+        
+        return copy;
+    }
+    
+    public void createSymetricModelNoCopy(Model m){        
+        ProgressHandle p = ProgressHandleFactory.createHandle("Creating symmetrical model...");
+        p.start(100);
+        Icp.instance().setP(p);
+        
+        Model mirror = MeshUtils.instance().getMirroredModel(m); 
+       
+        Icp.instance().icp(new KdTreeIndexed(m.getVerts()), mirror.getVerts(), mirror.getVerts(), 0.05f, 20, false);
+        //List<ICPTransformation> trans = FpProcessing.instance().faceRegistration(m);           
+        
+        p.finish();
+           
+>>>>>>> refs/remotes/origin/development
         Model[] models = new Model[2];
-        models[0] = copy;
+        models[0] = m;
         models[1] = mirror;
 
+<<<<<<< HEAD
         computeAverage(copy, models, ICPmetric.VERTEX_TO_VERTEX);
 
         return copy;
     }
+=======
+        computeAverage(m, models, ICPmetric.VERTEX_TO_VERTEX);
+        
+        //Icp.instance().reverseAllTransformations(trans, m.getVerts(), true);
+    }
+    
+    public List<File> createSymModelAndSave(List<File> models){
+        List<File> savedTo = new LinkedList<>();
+        String projectId = "" + System.currentTimeMillis();
+        File saveFolder = new File(projectId + File.separator + tmpModuleFile.getName());
+        ModelLoader ml = new ModelLoader();
+        
+        try {
+            FileUtils.instance().createTMPmoduleFolder(saveFolder);
+            
+            for(int i = 0; i < models.size(); i++){
+            Model m = ml.loadModel(models.get(i), false, Boolean.TRUE);
+            createSymetricModelNoCopy(m);
+            
+            savedTo.add(ProcessingFileUtils.instance().saveModelToTMP(m, saveFolder, -2, i, false));
+        }
+        } catch (FileManipulationException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        
+        return savedTo;
+    }
+>>>>>>> refs/remotes/origin/development
 
     public int findMostAvgFace(List<File> models) {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());        //creates thread pool of size of number of available processors
@@ -1080,7 +1291,11 @@ public class SurfaceComparisonProcessing {
 
             KdTree mainFace = new KdTreeIndexed(current.getVerts());
 
+<<<<<<< HEAD
             batchRawResultsToSingle(models, i, ml, executor, mainFace, null, false, 1.0f, list, ComparisonMethod.HAUSDORFF_DIST);
+=======
+            batchRawResultsToSingle(models, i, ml, executor, mainFace, null, false, 1.0f, 0.0f, list, ComparisonMethod.HAUSDORFF_DIST);
+>>>>>>> refs/remotes/origin/development
             batchVariance(list, uncomputedCollumn, res, 0, false);
         }
 

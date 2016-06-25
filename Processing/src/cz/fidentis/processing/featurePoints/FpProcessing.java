@@ -11,11 +11,12 @@ import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
+import cz.fidentis.featurepoints.FpDetector;
 import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.featurepoints.results.FpResultsPair;
 import cz.fidentis.featurepoints.symmetryplane.MirroredModel;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
@@ -42,6 +43,10 @@ import org.openide.util.Exceptions;
 public class FpProcessing {
 
     private static FpProcessing instance;
+<<<<<<< HEAD
+=======
+    private static KdTree mainF;
+>>>>>>> refs/remotes/origin/development
 
     public static FpProcessing instance() {
         if (instance == null) {
@@ -52,10 +57,13 @@ public class FpProcessing {
     }
 
     private FpProcessing() {
+<<<<<<< HEAD
     }
 
     //register face to generic face in frankfurt position, returns transformations performed during ICP process
     private List<ICPTransformation> faceRegistration(Model compareFace) {
+=======
+>>>>>>> refs/remotes/origin/development
         String genericFacePath = "";
         try {
             genericFacePath = new java.io.File(".").getCanonicalPath();
@@ -65,12 +73,25 @@ public class FpProcessing {
         if (!genericFacePath.equals("")) {
             genericFacePath = genericFacePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "average_face.obj";
             Model genericFace = new ModelLoader().loadModel(new File(genericFacePath), false, true);
-            KdTree mainF = new KdTreeIndexed(genericFace.getVerts());
-            List<ICPTransformation> trans = Icp.instance().icp(mainF, compareFace.getVerts(), compareFace.getVerts(), 0.f, 20, true);
-            return trans;
+            mainF = new KdTreeIndexed(genericFace.getVerts());
         }
+<<<<<<< HEAD
 
         return null;
+=======
+    }
+
+    //register face to generic face in frankfurt position, returns transformations performed during ICP process
+    public List<ICPTransformation> faceRegistration(Model compareFace) {
+        if (mainF == null) {
+            //error
+            return null;
+        }
+
+        List<ICPTransformation> trans = Icp.instance().icp(mainF, compareFace.getVerts(), compareFace.getVerts(), 0.f, 20, true);
+        return trans;
+
+>>>>>>> refs/remotes/origin/development
     }
 
     //computes center of the given face and its mirror
@@ -78,7 +99,7 @@ public class FpProcessing {
         Model mirroredModel = MeshUtils.instance().getMirroredModel(model);
 
         if (registrate) {
-            KdTree mainF = new KdTreeIndexed(model.getVerts());
+            //KdTree mainF = new KdTreeIndexed(model.getVerts());
             Icp.instance().icp(mainF, mirroredModel.getVerts(), mirroredModel.getVerts(), 0.f, 20, true);
         }
 
@@ -202,11 +223,21 @@ public class FpProcessing {
 
     //computes all facial points that software is currently capable of computing and reverts ICP transformations performed during FP computation
     private List<FacialPoint> computeAllFacialPoints(ArrayList<Vector3f> centerPoints, Model m, List<ICPTransformation> transformations) {
+<<<<<<< HEAD
         FeaturePointsUniverse fpUniverse = new FeaturePointsUniverse(m);
         List<FacialPoint> facialPoints;
 
         setUpJavaViewConsole();
         facialPoints = computePointsFromFpUniverse(fpUniverse, centerPoints);
+=======
+        //computation moved to FpDetector class
+//        FeaturePointsUniverse fpUniverse = new FeaturePointsUniverse(m);
+//        setUpJavaViewConsole();
+//        facialPoints = computePointsFromFpUniverse(fpUniverse, centerPoints);        
+
+        FpDetector fpDetector = new FpDetector(m);
+        List<FacialPoint> facialPoints = fpDetector.computeAllFPs(centerPoints);
+>>>>>>> refs/remotes/origin/development
 
         revertPerformedTransformations(facialPoints, m, transformations);
 
@@ -268,7 +299,11 @@ public class FpProcessing {
         ProgressHandle p;
         FpResultsOneToMany results = null;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...");
+<<<<<<< HEAD
         p.start(100);
+=======
+        p.start();
+>>>>>>> refs/remotes/origin/development
 
         try {
 
@@ -290,8 +325,12 @@ public class FpProcessing {
                 registeredModels.add(model);            //needed?
                 allFPs.put(model.getName(), facialPoints);
 
+<<<<<<< HEAD
                 p.progress(i * 100 / size);
 
+=======
+                //p.progress(i * 100 / size);
+>>>>>>> refs/remotes/origin/development
             }
 
             facialPoints = computePointsForSingleFace(p, mainF);
@@ -350,10 +389,11 @@ public class FpProcessing {
      */
     public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models) {
         int size = models.size();
+        float unit = 100f / size;
 
         ProgressHandle p;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...", cancelTask);
-        p.start(size);
+        p.start();
 
         ModelLoader loader = new ModelLoader();
         Model model;
@@ -373,7 +413,11 @@ public class FpProcessing {
             registeredModels.add(model);            //needed?
             allFPs.put(model.getName(), facialPoints);
 
+<<<<<<< HEAD
             p.progress(i * 100 / size);
+=======
+            //p.progress((int) (unit * (i + 1)));
+>>>>>>> refs/remotes/origin/development
         }
 
         res = new FpResultsBatch(allFPs, registeredModels);

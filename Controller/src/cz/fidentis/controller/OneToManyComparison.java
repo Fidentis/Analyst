@@ -47,18 +47,23 @@ public class OneToManyComparison {
     private Node node_registered;
     private Node node_result;
     private ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
+    
+    private List<List<ICPTransformation>> trans = new ArrayList<>();
       
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
     private Color hdColor1 = Color.green;           //redundant? take color from HDinfo instead eventually?
     private Color hdColor2 = Color.red;
-    private int hausdorfTreshold = 100;            //threshold value in % (HDPainting info contains actual computed distance thresholded)
+    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
+    private boolean createAvgFace = true;          //whether to create avg face during computatio of numerical results
     private boolean fpScaling;                     //whether feature points are scaled or not
     private int fpTreshold = 30;                   //threshold for feature points (still no clue what it is for)
     private int fpSize = 20;                       //size of displayed feature points
     private float ICPerrorRate = 0.05f;            //used error rate during alignment for ICP -- used when editing registration criteria
     private int ICPmaxIteration = 10;               //used number of iteration for ICP -- used when editing registration criteria
     private int templateIndex = 0;                 //index of mesh chosen to be a base for the avgFace
+    private boolean useSymmetry;
     private RegistrationMethod RegMethod;           //registration method used
     private ComparisonMethod CompareMethod;         //comparison method used
     private ICPmetric icpMetric = null;                    //ICP metric used for registration
@@ -106,6 +111,26 @@ public class OneToManyComparison {
 
     public void setSortedHdAbs(List<Float> sortedHdAbs) {
         this.sortedHdAbs = sortedHdAbs;
+    }
+
+    public List<ICPTransformation> getTrans(int i) {
+        return trans.get(i);
+    }
+
+    public void addTrans(List<ICPTransformation> trans) {
+        this.trans.add(trans);
+    }
+    
+    public void clearTrans(){
+        this.trans.clear();
+    }
+    
+    public List<List<ICPTransformation>> getTrans(){
+        return this.trans;
+    }
+    
+    public void setTrans(List<List<ICPTransformation>> trans){
+        this.trans = trans;
     }
 
     public HDpaintingInfo getHdPaintingInfo() {
@@ -180,13 +205,22 @@ public class OneToManyComparison {
         this.hdColor2 = hdColor2;
     }
 
-    public int getHausdorfTreshold() {
-        return hausdorfTreshold;
+    public int getHausdorfMaxTreshold() {
+        return hausdorfMaxTreshold;
     }
 
-    public void setHausdorfTreshold(int hausdorfTreshold) {
-        this.hausdorfTreshold = hausdorfTreshold;
+    public void setHausdorfMaxTreshold(int hausdorfTreshold) {
+        this.hausdorfMaxTreshold = hausdorfTreshold;
     }
+
+    public int getHausdorfMinTreshold() {
+        return hausdorfMinTreshold;
+    }
+
+    public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
+        this.hausdorfMinTreshold = hausdorfMinTreshold;
+    }   
+    
 
     public List<ArrayList<Float>> getNumResults() {
         return numResults;
@@ -194,6 +228,14 @@ public class OneToManyComparison {
 
     public void setNumResults(List<ArrayList<Float>> numResults) {
         this.numResults = numResults;
+    }
+
+    public boolean isCreateAvgFace() {
+        return createAvgFace;
+    }
+
+    public void setCreateAvgFace(boolean createAvgFace) {
+        this.createAvgFace = createAvgFace;
     }
     
 
@@ -284,6 +326,15 @@ public class OneToManyComparison {
     public void setTemplateIndex(int templateIndex) {
         this.templateIndex = templateIndex;
     }
+
+    public boolean isUseSymmetry() {
+        return useSymmetry;
+    }
+
+    public void setUseSymmetry(boolean useSymmetry) {
+        this.useSymmetry = useSymmetry;
+    }
+    
    
 
     public int getFpDistance() {

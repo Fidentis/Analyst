@@ -12,9 +12,9 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.utils.SortUtils;
 import cz.fidentis.utilsException.FileManipulationException;
@@ -22,16 +22,10 @@ import cz.fidentis.visualisation.procrustes.PApainting;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import javax.swing.JFileChooser;
-import static javax.swing.JFileChooser.SAVE_DIALOG;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -85,6 +79,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         jButton2 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        exportLandmarksButton = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.jLabel2.text")); // NOI18N
@@ -201,6 +196,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.exportLandmarksButton.text")); // NOI18N
+        exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportLandmarksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -219,11 +221,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         .addGap(281, 281, 281)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(exportLandmarksButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(processComparisonButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,8 +253,10 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportLandmarksButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(jPanel1);
@@ -303,7 +309,11 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
                         List<File> models = tc.getProject().getSelectedBatchComparison().getRegistrationResults();
                         if (models == null) {
+<<<<<<< HEAD
                             models = tc.getProject().getSelectedBatchComparison().getModels();
+=======
+                            models = originalModels;
+>>>>>>> refs/remotes/origin/development
                         }
                         ModelLoader ml = new ModelLoader();
                         Model template = ml.loadModel(models.get(tc.getProject().getSelectedBatchComparison().getTemplateIndex()), false, false);
@@ -345,11 +355,19 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
                             //numerical results
                             numResults = SurfaceComparisonProcessing.instance().batchCompareNumericalResults(models, 0, true,
+<<<<<<< HEAD
                                     (Integer) 100 / 100f, (ComparisonMethod) jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
 
                             List<Float> sortedHd = SortUtils.instance().sortValues(variance);
 
                             tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels));
+=======
+                                    1.0f, 0.0f, (ComparisonMethod) jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
+
+                            List<Float> sortedHd = SortUtils.instance().sortValues(variance);
+
+                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels, 1f, 0f));
+>>>>>>> refs/remotes/origin/development
                             tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
 
                         } catch (FileManipulationException ex) {
@@ -366,6 +384,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                                     tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
                             list.add(facialPoints);
                         }
+<<<<<<< HEAD
 
                         //List of points was created
                         ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, jCheckBox2.isSelected());
@@ -381,6 +400,23 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1().setDescriptionText(result);
                         tc.getViewerPanel_Batch().getListener().setProcrustes(true);
 
+=======
+
+                        //List of points was created
+                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, jCheckBox2.isSelected());
+
+                        //String result = procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
+                        String result = procrustes.compareBatch(tc.getProject().getSelectedBatchComparison().getModels());
+                        tc.getProject().getSelectedBatchComparison().setDistanceToMeanConfiguration(procrustes.distanceToMean());
+
+                        //GPA done
+                        //GUIController.getConfigurationTopComponent().getBatchComparisonResults().setNumericalResult(result);
+                        tc.getProject().getSelectedBatchComparison().setNumericalResults(result);
+
+                        //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1().setDescriptionText(result);
+                        tc.getViewerPanel_Batch().getListener().setProcrustes(true);
+
+>>>>>>> refs/remotes/origin/development
                         PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), null, 2);
 
                         /*tc.getViewerPanel_Batch().getListener().setTypePA(2);
@@ -422,6 +458,12 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                     GUIController.setPauseButtonVisible(false);
                     GUIController.updateNavigator();
                 } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+                   Exceptions.printStackTrace(ex);
+                   processComparisonButton.setEnabled(true);
+                }finally{
+>>>>>>> refs/remotes/origin/development
                     p.finish();
                 }
             }
@@ -475,6 +517,14 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 tc.getProject().getSelectedBatchComparison().getModels(), "_batch");
     }//GEN-LAST:event_jButton10ActionPerformed
 
+<<<<<<< HEAD
+=======
+    private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        FPImportExport.instance().exportBatch(tc, tc.getProject().getSelectedBatchComparison());
+    }//GEN-LAST:event_exportLandmarksButtonActionPerformed
+
+>>>>>>> refs/remotes/origin/development
     public Boolean getScaleEnabled() {
         return jCheckBox2.isSelected();
     }
@@ -503,6 +553,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        
+        if(c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES){
+            exportLandmarksButton.setVisible(true);
+        }else{
+            exportLandmarksButton.setVisible(false);
+        }
+        
         jCheckBox2.setSelected(c.isFpScaling());
         setupComparisonMethods(c);
         jButton2.setVisible((c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF));
@@ -520,6 +577,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;

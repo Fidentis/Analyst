@@ -23,7 +23,7 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
 import cz.fidentis.landmarkParser.CSVparser;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
@@ -125,6 +125,7 @@ public final class OpenProject implements ActionListener {
 
         Element root = doc.getDocumentElement();
         final Project p = new Project(root.getAttribute("name"));
+        p.setTempDirectory(tempFile);
         ntc.setProject(p);
         
         NodeList topNodes = root.getChildNodes();
@@ -198,19 +199,24 @@ public final class OpenProject implements ActionListener {
                 ntc.getViewerPanel_2Faces().getCanvas2().setImportLabelVisible(false);
                 ntc.getViewerPanel_2Faces().getListener2().setModels(comparison2f.getModel2());
                 if (comparison2f.getResultIcon() != null) {
-                    ntc.getViewerPanel_2Faces().setResultButtonVisible(true);
-                    ntc.getViewerPanel_2Faces().getCanvas2().showResultIcon();
+                    ntc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
+                    ntc.getViewerPanel_2Faces().getCanvas1().showResultIcon();
                 }
             }
             if (comparison2f.getState() >= 3) {
+                if (comparison2f.getResultIcon() != null) {
+                    ntc.getViewerPanel_2Faces().setResultButtonVisible(false, 0);
+                    ntc.getViewerPanel_2Faces().getCanvas1().showResultIcon();
+                }
+                
                 if (comparison2f.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-                    ntc.getViewerPanel_2Faces().getListener2().setProcrustes(true);
+                    ntc.getViewerPanel_2Faces().getListener1().setProcrustes(true);
                 } else {
-                    ntc.getViewerPanel_2Faces().getListener2().setModels(comparison2f.getHdPaintingInfo().getModel());
-                    ntc.getViewerPanel_2Faces().getListener2().setHdInfo(comparison2f.getHdPaintingInfo());
-                    ntc.getViewerPanel_2Faces().getListener2().setHdPaint(comparison2f.getHDP());
-                    ntc.getViewerPanel_2Faces().getListener2().setPaintHD(true);
-                    ntc.getViewerPanel_2Faces().getListener2().drawHD(true);
+                    ntc.getViewerPanel_2Faces().getListener1().setModels(comparison2f.getHdPaintingInfo().getModel());
+                    ntc.getViewerPanel_2Faces().getListener1().setHdInfo(comparison2f.getHdPaintingInfo());
+                    ntc.getViewerPanel_2Faces().getListener1().setHdPaint(comparison2f.getHDP());
+                    ntc.getViewerPanel_2Faces().getListener1().setPaintHD(true);
+                    ntc.getViewerPanel_2Faces().getListener1().drawHD(true);
                 }
             }
             ntc.show2FacesViewer();
@@ -359,7 +365,11 @@ public final class OpenProject implements ActionListener {
         }
         attr = projectE.getAttribute("haussdorfTreshold");
         if (attr != null && !attr.isEmpty()) {
-            comparison.setHausdorfTreshold(Integer.parseInt(attr));
+            comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMinTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {
@@ -452,7 +462,7 @@ public final class OpenProject implements ActionListener {
 
         if (hdInfoE != null) {
             boolean useRelative = Boolean.parseBoolean(hdInfoE.getAttribute("useRelative"));
-            HDpaintingInfo info = parseHdInfo(hdInfoE, useRelative, comparison.getHd(), comparison.getModel2(), comparison.getHdColor1(), comparison.getHdColor2());
+            HDpaintingInfo info = parseHdInfo(hdInfoE, useRelative, comparison.getHd(), comparison.getModel1(), comparison.getHdColor1(), comparison.getHdColor2());
 
             comparison.setHdPaintingInfo(info);
             comparison.setHDP(new HDpainting(info));
@@ -558,9 +568,17 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setHdColor2(new Color(Integer.parseInt(attr)));
         }
-        attr = projectE.getAttribute("haussdorfTreshold");
+        attr = projectE.getAttribute("haussdorfMinTreshold");
         if (attr != null && !attr.isEmpty()) {
-            comparison.setHausdorfTreshold(Integer.parseInt(attr));
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMaxTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMinTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {
@@ -808,9 +826,13 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setMetricTypeIndex(Integer.parseInt(attr));
         }
-        attr = projectE.getAttribute("haussdorfTreshold");
+        attr = projectE.getAttribute("haussdorfMaxTreshold");
         if (attr != null && !attr.isEmpty()) {
-            comparison.setHausdorfTreshold(Integer.parseInt(attr));
+            comparison.setHausdorfMaxTreshold(Integer.parseInt(attr));
+        }
+        attr = projectE.getAttribute("haussdorfMinTreshold");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHausdorfMinTreshold(Integer.parseInt(attr));
         }
         attr = projectE.getAttribute("fpScaling");
         if (attr != null && !attr.isEmpty()) {
@@ -1032,7 +1054,7 @@ public final class OpenProject implements ActionListener {
             float qz = Float.parseFloat(t.getAttribute("qZ"));
             float qw = Float.parseFloat(t.getAttribute("qW"));
             Quaternion q = new Quaternion(qw, qx, qy, qz);
-            transforms.add(new ICPTransformation(translation, scale, q, meanD));
+            transforms.add(new ICPTransformation(translation, scale, q, meanD, null));
         }
         return transforms;
 
@@ -1043,7 +1065,7 @@ public final class OpenProject implements ActionListener {
         info.setMinColor(hdColor1.getRGBColorComponents(null));
         info.setMinColor(hdColor2.getRGBColorComponents(null));
 
-        info.setThreshValue(Float.parseFloat(hdInfoE.getAttribute("treshValue")));
+        info.setMaxThreshValue(Float.parseFloat(hdInfoE.getAttribute("treshValue")));
         info.setMinSelection(Float.parseFloat(hdInfoE.getAttribute("minSelection")));
         info.setMaxSelection(Float.parseFloat(hdInfoE.getAttribute("maxSelection")));
         info.setIsSelection(Boolean.parseBoolean(hdInfoE.getAttribute("isSelection")));

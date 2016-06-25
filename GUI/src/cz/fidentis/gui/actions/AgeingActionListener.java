@@ -2,100 +2,71 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-/*package cz.fidentis.gui.actions;
+package cz.fidentis.gui.actions;
 
+import cz.fidentis.controller.Controller;
+import cz.fidentis.controller.Project;
 import cz.fidentis.gui.GUIController;
-import java.awt.Component;
+import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utilsException.FileManipulationException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
-import javax.swing.JToggleButton;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
-import org.openide.util.ImageUtilities;
-import org.openide.util.NbBundle.Messages;
-import org.openide.util.actions.Presenter;
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 @ActionID(
-    category = "Mode",
-id = "cz.fidentis.gui.actions.AgeingActionListener")
+        category = "Mode",
+        id = "cz.fidentis.gui.actions.AgeingActionListener")
 @ActionRegistration(
-
-//    iconBase = "cz/fidentis/gui/resources/ageing48.png",
-displayName = "#CTL_AgeingActionListener")
+        displayName = "#CTL_AgeingActionListener")
 @ActionReferences({
-    @ActionReference(path = "Menu/Mode", position = 250),
-    @ActionReference(path = "Toolbars/Mode", position = 250)
+    @ActionReference(path = "Menu/File", position = 75, separatorAfter = 100),
+    @ActionReference(path = "Shortcuts", name = "D-A")
 })
-@Messages("CTL_AgeingActionListener=Ageing")
+@NbBundle.Messages("CTL_AgeingActionListener=New Ageing")
+public final class AgeingActionListener implements ActionListener {
 
-public final class AgeingActionListener extends AbstractAction implements Presenter.Toolbar, Presenter.Menu {
-    JToggleButton abc = ButtonHelper.getAgeingButton();
-    JMenuItem m = ButtonHelper.getAgeingMenuItem();
-    
     @Override
     public void actionPerformed(ActionEvent e) {
-    }
+        ProjectTopComponent tc = GUIController.getBlankProject();
 
-    @Override
-    public Component getToolbarPresenter() {
-        ButtonHelper.getBg().add(abc);
-        abc.setSelected(false);
-        abc.setIcon(new ImageIcon(ImageUtilities.loadImage("cz/fidentis/gui/resources/ageing48.png")));
-        abc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-             action();
-                
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        Project project = new Project("Project " + dateFormat.format(date));
+        project.setName("Project " + dateFormat.format(date));
+        try {
+            project.setTempDirectory(FileUtils.instance()
+                    .createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
+        } catch (FileManipulationException ex) {
+            Exceptions.printStackTrace(ex);
         }
-            
-        });
-        return abc;
+
+        tc.setProject(project);
+        tc.setDisplayName(project.getName());
+        tc.setToolTipText("This is a " + project.getName() + " window");
+        tc.setName(String.valueOf(Controller.getProjects().size()));
+        project.setIndex(Controller.getProjects().size());
+        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+        Controller.addProjcet(project);
+
+        GUIController.getBlankProject(); // adds another "New Project" panel
+
+        GUIController.setSelectedProjectTopComponent(tc);
+        
+        ButtonHelper.setTexturesEnabled(true);
+        tc.getProject().addAgeing(NbBundle.getMessage(Controller.class, "tree.node.ageing"));
+        tc.getProject().setSelectedPart(6);
+        GUIController.selectAgeing();
+        GUIController.getNavigatorTopComponent().update();
+        tc.requestActive();
     }
 
-    @Override
-    public JMenuItem getMenuPresenter() {
-       // JMenuItem m = new JMenuItem("Ageing", new ImageIcon(ImageUtilities.loadImage("cz/fidentis/gui/resources/ageing48.png")));      
-        m.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                action();
-                abc.setSelected(true);
-            }
-        });
-        return m;
-    }
-
-    public void action(){
-        if (GUIController.getSelectedProjectTopComponent()!=null){
-            if(GUIController.getSelectedProjectTopComponent().getProject().getSelectedAgeing()==null){
-              GUIController.getSelectedProjectTopComponent().getProject().addResultContainer();  
-              GUIController.getSelectedProjectTopComponent().getProject().addAgeingContainer();  
-              if( GUIController.getSelectedProjectTopComponent().getProject().getSelectedViewer()!=null){
-                     GUIController.getSelectedProjectTopComponent().getAgeingPanel().setReferenceModel(
-                          GUIController.getSelectedProjectTopComponent().getProject().getSelectedViewer().getModel());
-                          
-              }
-              if( GUIController.getSelectedProjectTopComponent().getProject().getSelectedComposite()!=null){
-                     GUIController.getSelectedProjectTopComponent().getAgeingPanel().setReferenceModel(
-                          GUIController.getSelectedProjectTopComponent().getProject().getSelectedComposite().getModels());
-                }
-              GUIController.getNavigatorTopComponent().update();
-
-            }
-            GUIController.getSelectedProjectTopComponent().showAgeing();
-          }
-         abc.setSelected(true);
-        
-        
-      /*     NavigatorTopComponent navigatorTopComponent = (NavigatorTopComponent) WindowManager.getDefault().findTopComponent("NavigatorTopComponent");
-        if (navigatorTopComponent.getCurrentProjectTopComponent() != null) {
-            navigatorTopComponent.getCurrentProjectTopComponent().showAgeing();
-            * 
-}*/
- //   }
-//}
+}

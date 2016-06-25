@@ -84,11 +84,33 @@ public class MathUtils {
         
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
-                m.set(i,j, matrix[i+j]);
+                m.set(i,j, matrix[i * 4 + j]);
             }
         }
         
         return m;
+    }
+    
+    /**
+     * Creates quaternion from matrix
+     * 
+     * @param m - 3x3 rotational matrix
+     * @return quaternion created from given matrix
+     */
+    public Quaternion matrixToQuaternion(Matrix m){
+        double[][] mat = m.getArray();
+        float[] finalMat = new float[9];
+        Quaternion q = new Quaternion();
+        
+        for(int i = 0; i < mat.length; i++){
+            for(int j = 0; j < mat[i].length; j++){
+                finalMat[i * 3 + j] = (float) mat[i][j];
+            }
+        }
+        
+        q.setFromMatrix(finalMat);
+        
+        return q;
     }
     
     /**

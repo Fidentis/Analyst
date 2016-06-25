@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>org.opencv</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>org.opencv</package>
+                <package>org.opencv.calib3d</package>
+                <package>org.opencv.core</package>
+                <package>org.opencv.features2d</package>
+                <package>org.opencv.imgcodecs</package>
+                <package>org.opencv.imgproc</package>
+                <package>org.opencv.ml</package>
+                <package>org.opencv.objdetect</package>
+                <package>org.opencv.photo</package>
+                <package>org.opencv.utils</package>
+                <package>org.opencv.video</package>
+                <package>org.opencv.videoio</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/opencv-310.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/opencv-310.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

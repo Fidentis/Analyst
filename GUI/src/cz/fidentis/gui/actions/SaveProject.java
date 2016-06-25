@@ -29,7 +29,7 @@ import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import java.io.FileInputStream;
@@ -224,7 +224,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("secondaryColor", String.valueOf(comparison.getSecondaryColor().getRGB()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfTreshold()));
+        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        
+        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -384,7 +386,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("hdColor2", String.valueOf(comparison.getHdColor2().getRGB()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfTreshold()));
+        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        
+        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -533,7 +537,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
 
-        comparisonE.setAttribute("haussdorfTreshold", String.valueOf(comparison.getHausdorfTreshold()));
+        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
+        
+        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -645,7 +651,7 @@ public final class SaveProject implements ActionListener {
     private void appendHdInfo(HDpaintingInfo info, Element parent) {
         Element hdE = parent.getOwnerDocument().createElement("hdInfo");
         parent.appendChild(hdE);
-        hdE.setAttribute("treshValue", String.valueOf(info.getThreshValue()));
+        hdE.setAttribute("treshValue", String.valueOf(info.getMaxThreshValue()));
         hdE.setAttribute("minSelection", String.valueOf(info.getMinSelection()));
         hdE.setAttribute("maxSelection", String.valueOf(info.getMaxSelection()));
         hdE.setAttribute("isSelection", String.valueOf(info.isIsSelection()));

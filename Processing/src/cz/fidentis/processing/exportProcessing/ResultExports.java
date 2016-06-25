@@ -170,7 +170,12 @@ public class ResultExports {
      * @param originalModels - list of URLs containing models before alignment,
      * to use in table naming
      */
+<<<<<<< HEAD
     public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels) {
+=======
+    public void exportSymetricRes(final Component tc, final String precomputedRes, final int varianceMethod, final List<File> originalModels, 
+            final float upperTreshold, final float lowerTreshold) {
+>>>>>>> refs/remotes/origin/development
         if (precomputedRes == null) {
             //error
             return;
@@ -192,7 +197,12 @@ public class ResultExports {
                 try {
 
                     List<ArrayList<Float>> symRes = MathUtils.instance().symetricMatrix(precomputedRes);
+<<<<<<< HEAD
                     String res = SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable((ArrayList<ArrayList<Float>>) symRes, varianceMethod, originalModels);
+=======
+                    String res = SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable((ArrayList<ArrayList<Float>>) symRes, varianceMethod, 
+                            originalModels, upperTreshold, lowerTreshold);
+>>>>>>> refs/remotes/origin/development
 
                     writeStringToFile(tc, filePath, res);
 
@@ -296,6 +306,7 @@ public class ResultExports {
 
         savePicture(filePath, tc, canvas, width, height);
 
+<<<<<<< HEAD
     }
 
     public void exportVisualResults(Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
@@ -312,11 +323,18 @@ public class ResultExports {
 
     //saves picture as PNG file to given path, of given size
     private void savePicture(String path, Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
+=======
+    }
+
+    //saves picture as PNG file to given path, of given size
+    private void savePicture(String path, Component tc, GLEventListener canvas, int width, int height) {
+>>>>>>> refs/remotes/origin/development
         if (path.contains(".png")) {
         } else {
             path = path + ".png";
         }
 
+<<<<<<< HEAD
         int i = gl.glGetError();
         
         gl.glFinish();
@@ -389,6 +407,25 @@ public class ResultExports {
         g = bi.createGraphics();
         picture.paint(g);
 
+=======
+        BufferedImage bi;
+        Graphics g;
+        JFrame newFrame = new JFrame();
+        GLJPanel picture = new GLJPanel();
+        int[] size = new int[]{width, height};
+
+        newFrame.setSize(size[0], size[1]);
+        picture.addGLEventListener(canvas);
+        newFrame.add(picture);
+        newFrame.setVisible(true);
+        picture.setSize(size[0], size[1]);
+        picture.repaint();
+
+        bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_3BYTE_BGR);
+        g = bi.createGraphics();
+        picture.paintComponents(g);
+
+>>>>>>> refs/remotes/origin/development
         try {
             ImageIO.write(bi, "png", new File(path));
         } catch (IOException e) {

@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -34,19 +35,21 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
     }
 
     private boolean useRelative;
-    private Float thresh;
+    private Float upperTreshold;
+    private Float lowerTreshold;
     private int mainFaceNum;
     private int compareFaceNum;
-    private Curvature_jv mainCurv;
-    private Curvature_jv compCurv;
+    private double[] mainCurv;
+    private double[] compCurv;
     private ComparisonMethod method;
 
-    public BatchComparisonNumericCallable(KdTree mainF, Model compMesh, boolean useRelative, Float thresh, int mainFaceNum, int compareFaceNum,
-            Curvature_jv mainCurv, Curvature_jv compCurv, ComparisonMethod method) {
+    public BatchComparisonNumericCallable(KdTree mainF, Model compMesh, boolean useRelative, Float upperTreshold, Float lowerTreshold,  int mainFaceNum, int compareFaceNum,
+            double[] mainCurv, double[] compCurv, ComparisonMethod method) {
         this.mainF = mainF;
         this.compMesh = compMesh;
         this.useRelative = useRelative;
-        this.thresh = thresh;
+        this.upperTreshold = upperTreshold;
+        this.lowerTreshold = lowerTreshold;
         this.mainFaceNum = mainFaceNum;
         this.compareFaceNum = compareFaceNum;
         this.mainCurv = mainCurv;
@@ -68,7 +71,11 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
 
         try {
 
+<<<<<<< HEAD
             ArrayList<Float> tmp = new ArrayList<Float>((int) (compMesh.getVerts().size() * thresh));
+=======
+            ArrayList<Float> tmp = new ArrayList<Float>((int) (compMesh.getVerts().size() * upperTreshold));
+>>>>>>> refs/remotes/origin/development
 
             if (method == ComparisonMethod.HAUSDORFF_DIST) {
                 List<Vector3f> normalsUsed = compMesh.getNormals();
@@ -79,15 +86,25 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
 
                 result = HausdorffDistance.instance().hDistance(mainF, compMesh.getVerts(), normalsUsed, useRelative);
             } else {
+<<<<<<< HEAD
                 result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv.getCurvature(CurvatureType.Gaussian), compCurv.getCurvature(CurvatureType.Gaussian));
             }
             result = ComparisonMetrics.instance().thresholdValues(result, thresh, useRelative);
+=======
+                result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv, compCurv);
+            }
+            result = ComparisonMetrics.instance().thresholdValues(result, upperTreshold, lowerTreshold, useRelative);
+>>>>>>> refs/remotes/origin/development
             tmp.addAll(result);
 
             p.finish();
 
             return tmp;
         } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+            Exceptions.printStackTrace(ex);
+>>>>>>> refs/remotes/origin/development
             p.finish();
         }
 

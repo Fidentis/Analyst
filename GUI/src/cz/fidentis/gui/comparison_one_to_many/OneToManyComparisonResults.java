@@ -6,21 +6,17 @@
 package cz.fidentis.gui.comparison_one_to_many;
 
 import cz.fidentis.comparison.ComparisonMethod;
-import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.gui.GUIController;
-import cz.fidentis.gui.PlotsDrawingPanelAuxiliary;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.TableProcessing;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
-import cz.fidentis.utils.FileUtils;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.ColorSelector;
 import cz.fidentis.visualisation.histogram.histogramPanel;
@@ -29,33 +25,16 @@ import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.media.opengl.awt.GLJPanel;
-import javax.swing.JFileChooser;
-import static javax.swing.JFileChooser.SAVE_DIALOG;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -69,7 +48,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
     String result;
-    private boolean tresholdValueChanged;
+    private boolean maxTresholdValueChanged;
+    private boolean minTresholdValueChanged;
     private ColorScheme heatplotColorScheme = ColorScheme.GREEN_BLUE;
     private boolean valuesModified = false;
 
@@ -223,6 +203,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox();
         jComboBox6 = new javax.swing.JComboBox();
         jLabel21 = new javax.swing.JLabel();
+        minThreshSlider = new javax.swing.JSlider();
+        minThreshSpinner = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jSlider2 = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
@@ -947,14 +929,28 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel21, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.jLabel21.text")); // NOI18N
 
+        minThreshSlider.setMajorTickSpacing(20);
+        minThreshSlider.setMinorTickSpacing(5);
+        minThreshSlider.setPaintLabels(true);
+        minThreshSlider.setPaintTicks(true);
+        minThreshSlider.setValue(0);
+        minThreshSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                minThreshSliderStateChanged(evt);
+            }
+        });
+
+        minThreshSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        minThreshSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                minThreshSpinnerStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout colorMapPanelLayout = new javax.swing.GroupLayout(colorMapPanel);
         colorMapPanel.setLayout(colorMapPanelLayout);
         colorMapPanelLayout.setHorizontalGroup(
             colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(colorMapPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(colorMapPanelLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
                 .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -967,16 +963,24 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addGap(8, 8, 8)
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, 0, 75, Short.MAX_VALUE)
+                        .addComponent(jComboBox1, 0, 90, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addGroup(colorMapPanelLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorMapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                            .addComponent(minThreshSpinner)))))
+            .addGroup(colorMapPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addContainerGap())
         );
         colorMapPanelLayout.setVerticalGroup(
             colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -985,7 +989,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(colorMapPanelLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
                     .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1280,14 +1290,15 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<ArrayList<Float>> numResults = tc.getProject().getSelectedOneToManyComparison().getNumResults();
         List<Float> thresholdedValues;
-        thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
+        thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f,
+                (int) minThreshSpinner.getValue() / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
         ResultExports.instance().exportCSVnumericOrder(tc, thresholdedValues, tc.getProject().getSelectedOneToManyComparison().getModels());
     }//GEN-LAST:event_exportOrderedResultsButtonActionPerformed
 
     private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
         if (result != null) {
             jPanel4.setVisible(true);
-
+            pairComparisonPanel1.clear();
             setHeatPlotLabels();
 
             pairFrame.setTitle(
@@ -1299,7 +1310,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             pairFrame.setVisible(
                     true);
             pairFrame.setSize(
-                    1000, 500);
+                    1000, 700);
             pairFrame.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
 
         }
@@ -1344,12 +1355,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             l.setOpaque(true);
             //  jPanel5.add(l2);;
             jPanel5.add(l);
-            l.setLocation(0, 31*i);
+            l.setLocation(0, 31 * i);
             l.setSize(jPanel5.getWidth(), 30);
             l.setPreferredSize(new Dimension(jPanel5.getWidth(), 30));
             l.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    pairFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     OneToManyComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
                     ModelLoader ml = new ModelLoader();
                     // pairComparisonPanel1.clear();
@@ -1364,8 +1376,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     Model primary = bc.getPrimaryModel();
                     pairComparisonPanel1.getListener().addModel(primary);
                     pairComparisonPanel1.getListener().addModel(ml.loadModel(models.get(j), false, false));
-                    pairFrame.setTitle("Pairwise results - "+primary.getName()+" vs. " + models.get(j).getName());
-                    
+                    pairFrame.setTitle("Pairwise results - " + primary.getName() + " vs. " + models.get(j).getName());
+
                     List<Float> values = bc.getNumResults().get(j);
                     HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
                     HDpainting hdp = new HDpainting(info);
@@ -1375,6 +1387,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     pairComparisonPanel1.getListener().setPaintHD(true);
                     pairComparisonPanel1.revalidate();
                     pairComparisonPanel1.repaint();
+                    pairFrame.setCursor(Cursor.getDefaultCursor());
                 }
 
             }
@@ -1445,15 +1458,15 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(result != null){
+        if (result != null) {
             String[][] values = TableProcessing.instance().parseTable(result);
-            
+
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                     values,
                     values[0]
             ));
         }
-        
+
         TableProcessing.instance().setUpTable(jTable1, jFrame1, GUIController.getSelectedProjectTopComponent(), "Numerical results");
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1497,59 +1510,28 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_selectionButtonActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        if (!tresholdValueChanged
+        if (!maxTresholdValueChanged
                 && GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getComparisonMethod() != ComparisonMethod.PROCRUSTES) {
-            tresholdValueChanged = true;
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHausdorfTreshold(Integer.valueOf(jSpinner1.getValue().toString()));
-            jSlider1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHausdorfTreshold());
-            setMaxValue();
+            maxTresholdValueChanged = true;
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHausdorfMaxTreshold(Integer.valueOf(jSpinner1.getValue().toString()));
+            jSlider1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHausdorfMaxTreshold());
+            setMaxThreshValue();
         }
-        tresholdValueChanged = false;
+        updateHistograms();
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
-        if (!tresholdValueChanged
+        if (!maxTresholdValueChanged
                 && GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getComparisonMethod() != ComparisonMethod.PROCRUSTES) {
-            tresholdValueChanged = true;
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHausdorfTreshold(jSlider1.getValue());
-            jSpinner1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHausdorfTreshold());
+            maxTresholdValueChanged = true;
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHausdorfMaxTreshold(jSlider1.getValue());
+            jSpinner1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHausdorfMaxTreshold());
 
-            setMaxValue();
+            setMaxThreshValue();
         }
-
-        HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
-
-        if (info != null) {
-            //        info.setThreshPecent((float) jSlider1.getValue() / 100);
-        }
+        updateHistograms();
     }//GEN-LAST:event_jSlider1StateChanged
 
-    private void setMaxValue() {
-        float usedValues;
-        List<Float> list;
-
-        if (jComboBox2.getSelectedIndex() == 0) {
-            list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdRel();
-        } else {
-            list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdAbs();
-
-        }
-
-        int size = list.size();
-        int index = (int) (size * (jSlider1.getValue() / 100f));
-
-        if (index == 0) {
-            usedValues = list.get(0);
-        } else {
-            usedValues = list.get(index - 1);
-        }
-
-        HDpaintingInfo info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
-        info.setThreshValue(usedValues);
-        updateHistograms();
-
-        tresholdValueChanged = false;
-    }
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setShowVectors(jCheckBox6.isSelected());
@@ -1572,31 +1554,31 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jSlider3StateChanged
 
     private void positionSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerXStateChanged
-        if(!valuesModified){
-            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);       
+        if (!valuesModified) {
+            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_positionSpinnerXStateChanged
 
     private void positionSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerYStateChanged
-       if(!valuesModified){
-            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);       
+        if (!valuesModified) {
+            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_positionSpinnerYStateChanged
 
     private void positionSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerZStateChanged
-        if(!valuesModified){
-            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);       
+        if (!valuesModified) {
+            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_positionSpinnerZStateChanged
 
     private void normalSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerZStateChanged
-        if (normalSpinnerZ.isEnabled()&& !valuesModified) {
+        if (normalSpinnerZ.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_normalSpinnerZStateChanged
 
     private void normalSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerYStateChanged
-        if (normalSpinnerY.isEnabled()&& !valuesModified) {
+        if (normalSpinnerY.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
         }
     }//GEN-LAST:event_normalSpinnerYStateChanged
@@ -1664,6 +1646,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
                         hdDistance = absolute;
                     }
+<<<<<<< HEAD
 
                     HDpaintingInfo info = tc.getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
 
@@ -1677,6 +1660,21 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         if (modelShown == null) {
                             if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
 
+=======
+
+                    HDpaintingInfo info = tc.getProject().getSelectedOneToManyComparison().getHdPaintingInfo();
+
+                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
+                        info.setvType(VisualizationType.COLORMAP);
+                        tc.getOneToManyViewerPanel().getListener2().removeModel();
+                        ModelLoader l = new ModelLoader();
+                        Model modelShown = tc.getProject().getSelectedOneToManyComparison().getAvgFace();
+
+                        if (modelShown == null) {
+                            if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
+
+>>>>>>> refs/remotes/origin/development
                                 File m = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels().get(0);
                                 modelShown = l.loadModel(m, false, false);
                             } else {
@@ -1737,9 +1735,16 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
                     info.setRecompute(true);
 
+<<<<<<< HEAD
                     thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
 
                     String res = setValues(thresholdedValues, origModels, jComboBox3.getSelectedIndex());
+=======
+                    thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, ((Integer) jSpinner1.getValue()) / 100f,
+                            (int) minThreshSpinner.getValue() / 100f, jComboBox3.getSelectedIndex(), jComboBox2.getSelectedIndex() == 0);
+
+                    String res = setValues(thresholdedValues, origModels, jComboBox3.getSelectedIndex(), (int) jSpinner1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f);
+>>>>>>> refs/remotes/origin/development
 
                     info.setDistance(hdDistance);
                     info.setUseRelative(jComboBox2.getSelectedIndex() == 0);
@@ -1754,6 +1759,11 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     }
                     updateHistograms();
                 } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+                    Exceptions.printStackTrace(ex);
+                } finally {
+>>>>>>> refs/remotes/origin/development
                     p.finish();
                 }
             }
@@ -1765,7 +1775,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
         if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
-           densLabel.setVisible(false);
+            densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
             cylLengthLabel.setVisible(false);
@@ -1785,7 +1795,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             slicesPanel.setVisible(false);
         }
         if (VisualizationBox.getSelectedItem().equals(VisualizationType.CROSSSECTION.toString())) {
-           densLabel.setVisible(false);
+            densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
             cylLengthLabel.setVisible(false);
@@ -1804,15 +1814,21 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
         List<Float> l = jComboBox2.getSelectedIndex() == 0 ? GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdRel() : GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdAbs();
         int count = 0;
+        int count2 = 0;
         for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) < GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().getThreshValue()) {
+            if (l.get(i) <= GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().getMaxThreshValue()) {
                 count++;
-            } else {
-                break;
             }
+            if (l.get(i) >= GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().getMinThreshValue()) {
+                count2++;
+            }
+
         }
         float percent = count / (float) l.size();
         jSlider1.setValue((int) (percent * 100));
+
+        float percent2 = count2 / (float) l.size();
+        minThreshSlider.setValue(100 - (int) (percent2 * 100));
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void heatplotButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButton1ActionPerformed
@@ -1926,12 +1942,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
         String[][] values = TableProcessing.instance().alignmentInfoTable(c.getIcpMetric(), c.getScaleEnabled(), c.getICPerrorRate(), c.getICPmaxIteration(),
                 -1, null, Methods.values()[c.getMethod()], Type.values()[c.getType()], c.getValue());
-        
+
         alignTable.setModel(new javax.swing.table.DefaultTableModel(
-                    values,
-                    values[0]
-            ));
-        
+                values,
+                values[0]
+        ));
+
         TableProcessing.instance().setUpTable(alignTable, alignFrame, GUIController.getSelectedProjectTopComponent(), "Alignment parameters");
     }//GEN-LAST:event_alignParametersButtonActionPerformed
 
@@ -1940,12 +1956,34 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jColorChooser1.setColor(colorPanel.getBackground());
         colorDialog.setVisible(true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setColorOfCuts(colorPanel.getBackground().getRGBColorComponents(new float[3]));
-      
+
     }//GEN-LAST:event_colorPanelMouseClicked
 
     private void thicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_thicknessStateChanged
-       GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setCutThickness(thickness.getValue()/10f);
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setCutThickness(thickness.getValue() / 10f);
     }//GEN-LAST:event_thicknessStateChanged
+
+    private void minThreshSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSliderStateChanged
+        if (!minTresholdValueChanged) {
+            minTresholdValueChanged = true;
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHausdorfMinTreshold(minThreshSlider.getValue());
+            minThreshSpinner.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHausdorfMinTreshold());
+
+            setMinThreshValue();
+        }
+        updateHistograms();
+    }//GEN-LAST:event_minThreshSliderStateChanged
+
+    private void minThreshSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSpinnerStateChanged
+        if (!minTresholdValueChanged) {
+            minTresholdValueChanged = true;
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHausdorfMinTreshold(Integer.valueOf(minThreshSpinner.getValue().toString()));
+            minThreshSlider.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHausdorfMinTreshold());
+
+            setMinThreshValue();
+        }
+        updateHistograms();
+    }//GEN-LAST:event_minThreshSpinnerStateChanged
 
     public void setPlaneNormal(Vector3f normal) {
         normalSpinnerX.setValue(normal.x);
@@ -1963,10 +2001,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     public void setValuesModified(boolean valuesModified) {
         this.valuesModified = valuesModified;
     }
-    
-    
-    
-    
 
     private void setNormalControlsEnabled(boolean en) {
         normalSpinnerX.setEnabled(en);
@@ -1981,8 +2015,60 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         return histogram1;
     }
 
-    private String setValues(List<Float> hdDistance, List<File> models, int varianceMethod) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + ";");
+    private void setMaxThreshValue() {
+        float maxUsedValues;
+        List<Float> list;
+
+        if (jComboBox2.getSelectedIndex() == 0) {
+            list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdRel();
+        } else {
+            list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdAbs();
+
+        }
+
+        int size = list.size();
+        int index = (int) (size * (jSlider1.getValue() / 100f));
+
+        if (index == 0) {
+            maxUsedValues = list.get(0);
+        } else {
+            maxUsedValues = list.get(index - 1);
+        }
+
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().setMaxThreshValue(maxUsedValues);
+
+        maxTresholdValueChanged = false;
+    }
+
+    private void setMinThreshValue() {
+
+        List<Float> list;
+
+        if (jComboBox2.getSelectedIndex() == 0) {
+            list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdRel();
+        } else {
+            list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getSortedHdAbs();
+
+        }
+
+        int size = list.size();
+
+        float minUsedValues;
+        int index2 = (int) (size * (minThreshSlider.getValue() / 100f));
+
+        if (index2 == 0) {
+            minUsedValues = list.get(0);
+        } else {
+            minUsedValues = list.get(index2 - 1);
+        }
+
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo().setMinThreshValue(minUsedValues);
+        minTresholdValueChanged = false;
+    }
+
+    private String setValues(List<Float> hdDistance, List<File> models, int varianceMethod, float upperTreshold, float lowerTreshold) {
+        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Lower: " + 
+                (lowerTreshold * 100) +"% Upper: " + (upperTreshold * 100) + "% treshold;");
 
         for (int i = 0; i < hdDistance.size(); i++) {
             strResults.append(models.get(i).getName()).append(';');
@@ -2005,8 +2091,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
         HDpainting info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHDP();
 
-        jSlider1.setValue(c.getHausdorfTreshold());
-        jSpinner1.setValue(c.getHausdorfTreshold());
+        jSlider1.setValue(c.getHausdorfMaxTreshold());
+        jSpinner1.setValue(c.getHausdorfMaxTreshold());
+        minThreshSlider.setValue(c.getHausdorfMinTreshold());
+        minThreshSpinner.setValue(c.getHausdorfMinTreshold());
         jSlider2.setValue(c.getFpDistance());
         sizeSlider.setValue(c.getFpSize());
         jComboBox2.setSelectedIndex(c.getValuesTypeIndex());
@@ -2022,16 +2110,18 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 jLabel5.setVisible(false);
                 jComboBox2.setVisible(false);
             }
-            updateHistograms();
+
         }
-        
-        if(c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF){
+
+        if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
             alignParametersButton.setVisible(true);
-        }else{
+        } else {
             alignParametersButton.setVisible(false);
         }
         thickness.setValue(10);
         result = c.getNumericalResults();
+
+        updateHistograms();
 
     }
 
@@ -2041,8 +2131,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo());
         histogram1.setValues(f);
         histogram1.recomputeSliderPosition();
-        histogram1.validate();
-        //    histogramPanel2.repaint();
+        histogram1.revalidate();
+        histogram1.repaint();
 
     }
 
@@ -2133,6 +2223,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
+    private javax.swing.JSlider minThreshSlider;
+    private javax.swing.JSpinner minThreshSpinner;
     private javax.swing.JSpinner normalSpinnerX;
     private javax.swing.JSpinner normalSpinnerY;
     private javax.swing.JSpinner normalSpinnerZ;

@@ -196,7 +196,7 @@ public final class NavigatorTopComponent extends TopComponent {
         popup.add(menu_remove);
         popup.addSeparator();
         
-        if (selectedPart == 2 || selectedPart == 3) {
+        if (selectedPart == 2 || selectedPart == 3 || selectedPart == 6) {
             // add item for loading primary model
             popup.add(menu_loadModel);
         }
@@ -457,6 +457,9 @@ public final class NavigatorTopComponent extends TopComponent {
                     break;
                 case "Composite":
                     project.setSelectedPart(1);
+                    break;
+                case "Ageing":
+                    project.setSelectedPart(6);
                     break;
                 default:
                     project.setSelectedPart(5);

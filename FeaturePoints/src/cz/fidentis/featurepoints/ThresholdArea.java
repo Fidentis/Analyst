@@ -44,9 +44,9 @@ public class ThresholdArea {
         this.elementSet = elementSet;
         this.cornerTable = cornerTable;
         this.boundaryVertices = boundaryVertices;
-        tmpThresholdBigestRegion = new HashSet<Integer>();
-        visitedVertices = new HashSet<Integer>();
-        thresholdBigestRegion = new HashSet<Integer>();
+        tmpThresholdBigestRegion = new HashSet<>();
+        visitedVertices = new HashSet<>();
+        thresholdBigestRegion = new HashSet<>();
 
     }
 
@@ -712,9 +712,11 @@ public class ThresholdArea {
     public void setPronasale(PdVector pronasale) {
         this.pronasale = pronasale;
     }
-
+    
+    // POZOR BILATERALNE BODY SU PREHODENE, DOCASNE ZMENENE GETTERY
     public FacialPoint getRightCheilionFP() {
-        return getFacialPoint(rightCheilion, FacialPointType.CH_R);
+//        return getFacialPoint(rightCheilion, FacialPointType.CH_R);
+        return getFacialPoint(rightCheilion, FacialPointType.CH_L);
     }
 
     public void setRightCheilion(PdVector rightCheilion) {
@@ -722,7 +724,8 @@ public class ThresholdArea {
     }
 
     public FacialPoint getLeftCheilionFP() {
-        return getFacialPoint(leftCheilion, FacialPointType.CH_L);
+//        return getFacialPoint(leftCheilion, FacialPointType.CH_L);
+        return getFacialPoint(leftCheilion, FacialPointType.CH_R);
     }
 
     public void setLeftCheilion(PdVector leftCheilion) {
@@ -738,7 +741,8 @@ public class ThresholdArea {
     }
 
     public FacialPoint getRightEktokantionFP() {
-        return getFacialPoint(rightEktokantion, FacialPointType.EX_R);
+//        return getFacialPoint(rightEktokantion, FacialPointType.EX_R);
+        return getFacialPoint(rightEktokantion, FacialPointType.EX_L);
     }
 
     public void setRightEktokantion(PdVector rightEktokantion) {
@@ -746,7 +750,8 @@ public class ThresholdArea {
     }
 
     public FacialPoint getLeftEktokantionFP() {
-        return getFacialPoint(leftEktokantion, FacialPointType.EX_L);
+//        return getFacialPoint(leftEktokantion, FacialPointType.EX_L);
+        return getFacialPoint(leftEktokantion, FacialPointType.EX_R);
     }
 
     public void setLeftEktokantion(PdVector leftEktokantion) {
@@ -754,7 +759,8 @@ public class ThresholdArea {
     }
 
     public FacialPoint getRightEntokantionFP() {
-        return getFacialPoint(rightEntokantion, FacialPointType.EN_R);
+//        return getFacialPoint(rightEntokantion, FacialPointType.EN_R);
+        return getFacialPoint(rightEntokantion, FacialPointType.EN_L);
     }
 
     public void setRightEntokantion(PdVector rightEntokantion) {
@@ -762,7 +768,8 @@ public class ThresholdArea {
     }
 
     public FacialPoint getLeftEntokantionFP() {
-        return getFacialPoint(leftEntokantion, FacialPointType.EN_L);
+//        return getFacialPoint(leftEntokantion, FacialPointType.EN_L);
+        return getFacialPoint(leftEntokantion, FacialPointType.EN_R);
     }
 
     public void setLeftEntokantion(PdVector leftEntokantion) {

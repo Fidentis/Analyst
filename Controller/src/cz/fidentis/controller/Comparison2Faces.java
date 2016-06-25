@@ -42,7 +42,12 @@ public class Comparison2Faces {
     private Node node_2;
     private ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
     
+    private List<ICPTransformation> compFTransformations;
+    
     private ArrayList<List<FacialPoint>> databaseFacialPoints = new ArrayList<List<FacialPoint>>();         //database of FPs is currently not used within the application
+    private List<FacialPoint> mainFp;
+    private List<FacialPoint> secondaryFp;
+    private boolean editPoints;         //DON'T need to save in project
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     
     private boolean showPointInfo = true;           //whether to show description of the feature points
@@ -53,7 +58,10 @@ public class Comparison2Faces {
     private Color primaryColor = new Color(51,153,255, 255);        //color for primary model when overlaid before comparison(blueish?)
     private Color secondaryColor = new Color(255,255,0,255);        //color for secondary model when overlaid before comparison(yellow)
     
-    private int hausdorfTreshold = 100;         //threshold value in % (HDPainting info contains actual computed distance thresholded)
+   private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
+    private float lowerHDTreshold;
+    private float upperHDTreshold;
     private boolean fpScaling;          //whether feature points are scaled or not
     private int useDatabase;        //0 - dont use, 1 - default, 2 - data file, 3 - create  -- database currently not used in software
     private ArrayList<File> databaseFiles;      //database of feature points stored on disk -- database currently not used in software 
@@ -64,6 +72,7 @@ public class Comparison2Faces {
     private RegistrationMethod RegMethod;   //registration method used
     private ComparisonMethod CompareMethod; //comparison method used
     private ICPmetric icpMetric;            //either vertex-to-vert or vertex-to-mesh
+    private boolean useSymmetry;
     private int fpDistance;             //distance factor for feature points
     private boolean compareButtonEnabled = true;    //comparison button enabled means all computation of registration were finished (all threads are done)
     private String numericalResults;            //table format of numeric results
@@ -84,6 +93,14 @@ public class Comparison2Faces {
         this.valuesTypeIndex = valuesTypeIndex;
     }
 
+    public List<ICPTransformation> getCompFTransformations() {
+        return compFTransformations;
+    }
+
+    public void setCompFTransformations(List<ICPTransformation> compFTransformations) {
+        this.compFTransformations = compFTransformations;
+    }
+
     public HDpaintingInfo getHdPaintingInfo() {
         return hdPaintingInfo;
     }
@@ -91,6 +108,23 @@ public class Comparison2Faces {
     public void setHdPaintingInfo(HDpaintingInfo hdPaintingInfo) {
         this.hdPaintingInfo = hdPaintingInfo;
     }
+
+    public float getLowerHDTreshold() {
+        return lowerHDTreshold;
+    }
+
+    public void setLowerHDTreshold(float lowerHDTreshold) {
+        this.lowerHDTreshold = lowerHDTreshold;
+    }
+
+    public float getUpperHDTreshold() {
+        return upperHDTreshold;
+    }
+
+    public void setUpperHDTreshold(float upperHDTreshold) {
+        this.upperHDTreshold = upperHDTreshold;
+    }
+    
     
     public String getNumericalResults() {
         return numericalResults;
@@ -102,6 +136,14 @@ public class Comparison2Faces {
 
     public List<Float> getSortedHdValuesRelative() {
         return sortedHdValuesRelative;
+    }
+
+    public boolean isEditPoints() {
+        return editPoints;
+    }
+
+    public void setEditPoints(boolean editPoints) {
+        this.editPoints = editPoints;
     }
 
     public void setSortedHdValuesRelative(List<Float> sortedHdValuesRelative) {
@@ -138,6 +180,22 @@ public class Comparison2Faces {
 
     public void setValue(float value) {
         this.value = value;
+    }
+
+    public List<FacialPoint> getMainFp() {
+        return mainFp;
+    }
+
+    public void setMainFp(List<FacialPoint> mainFp) {
+        this.mainFp = mainFp;
+    }
+
+    public List<FacialPoint> getSecondaryFp() {
+        return secondaryFp;
+    }
+
+    public void setSecondaryFp(List<FacialPoint> secondaryFp) {
+        this.secondaryFp = secondaryFp;
     }
     
     
@@ -298,13 +356,21 @@ public class Comparison2Faces {
         this.hdColor2 = hdColor2;
     }
 
-    public int getHausdorfTreshold() {
-        return hausdorfTreshold;
+   public int getHausdorfMaxTreshold() {
+        return hausdorfMaxTreshold;
     }
 
-    public void setHausdorfTreshold(int hausdorfTreshold) {
-        this.hausdorfTreshold = hausdorfTreshold;
+    public void setHausdorfMaxTreshold(int hausdorfTreshold) {
+        this.hausdorfMaxTreshold = hausdorfTreshold;
     }
+
+    public int getHausdorfMinTreshold() {
+        return hausdorfMinTreshold;
+    }
+
+    public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
+        this.hausdorfMinTreshold = hausdorfMinTreshold;
+    }   
 
     public boolean isFpScaling() {
         return fpScaling;
@@ -376,6 +442,14 @@ public class Comparison2Faces {
 
     public void setIcpMetric(ICPmetric icpMetric) {
         this.icpMetric = icpMetric;
+    }
+
+    public boolean isUseSymmetry() {
+        return useSymmetry;
+    }
+
+    public void setUseSymmetry(boolean useSymmetry) {
+        this.useSymmetry = useSymmetry;
     }
 
     public ComparisonMethod getComparisonMethod() {

@@ -21,7 +21,8 @@ public class HDpaintingInfo {
     private List<Float> distance;
     private final Model model;
   //  private float threshPecent = 1f;
-    private float threshValue = Float.POSITIVE_INFINITY; 
+    private float maxThreshValue = Float.POSITIVE_INFINITY; 
+    private float minThreshValue = Float.NEGATIVE_INFINITY; 
     private float minSelection;
     private float maxSelection;
     private boolean isSelection =false;
@@ -125,9 +126,13 @@ public class HDpaintingInfo {
         return selectionVertices;
     }
 
-    public float getThreshValue() {
-        return threshValue;
+    public float getMaxThreshValue() {
+        return maxThreshValue;
     }
+     public float getMinThreshValue() {
+        return minThreshValue;
+    } 
+    
     
     public float getMinDistance(){
         float min = Float.POSITIVE_INFINITY;
@@ -136,7 +141,11 @@ public class HDpaintingInfo {
                 min = f;
             }
         }
-        return min;
+         if (minThreshValue == Float.NEGATIVE_INFINITY) {
+               return min;
+        }else{
+            return minThreshValue;
+        }
     }
     
      public float getMaxDistance(){
@@ -146,17 +155,21 @@ public class HDpaintingInfo {
                 max = f;
             }
         }
-        if (threshValue == Float.POSITIVE_INFINITY) {
+        if (maxThreshValue == Float.POSITIVE_INFINITY) {
                return max;
         }else{
-            return threshValue;
+            return maxThreshValue;
         }
     }
     
 
-    public void setThreshValue(float threshValue) {
-        this.threshValue = threshValue;
-    }    
+    public void setMaxThreshValue(float maxThreshValue) {
+        this.maxThreshValue = maxThreshValue;
+    }   
+    
+    public void setMinThreshValue(float minThreshValue) {
+        this.minThreshValue = minThreshValue;
+    } 
     
     public int[][] getIndicesForNormals() {
         return indicesForNormals;
@@ -188,7 +201,7 @@ public class HDpaintingInfo {
 
     public void setMaxSelection(float maxSelection) {
         this.maxSelection = maxSelection;
-        threshValue = maxSelection;
+        maxThreshValue = maxSelection;
     }
 
     public boolean isIsSelection() {          
@@ -196,10 +209,10 @@ public class HDpaintingInfo {
     }
 
     public void setIsSelection(boolean isSelection) {
-        threshValue = Float.POSITIVE_INFINITY;
+        maxThreshValue = Float.POSITIVE_INFINITY;
         minSelection = getMinDistance();
         maxSelection = getMaxDistance();
-        threshValue = maxSelection;
+        maxThreshValue = maxSelection;
         this.isSelection = isSelection;
     }
  

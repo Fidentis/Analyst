@@ -15,7 +15,7 @@ import cz.fidentis.composite.ModelSelector;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Graph2;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.VertexInfo;
@@ -195,6 +195,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private int maxColorUniform;
     private int minDistanceUniform;
     private int globalMaxDistanceUniform;
+    private int globalMinDistanceUniform;
     private int maxDistanceUniform;
     private int curDistanceAttrib;
     private int selectionUniform;
@@ -453,6 +454,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         }
         gl.glUniform1i(colorSchemeUniform,info.getHdInfo().getColorScheme().ordinal());
         gl.glUniform1f(globalMaxDistanceUniform, info.getHdInfo().getMaxDistance());
+        gl.glUniform1f(globalMinDistanceUniform, info.getHdInfo().getMinDistance());
         gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         gl.glUseProgram(0);
@@ -559,7 +561,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
          gl.glEnd();
          */
         if (info.isShowSamplingRays()) {
-            gl.glColor3f(0, 0, 0);
+             gl.glColor4fv(info.getColorOfCut(),0);
 
             //intersections/normals
             gl.glBegin(GL_LINES);
@@ -682,6 +684,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
     public boolean isShowVectors() {
         return info.isShowVectors();
+    }
+
+    public ComparisonListenerInfo getInfo() {
+        return info;
     }
 
     public void setShowVectors(boolean showVectors) {
@@ -1791,6 +1797,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     public FacialPoint getFacialPoint(int index) {
         return info.getFacialPoints().get(index);
     }
+    
+    public void setModelIndex(int index, Model m){
+        info.getModels().set(index, m);
+    }
 
     public void setColorOfPoint(float[] colorOfPoint) {
         info.setColorOfPoint(colorOfPoint);
@@ -2133,7 +2143,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
         } catch (IOException ex) {
             Logger.getLogger(ComparisonGLEventListener.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(1);
         }
 
         int vertexShaderSMId = initShader(gl, GL_VERTEX_SHADER, SMvertexShaderList);
@@ -2229,6 +2238,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         minDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "minDistance");
         maxDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "maxDistance");
         globalMaxDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "maxThreshDistance");
+        globalMinDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "minThreshDistance");
+
 
         checkProgramStatus(gl, ColorMapReductionShadersId, 3);
 
@@ -2297,7 +2308,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             String error = new String(infoLogBytes, 0, infoLogLength[0]);
 
             System.err.println(error);
-            System.exit(errorCode);
         }
     }
 
@@ -2326,7 +2336,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
             System.out.println(error);
             System.err.println(error);
-            System.exit(errorCode);
         }
     }
 

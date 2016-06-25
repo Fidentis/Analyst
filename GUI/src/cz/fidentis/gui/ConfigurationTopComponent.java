@@ -5,6 +5,7 @@
 package cz.fidentis.gui;
 
 
+import cz.fidentis.gui.ageing.AgeingConfiguration;
 import cz.fidentis.gui.comparison_batch.BatchComparisonConfiguration;
 import cz.fidentis.gui.comparison_batch.BatchComparisonResults;
 import cz.fidentis.gui.comparison_batch.BatchRegistrationConfiguration;
@@ -48,6 +49,7 @@ import org.openide.windows.TopComponent;
 })
 public final class ConfigurationTopComponent extends TopComponent {
 
+    private AgeingConfiguration ageingConfig;
     private CompositeConfiguration compositeConfiguration;
     private PairComparisonConfiguration comparisonConfiguration;
     private FeaturePointsConfiguration featurePointsConfiguration;
@@ -63,25 +65,6 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public ConfigurationTopComponent() {
         initComponents();
-        
-        registrationConfiguration = new PairRegistrationConfiguration();
-        compositeConfiguration = new CompositeConfiguration();
-        comparisonConfiguration = new PairComparisonConfiguration();
-        featurePointsConfiguration = new FeaturePointsConfiguration();
-        viewerConfiguration = new ViewerConfiguration();
-        batchComparisonConfiguration = new BatchComparisonConfiguration();
-        batchRegistrationConfiguration = new BatchRegistrationConfiguration();
-        oneToManyRegistrationConfiguration = new OneToManyRegistrationConfiguration();
-        oneToManyComparisonConfiguration = new OneToManyComparisonConfiguration();
-        pairComparisonResults = new PairComparisonResults();
-        oneToManyComparisonResults = new OneToManyComparisonResults();
-        batchComparisonResults = new BatchComparisonResults();
-//        FoldingPanel panel = new FoldingPanel();
-//        panel.addPanel("Registration Configuration", registrationConfiguration);
-//        panel.addPanel("Comparison", oneToManyComparisonConfiguration);
-//        this.add(panel);
-//        this.repaint();
-//        this.revalidate();
         
         setName(Bundle.CTL_ConfigurationTopComponent());
         setToolTipText(Bundle.HINT_ConfigurationTopComponent());
@@ -129,9 +112,25 @@ public final class ConfigurationTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+    
+    public void addAgeingComponent() {
+        this.removeAll();
+        
+        if(ageingConfig == null)
+            ageingConfig = new AgeingConfiguration();
+        
+        this.add(ageingConfig);
+        ageingConfig.setConfiguration();
+        this.revalidate();
+        this.repaint();
+    }
 
     public void addBatchComparisonResults() {
         this.removeAll();
+        
+        if(batchComparisonResults == null)
+            batchComparisonResults = new BatchComparisonResults();
+        
         this.add(batchComparisonResults);
         batchComparisonResults.setConfiguration();
         this.revalidate();
@@ -141,6 +140,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addPairComparisonResults() {
         this.removeAll();
+        
+        if(pairComparisonResults == null)
+            pairComparisonResults = new PairComparisonResults();
+        
         this.add(pairComparisonResults);
         pairComparisonResults.setConfiguration();
         this.revalidate();
@@ -150,6 +153,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addOneToManyComparisonResults() {
         this.removeAll();
+        
+        if(oneToManyComparisonResults == null)
+            oneToManyComparisonResults = new OneToManyComparisonResults();
+       
         this.add(oneToManyComparisonResults);
         oneToManyComparisonResults.setConfiguration();
          this.revalidate();
@@ -160,6 +167,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addComparisonComponent() {
         this.removeAll();
+        
+        if(comparisonConfiguration == null)
+            comparisonConfiguration = new PairComparisonConfiguration();
+        
         this.add(comparisonConfiguration);
         comparisonConfiguration.setConfiguration();
         this.repaint();
@@ -168,6 +179,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addBatchComparisonComponent() {
         this.removeAll();
+        
+        if(batchComparisonConfiguration == null)
+            batchComparisonConfiguration = new BatchComparisonConfiguration();
+        
         this.add(batchComparisonConfiguration);
         batchComparisonConfiguration.setConfiguration();
         this.revalidate();
@@ -177,6 +192,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addOneToManyComparisonComponent() {
         this.removeAll();
+        
+        if(oneToManyComparisonConfiguration == null)
+            oneToManyComparisonConfiguration = new OneToManyComparisonConfiguration();
+        
         this.add(oneToManyComparisonConfiguration);
         oneToManyComparisonConfiguration.setConfiguration();
         this.repaint();
@@ -185,6 +204,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addCompositeComponent() {
         this.removeAll();
+        
+        if(compositeConfiguration == null)
+            compositeConfiguration = new CompositeConfiguration();
+        
         this.add(compositeConfiguration);
         this.repaint();
         this.revalidate();
@@ -192,6 +215,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addFeaturePointsComponent() {
         this.removeAll();
+        
+        if(featurePointsConfiguration == null)
+            featurePointsConfiguration = new FeaturePointsConfiguration();
+        
         this.add(featurePointsConfiguration);
         this.repaint();
         this.revalidate();
@@ -200,6 +227,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addViewerComponent() {
         this.removeAll();
+        
+        if(viewerConfiguration == null)
+            viewerConfiguration = new ViewerConfiguration();
+        
         this.add(viewerConfiguration);
         this.repaint();
         this.revalidate();
@@ -208,6 +239,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addRegistrationComponent() {
         this.removeAll();
+        
+        if(registrationConfiguration == null)
+            registrationConfiguration = new PairRegistrationConfiguration();
+        
         this.add(registrationConfiguration);
         registrationConfiguration.setConfiguration();
         this.repaint();
@@ -217,6 +252,10 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addBatchRegistrationComponent() {
         this.removeAll();
+        
+        if(batchRegistrationConfiguration == null)
+            batchRegistrationConfiguration = new BatchRegistrationConfiguration();
+        
         this.add(batchRegistrationConfiguration);
         batchRegistrationConfiguration.setConfiguration();
         this.repaint();
@@ -226,12 +265,21 @@ public final class ConfigurationTopComponent extends TopComponent {
 
     public void addOneToManyRegistrationComponent() {
         this.removeAll();
+        
+        if(oneToManyRegistrationConfiguration == null)
+            oneToManyRegistrationConfiguration = new OneToManyRegistrationConfiguration();
+        
         this.add(oneToManyRegistrationConfiguration);
         oneToManyRegistrationConfiguration.setConfiguration();
         this.repaint();
         this.revalidate();
 
     }
+    
+    public AgeingConfiguration getAgeingConfiguration() {
+        return ageingConfig;
+    }
+    
     public PairRegistrationConfiguration getRegistrationConfiguration() {
         return registrationConfiguration;
     }

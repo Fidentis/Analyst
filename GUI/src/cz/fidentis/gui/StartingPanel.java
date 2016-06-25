@@ -8,10 +8,15 @@ package cz.fidentis.gui;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.Project;
 import cz.fidentis.gui.actions.ButtonHelper;
+import cz.fidentis.gui.observer.ProgressHandleMaster;
+import cz.fidentis.gui.observer.ProgressHandleObserver;
+import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utilsException.FileManipulationException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.WindowManager;
 
@@ -20,7 +25,8 @@ import org.openide.windows.WindowManager;
  * @author Katka
  */
 public class StartingPanel extends javax.swing.JPanel {
-
+    private static boolean triedDeleting = false;    
+    
     /**
      * Creates new form StartingPanel
      */
@@ -297,13 +303,39 @@ public class StartingPanel extends javax.swing.JPanel {
             Date date = new Date();
             Project project = new Project("Project " + dateFormat.format(date));
             project.setName("Project " + dateFormat.format(date));
+            try {
+                if(!triedDeleting){
+                    triedDeleting = true;
+                    
+                    ProgressHandleMaster master = new ProgressHandleMaster();
+                    final ProgressHandleObserver obs = new ProgressHandleObserver("Deleting tmp files");
+                    master.addObserver(obs);
+                
+                    Runnable run = new Runnable() {
+                        @Override
+                        public void run() {
+                            obs.startHandle();
+                        }
+                    };
+                
+                    Thread t = new Thread(run);
+                    t.start();                    
+                
+                    project.setTempDirectory(FileUtils.instance()
+                        .createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
+                
+                    master.updateObservers();
+                }
+            } catch (FileManipulationException ex) {
+                Exceptions.printStackTrace(ex);
+            }
 
             tc.setProject(project);
             tc.setDisplayName(project.getName());
             tc.setToolTipText("This is a " + project.getName() + " window");
             tc.setName(String.valueOf(Controller.getProjects().size()));
             project.setIndex(Controller.getProjects().size());
-            tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+            
             Controller.addProjcet(project);
 
             GUIController.getBlankProject(); // adds another "New Project" panel
@@ -324,13 +356,17 @@ public class StartingPanel extends javax.swing.JPanel {
         ButtonHelper.getTexturesMenuItem().setSelected(true);
         tc.getProject().addComposite(NbBundle.getMessage(Controller.class, "tree.node.composite"));
         //TODO chcek for existing compoites and name acordingly
-        tc.getCompositePanel().setCompositeData(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComposite());
-        tc.getCompositePanel().selectTemplates();
+        
         tc.getProject().setSelectedPart(1);
 
-        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+        //tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
         GUIController.getNavigatorTopComponent().update();
         GUIController.selectComposite();
+        
+        tc.getCompositePanel().setCompositeData(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComposite());
+        tc.getCompositePanel().selectTemplates();
+        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+        
         tc.requestActive();
     }//GEN-LAST:event_compositeCreationPanelMouseClicked
 
@@ -341,6 +377,9 @@ public class StartingPanel extends javax.swing.JPanel {
         tc.getProject().add2FacesComparison(NbBundle.getMessage(Controller.class, "tree.node.twoFacesComparison"));
         tc.getProject().setSelectedPart(2);
         GUIController.select2FacesViewer();
+        
+        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+        
         GUIController.getNavigatorTopComponent().update();
         tc.requestActive();
     }//GEN-LAST:event_compare2facesPanelMouseClicked
@@ -352,6 +391,9 @@ public class StartingPanel extends javax.swing.JPanel {
         tc.getProject().addBatchComparison(NbBundle.getMessage(Controller.class, "tree.node.batchComparison"));
         tc.getProject().setSelectedPart(4);
         GUIController.selectBatchViewer();
+        
+        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+        
         GUIController.getNavigatorTopComponent().update();
         tc.requestActive();
     }//GEN-LAST:event_batchComparisonPanelMouseClicked
@@ -363,6 +405,9 @@ public class StartingPanel extends javax.swing.JPanel {
         tc.getProject().addOneToManyComparison(NbBundle.getMessage(Controller.class, "tree.node.oneToMany"));
         tc.getProject().setSelectedPart(3);
         GUIController.selectOneToManyViewer();
+        
+        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+        
         GUIController.getNavigatorTopComponent().update();
         tc.requestActive();
     }//GEN-LAST:event_oneToManyComparisonPanelMouseClicked

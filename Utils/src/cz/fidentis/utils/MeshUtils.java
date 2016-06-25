@@ -8,10 +8,6 @@ package cz.fidentis.utils;
 
 
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
-import cz.fidentis.model.ModelLoader;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Vector3f;
 
@@ -20,7 +16,7 @@ import javax.vecmath.Vector3f;
  * @author Zuzana Ferkova
  */
 public class MeshUtils {
-    private static  MeshUtils instance;
+    private static MeshUtils instance;
     
     private MeshUtils(){};
     
@@ -59,14 +55,13 @@ public class MeshUtils {
      * 
      * @param model - model to mirror
      * @return mirrored model
-     * @throws CloneNotSupportedException 
      */
     public Model getMirroredModel(Model model){
         Model mirroredModel = model.copy();
         float[] centroid = computeCentroid(mirroredModel.getVerts());
         
         for (Vector3f vert : mirroredModel.getVerts()) {
-            vert.x = centroid[0] - vert.x;
+            vert.setX(centroid[0] - vert.x);
         }
 
         return mirroredModel;

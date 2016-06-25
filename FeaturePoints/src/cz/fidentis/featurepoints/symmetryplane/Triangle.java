@@ -5,6 +5,9 @@
  */
 package cz.fidentis.featurepoints.symmetryplane;
 
+import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
+import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3f;
 
 /**
@@ -13,40 +16,39 @@ import javax.vecmath.Vector3f;
  */
 public class Triangle {
 
-    private Vector3f a, b, c;
-//    public int Id;
-//    public SceneObject ReferenceObject; //reference to the object
-
+    private Point3f a, b, c;
+    
     public Triangle(Vector3f a, Vector3f b, Vector3f c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+        this(new Point3d(a), new Point3d(b), new Point3d(c));
     }
 
-    public Vector3f getA() {
+    public Triangle(Tuple3d a, Tuple3d b, Tuple3d c) {
+        this.a = new Point3f(a);
+        this.b = new Point3f(b);
+        this.c = new Point3f(c);
+    }
+
+    public Point3f getA() {
         return a;
     }
 
-    public void setA(Vector3f a) {
-        this.a = a;
+    public void setA(Tuple3d a) {
+        this.a = new Point3f(a);
     }
 
-    public Vector3f getB() {
+    public Point3f getB() {
         return b;
     }
 
-    public void setB(Vector3f b) {
-        this.b = b;
+    public void setB(Tuple3d b) {
+        this.b = new Point3f(b);
     }
 
-    public Vector3f getC() {
+    public Point3f getC() {
         return c;
     }
 
-    public void setC(Vector3f c) {
-        this.c = c;
+    public void setC(Tuple3d c) {
+        this.c = new Point3f(c);
     }
-    
-    
-
 }

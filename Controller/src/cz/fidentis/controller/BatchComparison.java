@@ -41,13 +41,16 @@ public class BatchComparison {
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
+    private List<List<ICPTransformation>> trans;
+    
     private boolean showPointInfo = true;   //whether to show description of the feature points
     private Color pointColor = Color.red;   //color of displayed feature points
     private Color hdColor1 = Color.green;   //redundant? take color from HDinfo instead eventually?
     private Color hdColor2 = Color.red;
     private int valuesTypeIndex = 0;        //relative, absolute
     private int metricTypeIndex = 0;        //RMS, min, max etc.
-    private int hausdorfTreshold = 100;     //threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private boolean fpScaling;          //whether feature points configuration were scaled
     private int fpTreshold = 30;        //threshold for feature points (still no clue what it's for)
     private int fpSize = 20;            //size of displayed feature points
@@ -55,6 +58,7 @@ public class BatchComparison {
     private int ICPmaxIteration = 10;      //max number of iteration used in ICP algorithm -- used when editing registration criteria
     private int ICPnumberOfHeads = 3;   //number of average faces created -- used when editing registration criteria
     private int templateIndex = 0;      //index of mesh picked as a base for average face
+    private boolean useSymmetry;
     private RegistrationMethod RegMethod ;  //used registration method
     private ComparisonMethod CompareMethod; //used comparison method
     private ICPmetric icpMetric;        //ICP metric used for registration
@@ -94,6 +98,33 @@ public class BatchComparison {
 
     public void setHDinfo(HDpaintingInfo HDinfo) {
         this.HDinfo = HDinfo;
+    }
+
+    public List<ICPTransformation> getTrans(int i) {
+        return trans.get(i);
+    }
+    
+    public void setTransSize(int i){
+        trans = new ArrayList<>(i);
+        for(int j = 0; j < i; j++){
+            trans.add(null);
+        }
+    }
+
+    public void addTrans(List<ICPTransformation> trans, int i) {
+        this.trans.set(i,trans);
+    }
+    
+    public void clearTrans(){
+        this.trans.clear();
+    }
+    
+    public List<List<ICPTransformation>> getTrans(){
+        return this.trans;
+    }
+    
+    public void setTrans(List<List<ICPTransformation>> trans){
+        this.trans = trans;
     }
     
     public String getNumericalResults() {
@@ -252,14 +283,22 @@ public class BatchComparison {
         this.hdColor2 = hdColor2;
     }
 
-    public int getHausdorfTreshold() {
-        return hausdorfTreshold;
+    public int getHausdorfMaxTreshold() {
+        return hausdorfMaxTreshold;
     }
 
-    public void setHausdorfTreshold(int hausdorfTreshold) {
-        this.hausdorfTreshold = hausdorfTreshold;
+    public void setHausdorfMaxTreshold(int hausdorfMaxTreshold) {
+        this.hausdorfMaxTreshold = hausdorfMaxTreshold;
     }
 
+    public int getHausdorfMinTreshold() {
+        return hausdorfMinTreshold;
+    }
+
+    public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
+        this.hausdorfMinTreshold = hausdorfMinTreshold;
+    }
+    
     public boolean isFpScaling() {
         return fpScaling;
     }
@@ -340,6 +379,15 @@ public class BatchComparison {
     public void setCompareButtonEnabled(boolean compareButtonEnabled) {
         this.compareButtonEnabled = compareButtonEnabled;
     }
+
+    public boolean isUseSymmetry() {
+        return useSymmetry;
+    }
+
+    public void setUseSymmetry(boolean useSymmetry) {
+        this.useSymmetry = useSymmetry;
+    }
+    
 
     
      public int getState() {

@@ -72,7 +72,7 @@ public class Curvature_jv {
      * compute curvature values of each vertex in m_geometry
      */
     private void computeCurvature() {
-        System.out.println("computing curvature of " + m_geometry.getName());
+        //System.out.println("computing curvature of " + m_geometry.getName());
         // iterate over all corners, each time adding the partial 
         // contribution to the mixed area and mean curvature normal operator
         // note: each corner is one summand of the sums in eq. 8 / fig 4.
@@ -167,7 +167,7 @@ public class Curvature_jv {
 
     public double[] getCurvature(CurvatureType type) {
 
-        System.out.println("computing curvature: " + type);
+        //System.out.println("computing curvature: " + type);
         VertexCurvature[] curvatures = curvatures();
         double values[] = new double[curvatures.length];
         double totalGaussian = 0;
@@ -202,11 +202,11 @@ public class Curvature_jv {
             //System.out.println(i + ".value: " + values[i]);
         }
 
-        System.out.println("sum of theta_ij: " + totalGaussian);
+        /*System.out.println("sum of theta_ij: " + totalGaussian);
         System.out.println("divided by 2pi: " + (totalGaussian / (2.0d * Math.PI)));
         System.out.println("max value: " + maxValue + ", min value: " + minValue);
         System.out.println("total angle deficit:" + (m_geometry.getNumVertices() - totalGaussian / (2.0d * Math.PI)));
-        System.out.println("done");
+        System.out.println("done");*/
 
         return values;
 

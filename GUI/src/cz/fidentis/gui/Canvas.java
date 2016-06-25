@@ -281,9 +281,9 @@ public class Canvas extends javax.swing.JPanel {
                 rightNavigationButtonMouseReleased(evt);
             }
         });
+        jLayeredPane.setLayer(rightNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(rightNavigationButton);
         rightNavigationButton.setBounds(91, 60, 22, 22);
-        jLayeredPane.setLayer(rightNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         upNavigationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/up22.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(upNavigationButton, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.upNavigationButton.text")); // NOI18N
@@ -299,9 +299,9 @@ public class Canvas extends javax.swing.JPanel {
                 upNavigationButtonMouseReleased(evt);
             }
         });
+        jLayeredPane.setLayer(upNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(upNavigationButton);
         upNavigationButton.setBounds(63, 32, 22, 22);
-        jLayeredPane.setLayer(upNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         minusNavigationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/minus.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(minusNavigationButton, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.minusNavigationButton.text")); // NOI18N
@@ -318,9 +318,9 @@ public class Canvas extends javax.swing.JPanel {
                 minusNavigationButtonMouseReleased(evt);
             }
         });
+        jLayeredPane.setLayer(minusNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(minusNavigationButton);
         minusNavigationButton.setBounds(62, 150, 22, 22);
-        jLayeredPane.setLayer(minusNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         leftnavigationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/left22.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(leftnavigationButton, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.leftnavigationButton.text")); // NOI18N
@@ -336,9 +336,9 @@ public class Canvas extends javax.swing.JPanel {
                 leftnavigationButtonMouseReleased(evt);
             }
         });
+        jLayeredPane.setLayer(leftnavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(leftnavigationButton);
         leftnavigationButton.setBounds(33, 60, 22, 22);
-        jLayeredPane.setLayer(leftnavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         homeNavigationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/home22.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(homeNavigationButton, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.homeNavigationButton.text")); // NOI18N
@@ -351,9 +351,9 @@ public class Canvas extends javax.swing.JPanel {
                 homeNavigationButtonActionPerformed(evt);
             }
         });
+        jLayeredPane.setLayer(homeNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(homeNavigationButton);
         homeNavigationButton.setBounds(63, 60, 22, 22);
-        jLayeredPane.setLayer(homeNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         plusNavigationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/plus.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(plusNavigationButton, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.plusNavigationButton.text")); // NOI18N
@@ -370,9 +370,9 @@ public class Canvas extends javax.swing.JPanel {
                 plusNavigationButtonMouseReleased(evt);
             }
         });
+        jLayeredPane.setLayer(plusNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(plusNavigationButton);
         plusNavigationButton.setBounds(62, 126, 22, 22);
-        jLayeredPane.setLayer(plusNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         downNavigationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/down22.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(downNavigationButton, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.downNavigationButton.text")); // NOI18N
@@ -388,15 +388,15 @@ public class Canvas extends javax.swing.JPanel {
                 downNavigationButtonMouseReleased(evt);
             }
         });
+        jLayeredPane.setLayer(downNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(downNavigationButton);
         downNavigationButton.setBounds(63, 90, 22, 22);
-        jLayeredPane.setLayer(downNavigationButton, javax.swing.JLayeredPane.MODAL_LAYER);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/navigationBackground.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.jLabel1.text")); // NOI18N
+        jLayeredPane.setLayer(jLabel1, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(jLabel1);
         jLabel1.setBounds(30, 30, 86, 86);
-        jLayeredPane.setLayer(jLabel1, javax.swing.JLayeredPane.MODAL_LAYER);
 
         jLabel2.setVisible(false);
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -410,14 +410,14 @@ public class Canvas extends javax.swing.JPanel {
                 jLabel2MouseClicked(evt);
             }
         });
+        jLayeredPane.setLayer(jLabel2, javax.swing.JLayeredPane.MODAL_LAYER);
         jLayeredPane.add(jLabel2);
         jLabel2.setBounds(190, 110, 90, 80);
-        jLayeredPane.setLayer(jLabel2, javax.swing.JLayeredPane.MODAL_LAYER);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
+        jLayeredPane.setLayer(jPanel2, javax.swing.JLayeredPane.PALETTE_LAYER);
         jLayeredPane.add(jPanel2);
         jPanel2.setBounds(0, 0, 0, 0);
-        jLayeredPane.setLayer(jPanel2, javax.swing.JLayeredPane.PALETTE_LAYER);
         jPanel2.setBounds(0, 0,jLayeredPane.getWidth(),jLayeredPane.getHeight());
 
         featurePointsPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -513,9 +513,9 @@ public class Canvas extends javax.swing.JPanel {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
         );
 
+        jLayeredPane.setLayer(featurePointsPanel, javax.swing.JLayeredPane.POPUP_LAYER);
         jLayeredPane.add(featurePointsPanel);
         featurePointsPanel.setBounds(10, 170, 250, 120);
-        jLayeredPane.setLayer(featurePointsPanel, javax.swing.JLayeredPane.POPUP_LAYER);
         featurePointsPanel.setVisible(false);
 
         textPane.setEditable(false);
@@ -524,9 +524,9 @@ public class Canvas extends javax.swing.JPanel {
         textPane.setEnabled(false);
         textPane.setPreferredSize(new java.awt.Dimension(300, 100));
         textPane.setVisible(false);
+        jLayeredPane.setLayer(textPane, javax.swing.JLayeredPane.POPUP_LAYER);
         jLayeredPane.add(textPane);
         textPane.setBounds(10, 180, 250, 110);
-        jLayeredPane.setLayer(textPane, javax.swing.JLayeredPane.POPUP_LAYER);
 
         jButton1.setVisible(false);
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(Canvas.class, "Canvas.jButton1.text")); // NOI18N
@@ -538,9 +538,9 @@ public class Canvas extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
+        jLayeredPane.setLayer(jButton1, javax.swing.JLayeredPane.POPUP_LAYER);
         jLayeredPane.add(jButton1);
         jButton1.setBounds(303, 10, 100, 120);
-        jLayeredPane.setLayer(jButton1, javax.swing.JLayeredPane.POPUP_LAYER);
 
         add(jLayeredPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -804,6 +804,7 @@ public class Canvas extends javax.swing.JPanel {
                             projectTopComponent.getViewerPanel_2Faces().setModel1(model);
                             projectTopComponent.getProject().setSelectedPart(2);
                             GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+<<<<<<< HEAD
 
                         } else {
                             ModelLoader loader = new ModelLoader();
@@ -813,6 +814,9 @@ public class Canvas extends javax.swing.JPanel {
                             projectTopComponent.getViewerPanel_2Faces().setModel2(model);
                             projectTopComponent.getProject().setSelectedPart(2);
                             GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+=======
+                            
+>>>>>>> refs/remotes/origin/development
                             int width = glJPanel.getWidth();
                             int height = glJPanel.getHeight();
                             glJPanel.display();
@@ -823,6 +827,19 @@ public class Canvas extends javax.swing.JPanel {
                             ImageIcon i = new ImageIcon(img.getScaledInstance(90, 108, Image.SCALE_SMOOTH));
                             jButton1.setIcon(i);
                             projectTopComponent.getProject().getSelectedComparison2Faces().setModelIcon(i);
+<<<<<<< HEAD
+=======
+
+                        } else {
+                            ModelLoader loader = new ModelLoader();
+                            Model model = loader.loadModel(new File(files[0].getPath()), true, true);
+
+                            projectTopComponent.getProject().getSelectedComparison2Faces().setModel2(model);
+                            projectTopComponent.getViewerPanel_2Faces().setModel2(model);
+                            projectTopComponent.getProject().setSelectedPart(2);
+                            GUIController.getConfigurationTopComponent().getRegistrationConfiguration().updateRegisterButtonEnabled();
+                            
+>>>>>>> refs/remotes/origin/development
                         }
 
                         p.finish();
@@ -871,6 +888,13 @@ public class Canvas extends javax.swing.JPanel {
             projectTopComponent.getViewerPanel_Batch().getListener().setModels(model);
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().updateRegisterButtonEnabled();
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().populateFacesComboBox();
+        } else if (projectTopComponent.getProject().getSelectedPart() == 6) {
+            ModelLoader loader = new ModelLoader();
+            Model m = loader.loadModel(files[0], true, true);
+            
+            projectTopComponent.getProject().getSelectedAgeing().setOriginModel(m);
+            projectTopComponent.getAgeingViewerPanel().getListenerOrigin().setModels(m);
+            GUIController.getConfigurationTopComponent().getAgeingConfiguration().setConfiguration();
         }
         jLabel2.setVisible(false);
         GUIController.getNavigatorTopComponent().update();
@@ -879,26 +903,35 @@ public class Canvas extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (projectTopComponent.getProject().getSelectedComparison2Faces().getState() == 2) {
 
-            if (projectTopComponent.getViewerPanel_2Faces().getListener2().getNumberOfModels() > 1) {
-                Model model = projectTopComponent.getViewerPanel_2Faces().getListener2().getModel();
-                projectTopComponent.getViewerPanel_2Faces().getListener2().setModels(model);
+            if (projectTopComponent.getViewerPanel_2Faces().getListener1().getNumberOfModels() > 1) {
+                Model model = projectTopComponent.getViewerPanel_2Faces().getListener1().getModel();
+                projectTopComponent.getViewerPanel_2Faces().getListener1().setModels(model);
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
             } else {
                 //   ModelLoader l = new ModelLoader();
                 //  Model model = l.loadModel(projectTopComponent.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
+<<<<<<< HEAD
                 Model model = projectTopComponent.getViewerPanel_2Faces().getListener1().getModel();
                 projectTopComponent.getViewerPanel_2Faces().getListener2().addModel(model);
+=======
+                Model model = projectTopComponent.getViewerPanel_2Faces().getListener2().getModel();
+                projectTopComponent.getViewerPanel_2Faces().getListener1().addModel(model);
+>>>>>>> refs/remotes/origin/development
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
 
             }
         } else {
+<<<<<<< HEAD
             if (projectTopComponent.getViewerPanel_2Faces().getListener2().isPaintHD()) {
+=======
+            if (projectTopComponent.getViewerPanel_2Faces().getListener1().isPaintHD()) {
+>>>>>>> refs/remotes/origin/development
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getResultIcon());
             } else {
                 jButton1.setIcon(projectTopComponent.getProject().getSelectedComparison2Faces().getModelIcon());
             }
-            projectTopComponent.getViewerPanel_2Faces().getListener2().setPaintHD(
-                    !projectTopComponent.getViewerPanel_2Faces().getListener2().isPaintHD());
+            projectTopComponent.getViewerPanel_2Faces().getListener1().setPaintHD(
+                    !projectTopComponent.getViewerPanel_2Faces().getListener1().isPaintHD());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

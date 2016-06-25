@@ -230,6 +230,12 @@ public class GUIController implements StatusLineElementProvider{
         selectedProjectTopComponent.show1toNViewer();
         ButtonHelper.selectViewer();
     }
+     
+     public static void selectAgeing() {
+         selectedProjectTopComponent.clearPanel();
+         selectedProjectTopComponent.showAgeing();
+         ButtonHelper.selectAgeing();
+     }
 
     public static void updateSelectedComponent() {
         if (selectedProjectTopComponent.getProject() != null) {
@@ -257,6 +263,8 @@ public class GUIController implements StatusLineElementProvider{
                 ButtonHelper.selectComposite();
             } else if (i == 5) {
                 ButtonHelper.selectViewer();
+            } else if (i == 6) {
+                ButtonHelper.selectAgeing();
             } else {
                 selectedProjectTopComponent.showEmptyView();
                 ButtonHelper.setCompositeEnabled(false);

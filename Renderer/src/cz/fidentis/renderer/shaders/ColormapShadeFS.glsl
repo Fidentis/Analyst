@@ -3,6 +3,7 @@ uniform int colorScheme;
 uniform float minDistance;
 uniform float maxDistance;
 uniform float maxThreshDistance;
+uniform float minThreshDistance;
 layout(origin_upper_left) in vec4 gl_FragCoord;
 
 
@@ -169,15 +170,15 @@ void main(void)
    vec4 shade = vec4((unpackUnorm4x8(frag.w)).xyz,1);
    vec4 color = shade;
    float currentDistance = uintBitsToFloat(frag.y);
-    if((unpackUnorm4x8(frag.w)).w == 1 && (currentDistance<maxThreshDistance)){           
+    if((unpackUnorm4x8(frag.w)).w == 1 && (currentDistance<maxThreshDistance) && (currentDistance>minThreshDistance)){           
            if(colorScheme == 1){
-                color = shade * vec4(chooseDivergingColor(minDistance,maxThreshDistance,currentDistance),1);
+                color = shade * vec4(chooseDivergingColor(minThreshDistance,maxThreshDistance,currentDistance),1);
             }
             if(colorScheme == 0){
-                color = shade * vec4(chooseSequentialColor(minDistance,maxThreshDistance,currentDistance),1);
+                color = shade * vec4(chooseSequentialColor(minThreshDistance,maxThreshDistance,currentDistance),1);
             }
             if(colorScheme == 2){
-                color = shade * vec4(chooseRainbowColor(minDistance,maxThreshDistance,currentDistance),1);
+                color = shade * vec4(chooseRainbowColor(minThreshDistance,maxThreshDistance,currentDistance),1);
             }
     }else{
             color = shade/2;

@@ -41,12 +41,14 @@ public class histogramPanel extends JComponent {
     private Vector4f activeArea = new Vector4f();
     private Point slider1Tip;
     private boolean slider1Selected = false;
-    private float sliderX;
+    private Point slider2Tip;
+    private boolean slider2Selected = false;
+    private float slider2X;
+    private float slider1X;
     private float mouseX;
     private float minValue = 0;
     private float maxValue = 0;
-    
-    
+
     private int width = 100;
     private int height = 100;
 
@@ -56,12 +58,12 @@ public class histogramPanel extends JComponent {
     public histogramPanel() {
         initComponents();
         slider1Tip = new Point(this.getWidth() - 5, 5);
+        slider2Tip = new Point(5, 5);
 
     }
 
     private HDpaintingInfo hdp;
 
-    
     public void setHdp(HDpaintingInfo hdp) {
         this.hdp = hdp;
     }
@@ -131,7 +133,7 @@ public class histogramPanel extends JComponent {
 
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-               
+
         width = this.getWidth();
         height = this.getHeight();
         recomputeSliderPosition();
@@ -142,8 +144,11 @@ public class histogramPanel extends JComponent {
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
 
         if (Math.abs(evt.getX() - slider1Tip.x) < 3 && (evt.getY() < (height - 60))) {
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));      
-            
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+
+        } else if (Math.abs(evt.getX() - slider2Tip.x) < 3 && (evt.getY() < (height - 60))) {
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+
         } else {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
@@ -155,7 +160,12 @@ public class histogramPanel extends JComponent {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         if (Math.abs(evt.getX() - slider1Tip.x) < 3 && (evt.getY() < (height - 60))) {
             slider1Selected = true;
-            sliderX = slider1Tip.x;
+            slider1X = slider1Tip.x;
+            mouseX = evt.getX();
+        }
+        if (Math.abs(evt.getX() - slider2Tip.x) < 3 && (evt.getY() < (height - 60))) {
+            slider2Selected = true;
+            slider2X = slider2Tip.x;
             mouseX = evt.getX();
         }
 
@@ -163,28 +173,45 @@ public class histogramPanel extends JComponent {
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         slider1Selected = false;
-         hdp.setThreshValue(minValue+((slider1Tip.x-5)/(float)(this.getWidth()-10))*(maxValue-minValue));
-         this.revalidate();
+        slider2Selected = false;
+        hdp.setMaxThreshValue(minValue + ((slider1Tip.x - 5) / (float) (this.getWidth() - 10)) * (maxValue - minValue));
+        hdp.setMinThreshValue(minValue + ((slider2Tip.x - 5) / (float) (this.getWidth() - 10)) * (maxValue - minValue));
+        this.revalidate();
         this.repaint();
-                         
+
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         if (slider1Selected) {
-           
-            if (sliderX + (evt.getX() - mouseX) < (width - 5) && sliderX + (evt.getX() - mouseX) > 5) {
-                slider1Tip.setLocation(sliderX + (evt.getX() - mouseX), slider1Tip.y);
-            } else if (sliderX + (evt.getX() - mouseX) > width - 5) {
+
+            if (slider1X + (evt.getX() - mouseX) < (width - 5) && slider1X + (evt.getX() - mouseX) > 5) {
+                slider1Tip.setLocation(slider1X + (evt.getX() - mouseX), slider1Tip.y);
+            } else if (slider1X + (evt.getX() - mouseX) > width - 5) {
                 slider1Tip.setLocation(width - 5, slider1Tip.y);
             } else {
                 slider1Tip.setLocation(5, slider1Tip.y);
             }
-             hdp.setThreshValue(minValue+((slider1Tip.x-5)/(float)(this.getWidth()-10))*(maxValue-minValue));
-            
+            hdp.setMaxThreshValue(minValue + ((slider1Tip.x - 5) / (float) (this.getWidth() - 10)) * (maxValue - minValue));
+           
+
         }
+        if (slider2Selected) {
+
+            if (slider2X + (evt.getX() - mouseX) < (width - 5) && slider2X + (evt.getX() - mouseX) > 5) {
+                slider2Tip.setLocation(slider2X + (evt.getX() - mouseX), slider2Tip.y);
+            } else if (slider2X + (evt.getX() - mouseX) > width - 5) {
+                slider2Tip.setLocation(width - 5, slider2Tip.y);
+            } else {
+                slider2Tip.setLocation(5, slider2Tip.y);
+            }
+             hdp.setMinThreshValue(minValue + ((slider2Tip.x - 5) / (float) (this.getWidth() - 10)) * (maxValue - minValue));
+
+
+        }
+        
         this.revalidate();
         this.repaint();
-                  
+
     }//GEN-LAST:event_formMouseDragged
 
     //@Override
@@ -193,40 +220,44 @@ public class histogramPanel extends JComponent {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(Color.WHITE);
-     //   g2.fill(new Rectangle2D.Double(0, 0, width, height));
+        //   g2.fill(new Rectangle2D.Double(0, 0, width, height));
         if (values != null && hdp != null) {
             int numValues = values.size();
 
             maxValue = Float.MIN_VALUE;
-            float maxThreshValue = hdp.getThreshValue();//Float.MIN_VALUE;
+            float maxThreshValue = hdp.getMaxThreshValue();//Float.MIN_VALUE;
+            float minThreshValue = hdp.getMinThreshValue();
             minValue = Float.MAX_VALUE;
-            
-            if(!(hdp.isIsSelection() && !hdp.getSelectionVertices().isEmpty())){
-            for (int i = 0; i < numValues; i++) {
-                if (values.get(i) > maxValue) {
-                    maxValue = values.get(i);
-                }
-                if (values.get(i) <= hdp.getMaxDistance()) {
 
-                    if (values.get(i) > maxThreshValue) {
-                        maxThreshValue = values.get(i);
+            if (!(hdp.isIsSelection() && !hdp.getSelectionVertices().isEmpty())) {
+                for (int i = 0; i < numValues; i++) {
+                    if (values.get(i) > maxValue) {
+                        maxValue = values.get(i);
                     }
-                    if (values.get(i) < minValue) {
-                        minValue = values.get(i);
+                    if (values.get(i) <= hdp.getMaxDistance()) {
+
+                        if (values.get(i) > maxThreshValue) {
+                            maxThreshValue = values.get(i);
+                        }
+                         if (values.get(i) <minThreshValue) {
+                            minThreshValue = values.get(i);
+                        }
+                        
+                        if (values.get(i) < minValue) {
+                            minValue = values.get(i);
+                        }
                     }
                 }
-            }
-            }
-            else{
+            } else {
                 minValue = hdp.getMinSelection();
                 maxValue = hdp.getMaxSelection();
             }
-            float ratio = (maxThreshValue - minValue) / (maxValue - minValue);
+            float ratio = (maxThreshValue - minThreshValue) / (maxValue - minValue);
             paintScale(g2, ratio);
         }
     }
 
-    private void paintScale(Graphics2D g2,  float ratio) {
+    private void paintScale(Graphics2D g2, float ratio) {
         g2.setPaint(Color.BLACK);
         g2.draw(new Line2D.Float(5, height - 60, width - 5, height - 60));
         float stepWidth = 1;
@@ -241,7 +272,7 @@ public class histogramPanel extends JComponent {
         }
 
         int scaleSteps = 5;
-        float scaleStepNum = (maxValue - minValue)/(float)scaleSteps;
+        float scaleStepNum = (maxValue - minValue) / (float) scaleSteps;
         for (int i = 0; i <= scaleSteps; i++) {
             float wd = i * ((width - 10) / (float) scaleSteps);
             g2.setPaint(Color.BLACK);
@@ -250,16 +281,16 @@ public class histogramPanel extends JComponent {
             g2.setFont(f);
             FontMetrics fm = getFontMetrics(getFont());
             float h = fm.getHeight();
-            float n = Math.round((minValue+i*scaleStepNum) * 1000f) / 1000f;
+            float n = Math.round((minValue + i * scaleStepNum) * 1000f) / 1000f;
             float w = fm.stringWidth(Float.toString(n));
-            
+
             AffineTransform at = g2.getTransform();//new AffineTransform();
-             g2.rotate(-Math.PI / 2f);
+            g2.rotate(-Math.PI / 2f);
             // g2.setTransform(at);
-             g2.drawString(Float.toString(n), -1 * (height - 48) - w, (5 + wd) + h / 3);
-             
-         //    g2.drawString(Float.toString(n), wd-3,  height - 25);
-           //  at.rotate(Math.PI / 2f);
+            g2.drawString(Float.toString(n), -1 * (height - 48) - w, (5 + wd) + h / 3);
+
+            //    g2.drawString(Float.toString(n), wd-3,  height - 25);
+            //  at.rotate(Math.PI / 2f);
             g2.setTransform(at);
         }
 
@@ -267,8 +298,8 @@ public class histogramPanel extends JComponent {
         for (int i = 0; i < numValues; i++) {
             for (int k = 0; k < (width - 10) / stepWidth; k++) {
                 if (values.get(i) > boundaries[k] && values.get(i) <= boundaries[k + 1]) {
-                    if((hdp.isIsSelection() && hdp.getSelectionVertices().contains(i)) || (! hdp.isIsSelection()) ){
-                        histogram[k]++;      
+                    if ((hdp.isIsSelection() && hdp.getSelectionVertices().contains(i)) || (!hdp.isIsSelection())) {
+                        histogram[k]++;
                     }
                 }
             }
@@ -286,11 +317,11 @@ public class histogramPanel extends JComponent {
             if (i < (width - 10)) {
                 Color c1;
                 Color c2;
-                if (5 + (i * stepWidth)<=slider1Tip.x) {
-                   c1 = s.chooseColor(0,slider1Tip.x-5,(i * stepWidth), hdp.getColorScheme());
-                   c2 =s.chooseColor(0,slider1Tip.x-5,((i + 1) * stepWidth), hdp.getColorScheme());
-                  //  c1 =new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), hdp.chooseColorHSVMapping((i * stepWidth),slider1Tip.x-5, 0), 1);
-                 //   c2 =new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), hdp.chooseColorHSVMapping(((i + 1) * stepWidth), slider1Tip.x-5, 0), 1);
+                if (5 + (i * stepWidth) <= slider1Tip.x && 5 + (i * stepWidth)>= slider2Tip.x) {
+                    c1 = s.chooseColor(slider2Tip.x - 5, slider1Tip.x - 5, (i * stepWidth), hdp.getColorScheme());
+                    c2 = s.chooseColor(slider2Tip.x - 5, slider1Tip.x - 5, ((i + 1) * stepWidth), hdp.getColorScheme());
+                    //  c1 =new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), hdp.chooseColorHSVMapping((i * stepWidth),slider1Tip.x-5, 0), 1);
+                    //   c2 =new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), hdp.chooseColorHSVMapping(((i + 1) * stepWidth), slider1Tip.x-5, 0), 1);
                 } else {
                     c1 = new Color(170, 170, 170);
                     c2 = new Color(170, 170, 170);
@@ -304,44 +335,52 @@ public class histogramPanel extends JComponent {
         }
 
         paintSlider(g2, slider1Tip);
+        paintSlider(g2, slider2Tip);
 
     }
 
     private void paintSlider(Graphics2D g2, Point sliderTip) {
         g2.setPaint(Color.BLACK);
-        
-        int xPoints[] = {(int) sliderTip.x-1, (int) sliderTip.x - 4, (int) sliderTip.x + 3, sliderTip.x};
-        int yPoints[] = {(int) sliderTip.y, (int) sliderTip.y - 5, (int) sliderTip.y - 5,(int) sliderTip.y};
+
+        int xPoints[] = {(int) sliderTip.x - 1, (int) sliderTip.x - 4, (int) sliderTip.x + 3, sliderTip.x};
+        int yPoints[] = {(int) sliderTip.y, (int) sliderTip.y - 5, (int) sliderTip.y - 5, (int) sliderTip.y};
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        g2.fill(new Polygon(xPoints, yPoints, 4)); 
-        g2.setStroke(new BasicStroke(2));        
-        g2.draw(new Line2D.Float(sliderTip.x-1, sliderTip.y, sliderTip.x-1, height - 61));
-         g2.setStroke(new BasicStroke(1));  
+        g2.fill(new Polygon(xPoints, yPoints, 4));
+        g2.setStroke(new BasicStroke(2));
+        g2.draw(new Line2D.Float(sliderTip.x - 1, sliderTip.y, sliderTip.x - 1, height - 61));
+        g2.setStroke(new BasicStroke(1));
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    public void resetSlider(){
-        slider1Tip = new Point(this.getWidth() - 5, 5); 
+    public void resetSlider() {
+        slider1Tip = new Point(this.getWidth() - 5, 5);
+        slider2Tip = new Point(5, 5);
     }
-    
-    
+
     public void recomputeSliderPosition() {
-        if(hdp == null){
+        if (hdp == null) {
             return;
         }
         
-        if(hdp.getThreshValue()==Float.POSITIVE_INFINITY){
-            slider1Tip = new Point(this.getWidth() - 5, 5); 
+        if (hdp.getMaxThreshValue() == Float.POSITIVE_INFINITY) {
+            slider1Tip = new Point(this.getWidth() - 5, 5);
+        } else {
+            float thresh = hdp.getMaxThreshValue();
+            slider1Tip.setLocation(5 + ((thresh - minValue) / (maxValue - minValue)) * (this.width - 10), slider1Tip.y);
         }
-        else{
-        float thresh = hdp.getThreshValue();
-        slider1Tip.setLocation(5+((thresh - minValue)/(maxValue - minValue)) *(this.width -10),slider1Tip.y);}
+        
+        if (hdp.getMinThreshValue() == Float.NEGATIVE_INFINITY) {
+            slider2Tip = new Point(5, 5);
+        } else {
+            float thresh = hdp.getMinThreshValue();
+            slider2Tip.setLocation(5 + ((thresh - minValue) / (maxValue - minValue)) * (this.width - 10), slider2Tip.y);
+        }
     }
 
 }

@@ -283,86 +283,120 @@ public class Icp {
         }
             //end computing scale paramters
 
-        transformations = new ICPTransformation(new Vector3f(meanX, meanY, meanZ), scaleFactor, q, meanD);
+        transformations = new ICPTransformation(new Vector3f(meanX, meanY, meanZ), scaleFactor, q, meanD, null);
 
         return transformations;
     }
     
     /**
      * Applies computed transformation to given model. Only applies scale if it's allowed in ICP class.
+     * If transformation contains transformation matrix, this will be applied, otherwise 
+     * translation, rotation and scale will be applied separately
      * 
      * @param compF - mesh to apply the transformation to
      * @param transformation - computed transformations to be applied
      */
     public void applyTransformation(List<Vector3f> compF, ICPTransformation transformation, boolean scale){
-        Vector3f p1;
-        Quaternion qCopy;
-        
-        //apply rotation, translation and scale (if allowed)
+        if (transformation.getTransMatrix() != null) {
+
+            for (Vector3f v : compF) {
+                double[] point = {v.x, v.y, v.z};
+                Matrix p = new Matrix(point, 1);
+                p = p.times(transformation.getTransMatrix());
+                v.setX((float) p.get(0, 0));
+                v.setY((float) p.get(0, 1));
+                v.setZ((float) p.get(0, 2));
+            }
+        } else {
+
+            Vector3f p1;
+            Quaternion qCopy;
+            /*Quaternion qq = new Quaternion(transformation.getRotation().getX(), transformation.getRotation().getY(), transformation.getRotation().getZ(), transformation.getRotation().getW());
+        qq.inverse();*/
+
+            //apply rotation, translation and scale (if allowed)
             for (Vector3f compF1 : compF) {
                 p1 = compF1;
-                
-                
+
                 Quaternion point = new Quaternion(p1.getX(), p1.getY(), p1.getZ(), 1);
-                
-                if(compF.size() > 1){
+
+                if (compF.size() > 1) {
                     qCopy = MathUtils.instance().multiply(point, conjugateQ(transformation.getRotation()));
                     qCopy = MathUtils.instance().multiply(transformation.getRotation(), qCopy);
-                }else{
+                    //qCopy = MathUtils.instance().multiply(qq,point);
+                } else {
                     qCopy = point;
                 }
-                
-                if(scale && !Float.isNaN(transformation.getScaleFactor())){
-                p1.setX(qCopy.getX() * transformation.getScaleFactor() + transformation.getTranslation().x);
-                p1.setY(qCopy.getY() * transformation.getScaleFactor() + transformation.getTranslation().y);
-                p1.setZ(qCopy.getZ() * transformation.getScaleFactor() + transformation.getTranslation().z);
-                }else{
-                p1.setX(qCopy.getX() + transformation.getTranslation().x);
-                p1.setY(qCopy.getY() + transformation.getTranslation().y);
-                p1.setZ(qCopy.getZ() + transformation.getTranslation().z);
+
+                if (scale && !Float.isNaN(transformation.getScaleFactor())) {
+                    p1.setX(qCopy.getX() * transformation.getScaleFactor() + transformation.getTranslation().x);
+                    p1.setY(qCopy.getY() * transformation.getScaleFactor() + transformation.getTranslation().y);
+                    p1.setZ(qCopy.getZ() * transformation.getScaleFactor() + transformation.getTranslation().z);
+                } else {
+                    p1.setX(qCopy.getX() + transformation.getTranslation().x);
+                    p1.setY(qCopy.getY() + transformation.getTranslation().y);
+                    p1.setZ(qCopy.getZ() + transformation.getTranslation().z);
                 }
             }
+        }
     }
     
     /***
      * Reverse all transformations computed in given ICPTransformation class on verticies.
+     * If transformation contains transformation matrix, this will be applied, otherwise 
+     * translation, rotation and scale will be applied separately
      * 
      * @param trans - computed transformations
      * @param verticies - vertices to be reverted
      * @param scale - whether scale was used 
      */
     public void reverseTransformations(ICPTransformation trans, List<Vector3f> verticies, boolean scale){
-        if(scale){
-            for(Vector3f v : verticies){
-                v.setX((v.x - trans.getTranslation().x) / trans.getScaleFactor());
-                v.setY((v.y - trans.getTranslation().y) / trans.getScaleFactor());
-                v.setZ((v.z - trans.getTranslation().z) / trans.getScaleFactor());
+        if (trans.getTransMatrix() != null) {
+            Matrix inverse = trans.getTransMatrix().inverse();
+
+            for (Vector3f v : verticies) {
+                double[] point = {v.x, v.y, v.z};
+                Matrix p = new Matrix(point, 1);
+                p = p.times(inverse);
+                v.setX((float) p.get(0, 0));
+                v.setY((float) p.get(0, 1));
+                v.setZ((float) p.get(0, 2));
             }
-        }else{
-           for(Vector3f v : verticies){
-                v.setX(v.x - trans.getTranslation().x);
-                v.setY(v.y - trans.getTranslation().y);
-                v.setZ(v.z - trans.getTranslation().z);
-            } 
-        }
-        
-        //Quaternion reverse = conjugateQ(trans.getRotation());
-        Quaternion reverse = new Quaternion(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
-        reverse.inverse();
-        Quaternion reverCon = conjugateQ(reverse);
-        
-        Quaternion oldV;
-        
-        for (Vector3f v : verticies) {
-           oldV = new Quaternion(v.x, v.y, v.z, 1);
-           /*oldV = MathUtils.instance().multiply(reverse, oldV);
+        } else {
+
+            if (scale) {
+                for (Vector3f v : verticies) {
+                    v.setX((v.x - trans.getTranslation().x) / trans.getScaleFactor());
+                    v.setY((v.y - trans.getTranslation().y) / trans.getScaleFactor());
+                    v.setZ((v.z - trans.getTranslation().z) / trans.getScaleFactor());
+                }
+            } else {
+                for (Vector3f v : verticies) {
+                    v.setX(v.x - trans.getTranslation().x);
+                    v.setY(v.y - trans.getTranslation().y);
+                    v.setZ(v.z - trans.getTranslation().z);
+                }
+            }
+
+            //Quaternion reverse = conjugateQ(trans.getRotation());
+            //Quaternion reverse = new Quaternion(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
+            //reverse.inverse();
+            Quaternion reverCon = conjugateQ(trans.getRotation());
+
+            Quaternion oldV;
+
+            for (Vector3f v : verticies) {
+                oldV = new Quaternion(v.x, v.y, v.z, 1);
+                /*oldV = MathUtils.instance().multiply(reverse, oldV);
            oldV = MathUtils.instance().multiply(oldV, trans.getRotation());*/
-           oldV = MathUtils.instance().multiply(reverse, oldV);
-           oldV = MathUtils.instance().multiply(oldV, reverCon);
-           
-           v.setX(oldV.getX());
-           v.setY(oldV.getY());
-           v.setZ(oldV.getZ());
+                oldV = MathUtils.instance().multiply(oldV, trans.getRotation());
+                oldV = MathUtils.instance().multiply(reverCon, oldV);
+                //oldV = MathUtils.instance().multiply(trans.getRotation(), oldV);
+
+                v.setX(oldV.getX());
+                v.setY(oldV.getY());
+                v.setZ(oldV.getZ());
+            }
         }
     }
     
@@ -374,7 +408,11 @@ public class Icp {
      * @param scale - whether scale was used
      */
     public void reverseAllTransformations(List<ICPTransformation> trans, List<Vector3f> verticies, boolean scale){
+<<<<<<< HEAD
         /*for(int i = trans.size() - 1; i >= 0; i--){
+=======
+       for(int i = trans.size() - 1; i >= 0; i--){
+>>>>>>> refs/remotes/origin/development
             reverseTransformations(trans.get(i), verticies, scale);
         }*/
         
@@ -404,6 +442,54 @@ public class Icp {
             r.mult(q);
         }
         
+<<<<<<< HEAD
         return new ICPTransformation(t, s, r, 0.0f);
+=======
+        /*ICPTransformation finalTrans = createFinalTrans(trans, scale);
+        reverseTransformations(finalTrans, verticies, scale);*/
+    }
+    
+    /**
+     * Create final transformation combining all transformations in the list.
+     * 
+     * @param trans - transformations to combine
+     * @param scale - whether scale was used
+     * @return final transformation combining all listed transformations
+     */
+    public ICPTransformation createFinalTrans(List<ICPTransformation> trans, boolean scale){
+        float s = 1;
+        Vector3f t = new Vector3f();
+        Quaternion r = new Quaternion(0,0,0,1);
+        
+        for(int i = 0; i < trans.size(); i++){
+            ICPTransformation tran = trans.get(i);
+            
+            if(scale)
+                s *= tran.getScaleFactor();
+            
+            //i = 0, t = tran.get(i)
+            //t = trans.getTranslation() + tran.getRotation(tran.getScaleFactor() * t)
+            if(i == 0){
+                t = tran.getTranslation();
+            }
+            
+            if(scale && i > 0)
+                t = MathUtils.instance().multiplyVectorByNumber(t, tran.getScaleFactor());
+            Quaternion qt = new Quaternion(t.x,t.y,t.z,1);
+            Quaternion conjugate = conjugateQ(tran.getRotation());
+            qt = MathUtils.instance().multiply(tran.getRotation(), qt);
+            qt = MathUtils.instance().multiply(qt, conjugate);
+            
+            t.x = qt.getX() + tran.getTranslation().x;
+            t.y = qt.getY() + tran.getTranslation().y;
+            t.z = qt.getZ() + tran.getTranslation().z;
+           
+            
+            Quaternion q = tran.getRotation();
+            r.mult(q);
+        }
+        
+        return new ICPTransformation(t, s, r, 0.0f, null);
+>>>>>>> refs/remotes/origin/development
     }
 }

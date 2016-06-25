@@ -7,6 +7,7 @@ package cz.fidentis.gui.comparison_one_to_many;
 
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
@@ -17,7 +18,7 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -38,6 +39,7 @@ import javax.swing.JLabel;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -100,6 +102,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         icpMetricLabel = new javax.swing.JLabel();
         icpMetricComboBox = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        symModelsCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -388,6 +392,15 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel11.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(symModelsCheckbox, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.symModelsCheckbox.text")); // NOI18N
+        symModelsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                symModelsCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -408,9 +421,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel7)
                             .addComponent(jLabel10)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -419,7 +433,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                                     .addComponent(jCheckBox9)
                                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jSpinner2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(symModelsCheckbox)))
                             .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(discPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -445,6 +460,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel10)
                     .addComponent(jCheckBox9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11)
+                    .addComponent(symModelsCheckbox))
+                .addGap(9, 9, 9)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -762,7 +781,9 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 976, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -905,6 +926,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             //osefuj error
                             jButton1.setEnabled(true);
                         }
+<<<<<<< HEAD
 
                         List<File> models = tc.getProject().getSelectedOneToManyComparison().getModels();
                         List<File> results;
@@ -916,6 +938,27 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         float value = getUndersampleValue(m, t);
                         KdTree mainF;
 
+=======
+
+                        List<File> models = tc.getProject().getSelectedOneToManyComparison().getModels();
+                                          
+                        List<File> results;
+                        Model template = tc.getOneToManyViewerPanel().getListener1().getModel();
+                       
+                        
+                        if(symModelsCheckbox.isSelected()){
+                            models = SurfaceComparisonProcessing.instance().createSymModelAndSave(models);
+                            SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(template);
+                        }
+                        
+
+                        ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
+                        Methods m = (Methods) jComboBox2.getSelectedItem();
+                        Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
+                        float value = getUndersampleValue(m, t);
+                        KdTree mainF;
+
+>>>>>>> refs/remotes/origin/development
                         if (metric == ICPmetric.VERTEX_TO_VERTEX) {
                             mainF = new KdTreeIndexed(template.getVerts());
                         } else {
@@ -923,8 +966,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         }
 
                         results = SurfaceComparisonProcessing.instance().processOneToMany(mainF, models, (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
+<<<<<<< HEAD
                                 m, t, value);
                         tc.getProject().getSelectedOneToManyComparison().setRegisteredModels(results);
+=======
+                                m, t, value, tc.getProject().getSelectedOneToManyComparison());
+                        tc.getProject().getSelectedOneToManyComparison().setRegisteredModels(results);
+                        tc.getProject().getSelectedOneToManyComparison().setUseSymmetry(symModelsCheckbox.isSelected());
+>>>>>>> refs/remotes/origin/development
                         tc.getProject().getSelectedOneToManyComparison().setIcpMetric(metric);
                         tc.getProject().getSelectedOneToManyComparison().setMethod(m.ordinal());
                         tc.getProject().getSelectedOneToManyComparison().setType(t.ordinal());
@@ -932,6 +981,12 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                         p.finish();
                     } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+                        jButton1.setEnabled(true);
+                        Exceptions.printStackTrace(ex);
+                    }finally{
+>>>>>>> refs/remotes/origin/development
                         p.finish();
                     }
 
@@ -954,7 +1009,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             list, verts, jCheckBox11.isSelected());
 
                     //procrustes.compare1WithN(jSlider3.getValue() / 100f);
-                    procrustes.align1withN();
+                    List<List<ICPTransformation>> trans = procrustes.align1withN();
+                    tc.getProject().getSelectedOneToManyComparison().setTrans(trans);
 
                     tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().setVerts(procrustes.getPa().getVertices());
                     procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints());
@@ -1222,6 +1278,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
+
+    private void symModelsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModelsCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_symModelsCheckboxActionPerformed
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1310,6 +1370,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1343,5 +1404,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner numberSpinner;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JCheckBox symModelsCheckbox;
     // End of variables declaration//GEN-END:variables
 }

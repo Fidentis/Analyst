@@ -8,6 +8,7 @@ package cz.fidentis.gui.comparison_batch;
 
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.procrustes.ProcrustesBatchProcessing;
 import cz.fidentis.controller.BatchComparison;
@@ -15,7 +16,7 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.landmarkParser.FpModel;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -38,6 +39,7 @@ import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -114,6 +116,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         facesComboBox = new javax.swing.JComboBox();
         icpMetricLabel = new javax.swing.JLabel();
         icpMetricComboBox = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        symModelsCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -420,6 +424,15 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel16.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(symModelsCheckbox, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.symModelsCheckbox.text")); // NOI18N
+        symModelsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                symModelsCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -460,14 +473,20 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(facesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(jCheckBox9)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(icpMetricLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(icpMetricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(jCheckBox9))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(symModelsCheckbox)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -487,6 +506,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         .addComponent(icpMetricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox9)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel16)
+                    .addComponent(symModelsCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -810,7 +833,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1004, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -944,6 +967,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         SurfaceComparisonProcessing.setP(p);
 
                         List<File> models = tc.getProject().getSelectedBatchComparison().getModels();
+<<<<<<< HEAD
+=======
+                        tc.getProject().getSelectedBatchComparison().setTransSize(models.size());
+>>>>>>> refs/remotes/origin/development
                         ModelLoader ml = new ModelLoader();
 
                         int selectedModelTemplate = facesComboBox.getSelectedIndex();
@@ -969,6 +996,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                         Model template = ml.loadModel(models.get(selectedModelTemplate), Boolean.FALSE, true);
                         tc.getProject().getSelectedBatchComparison().setTemplateIndex(selectedModelTemplate);
+<<<<<<< HEAD
 
                         tc.getViewerPanel_Batch().getListener().setModels(template);
                         List<File> results;
@@ -1023,6 +1051,81 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                 tc.getViewerPanel_Batch().getListener().setModels(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i));
                             }
 
+=======
+                        
+                        if(symModelsCheckbox.isSelected()){
+                            long time = System.currentTimeMillis();
+                            
+                            SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(template);
+                            models = SurfaceComparisonProcessing.instance().createSymModelAndSave(models);
+                            
+                            System.out.println((System.currentTimeMillis() - time) * 0.001f);
+                        }
+
+                        tc.getViewerPanel_Batch().getListener().setModels(template);
+                        List<File> results = models;
+
+                        try {
+                            Methods m = (Methods) jComboBox2.getSelectedItem();
+                            Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
+                            float value = getUndersampleValue(m, t);
+                            ICPmetric metric = (ICPmetric) icpMetricComboBox.getSelectedItem();
+
+                            results = SurfaceComparisonProcessing.instance().processManyToMany(template, models, (int) jSpinner3.getValue(), (int) jSpinner2.getValue(), jCheckBox9.isSelected(), (float) jSpinner1.getValue(),
+                                    m, t, value, metric, tc.getProject().getSelectedBatchComparison());
+
+                            tc.getProject().getSelectedBatchComparison().setIcpMetric(metric);
+                            tc.getProject().getSelectedBatchComparison().setUseSymmetry(symModelsCheckbox.isSelected());
+                            tc.getProject().getSelectedBatchComparison().setMethod(m.ordinal());
+                            tc.getProject().getSelectedBatchComparison().setType(t.ordinal());
+                            tc.getProject().getSelectedBatchComparison().setValue(value);
+                            tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
+                            tc.getProject().getSelectedBatchComparison().setAverageFace(template);
+                       } catch (FileManipulationException ex) {
+                            //osefuj vynimku
+                            jButton1.setEnabled(true);
+                        }
+
+                    } else if (jComboBox6.getSelectedIndex() == 0) {
+                        int size = tc.getProject().getSelectedBatchComparison().getModels().size();
+                        p.start(size);
+                        //TODO Procrustes
+                        List<List<FacialPoint>> list = new ArrayList();
+                        List<ArrayList<Vector3f>> verts = new ArrayList();
+
+                        for (int i = 0; i < size; i++) {
+                            List<FacialPoint> facialPoints = tc.getProject().getSelectedBatchComparison().getFacialPoints(
+                                    tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
+                            list.add(facialPoints);
+
+                            verts.add(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getVerts());
+                        }
+
+                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, jCheckBox11.isSelected());
+
+                        //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
+                        List<List<ICPTransformation>> trans = procrustes.alignBatch(jSlider3.getValue() / 100f);
+                        tc.getProject().getSelectedBatchComparison().setTrans(trans);
+                        
+                        tc.getProject().getSelectedBatchComparison().clearFacialPoints();
+
+                        List<File> results;
+
+                        for (int i = 0; i < tc.getProject().getSelectedBatchComparison().getPreregiteredModels().size(); i++) {
+                            tc.getProject().getSelectedBatchComparison().addFacialPoints(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName(),
+                                    procrustes.getGpa().getPA(i).getFacialPoints());
+                            
+                            tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).setVerts(procrustes.getGpa().getPA(i).getVertices());
+                            procrustes.getGpa().getPA(i).updateFacialPoints(tc.getProject().getSelectedBatchComparison().getFacialPoints(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName()));
+                            
+                            
+                            
+                            if (tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i).getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
+                                tc.getViewerPanel_Batch().getListener().setModels(tc.getProject().getSelectedBatchComparison().getPreregiteredModels().get(i));
+                                tc.getViewerPanel_Batch().getListener().setFacialPoints(tc.getProject().getSelectedBatchComparison().getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
+                            }
+
+>>>>>>> refs/remotes/origin/development
                         }
 
                         if (jCheckBox11.isSelected()) {
@@ -1055,24 +1158,44 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                         tc.getViewerPanel_Batch().getListener().getModel().getName()
                                 ));
 
+<<<<<<< HEAD
+=======
+                    }else{
+                        tc.getProject().getSelectedBatchComparison().setRegistrationResults(tc.getProject().getSelectedBatchComparison().getModels());
+>>>>>>> refs/remotes/origin/development
                     }
 
                     //pre istotu
                     jButton1.setEnabled(true);
                     tc.getProject().getSelectedBatchComparison().setRegisterButtonEnabled(true);
                     //tc.getProject().getSelectedBatchComparison().setAverageRegisteredFace(tc.getViewerPanel_Batch().getListener().getModel());
+<<<<<<< HEAD
 
                     if (GUIController.getSelectedProjectTopComponent() == tc) {
                         GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
                     }
                     tc.getProject().getSelectedBatchComparison().setState(2);
 
+=======
+
+                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
+                    }
+                    tc.getProject().getSelectedBatchComparison().setState(2);
+
+>>>>>>> refs/remotes/origin/development
                     if (jCheckBox10.isSelected()) {
                         GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().computeComparison(tc);
                     }
                     p.finish();
                     GUIController.updateNavigator();
                 } catch (Exception ex) {
+<<<<<<< HEAD
+=======
+                    Exceptions.printStackTrace(ex);
+                    jButton1.setEnabled(true);
+                }finally{
+>>>>>>> refs/remotes/origin/development
                     p.finish();
                 }
             }
@@ -1248,6 +1371,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
+
+    private void symModelsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModelsCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_symModelsCheckboxActionPerformed
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setColorOfPoint(colorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setPointColor(colorPanel.getBackground());
@@ -1270,6 +1397,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+
         jSpinner1.setValue(c.getICPerrorRate());
         jSpinner2.setValue(c.getICPmaxIteration());
         jSpinner3.setValue(c.getICPnumberOfHeads());
@@ -1287,6 +1415,13 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             jButton7.setEnabled(true);
         }
         populateFacesComboBox();
+<<<<<<< HEAD
+=======
+        
+        if(c.getModels().size() > 0)
+            facesComboBox.setSelectedIndex(c.getTemplateIndex() + 3);
+        
+>>>>>>> refs/remotes/origin/development
 
     }
 
@@ -1357,6 +1492,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1388,5 +1524,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner numberSpinner;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JCheckBox symModelsCheckbox;
     // End of variables declaration//GEN-END:variables
 }
