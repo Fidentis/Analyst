@@ -1068,7 +1068,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(), 1920, 1920);
+        
+        //ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(), 1920, 1920);
+        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(),
+                tc.getViewerPanel_2Faces().getListener1().getGLContext(), 1920, 1920);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

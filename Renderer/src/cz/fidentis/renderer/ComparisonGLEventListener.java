@@ -2529,4 +2529,9 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         info.setCutThickness(f);
     }
 
+    
+    public GL2 getGLContext(){
+        return gl; 
+    }
+    
 }
