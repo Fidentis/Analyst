@@ -3,6 +3,7 @@ package cz.fidentis.visualisation.surfaceComparison;
 import cz.fidentis.model.Graph2;
 import com.jogamp.opengl.util.gl2.GLUT;
 import cz.fidentis.model.Faces;
+import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.SortUtils;
 import java.awt.Color;
 import java.nio.FloatBuffer;
@@ -285,10 +286,18 @@ public class HDpainting {
             Vector3f vecB = new Vector3f(mesh.get(info.indicesForNormals[0][k] - 1));
             Vector3f vecN = new Vector3f(normals.get(info.indicesForNormals[1][k] - 1));
             Vector3f vecE = new Vector3f(vecB);
+            
+            
+            
             float sig = (distanceCopy.get(info.indicesForNormals[0][k] - 1 ));
             sig = Math.signum(sig);
-            vecN.scale((info.getCylLengthFactor() * distanceCopy.get(info.indicesForNormals[0][k] - 1 )) + sig);
+            /*vecN.scale((info.getCylLengthFactor() * distanceCopy.get(info.indicesForNormals[0][k] - 1 )) + sig);
+            vecE.add(vecN);*/
+
+            vecN.normalize();
+            vecN.scale(sig * info.getCylLengthFactor());
             vecE.add(vecN);
+            
 
             info.c.addCylider(vecB, vecE, info.getCylRadius(), 10, sig);
         }
