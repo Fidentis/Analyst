@@ -1036,7 +1036,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         colorDialog.setVisible(false);
         activeColorPanel.setBackground(jColorChooser1.getColor());
-
+        
+        //???
         HDpaintingInfo hdp;
 
         try {
@@ -1047,6 +1048,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
 
         histogram1.repaint();
+        setColors();
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -1465,7 +1467,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
             alignParamButton.setVisible(false);
         }
         updateHistograms();
-
+        setColors();
     }
 
     public histogramPanel getHistogram1() {
