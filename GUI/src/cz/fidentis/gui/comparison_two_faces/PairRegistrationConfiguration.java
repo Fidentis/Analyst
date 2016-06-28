@@ -20,6 +20,7 @@ import cz.fidentis.featurepoints.results.FpResultsPair;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1291,15 +1292,19 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         Comparison2Faces c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
-        errorSpinner.setValue(c.getICPerrorRate());
+        /*errorSpinner.setValue(c.getICPerrorRate());
         maxIterSpinner.setValue(c.getICPmaxIteration());
         fpColorPanel.setBackground(c.getPointColor());
         fpSizeSlider.setValue(c.getFpSize());
-        showFpInfoCheckbox.setSelected(c.isShowPointInfo());
+        showFpInfoCheckbox.setSelected(c.isShowPointInfo());*/
         setRegistrationMethods(c.getRegistrationMethod());
-        //TODO set ICP metric, undersampling method, template index
+        
+        TwoFacesGUISetup.defaultValuesRegistration(methodCombobox, fpScaleCheckBox, fpThresholdSlider, showFpInfoCheckbox, fpColorPanel, fpSizeSlider,
+                icpMetricComboBox, icpScaleCheckbox, symModCheckbox, errorSpinner, maxIterSpinner, 
+                undersamplingCombobox, percentageSpinner, numberSpinner, jRadioButton1, undersamplingRadiusSlider, continueComparisonCheckbox);
 
-        icpScaleCheckbox.setSelected(c.getScaleEnabled());
+
+        //icpScaleCheckbox.setSelected(c.getScaleEnabled());
         if ((methodCombobox.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
             jButton1.setEnabled(false);
             exportPointsButton.setEnabled(false);

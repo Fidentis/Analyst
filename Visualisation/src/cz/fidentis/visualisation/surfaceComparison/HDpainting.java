@@ -298,8 +298,8 @@ public class HDpainting {
             vecN.scale(sig * info.getCylLengthFactor());
             vecE.add(vecN);
             
-
-            info.c.addCylider(vecB, vecE, info.getCylRadius(), 10, sig);
+            //scale radius to 5th of previous size
+            info.c.addCylider(vecB, vecE, info.getCylRadius() * 0.2f, 10, sig);
         }
             info.c.prepareBuffer();
             info.c.prepareVBO();

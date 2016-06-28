@@ -12,6 +12,7 @@ import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.TableProcessing;
+import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.renderer.ComparisonGLEventListener;
@@ -113,9 +114,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
         density = new javax.swing.JSlider();
         shadersPanel = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        primaryColorPanel = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
         secondaryColorPanel = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        primaryColorPanel = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jSlider3 = new javax.swing.JSlider();
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -325,28 +326,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel8.text")); // NOI18N
 
-        primaryColorPanel.setBackground(new java.awt.Color(51, 153, 255));
-        primaryColorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        primaryColorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                primaryColorPanelMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout primaryColorPanelLayout = new javax.swing.GroupLayout(primaryColorPanel);
-        primaryColorPanel.setLayout(primaryColorPanelLayout);
-        primaryColorPanelLayout.setHorizontalGroup(
-            primaryColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        primaryColorPanelLayout.setVerticalGroup(
-            primaryColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel12.text")); // NOI18N
-
-        secondaryColorPanel.setBackground(new java.awt.Color(255, 255, 0));
+        secondaryColorPanel.setBackground(new java.awt.Color(51, 153, 255));
         secondaryColorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         secondaryColorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -362,6 +342,27 @@ public class PairComparisonResults extends javax.swing.JPanel {
         );
         secondaryColorPanelLayout.setVerticalGroup(
             secondaryColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel12.text")); // NOI18N
+
+        primaryColorPanel.setBackground(new java.awt.Color(255, 255, 0));
+        primaryColorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        primaryColorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                primaryColorPanelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout primaryColorPanelLayout = new javax.swing.GroupLayout(primaryColorPanel);
+        primaryColorPanel.setLayout(primaryColorPanelLayout);
+        primaryColorPanelLayout.setHorizontalGroup(
+            primaryColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        primaryColorPanelLayout.setVerticalGroup(
+            primaryColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -487,12 +488,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                            .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                             .addGroup(shadersPanelLayout.createSequentialGroup()
                                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(fogColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                                    .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jCheckBox4)
@@ -519,12 +520,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1157,9 +1158,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     tc.getProject().getSelectedComparison2Faces().setValuesTypeIndex(jComboBox2.getSelectedIndex());
                     p.finish();
 
-                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                    /*if (GUIController.getSelectedProjectTopComponent() == tc) {
                         GUIController.getConfigurationTopComponent().addPairComparisonResults();
-                    }
+                    }*/
                     updateHistograms();
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
@@ -1249,17 +1250,17 @@ public class PairComparisonResults extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
-    private void primaryColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_primaryColorPanelMouseClicked
-        activeColorPanel = primaryColorPanel;
-        jColorChooser1.setColor(activeColorPanel.getBackground());
-        colorDialog.setVisible(true);
-    }//GEN-LAST:event_primaryColorPanelMouseClicked
-
     private void secondaryColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_secondaryColorPanelMouseClicked
         activeColorPanel = secondaryColorPanel;
         jColorChooser1.setColor(activeColorPanel.getBackground());
         colorDialog.setVisible(true);
     }//GEN-LAST:event_secondaryColorPanelMouseClicked
+
+    private void primaryColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_primaryColorPanelMouseClicked
+        activeColorPanel = primaryColorPanel;
+        jColorChooser1.setColor(activeColorPanel.getBackground());
+        colorDialog.setVisible(true);
+    }//GEN-LAST:event_primaryColorPanelMouseClicked
 
     private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
         setColors();
@@ -1268,12 +1269,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
     public void setColors() {
         ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
         float[] color = new float[4];
-        primaryColorPanel.getBackground().getRGBColorComponents(color);
+        secondaryColorPanel.getBackground().getRGBColorComponents(color);
         color[3] = jCheckBox3.isSelected() ? 1 : jSlider3.getValue() / (float) 100;
         tc.setPrimaryColor(color);
 
         float[] color2 = new float[4];
-        secondaryColorPanel.getBackground().getRGBColorComponents(color2);
+        primaryColorPanel.getBackground().getRGBColorComponents(color2);
         color2[3] = jCheckBox4.isSelected() ? 1 : jSlider3.getValue() / (float) 100;
         tc.setSecondaryColor(color2);
 
@@ -1434,14 +1435,18 @@ public class PairComparisonResults extends javax.swing.JPanel {
         Comparison2Faces c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
 
         result = c.getNumericalResults();
+        
+        TwoFacesGUISetup.defaultValueComparisonResult(VisualizationBox, jComboBox2, jSlider1, jSpinner1, minThreshSlider, minThreshSpinner,
+                jComboBox6, density, cylLength, cylRadius, primaryColorPanel, jCheckBox4, secondaryColorPanel, jCheckBox3, fogColorPanel, jSlider3, 
+                jCheckBox1, jCheckBox2, jCheckBox7, noneRadioButton, jSlider2, sizeSlider);
 
-        jSlider1.setValue(c.getHausdorfMaxTreshold());
+       /* jSlider1.setValue(c.getHausdorfMaxTreshold());
         minThreshSlider.setValue(c.getHausdorfMinTreshold());
         minThreshSpinner.setValue(c.getHausdorfMinTreshold());
         jSpinner1.setValue(c.getHausdorfMaxTreshold());
         jSlider2.setValue(c.getFpDistance());
         sizeSlider.setValue(c.getFpSize());
-        jComboBox2.setSelectedIndex(c.getValuesTypeIndex());
+        jComboBox2.setSelectedIndex(c.getValuesTypeIndex());*/
         /*if (c.getResults() == 0) {
          showProcrustesControls();
          }

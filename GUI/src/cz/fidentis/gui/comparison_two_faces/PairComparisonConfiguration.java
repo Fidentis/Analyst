@@ -22,6 +22,7 @@ import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1205,25 +1206,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             exportLandmarksButton.setVisible(false);
         }
         
-        //setup overlay options
-        primaryColorPanel.setBackground(Color.yellow);
-        jCheckBox6.setSelected(false);
+        TwoFacesGUISetup.defaultValueComparisonConfiguration(jComboBox1, jCheckBox2, jCheckBox1, jSlider3,
+                primaryColorPanel, jCheckBox6, secondaryColorPanel, jCheckBox5, fogColorPanel, jSlider4, 
+                jCheckBox3, jCheckBox4, jCheckBox7, noneRadioButton);
         
-        secondaryColorPanel.setBackground(new Color(51,153,255));
-        jCheckBox5.setSelected(false);
-        
-        fogColorPanel.setBackground(new Color(255,102,204));
-        jSlider4.setValue(100);
-        jCheckBox3.setSelected(true);
-        jCheckBox4.setSelected(false);
-        jCheckBox7.setSelected(true);
-        
-        noneRadioButton.setSelected(true);
-        //end overlay options
-        
-        jCheckBox2.setSelected(c.isFpScaling());
-        //primaryColorPanel.setBackground(new Color(c.getPrimaryColor().getRed(), c.getPrimaryColor().getGreen(), c.getPrimaryColor().getBlue()));
-        //secondaryColorPanel.setBackground(new Color(c.getSecondaryColor().getRed(), c.getSecondaryColor().getGreen(), c.getSecondaryColor().getBlue()));
         setupComparisonMethods(c);
         jSlider3.setValue(c.getFpTreshold());
         switch (c.getUseDatabase()) {
@@ -1264,6 +1250,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 break;
         }
         setColors();
+        
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(jCheckBox7.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(jCheckBox3.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(jCheckBox5.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(buttonGroup1.getSelection().getMnemonic());
+        
         processComparisonButton.setEnabled(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().isCompareButtonEnabled());
 
     }
