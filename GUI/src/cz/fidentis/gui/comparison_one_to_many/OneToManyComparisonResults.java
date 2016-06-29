@@ -11,6 +11,7 @@ import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.TableProcessing;
+import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1732,9 +1733,9 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
                     p.finish();
 
-                    if (GUIController.getSelectedProjectTopComponent() == tc) {
+                    /*if (GUIController.getSelectedProjectTopComponent() == tc) {
                         GUIController.getConfigurationTopComponent().addOneToManyComparisonResults();
-                    }
+                    }*/
                     updateHistograms();
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
@@ -2064,18 +2065,22 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jLabel7.setVisible(false);
 
         OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
-        HDpainting info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHDP();
+        //HDpainting info = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHDP();
 
-        jSlider1.setValue(c.getHausdorfMaxTreshold());
+        /*jSlider1.setValue(c.getHausdorfMaxTreshold());
         jSpinner1.setValue(c.getHausdorfMaxTreshold());
         minThreshSlider.setValue(c.getHausdorfMinTreshold());
         minThreshSpinner.setValue(c.getHausdorfMinTreshold());
         jSlider2.setValue(c.getFpDistance());
         sizeSlider.setValue(c.getFpSize());
         jComboBox2.setSelectedIndex(c.getValuesTypeIndex());
-        jComboBox3.setSelectedIndex(c.getMetricTypeIndex());
+        jComboBox3.setSelectedIndex(c.getMetricTypeIndex());*/
+        
+        OneToManyGUISetup.defaultValuesComparisonResult(jComboBox3, VisualizationBox, jComboBox2, jRadioButton5, 
+                positionSpinnerX, positionSpinnerY, positionSpinnerZ, jSlider3, thickness, colorPanel, jCheckBox3, jCheckBox6, jCheckBox4, jCheckBox5,
+                jSlider1, jSpinner1, minThreshSlider, minThreshSpinner, jComboBox6, density, cylLength, cylRadius, jSlider2, sizeSlider);
 
-        if (/*c.getResults() == 0*/c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
+        if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
         }
         if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
@@ -2093,7 +2098,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         } else {
             alignParametersButton.setVisible(false);
         }
-        thickness.setValue(10);
+        //thickness.setValue(10);
         result = c.getNumericalResults();
 
         updateHistograms();

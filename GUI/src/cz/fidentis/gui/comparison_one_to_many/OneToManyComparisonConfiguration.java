@@ -18,6 +18,7 @@ import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -569,8 +570,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             }
         }
         
-        createAvgCheckBox.setSelected(c.isCreateAvgFace());
-      /*  if((c.getRegistrationMethod() == 0)){
+        /*createAvgCheckBox.setSelected(c.isCreateAvgFace());
+        if((c.getRegistrationMethod() == 0)){
             jComboBox1.removeItemAt(0);
         }*/
         if((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)){
@@ -587,9 +588,11 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             exportLandmarksButton.setVisible(false);
         }
         
-        jCheckBox2.setSelected(c.isFpScaling());
+        OneToManyGUISetup.defaultValuesComparisonConfiguration(jComboBox1, createAvgCheckBox, jCheckBox2, jSlider3);
+        
+        //jCheckBox2.setSelected(c.isFpScaling());
         setupComparisonMethods(c);
-        jSlider3.setValue(c.getFpTreshold());
+        //jSlider3.setValue(c.getFpTreshold());
         processComparisonButton.setEnabled(c.isCompareButtonEnabled());
     }
 

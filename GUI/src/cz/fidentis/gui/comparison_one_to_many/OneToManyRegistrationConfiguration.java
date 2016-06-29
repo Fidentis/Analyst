@@ -19,6 +19,7 @@ import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1285,13 +1286,17 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
-        jSpinner1.setValue(c.getICPerrorRate());
+       /* jSpinner1.setValue(c.getICPerrorRate());
         jSpinner2.setValue(c.getICPmaxIteration());
         colorPanel.setBackground(c.getPointColor());
         jSlider1.setValue(c.getFpSize());
-        jCheckBox1.setSelected(c.isShowPointInfo());
+        jCheckBox1.setSelected(c.isShowPointInfo());*/
+       
+        OneToManyGUISetup.defaultValuesRegistration(jComboBox6, jCheckBox11, jSlider3, jCheckBox1, colorPanel, jSlider1,
+                icpMetricComboBox, jCheckBox9, symModelsCheckbox, jSpinner1, jSpinner2, jComboBox2, percentageSpinner, numberSpinner, jRadioButton1, jSlider2, jCheckBox10);
+       
         setRegistrationMethods(c.getRegistrationMethod());
-        jCheckBox9.setSelected(c.getScaleEnabled());
+        //jCheckBox9.setSelected(c.getScaleEnabled());
         if ((jComboBox6.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
             jButton1.setEnabled(false);
             jButton7.setEnabled(false);

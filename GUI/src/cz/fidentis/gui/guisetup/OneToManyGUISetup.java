@@ -6,7 +6,7 @@
 package cz.fidentis.gui.guisetup;
 
 import cz.fidentis.comparison.ComparisonMethod;
-import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import cz.fidentis.comparison.RegistrationMethod;
 import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -19,11 +19,10 @@ import javax.swing.JSpinner;
  *
  * @author xferkova
  */
-public class TwoFacesGUISetup {
-    //default values
+public class OneToManyGUISetup {
     
    //registration configuration
-   private static final int SELECTED_REGISTRATION = 0; 
+   private static final RegistrationMethod SELECTED_REGISTRATION = RegistrationMethod.PROCRUSTES; 
     
    private static final boolean FP_SCALE = false;
    private static final int FP_THRESHOLD = 30;
@@ -41,22 +40,24 @@ public class TwoFacesGUISetup {
    private static final int NUMBER_SPINNER = 0;
    private static final int UNDERSAMPLING_RADIUS = 50;
    private static final boolean CONTINUE_COMPARISON = false;
-   
+    
    //comparison configuration
    private static final ComparisonMethod COMPARISON_METHOD = ComparisonMethod.HAUSDORFF_DIST;
-   private static final boolean FP_DATABASE = false;
-   
-   private static final Color PRIMARY_MODEL = new Color(255,255,0);
-   private static final boolean SOLID_PRIMARY = false;
-   private static final Color SECONDARY_MODEL = new Color(51,153,255);
-   private static final boolean SOLDI_SECONDARY = false;
-   private static final Color FOG_COLOR = new Color(255,102,204);
-   private static final int OVERLAY_TRANSPARENCY = 100;
-   private static final boolean INNER_SURFACE_SOLID = true;
-   private static final boolean USE_GLYPHS = false;
-   private static final boolean USE_COUNTOURS = true;
+   private static final boolean CREATE_AVG_FACE = false;
    
    //comparison results
+   private static final int SELECTED_METRIC = 0;
+   private static final float X_PLANE_POSITION = 0f;
+   private static final float Y_PLANE_POSITION = 0f;
+   private static final float Z_PLANE_POSITION = 0f;
+   private static final int CROSSCUT_SIZE = 50;
+   private static final int CROSSCUT_THICKNESS = 50;
+   private static final Color CROSSCUT_COLOR = new Color(255,255,255);
+   private static final boolean HIGHLIGHT_CUTS = true;
+   private static final boolean CROSSCUT_VECTORS = true;
+   private static final boolean ALL_CUTS = false;
+   private static final boolean SAMPLINGR_RAYS = false;
+   
    private static final int VISUALIZATION = 0;
    private static final int VALUES_TYPE = 0;
    private static final int MAX_THRESHOLD = 100;
@@ -68,13 +69,15 @@ public class TwoFacesGUISetup {
    private static final int CYLINDER_RADIUS = 1;
    
    private static final int FP_DISTANCE = 0;
-   
-   public static void defaultValuesRegistration(JComboBox selectedRegistration, JCheckBox fpScale, JSlider fpThreshold, JCheckBox showFpInfo, JPanel fpColor, JSlider fpSize,
+
+    
+    //is same as in 1:1, except registration is not enum, need to change that
+    public static void defaultValuesRegistration(JComboBox selectedRegistration, JCheckBox fpScale, JSlider fpThreshold, JCheckBox showFpInfo, JPanel fpColor, JSlider fpSize,
            JComboBox icpMetric, JCheckBox icpScale, JCheckBox symModels, JSpinner icpError, JSpinner maxIteration, JComboBox icpUndersampling, 
            JSpinner undersamplingPercentage, JSpinner undersamplingNumber, JRadioButton selectedUndersampling, JSlider undersamplingRadius,
            JCheckBox continueComparison){
-       
-       selectedRegistration.setSelectedIndex(SELECTED_REGISTRATION);
+         
+       selectedRegistration.setSelectedItem(SELECTED_REGISTRATION);
        
        //FP
        fpScale.setSelected(FP_SCALE);
@@ -96,42 +99,24 @@ public class TwoFacesGUISetup {
        undersamplingRadius.setValue(UNDERSAMPLING_RADIUS);
        
        continueComparison.setSelected(CONTINUE_COMPARISON);
-   }
-   
-   public static void defaultValueComparisonConfiguration(JComboBox comparisonMethod, JCheckBox fpScaling, JCheckBox useDatabase, JSlider fpThreshold,
-           JPanel primaryPanel, JCheckBox solidPrimary, JPanel secondaryPanel, JCheckBox secondarySolid, JPanel fogPanel, JSlider overlayTransparency, 
-           JCheckBox innerSurfaceSolid, JCheckBox useGlyphs, JCheckBox useContours, JRadioButton selectedFogging){
-       
-       comparisonMethod.setSelectedItem(COMPARISON_METHOD);
-       
-       //FP
-       fpScaling.setSelected(FP_SCALE);
-       useDatabase.setSelected(FP_DATABASE);
-       fpThreshold.setValue(FP_THRESHOLD);
-       
-        overlaySetup(primaryPanel, solidPrimary, secondaryPanel, secondarySolid, fogPanel, overlayTransparency, innerSurfaceSolid, useGlyphs, useContours, selectedFogging);
-       
-   }
-
-    private static void overlaySetup(JPanel primaryPanel, JCheckBox solidPrimary, JPanel secondaryPanel, JCheckBox secondarySolid, JPanel fogPanel, JSlider overlayTransparency, JCheckBox innerSurfaceSolid, JCheckBox useGlyphs, JCheckBox useContours, JRadioButton selectedFogging) {
-        //overlay
-        primaryPanel.setBackground(PRIMARY_MODEL);
-        solidPrimary.setSelected(SOLID_PRIMARY);
-        secondaryPanel.setBackground(SECONDARY_MODEL);
-        secondarySolid.setSelected(SOLDI_SECONDARY);
-        fogPanel.setBackground(FOG_COLOR);
-        overlayTransparency.setValue(OVERLAY_TRANSPARENCY);
-        innerSurfaceSolid.setSelected(INNER_SURFACE_SOLID);
-        useGlyphs.setSelected(USE_GLYPHS);
-        useContours.setSelected(USE_COUNTOURS);
-        selectedFogging.setSelected(true);
-    }
-   
-   public static void defaultValueComparisonResult(JComboBox visualization, JComboBox values, JSlider maxThresh, JSpinner maxThrehsSpinner,
+         
+     }
+     
+     public static void defaultValuesComparisonConfiguration(JComboBox comparisonMethod, JCheckBox createAvgFace, JCheckBox fpScaling, JSlider fpThrehsold){
+         
+         comparisonMethod.setSelectedItem(COMPARISON_METHOD);
+         createAvgFace.setSelected(CREATE_AVG_FACE);
+         fpScaling.setSelected(FP_SCALE);
+         fpThrehsold.setValue(FP_THRESHOLD);
+     }
+     
+     public static void defaultValuesComparisonResult(JComboBox comparisonMetric, JComboBox visualization, JComboBox values, 
+           JRadioButton selectedPlane, JSpinner planeXposition, JSpinner planeYposition, JSpinner planeZposition, JSlider cutSize, JSlider cutThickness, 
+           JPanel vectorColor, JCheckBox highlightCuts, JCheckBox showVectors, JCheckBox allCuts, JCheckBox samplingRays,
+           JSlider maxThresh, JSpinner maxThrehsSpinner,
            JSlider minThresh, JSpinner minThreshSpinner, JComboBox colorScheme, JSlider vectorRadius, JSlider vectorLength, JSlider cylinderRadius,
-           JPanel primaryPanel, JCheckBox solidPrimary, JPanel secondaryPanel, JCheckBox secondarySolid, JPanel fogPanel, JSlider overlayTransparency, 
-           JCheckBox innerSurfaceSolid, JCheckBox useGlyphs, JCheckBox useContours, JRadioButton selectedFogging, JSlider fpDistance, JSlider fpSize){
-       
+           JSlider fpDistance, JSlider fpSize){
+         
        visualization.setSelectedIndex(VISUALIZATION);
        values.setSelectedItem(VALUES_TYPE);
        
@@ -148,7 +133,18 @@ public class TwoFacesGUISetup {
        fpDistance.setValue(FP_DISTANCE);
        fpSize.setValue(FP_SIZE);
        
-       overlaySetup(primaryPanel, solidPrimary, secondaryPanel, secondarySolid, fogPanel, overlayTransparency, innerSurfaceSolid, useGlyphs, useContours, selectedFogging);
-       
-   }
+       comparisonMetric.setSelectedIndex(SELECTED_METRIC);
+       selectedPlane.setSelected(true);
+       planeXposition.setValue(X_PLANE_POSITION);
+       planeYposition.setValue(Y_PLANE_POSITION);
+       planeZposition.setValue(Z_PLANE_POSITION);
+       cutSize.setValue(CROSSCUT_SIZE);
+       cutThickness.setValue(CROSSCUT_THICKNESS);
+       vectorColor.setBackground(CROSSCUT_COLOR);
+       highlightCuts.setSelected(HIGHLIGHT_CUTS);
+       showVectors.setSelected(CROSSCUT_VECTORS);
+       allCuts.setSelected(ALL_CUTS);
+       samplingRays.setSelected(SAMPLINGR_RAYS);
+         
+     }
 }
