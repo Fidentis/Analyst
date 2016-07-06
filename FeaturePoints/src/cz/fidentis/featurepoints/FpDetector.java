@@ -145,7 +145,7 @@ public class FpDetector {
     }
 
     public Mat computeTextureFPs() {
-        if (!isMaterial) {
+        if (!isMaterial || model.getTexCoords().size() <= 0) {
             return null;
         }
 
