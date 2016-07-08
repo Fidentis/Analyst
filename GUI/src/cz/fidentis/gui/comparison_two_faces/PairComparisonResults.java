@@ -59,6 +59,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jSpinner1.setVisible(false);
         jSlider1.setVisible(false);
         jLabel5.setVisible(false);
+        jButton8.setVisible(false);
 
     }
 
@@ -71,6 +72,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jSpinner1.setVisible(true);
         jSlider1.setVisible(true);
         jLabel5.setVisible(true);
+        jButton8.setVisible(true);
     }
 
     public void setNumericalResult(String result) {
@@ -1191,6 +1193,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
         /**
          * Visibility of density slider and label
          */
+        
+        //Procrustes
+        if(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getHdPaintingInfo() == null)
+            return;
 
         if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
             densLabel.setVisible(false);
@@ -1378,6 +1384,11 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
         Comparison2Faces bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
+        
+        //Procrustes
+        if(bc.getHDP() == null)
+            return;
+        
         bc.getHDP().getInfo().setColorScheme(ColorScheme.values()[jComboBox6.getSelectedIndex()]);
     }//GEN-LAST:event_jComboBox6ActionPerformed
 
