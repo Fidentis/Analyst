@@ -17,7 +17,9 @@ import java.security.ProtectionDomain;
  * @author xferkova
  */
 public class LoadOpenCV {
-
+    
+    public static boolean openCVLoaded = false;
+    
     private static void loadOpenCV(String url) throws URISyntaxException {
         
         //System.load(root + "opencv_java310.dll");

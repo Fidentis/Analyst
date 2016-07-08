@@ -1,5 +1,6 @@
 package cz.fidentis.featurepoints;
 
+import cz.fidentis.*;
 import cz.fidentis.model.Material;
 import cz.fidentis.model.Model;
 import cz.fidentis.featurepoints.symmetryplane.Midline;
@@ -13,6 +14,7 @@ import javax.vecmath.Vector3f;
 import jv.object.PsDebug;
 import org.opencv.core.Mat;
 import org.opencv.LoadOpenCV;
+import sun.awt.windows.WToolkit;
 
 /**
  *
@@ -145,7 +147,7 @@ public class FpDetector {
     }
 
     public Mat computeTextureFPs() {
-        if (!isMaterial || model.getTexCoords().size() <= 0) {
+        if (!isMaterial || model.getTexCoords().size() <= 0 || !LoadOpenCV.openCVLoaded) {
             return null;
         }
 
@@ -174,15 +176,19 @@ public class FpDetector {
     }
 
     public boolean isMaterial() {
-        ArrayList<Material> materials = model.getMatrials().getMatrials();
-
-        if (materials.isEmpty()) {
-            System.out.println("For model " + modelName + " exists no texture.");
+        if (model.getMatrials() == null) {
             isMaterial = false;
-        } else if (materials.size() != 1) {
-            System.out.println("For model" + modelName + " exists more than 1 (" + materials.size() + ") texture.");
         } else {
-            isMaterial = true;
+            ArrayList<Material> materials = model.getMatrials().getMatrials();
+
+            if (materials.isEmpty()) {
+                System.out.println("For model " + modelName + " exists no texture.");
+                isMaterial = false;
+            } else if (materials.size() != 1) {
+                System.out.println("For model" + modelName + " exists more than 1 (" + materials.size() + ") texture.");
+            } else {
+                isMaterial = true;
+            }
         }
 
         return isMaterial;
