@@ -16,15 +16,20 @@ import org.opencv.LoadOpenCV;
 public class LoadLibraries {
     private static boolean openCVLoaded = false;
     
-    
-    public static void loadOpenCV() throws URISyntaxException{
-        
-        if(OSValidator.isWindows()){
-            LoadOpenCV.loadWindowsLib();
-        }else if(OSValidator.isMac()){
-            LoadOpenCV.loadOSXlib();
+    public static void loadOpenCV() throws URISyntaxException {
+
+        try {
+            if (OSValidator.isWindows()) {
+                LoadOpenCV.loadWindowsLib();
+            } else if (OSValidator.isMac()) {
+                LoadOpenCV.loadOSXlib();
+            }
+            openCVLoaded = true;
+        } catch (UnsatisfiedLinkError ex) {
+            openCVLoaded = false;
         }
         
-        openCVLoaded = true;
+        LoadOpenCV.openCVLoaded = openCVLoaded;
+
     }
 }
