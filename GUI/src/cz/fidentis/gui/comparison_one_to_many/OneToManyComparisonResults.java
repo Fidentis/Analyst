@@ -76,6 +76,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jSpinner1.setVisible(false);
         jSlider1.setVisible(false);
         jLabel7.setVisible(false);
+        heatplotButton.setVisible(false);
+        heatplotButton1.setVisible(false);
     }
 
     public void showHausdorfControls() {
@@ -90,6 +92,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jSpinner1.setVisible(true);
         jSlider1.setVisible(true);
         jLabel7.setVisible(true);
+        heatplotButton.setVisible(true);
+        heatplotButton1.setVisible(true);
 
         if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
             densLabel.setVisible(false);
@@ -980,7 +984,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                             .addComponent(minThreshSpinner)))))
             .addGroup(colorMapPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                 .addContainerGap())
         );
         colorMapPanelLayout.setVerticalGroup(
@@ -1906,6 +1910,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
         OneToManyComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
+        
+        //Procrustes
+        if(bc.getHDP() == null)
+            return;
         bc.getHDP().getInfo().setColorScheme(ColorScheme.values()[jComboBox6.getSelectedIndex()]);
     }//GEN-LAST:event_jComboBox6ActionPerformed
 
@@ -2106,6 +2114,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }
 
     public void updateHistograms() {
+        //Procrustes
+        if(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHDP() == null)
+            return;
+        
         List<Float> f = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHDP().getInfo().getDistance();
 
         histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().getHdPaintingInfo());

@@ -87,6 +87,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
         jSlider2.setValue(c.getFpDistance());
         sizeSlider.setValue(c.getFpSize());
+        comparisonButton.setVisible(false);
+        heatplotButton1.setvisible(false);
+        heatplotButton.setVisible(false);
     }
 
     public void showHausdorfControls() {
@@ -105,6 +108,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jButton8.setVisible(true);
         exportDistToMeanButton.setVisible(false);
         exportSymetricResults.setVisible(true);
+        comparisonButton.setVisible(true);
+        heatplotButton1.setVisible(true);
+        heatplotButton.setVisible(true);
         setupVisualizationControls();
 
     }
