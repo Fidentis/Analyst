@@ -88,7 +88,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jSlider2.setValue(c.getFpDistance());
         sizeSlider.setValue(c.getFpSize());
         comparisonButton.setVisible(false);
-        heatplotButton1.setvisible(false);
+        heatplotButton1.setVisible(false);
         heatplotButton.setVisible(false);
     }
 

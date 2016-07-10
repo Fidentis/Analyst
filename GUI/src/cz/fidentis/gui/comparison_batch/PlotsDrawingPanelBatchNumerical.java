@@ -66,7 +66,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
     private static final float MINIMAL_HEIGHT = 30;
     private static final float MINIMAL_WIDTH = 50;
     private boolean zoom = false;
-    private float zoomValue = 1;
+    private Rectangle2D[][] matrix = new Rectangle2D[50][50];
 
     /**
      * Creates new form plotsPanel
@@ -91,6 +91,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
 
     public void setValues(float[][] values) {
         this.values = values;
+        matrix = new Rectangle2D[values.length][values.length];
         this.repaint();
         this.repaint();
     }
@@ -163,11 +164,6 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
             }
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 formMouseMoved(evt);
-            }
-        });
-        addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                formMouseWheelMoved(evt);
             }
         });
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -323,8 +319,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                 slider1Tip.y = slider1P + y;
             }
             this.repaint();
-        }
-        else if (slider2Selected) {
+        } else if (slider2Selected) {
             int y = evt.getY() - lastClickedPoint.y;
             if (slider2P + y < slider1Tip.y + 20) {
                 slider2Tip.y = slider1Tip.y + 20;
@@ -334,8 +329,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                 slider2Tip.y = slider2P + y;
             }
             this.repaint();
-        }
-        else{
+        } else {
             moveCamera(evt);
         }
     }//GEN-LAST:event_formMouseDragged
@@ -354,17 +348,13 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         this.repaint();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
-       zoomValue = evt.getUnitsToScroll();
-    }//GEN-LAST:event_formMouseWheelMoved
-
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setPaint(Color.WHITE);   
-         AffineTransform zoomt = g2.getTransform();
-   //     zoomt.scale(zoomValue, zoomValue);
-   //     g2.setTransform(zoomt);
+        g2.setPaint(Color.WHITE);
+        AffineTransform zoomt = g2.getTransform();
+        //     zoomt.scale(zoomValue, zoomValue);
+        //     g2.setTransform(zoomt);
         g2.fill(new Rectangle2D.Double(0, 0, this.getWidth(), this.getHeight()));
         int height = this.getHeight() - 140;
 
@@ -376,13 +366,16 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         cellWidth = width / (float) numValuesX - 1;
         cellHeight = height / (float) numValuesY - 1;
 
+        float zoomCellWidth = width / (float) numValuesX - 1;
+        float zoomCellHeight = height / (float) numValuesY - 1;
+
         if (cellWidth < MINIMAL_WIDTH || cellHeight < MINIMAL_HEIGHT) {
             zoom = true;
         } else {
             zoom = false;
         }
 
-        activeArea = new Rectangle2D.Float(70, 70, numValuesX * (cellWidth + 1), numValuesY * (cellHeight + 1));
+        activeArea = new Rectangle2D.Float(70, 70, width, height);
 
         float maxValue = Float.MIN_VALUE;
         float minValue = Float.MAX_VALUE;
@@ -404,32 +397,70 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
             g2.setFont(yFont.deriveFont(cellHeight));
         }
 
-        // Rectangle2D orig = new Rectangle2D.Float(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth, cellHeight);
-        //float w = (MINIMAL_WIDTH - cellWidth);
-        float originalCellWidth = cellWidth;
-      /*  if (activeArea.contains(mousePosition) && zoom) {
-            cellWidth = (width - 3*MINIMAL_WIDTH)/((float) numValuesX - 1) -1 ;
-           // cellWidth = (width - 3 * (MINIMAL_WIDTH - cellWidth)) / (float) numValuesX - 1;
-        }*/
-        int column = (mousePosition.x - 70) / (int) originalCellWidth;
+        float x = mousePosition.x;
+        float y = mousePosition.y;
+        int column = (int) Math.floor((x - 70) / (cellWidth + 1));
+        int row = (int) Math.floor((y - 70) / (cellHeight + 1));
 
+        float gauss = 0;
+        int gauseWidth = (column - 1) > (numValuesX - column) ? (column - 1) : (numValuesX - column);
+        if (activeArea.contains(mousePosition) && zoom) {
+            for (int i = 0; i < numValuesX; i++) {
+                gauss += getGauss(i, 5, column, gauseWidth);
+            }
+            zoomCellWidth = width / gauss;
+        }
+
+        gauss = 0;
+        int gauseHeight = (row - 1) > (numValuesY - row) ? (row - 1) : (numValuesY - row);
+        if (activeArea.contains(mousePosition) && zoom) {
+            for (int i = 0; i < numValuesY; i++) {
+                gauss += getGauss(i, 5, row, gauseHeight);
+            }
+            zoomCellHeight = height / gauss;
+        }
+
+        float gaussX = 0;
         for (int i = 0; i < numValuesX; i++) {
+            float gaussY = 0;
             for (int j = 0; j < numValuesY; j++) {
+                float currentWidth = getGauss(i, 5, column, gauseWidth) * zoomCellWidth;
+                float currentHeight = getGauss(j, 5, row, gauseHeight) * zoomCellHeight;
                 g2.setPaint(Color.BLACK);
-                if (j == 0) {
-                    fm = getFontMetrics(getFont());
-                    h = fm.getHeight();
-                    if (h > cellHeight) {
-                        h = (int) cellHeight;
+                if (activeArea.contains(mousePosition) && zoom) {
+                    if (j == 0) {
+                         fm = getFontMetrics(getFont());
+                        h = fm.getHeight();
+                        if(currentWidth/2> h)g2.setFont(getFont().deriveFont(currentWidth/3));
+                        int w = fm.stringWidth(Integer.toString((int) values[numValuesY][i] + 1));
+                        g2.drawString(Integer.toString((int) values[numValuesY][i] + 1), 70 + gaussX + (currentWidth - w) / 2, 60);
+                        g2.setFont(getFont().deriveFont(h));
                     }
-                    int w = fm.stringWidth(Integer.toString((int) values[numValuesY][i] + 1));
-                    g2.drawString(Integer.toString((int) values[numValuesY][i] + 1), 55 + (3 - w), 70 + (i + 1) * cellHeight + i - (cellHeight - h));
-                }
-                if (i == 0) {
-                    fm = getFontMetrics(getFont());
-                    int w = fm.stringWidth(Integer.toString((int) values[j][numValuesX] + 1));
+                    if (i == 0) {
+                        fm = getFontMetrics(getFont());
+                        h = fm.getHeight();
+                        if(currentHeight/2> h)g2.setFont(getFont().deriveFont(currentHeight/3));
+                        int w = fm.stringWidth(Integer.toString((int) values[j][numValuesX] + 1));
+                        g2.drawString(Integer.toString((int) values[j][numValuesX] + 1), 55 + (3 - w), 70 + gaussY + currentHeight );
+                        g2.setFont(getFont().deriveFont(h));
+                    }
 
-                    g2.drawString(Integer.toString((int) values[j][numValuesX] + 1), 70 + (j * cellWidth) + j + (cellWidth - w) / 2, 60);
+                } else {
+                    if (j == 0) {
+                        fm = getFontMetrics(getFont());
+                        h = fm.getHeight();
+                        if (h > zoomCellHeight) {
+                            h = (int) zoomCellHeight;
+                        }
+                        int w = fm.stringWidth(Integer.toString((int) values[numValuesY][i] + 1));
+                        g2.drawString(Integer.toString((int) values[numValuesY][i] + 1), 55 + (3 - w), 70 + (i + 1) * cellHeight + i - (cellHeight - h));
+                    }
+                    if (i == 0) {
+                        fm = getFontMetrics(getFont());
+                        int w = fm.stringWidth(Integer.toString((int) values[j][numValuesX] + 1));
+
+                        g2.drawString(Integer.toString((int) values[j][numValuesX] + 1), 70 + (j * cellWidth) + j + (cellWidth - w) / 2, 60);
+                    }
                 }
 
                 float s1 = (slider1Tip.y - 70) * ((2f / 3f) / (this.getHeight() - 140));
@@ -446,79 +477,94 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                 } else {
                     g2.setPaint(Color.getHSBColor(1, 0, 0.5f));
                 }
-                Rectangle2D orig = new Rectangle2D.Float(70 + (i * originalCellWidth) + i, 70, originalCellWidth, height);
-               /* if (activeArea.contains(mousePosition) && zoom) {
-                    if (i == column) {
-                        g2.fill(new Rectangle2D.Double(70 + (i * cellWidth) + i + (MINIMAL_WIDTH - cellWidth), 70 + (j * cellHeight) + j, MINIMAL_WIDTH, cellHeight));
-                        g2.setPaint(Color.WHITE);
-                        g2.draw(new Rectangle2D.Double(70 + (i * cellWidth) + i + (MINIMAL_WIDTH - cellWidth), 70 + (j * cellHeight) + j, MINIMAL_WIDTH, cellHeight));
-                    } else if (column<i) {
-                        if (column-i <3) {
-                             float pos = 70 + (column * originalCellWidth) + i - (MINIMAL_WIDTH - originalCellWidth) / 2;
-                             g2.fill(new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth + (column-i)*(MINIMAL_WIDTH - cellWidth)/3, cellHeight));
-                            g2.setPaint(Color.WHITE);
-                            g2.draw(new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth + (column-i)*(MINIMAL_WIDTH - cellWidth)/3, cellHeight));
-                        } else {
-                            g2.fill(new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth, cellHeight));
-                            g2.setPaint(Color.WHITE);
-                            g2.draw(new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth, cellHeight));
-                        }
 
-                    } else {
-                        g2.fill(new Rectangle2D.Double(70 + (i * cellWidth) + i + 3 * ((MINIMAL_WIDTH - cellWidth)), 70 + (j * cellHeight) + j, cellWidth, cellHeight));
-                        g2.setPaint(Color.WHITE);
-                        g2.draw(new Rectangle2D.Double(70 + (i * cellWidth) + i + 3 * ((MINIMAL_WIDTH - cellWidth)), 70 + (j * cellHeight) + j, cellWidth, cellHeight));
-                    }
-                } else {*/
-                    g2.fill(new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth, cellHeight));
+                if (activeArea.contains(mousePosition) && zoom) {
+                    Rectangle2D r = new Rectangle2D.Double(70 + gaussX, 70 + gaussY, getGauss(i, 5, column, gauseWidth) * zoomCellWidth, getGauss(j, 5, row, gauseHeight) * zoomCellHeight);
+                    g2.fill(r);
                     g2.setPaint(Color.WHITE);
-                    g2.draw(new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, cellWidth, cellHeight));
-               // }
-
+                    g2.draw(r);
+                    matrix[i][j] = r;
+                } else {
+                    Rectangle2D r = new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, zoomCellWidth, cellHeight);
+                    g2.fill(r);
+                    g2.setPaint(Color.WHITE);
+                    g2.draw(r);
+                    matrix[i][j] = r;
+                }
+                gaussY += getGauss(j, 5, row, gauseHeight) * zoomCellHeight;
             }
+            gaussX += getGauss(i, 5, column, gauseWidth) * zoomCellWidth;
         }
 
         paintSlider(g2, slider1Tip);
-        paintSlider(g2, slider2Tip);
-        paintScale(g2, maxValue, minValue, 10);
 
-        if (select == true && activeArea.contains(lastClickedPoint)) {
+        paintSlider(g2, slider2Tip);
+
+        paintScale(g2, maxValue, minValue,
+                10);
+
+        if (select
+                == true && activeArea.contains(lastClickedPoint)) {
             paintSelection(g2, numValuesX, numValuesY);
         }
-        if ((System.currentTimeMillis() - lastMovedTime) >= 1000 && mousePosition != null && activeArea.contains(mousePosition)) {
+
+        if ((System.currentTimeMillis()
+                - lastMovedTime) >= 1000 && mousePosition != null && activeArea.contains(mousePosition)) {
             paintToolTip(g2);
         }
 
         Font f = g2.getFont();
         Font fn = g2.getFont();
+
         g2.setPaint(Color.BLACK);
-        g2.fill(new Rectangle2D.Double(35, 35, 200, 5));
-        g2.fill(new Rectangle2D.Double(35, 35, 5, 200));
+
+        g2.fill(
+                new Rectangle2D.Double(35, 35, 200, 5));
+        g2.fill(
+                new Rectangle2D.Double(35, 35, 5, 200));
 
         int xPoints[] = {235, 250, 235};
         int yPoints[] = {30, 38, 45};
+
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        g2.fill(new Polygon(xPoints, yPoints, 3));
+
+        g2.fill(
+                new Polygon(xPoints, yPoints, 3));
         int xPoints1[] = {30, 38, 45};
         int yPoints1[] = {235, 250, 235};
-        g2.fill(new Polygon(xPoints1, yPoints1, 3));
 
-        fn.deriveFont(Font.BOLD, 20f);
+        g2.fill(
+                new Polygon(xPoints1, yPoints1, 3));
+
+        fn.deriveFont(Font.BOLD,
+                20f);
         g2.setFont(fn);
-        g2.drawString("Model #", 40, 30);
+
+        g2.drawString(
+                "Model #", 40, 30);
 
         AffineTransform at = g2.getTransform();
-        at.rotate(-Math.PI / 2f, 30, 80);
-        g2.setTransform(at);
-        g2.drawString("Model #", 30, 80);
-        at = new AffineTransform();
-    //    g2.setTransform(at);
 
-        
+        at.rotate(
+                -Math.PI / 2f, 30, 80);
+        g2.setTransform(at);
+
+        g2.drawString(
+                "Model #", 30, 80);
+        at = new AffineTransform();
+        //    g2.setTransform(at);
+
         g2.setFont(f);
+    }
+
+    private float getGauss(int x, int peak, int center, int width) {
+        float exp = -(float) (Math.pow(x - center, 2)) / width;
+        float value = peak * (float) Math.exp(exp);
+        return value + 1;
     }
 
     private void paintScale(Graphics2D g2, float max, float min, int steps) {
@@ -585,8 +631,20 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         int size = values.length;
         float x = mousePosition.x;
         float y = mousePosition.y;
-        int column = (int) Math.floor((x - 70) / (cellWidth + 1));
-        int row = (int) Math.floor((y - 70) / (cellHeight + 1));
+        int column = 0;
+        int row = 0;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                if (matrix[i][j] != null && matrix[i][j].contains(mousePosition)) {
+                    column = i;
+                    row = j;
+                }
+            }
+        }
+
+        //     column = (int) Math.floor((x - 70) / (cellWidth + 1));
+        //    row = (int) Math.floor((y - 70) / (cellHeight + 1));
         FontMetrics fm = getFontMetrics(getFont());
 
         String model2 = modelNames[(int) values[size - 1][column]];
@@ -605,8 +663,8 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
 
     }
 
-      private void moveCamera(MouseEvent e) {
-    /*    try {
+    private void moveCamera(MouseEvent e) {
+        /*    try {
             Point2D dragEndScreen = e.getPoint();
             Point2D dragStart = transformPoint(dragStartScreen);
             Point2D dragEnd = transformPoint(dragEndScreen);
@@ -620,9 +678,8 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
             ex.printStackTrace();
         }*/
     }
-    
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
