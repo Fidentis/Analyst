@@ -55,7 +55,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
     private float cellWidth;
     private float cellHeight;
     private long lastMovedTime;
-    private Point mousePosition;
+    private Point mousePosition = new Point(0, 0);
     private Point slider1Tip = new Point(this.getWidth() - 50, 70);
     private int slider1P;
     private Point slider2Tip = new Point(this.getWidth() - 50, this.getHeight() - 70);
@@ -67,6 +67,8 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
     private static final float MINIMAL_WIDTH = 50;
     private boolean zoom = false;
     private Rectangle2D[][] matrix = new Rectangle2D[50][50];
+
+    private float peakStrength = 5;
 
     /**
      * Creates new form plotsPanel
@@ -157,7 +159,9 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         pairFrame.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setMinimumSize(new java.awt.Dimension(800, 500));
         setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(800, 500));
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 formMouseDragged(evt);
@@ -187,11 +191,11 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 180, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -214,8 +218,20 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                         int size = values.length;
                         float x = mousePosition.x;
                         float y = mousePosition.y;
-                        int column = (int) Math.floor((x - 70) / (cellWidth + 1));
-                        int row = (int) Math.floor((y - 70) / (cellHeight + 1));
+                        int column = 0;
+                        int row = 0;
+
+                        for (int i = 0; i < matrix.length; i++) {
+                            for (int j = 0; j < matrix.length; j++) {
+                                if (matrix[i][j] != null && matrix[i][j].contains(mousePosition)) {
+                                    column = i;
+                                    row = j;
+                                }
+                            }
+                        }
+
+      //                  int column = (int) Math.floor((x - 70) / (cellWidth + 1));
+      //                  int row = (int) Math.floor((y - 70) / (cellHeight + 1));
 
                         String model2 = modelNames[(int) values[size - 1][column]];
                         String model1 = modelNames[(int) values[row][size - 1]];
@@ -406,7 +422,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         int gauseWidth = (column - 1) > (numValuesX - column) ? (column - 1) : (numValuesX - column);
         if (activeArea.contains(mousePosition) && zoom) {
             for (int i = 0; i < numValuesX; i++) {
-                gauss += getGauss(i, 5, column, gauseWidth);
+                gauss += getGauss(i, peakStrength, column, gauseWidth);
             }
             zoomCellWidth = width / gauss;
         }
@@ -415,7 +431,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         int gauseHeight = (row - 1) > (numValuesY - row) ? (row - 1) : (numValuesY - row);
         if (activeArea.contains(mousePosition) && zoom) {
             for (int i = 0; i < numValuesY; i++) {
-                gauss += getGauss(i, 5, row, gauseHeight);
+                gauss += getGauss(i, peakStrength, row, gauseHeight);
             }
             zoomCellHeight = height / gauss;
         }
@@ -424,14 +440,19 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         for (int i = 0; i < numValuesX; i++) {
             float gaussY = 0;
             for (int j = 0; j < numValuesY; j++) {
-                float currentWidth = getGauss(i, 5, column, gauseWidth) * zoomCellWidth;
-                float currentHeight = getGauss(j, 5, row, gauseHeight) * zoomCellHeight;
+                float currentWidth = getGauss(i, peakStrength, column, gauseWidth) * zoomCellWidth;
+                float currentHeight = getGauss(j, peakStrength, row, gauseHeight) * zoomCellHeight;
                 g2.setPaint(Color.BLACK);
                 if (activeArea.contains(mousePosition) && zoom) {
                     if (j == 0) {
-                         fm = getFontMetrics(getFont());
+                        fm = getFontMetrics(getFont());
                         h = fm.getHeight();
-                        if(currentWidth/2> h)g2.setFont(getFont().deriveFont(currentWidth/3));
+                        if (currentWidth / 3 > h) {
+                            g2.setFont(getFont().deriveFont(currentWidth / 3));
+                        } else {
+                            g2.setFont(getFont().deriveFont(h < currentWidth ? h : currentWidth));
+                        }
+                        fm = getFontMetrics(getFont());
                         int w = fm.stringWidth(Integer.toString((int) values[numValuesY][i] + 1));
                         g2.drawString(Integer.toString((int) values[numValuesY][i] + 1), 70 + gaussX + (currentWidth - w) / 2, 60);
                         g2.setFont(getFont().deriveFont(h));
@@ -439,9 +460,14 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                     if (i == 0) {
                         fm = getFontMetrics(getFont());
                         h = fm.getHeight();
-                        if(currentHeight/2> h)g2.setFont(getFont().deriveFont(currentHeight/3));
+                        if (currentHeight / 3 > h) {
+                            g2.setFont(getFont().deriveFont(currentHeight / 3));
+                        } else {
+                            g2.setFont(getFont().deriveFont(h < currentHeight ? h : currentHeight));
+                        }
+                        fm = getFontMetrics(getFont());
                         int w = fm.stringWidth(Integer.toString((int) values[j][numValuesX] + 1));
-                        g2.drawString(Integer.toString((int) values[j][numValuesX] + 1), 55 + (3 - w), 70 + gaussY + currentHeight );
+                        g2.drawString(Integer.toString((int) values[j][numValuesX] + 1), 58 - w, 70 + gaussY + currentHeight);
                         g2.setFont(getFont().deriveFont(h));
                     }
 
@@ -479,21 +505,21 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                 }
 
                 if (activeArea.contains(mousePosition) && zoom) {
-                    Rectangle2D r = new Rectangle2D.Double(70 + gaussX, 70 + gaussY, getGauss(i, 5, column, gauseWidth) * zoomCellWidth, getGauss(j, 5, row, gauseHeight) * zoomCellHeight);
+                    Rectangle2D r = new Rectangle2D.Double(70 + gaussX, 70 + gaussY, getGauss(i, peakStrength, column, gauseWidth) * zoomCellWidth, getGauss(j, peakStrength, row, gauseHeight) * zoomCellHeight);
                     g2.fill(r);
                     g2.setPaint(Color.WHITE);
                     g2.draw(r);
                     matrix[i][j] = r;
                 } else {
-                    Rectangle2D r = new Rectangle2D.Double(70 + (i * cellWidth) + i, 70 + (j * cellHeight) + j, zoomCellWidth, cellHeight);
+                    Rectangle2D r = new Rectangle2D.Double(70 + (i * (cellWidth))+i, 70 + (j * (cellHeight)) + j, cellWidth+1, cellHeight+1);
                     g2.fill(r);
                     g2.setPaint(Color.WHITE);
                     g2.draw(r);
                     matrix[i][j] = r;
                 }
-                gaussY += getGauss(j, 5, row, gauseHeight) * zoomCellHeight;
+                gaussY += getGauss(j, peakStrength, row, gauseHeight) * zoomCellHeight;
             }
-            gaussX += getGauss(i, 5, column, gauseWidth) * zoomCellWidth;
+            gaussX += getGauss(i, peakStrength, column, gauseWidth) * zoomCellWidth;
         }
 
         paintSlider(g2, slider1Tip);
@@ -561,7 +587,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         g2.setFont(f);
     }
 
-    private float getGauss(int x, int peak, int center, int width) {
+    private float getGauss(int x, float peak, int center, int width) {
         float exp = -(float) (Math.pow(x - center, 2)) / width;
         float value = peak * (float) Math.exp(exp);
         return value + 1;
@@ -712,6 +738,10 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                 }
             }
         }
+    }
+
+    public void setPeakStrength(float peakStrength) {
+        this.peakStrength = peakStrength;
     }
 
     private void sortValuesByColumn(boolean reset) {

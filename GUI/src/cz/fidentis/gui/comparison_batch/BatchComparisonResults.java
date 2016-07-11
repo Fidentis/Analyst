@@ -142,6 +142,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jComboBox5 = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jSlider4 = new javax.swing.JSlider();
         jScrollPane4 = new javax.swing.JScrollPane();
         plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -351,12 +353,25 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             .addComponent(histogramPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
         );
 
+        jFrame3.setMinimumSize(new java.awt.Dimension(800, 600));
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel22, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel22.text")); // NOI18N
 
         jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
         jComboBox5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox5ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel1.text")); // NOI18N
+
+        jSlider4.setMaximum(1000);
+        jSlider4.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jSlider4.toolTipText")); // NOI18N
+        jSlider4.setValue(50);
+        jSlider4.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider4StateChanged(evt);
             }
         });
 
@@ -369,16 +384,24 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(13, 13, 13)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(jSlider4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         plotsDrawingPanelBatchNumerical1.setPreferredSize(new java.awt.Dimension(500, 388));
@@ -401,14 +424,14 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jFrame3Layout.setHorizontalGroup(
             jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane4)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
         );
         jFrame3Layout.setVerticalGroup(
             jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame3Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
         );
 
         plotsDrawingPanelAuxiliary2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -522,7 +545,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         );
         pairFrameLayout.setVerticalGroup(
             pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pairComparisonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+            .addComponent(pairComparisonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 460, Short.MAX_VALUE)
         );
 
         pairFrame.setSize(new Dimension(800,600));
@@ -1929,7 +1952,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
             jFrame3.setIconImage(icon);
             jFrame3.setVisible(true);
-            jFrame3.setSize(500, 500);
+            jFrame3.setSize(800, 600);
             jFrame3.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
             plotsDrawingPanelBatchNumerical1.revalidate();
             plotsDrawingPanelBatchNumerical1.repaint();
@@ -2255,6 +2278,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         updateHistograms();
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
+    private void jSlider4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider4StateChanged
+        plotsDrawingPanelBatchNumerical1.setPeakStrength(jSlider4.getValue()/(float)10);
+    }//GEN-LAST:event_jSlider4StateChanged
+
     public histogramPanel getHistogram() {
         return histogram1;
     }
@@ -2381,6 +2408,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JFrame jFrame2;
     private javax.swing.JFrame jFrame3;
     private javax.swing.JFrame jFrame4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2418,6 +2446,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JSlider jSlider3;
+    private javax.swing.JSlider jSlider4;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
     private javax.swing.JSlider minThreshSlider;
