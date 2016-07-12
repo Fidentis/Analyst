@@ -49,6 +49,7 @@ public class Comparison2Faces {
     private List<FacialPoint> secondaryFp;
     private boolean editPoints;         //DON'T need to save in project
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
+    private boolean continueComparison = false;
     
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
@@ -84,7 +85,21 @@ public class Comparison2Faces {
     private int method;         //undersampling method
     private int type;           //undersampling type
     private float value;          //undersampling value
+    
+    private boolean firstCreated = true;
 
+    public Comparison2Faces() {
+    }
+
+    public boolean isFirstCreated() {
+        return firstCreated;
+    }
+
+    public void setFirstCreated(boolean firstCreated) {
+        this.firstCreated = firstCreated;
+    }
+       
+    
     public int getValuesTypeIndex() {
         return valuesTypeIndex;
     }
@@ -164,6 +179,14 @@ public class Comparison2Faces {
 
     public void setMethod(int method) {
         this.method = method;
+    }
+
+    public boolean isContinueComparison() {
+        return continueComparison;
+    }
+
+    public void setContinueComparison(boolean continueComparison) {
+        this.continueComparison = continueComparison;
     }
 
     public int getType() {

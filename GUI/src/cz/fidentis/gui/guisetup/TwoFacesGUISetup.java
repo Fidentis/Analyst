@@ -6,6 +6,9 @@
 package cz.fidentis.gui.guisetup;
 
 import cz.fidentis.comparison.ComparisonMethod;
+import cz.fidentis.comparison.ICPmetric;
+import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
 import javax.swing.JCheckBox;
@@ -69,33 +72,87 @@ public class TwoFacesGUISetup {
    
    private static final int FP_DISTANCE = 0;
    
-   public static void defaultValuesRegistration(JComboBox selectedRegistration, JCheckBox fpScale, JSlider fpThreshold, JCheckBox showFpInfo, JPanel fpColor, JSlider fpSize,
+   public static void setUpValuesRegistration(JComboBox selectedRegistration, JCheckBox fpScale, JSlider fpThreshold, JCheckBox showFpInfo, JPanel fpColor, JSlider fpSize,
            JComboBox icpMetric, JCheckBox icpScale, JCheckBox symModels, JSpinner icpError, JSpinner maxIteration, JComboBox icpUndersampling, 
-           JSpinner undersamplingPercentage, JSpinner undersamplingNumber, JRadioButton selectedUndersampling, JSlider undersamplingRadius,
-           JCheckBox continueComparison){
+           JSpinner undersamplingPercentage, JSpinner undersamplingNumber, JRadioButton numberUndersampling, JRadioButton percentageUndersampling,  JSlider undersamplingRadius,
+           JCheckBox continueComparison, Comparison2Faces data){
        
-       selectedRegistration.setSelectedIndex(SELECTED_REGISTRATION);
+       selectedRegistration.setSelectedIndex(data.getRegistrationMethod().ordinal());
        
        //FP
-       fpScale.setSelected(FP_SCALE);
-       fpThreshold.setValue(FP_THRESHOLD);
-       showFpInfo.setSelected(SHOW_FP_INFO);
-       fpColor.setBackground(FP_COLOR);
-       fpSize.setValue(FP_SIZE);
+       fpScale.setSelected(data.isFpScaling());
+       fpThreshold.setValue(data.getFpTreshold());
+       showFpInfo.setSelected(data.isShowPointInfo());
+       fpColor.setBackground(data.getPointColor());
+       fpSize.setValue(data.getFpSize());
        
        //ICP
-       icpMetric.setSelectedIndex(ICP_METRIC);
-       icpScale.setSelected(ICP_SCALE);
-       symModels.setSelected(SYMMETRIC_MODELS);
-       icpError.setValue(ERROR_VALUE);
-       maxIteration.setValue(MAX_ITERATION);
-       icpUndersampling.setSelectedIndex(UNDERSAMPLING_INDEX);
-       undersamplingPercentage.setValue(PERCENTAGE_VALUE);
-       undersamplingNumber.setValue(NUMBER_SPINNER);
-       selectedUndersampling.setSelected(true);
+       icpMetric.setSelectedIndex(data.getIcpMetric().ordinal());
+       icpScale.setSelected(data.getScaleEnabled());
+       symModels.setSelected(data.isUseSymmetry());
+       icpError.setValue(data.getICPerrorRate());
+       maxIteration.setValue(data.getICPmaxIteration());
+       icpUndersampling.setSelectedIndex(data.getMethod());
+       undersamplingPercentage.setValue(data.getValue());
+       undersamplingNumber.setValue(data.getValue());
+       
+       //SELECT CORRECT JRADIOBUTTON
+       //selectedUndersampling.setSelected(true);
        undersamplingRadius.setValue(UNDERSAMPLING_RADIUS);
        
-       continueComparison.setSelected(CONTINUE_COMPARISON);
+       continueComparison.setSelected(data.isContinueComparison());
+       
+   }
+   
+   public static void setUpDefaultRegistrationData(Comparison2Faces data){
+       data.setRegistrationMethod(RegistrationMethod.values()[SELECTED_REGISTRATION]);
+       
+       //FP
+       data.setFpScaling(FP_SCALE);
+       data.setFpTreshold(FP_THRESHOLD);
+       data.setShowPointInfo(SHOW_FP_INFO);
+       data.setPointColor(FP_COLOR);
+       data.setFpSize(FP_SIZE);
+       
+       //ICP
+       data.setIcpMetric(ICPmetric.values()[ICP_METRIC]);
+       data.setScaleEnabled(ICP_SCALE);
+       data.setUseSymmetry(SYMMETRIC_MODELS);
+       data.setICPerrorRate(ERROR_VALUE);
+       data.setICPmaxIteration(MAX_ITERATION);
+       data.setMethod(UNDERSAMPLING_INDEX);
+       data.setType(UNDERSAMPLING_INDEX);
+       data.setValue(PERCENTAGE_VALUE);
+       
+       data.setContinueComparison(CONTINUE_COMPARISON);
+       data.setFirstCreated(false);
+   }
+   
+   public static void setUpUsedRegistrationData(JComboBox selectedRegistration, JCheckBox fpScale, JSlider fpThreshold, JCheckBox showFpInfo, JPanel fpColor, JSlider fpSize,
+           JComboBox icpMetric, JCheckBox icpScale, JCheckBox symModels, JSpinner icpError, JSpinner maxIteration, JComboBox icpUndersampling, 
+           JSpinner undersamplingPercentage, JSpinner undersamplingNumber, JRadioButton numberUndersampling, JRadioButton percentageUndersampling,  JSlider undersamplingRadius,
+           JCheckBox continueComparison, Comparison2Faces data){
+       
+       data.setRegistrationMethod(RegistrationMethod.values()[selectedRegistration.getSelectedIndex()]);
+       
+       //FP
+       data.setFpScaling(fpScale.isSelected());
+       data.setFpTreshold(fpThreshold.getValue());
+       data.setShowPointInfo(showFpInfo.isSelected());
+       data.setPointColor(fpColor.getBackground());
+       data.setFpSize(fpSize.getValue());
+       
+       //ICP
+       data.setIcpMetric(ICPmetric.values()[icpMetric.getSelectedIndex()]);
+       data.setScaleEnabled(icpScale.isSelected());
+       data.setUseSymmetry(symModels.isSelected());
+       data.setICPerrorRate((float) icpError.getValue());
+       data.setICPmaxIteration((int) maxIteration.getValue());
+       data.setMethod(icpUndersampling.getSelectedIndex());
+       data.setType(percentageUndersampling.isSelected() ? 1 : 0);
+       data.setValue((float) (percentageUndersampling.isSelected() ? undersamplingPercentage.getValue() : undersamplingNumber.getValue()));
+       
+       data.setContinueComparison(continueComparison.isSelected());
    }
    
    public static void defaultValueComparisonConfiguration(JComboBox comparisonMethod, JCheckBox fpScaling, JCheckBox useDatabase, JSlider fpThreshold,
