@@ -63,9 +63,9 @@ public class OneToManyComparison {
     private float ICPerrorRate = 0.05f;            //used error rate during alignment for ICP -- used when editing registration criteria
     private int ICPmaxIteration = 10;               //used number of iteration for ICP -- used when editing registration criteria
     private boolean useSymmetry;
-    private RegistrationMethod RegMethod = RegistrationMethod.HAUSDORFF; //registration method used
-    private ComparisonMethod CompareMethod = ComparisonMethod.HAUSDORFF_DIST; //comparison method used
-    private ICPmetric icpMetric = ICPmetric.VERTEX_TO_VERTEX; //ICP metric used for registration
+    private RegistrationMethod RegMethod;           //registration method used
+    private ComparisonMethod CompareMethod;         //comparison method used
+    private ICPmetric icpMetric = null;                    //ICP metric used for registration
     private int fpDistance;                         //distance factor for feature points
     private boolean compareButtonEnabled = true;  //comparison button enabled means all computation of registration were finished (all threads are done)
     private String numericalResults;            //table format of numerical results

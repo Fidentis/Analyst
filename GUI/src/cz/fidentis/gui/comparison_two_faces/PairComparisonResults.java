@@ -323,6 +323,11 @@ public class PairComparisonResults extends javax.swing.JPanel {
         density.setValue(10);
         density.setVisible(false);
         densLabel.setVisible(false);
+        density.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                densityStateChanged(evt);
+            }
+        });
 
         shadersPanel.setVisible(false);
 
@@ -674,7 +679,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                                 .addComponent(minThreshSpinner))))))
-            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(colormapPanelLayout.createSequentialGroup()
@@ -728,6 +733,11 @@ public class PairComparisonResults extends javax.swing.JPanel {
         cylRadius.setValue(1);
         cylRadius.setVisible(false);
         cylRadiusLabel.setVisible(false);
+        cylRadius.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cylRadiusStateChanged(evt);
+            }
+        });
 
         cylLength.setMajorTickSpacing(1);
         cylLength.setMaximum(10);
@@ -737,6 +747,11 @@ public class PairComparisonResults extends javax.swing.JPanel {
         cylLength.setSnapToTicks(true);
         cylLength.setValue(1);
         cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
+        cylLength.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cylLengthStateChanged(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(cylLengthLabel, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.cylLengthLabel.text")); // NOI18N
 
@@ -1081,6 +1096,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setState(2);
+        TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces());
         GUIController.getConfigurationTopComponent().addComparisonComponent();
 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().drawHD(false);
@@ -1090,6 +1106,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().addModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel2());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().rotationAndSizeRestart();
+        
+        
 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -1247,13 +1265,15 @@ public class PairComparisonResults extends javax.swing.JPanel {
             info.setCylRadius(cylRadius.getValue());
             info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
             info.setRecompute(true);
+            
+            tc.getProject().getSelectedComparison2Faces().setVisualization(VisualizationBox.getSelectedIndex());
         }
         GUIController.getSelectedProjectTopComponent().revalidate();
         GUIController.getSelectedProjectTopComponent().repaint();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValuesTypeIndex(jComboBox2.getSelectedIndex());
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void secondaryColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_secondaryColorPanelMouseClicked
@@ -1269,18 +1289,19 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_primaryColorPanelMouseClicked
 
     private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setOverlayTransparency(jSlider3.getValue());
         setColors();
     }//GEN-LAST:event_jSlider3StateChanged
 
     public void setColors() {
         ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
         float[] color = new float[4];
-        secondaryColorPanel.getBackground().getRGBColorComponents(color);
+        primaryColorPanel.getBackground().getRGBColorComponents(color);
         color[3] = jCheckBox3.isSelected() ? 1 : jSlider3.getValue() / (float) 100;
         tc.setPrimaryColor(color);
 
         float[] color2 = new float[4];
-        primaryColorPanel.getBackground().getRGBColorComponents(color2);
+        secondaryColorPanel.getBackground().getRGBColorComponents(color2);
         color2[3] = jCheckBox4.isSelected() ? 1 : jSlider3.getValue() / (float) 100;
         tc.setSecondaryColor(color2);
 
@@ -1290,34 +1311,40 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setInnerSurfaceSolid(jCheckBox1.isSelected());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(jCheckBox1.isSelected());
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void noneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noneRadioButtonActionPerformed
         if (noneRadioButton.isSelected()) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(0);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(0);
         }
     }//GEN-LAST:event_noneRadioButtonActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         if (jRadioButton2.isSelected()) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(1);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(1);
         }
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         if (jRadioButton3.isSelected()) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(2);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(2);
         }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         if (jRadioButton4.isSelected()) {
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(3);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(3);
         }
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseGlyphs(jCheckBox2.isSelected());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(jCheckBox2.isSelected());
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
@@ -1328,6 +1355,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_fogColorPanelMouseClicked
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseContours(jCheckBox7.isSelected());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(jCheckBox7.isSelected());
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
@@ -1346,10 +1374,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setIsSecondarySolid(jCheckBox3.isSelected());
         setColors();
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setIsPrimarySolid(jCheckBox4.isSelected());
         setColors();
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
@@ -1389,6 +1419,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if(bc.getHDP() == null)
             return;
         
+        bc.setColorScheme(jComboBox6.getSelectedIndex());
         bc.getHDP().getInfo().setColorScheme(ColorScheme.values()[jComboBox6.getSelectedIndex()]);
     }//GEN-LAST:event_jComboBox6ActionPerformed
 
@@ -1439,6 +1470,18 @@ public class PairComparisonResults extends javax.swing.JPanel {
         updateHistograms();
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
+    private void densityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_densityStateChanged
+       GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setVectorDensity(density.getValue());
+    }//GEN-LAST:event_densityStateChanged
+
+    private void cylLengthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylLengthStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setVectorLength(cylLength.getValue());
+    }//GEN-LAST:event_cylLengthStateChanged
+
+    private void cylRadiusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylRadiusStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setCylinderRadius(cylRadius.getValue());
+    }//GEN-LAST:event_cylRadiusStateChanged
+
     public void setConfiguration() {
         jSpinner1.setVisible(false);
         jSlider1.setVisible(false);
@@ -1447,9 +1490,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         result = c.getNumericalResults();
         
-        TwoFacesGUISetup.defaultValueComparisonResult(VisualizationBox, jComboBox2, jSlider1, jSpinner1, minThreshSlider, minThreshSpinner,
+        TwoFacesGUISetup.setUpComparisonResult(VisualizationBox, jComboBox2, jSlider1, jSpinner1, minThreshSlider, minThreshSpinner,
                 jComboBox6, density, cylLength, cylRadius, primaryColorPanel, jCheckBox4, secondaryColorPanel, jCheckBox3, fogColorPanel, jSlider3, 
-                jCheckBox1, jCheckBox2, jCheckBox7, noneRadioButton, jSlider2, sizeSlider);
+                jCheckBox1, jCheckBox2, jCheckBox7, noneRadioButton, jSlider2, sizeSlider, noneRadioButton, jRadioButton2, jRadioButton3, jRadioButton4, c);
 
        /* jSlider1.setValue(c.getHausdorfMaxTreshold());
         minThreshSlider.setValue(c.getHausdorfMinTreshold());

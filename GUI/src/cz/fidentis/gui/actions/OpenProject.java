@@ -504,6 +504,72 @@ public final class OpenProject implements ActionListener {
         if(attr != null && !attr.isEmpty()){
             comparison.setFirstCreated(Boolean.parseBoolean(attr));
         }
+        
+        //overlay config
+        attr = projectE.getAttribute("primarySolid");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setIsPrimarySolid(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("secondarySolid");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setIsSecondarySolid(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("fogColor");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setFogColor(new Color(Integer.parseInt(attr)));
+        }
+        
+        attr = projectE.getAttribute("overlayTransparency");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setOverlayTransparency(Float.parseFloat(attr));
+        }
+        
+        attr = projectE.getAttribute("innerSurfaceSolid");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setInnerSurfaceSolid(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("useGlyphs");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setUseGlyphs(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("useContours");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setUseContours(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("fogVersion");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setFogVersion(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("visualization");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setVisualization(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("colorScheme");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setColorScheme(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("vectorDensity");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setVectorDensity(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("vectorLength");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setVectorLength(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("cylinderRadius");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setCylinderRadius(Integer.parseInt(attr));
+        }
 
         if (primaryE != null) {
             Element modelE = (Element) primaryE.getElementsByTagName("model").item(0);

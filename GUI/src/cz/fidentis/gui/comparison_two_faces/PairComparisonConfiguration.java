@@ -918,16 +918,15 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         if (jCheckBox2.isSelected()) {
                             tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
-                            //paInfo.setPointSize(30 / (float) (30));
-                            //tc.getViewerPanel_2Faces().getListener2().setFpSize(30 / (float) (30));
+
                         } else {
                             tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
-                            //tc.getViewerPanel_2Faces().getListener2().setFpSize(30 * 3);
+
                         }
 
                         tc.getViewerPanel_2Faces().getListener1().setProcrustes(true);
-                        //tc.getViewerPanel_2Faces().getListener2().setTypePA(0);
+
 
                         //choosing type of used database
                         if (jCheckBox1.isSelected()) {
@@ -950,15 +949,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                             tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, jCheckBox2.isSelected());
                                 }
 
-                                //                            Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                //                                    tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
                                 String result = procrustes.compare2ModelsWithDatabase(jSlider3.getValue() / 100f);
-                                // GUIController.getConfigurationTopComponent().getPairComparisonResults().setNumericalResult(result);
+  
                                 tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
 
-                                //tc.getViewerPanel_2Faces().getListener2().setGpa(procrustes.getGpa());
                                 paInfo.setGpa(procrustes.getGpa());
-                                //tc.getViewerPanel_2Faces().getListener2().setEnhance(0);
+   
 
                             } catch (FileNotFoundException ex) {
                                 Exceptions.printStackTrace(ex);
@@ -974,12 +970,8 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                         tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
 
                                 String result = procrustes.compare2Models(jSlider3.getValue() / 100f);
-                                // GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas2().setDescriptionText(result);
-                                // GUIController.getConfigurationTopComponent().getPairComparisonResults().setNumericalResult(result);
                                 tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
 
-                                /*tc.getViewerPanel_2Faces().getListener2().setGpa(procrustes.getGpa());
-                             tc.getViewerPanel_2Faces().getListener2().setEnhance(0);*/
                                 paInfo.setPa(procrustes.getPa());
                                 paInfo.setPa2(procrustes.getPa2());
                                 paInfo.setGpa(procrustes.getGpa());
@@ -1000,19 +992,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
                     tc.getProject().getSelectedComparison2Faces().setState(3);
 
-                    /*if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
-                    tc.getProject().getSelectedComparison2Faces().setResults(0);
-                } else if(((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST){
-                    tc.getProject().getSelectedComparison2Faces().setResults(1);
-                }else{
-                    tc.getProject().getSelectedComparison2Faces().setResults(2);
-                }*/
-                    //tc.getProject().getSelectedComparison2Faces().setResults((ComparisonMethod) jComboBox1.getSelectedItem());
                     tc.getViewerPanel_2Faces().setResultButtonVisible(false, 0);
 
-                    if (GUIController.getSelectedProjectTopComponent() == tc) {
-                        GUIController.getConfigurationTopComponent().addPairComparisonResults();
-                    }
+                    
 
                     p.finish();
                 } catch (Exception ex) {
@@ -1021,26 +1003,16 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 }finally{
                      p.finish();
                 }
+                
+                TwoFacesGUISetup.setUpComparisonResultDefaultData(tc.getProject().getSelectedComparison2Faces());
+                
+                if (GUIController.getSelectedProjectTopComponent() == tc) {
+                        GUIController.getConfigurationTopComponent().addPairComparisonResults();
+                }
             }
         };
         Thread t = new Thread(run);
         t.start(); // start the task and progress visualisation
-
-        /*Color color = new Color(colorPanel1.getBackground().getRGB());
-
-         int[] rgbVal = new int[3];
-         rgbVal[0] = color.getRed();
-         rgbVal[1] = color.getGreen();
-         rgbVal[2] = color.getBlue();
-
-         paintMain.setMinColor2(rgbVal);
-
-         color = new Color(colorPanel2.getBackground().getRGB());
-
-         rgbVal[0] = color.getRed();
-         rgbVal[1] = color.getGreen();
-         rgbVal[2] = color.getBlue();
-         paintMain.setMaxColor2(rgbVal);*/
     }
 
     private void processComparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processComparisonButtonActionPerformed
@@ -1107,34 +1079,40 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(jCheckBox3.isSelected());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setInnerSurfaceSolid(jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void noneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noneRadioButtonActionPerformed
         if (noneRadioButton.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(0);
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(0);
         }
     }//GEN-LAST:event_noneRadioButtonActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         if (jRadioButton2.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(1);
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(1);
         }
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         if (jRadioButton3.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(2);
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(2);
         }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         if (jRadioButton4.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(3);
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(3);
         }
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(jCheckBox4.isSelected());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseGlyphs(jCheckBox4.isSelected());
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void fogColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fogColorPanelMouseClicked
@@ -1145,6 +1123,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(jCheckBox7.isSelected());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseContours(jCheckBox7.isSelected());
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
@@ -1206,9 +1185,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             exportLandmarksButton.setVisible(false);
         }
         
-        TwoFacesGUISetup.defaultValueComparisonConfiguration(jComboBox1, jCheckBox2, jCheckBox1, jSlider3,
+        TwoFacesGUISetup.setUpValuesCompConfiguration(jComboBox1, jCheckBox2, jCheckBox1, jSlider3,
                 primaryColorPanel, jCheckBox6, secondaryColorPanel, jCheckBox5, fogColorPanel, jSlider4, 
-                jCheckBox3, jCheckBox4, jCheckBox7, noneRadioButton);
+                jCheckBox3, jCheckBox4, jCheckBox7, noneRadioButton,
+                jRadioButton2, jRadioButton3, jRadioButton4, c);
+        
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(c.getFogVersion());
         
         setupComparisonMethods(c);
         jSlider3.setValue(c.getFpTreshold());
@@ -1264,13 +1246,13 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         ComparisonGLEventListener c = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
         Comparison2Faces tc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
         float[] color = new float[4];
-        secondaryColorPanel.getBackground().getRGBColorComponents(color);
+        primaryColorPanel.getBackground().getRGBColorComponents(color);
         color[3] = jCheckBox5.isSelected() ? 1 : jSlider4.getValue() / (float) 100;
         tc.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
         c.setPrimaryColor(color);
 
         float[] color2 = new float[4];
-        primaryColorPanel.getBackground().getRGBColorComponents(color2);
+        secondaryColorPanel.getBackground().getRGBColorComponents(color2);
         color2[3] = jCheckBox6.isSelected() ? 1 : jSlider4.getValue() / (float) 100;
         tc.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
         c.setSecondaryColor(color2);

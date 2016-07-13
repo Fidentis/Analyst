@@ -421,6 +421,9 @@
                     <Property name="paintTicks" type="boolean" value="true"/>
                     <Property name="value" type="int" value="10"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="densityStateChanged"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="density.setVisible(false);&#xd;&#xa;densLabel.setVisible(false);"/>
                   </AuxValues>
@@ -1028,6 +1031,9 @@
                     <Property name="paintTicks" type="boolean" value="true"/>
                     <Property name="value" type="int" value="1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cylRadiusStateChanged"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cylRadius.setVisible(false);&#xd;&#xa;cylRadiusLabel.setVisible(false);"/>
                   </AuxValues>
@@ -1042,6 +1048,9 @@
                     <Property name="snapToTicks" type="boolean" value="true"/>
                     <Property name="value" type="int" value="1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cylLengthStateChanged"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cylLength.setVisible(false);  cylLengthLabel.setVisible(false);"/>
                   </AuxValues>
