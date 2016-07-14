@@ -122,7 +122,7 @@
                                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jComboBox1" min="-2" pref="189" max="-2" attributes="0"/>
+                                  <Component id="compMethodComboBox" min="-2" pref="189" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
@@ -151,7 +151,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox1" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="compMethodComboBox" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
                           <Component id="filler1" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -210,7 +210,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
+            <Component class="javax.swing.JComboBox" name="compMethodComboBox">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
@@ -226,7 +226,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="compMethodComboBoxActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.Box$Filler" name="filler1">
@@ -252,7 +252,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel12" min="-2" pref="61" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jSlider3" max="32767" attributes="0"/>
+                                  <Component id="fpThresholdSlider" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -262,11 +262,11 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="enableScaleCheckbox" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                          <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="useDatabaseCheckbox" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -295,12 +295,12 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel8" min="-2" pref="24" max="-2" attributes="0"/>
-                              <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+                              <Component id="enableScaleCheckbox" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel7" min="-2" pref="24" max="-2" attributes="0"/>
-                              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                              <Component id="useDatabaseCheckbox" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                           <Component id="deafultDatabaseRadioButton" min="-2" max="-2" attributes="0"/>
@@ -315,7 +315,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSlider3" min="-2" pref="46" max="-2" attributes="0"/>
+                              <Component id="fpThresholdSlider" min="-2" pref="46" max="-2" attributes="0"/>
                               <Component id="jLabel12" min="-2" pref="24" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -331,14 +331,14 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+                <Component class="javax.swing.JCheckBox" name="useDatabaseCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.useDatabaseCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="useDatabaseCheckboxActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel8">
@@ -348,14 +348,14 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox2">
+                <Component class="javax.swing.JCheckBox" name="enableScaleCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.enableScaleCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCheckBox2StateChanged"/>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="enableScaleCheckboxStateChanged"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="deafultDatabaseRadioButton">
@@ -429,7 +429,7 @@
                     <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jButton1.setVisible(false);"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JSlider" name="jSlider3">
+                <Component class="javax.swing.JSlider" name="fpThresholdSlider">
                   <Properties>
                     <Property name="majorTickSpacing" type="int" value="20"/>
                     <Property name="minorTickSpacing" type="int" value="5"/>
@@ -440,10 +440,10 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSlider3StateChanged"/>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="fpThresholdSliderStateChanged"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Hashtable tresholdTable = new Hashtable();&#xa;        tresholdTable.put(new Integer(0), new JLabel(&quot;0&quot;));&#xa;        tresholdTable.put(new Integer(20), new JLabel(&quot;0,2&quot;));&#xa;        tresholdTable.put(new Integer(40), new JLabel(&quot;0,4&quot;));&#xa;        tresholdTable.put(new Integer(60), new JLabel(&quot;0,6&quot;));&#xa;        tresholdTable.put(new Integer(80), new JLabel(&quot;0,8&quot;));&#xa;        tresholdTable.put(new Integer(100), new JLabel(&quot;1&quot;));&#xa;        jSlider3.setLabelTable(tresholdTable);"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Hashtable tresholdTable = new Hashtable();&#xa;        tresholdTable.put(new Integer(0), new JLabel(&quot;0&quot;));&#xa;        tresholdTable.put(new Integer(20), new JLabel(&quot;0,2&quot;));&#xa;        tresholdTable.put(new Integer(40), new JLabel(&quot;0,4&quot;));&#xa;        tresholdTable.put(new Integer(60), new JLabel(&quot;0,6&quot;));&#xa;        tresholdTable.put(new Integer(80), new JLabel(&quot;0,8&quot;));&#xa;        tresholdTable.put(new Integer(100), new JLabel(&quot;1&quot;));&#xa;        fpThresholdSlider.setLabelTable(tresholdTable);"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel12">
@@ -496,7 +496,7 @@
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jSlider4" alignment="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="transparencySlider" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Component id="primaryColorPanel" max="32767" attributes="0"/>
@@ -505,8 +505,8 @@
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jCheckBox5" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jCheckBox6" min="-2" max="-2" attributes="0"/>
+                                              <Component id="secondarySolidCheckbox" min="-2" max="-2" attributes="0"/>
+                                              <Component id="primarySolidCheckbox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="32767" attributes="0"/>
                                       </Group>
@@ -514,16 +514,16 @@
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jCheckBox7" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="useContoursCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="useGlyphsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="innerSurfaceSolidCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jRadioButton4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jRadioButton3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jRadioButton2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="innerSurfaceSolidRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="transparencyMappingRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="colorOverlayRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="noneRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -542,7 +542,7 @@
                               <Component id="jLabel9" min="-2" pref="23" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="primaryColorPanel" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jCheckBox6" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="primarySolidCheckbox" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -553,7 +553,7 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jCheckBox5" max="32767" attributes="0"/>
+                                      <Component id="secondarySolidCheckbox" max="32767" attributes="0"/>
                                       <Component id="secondaryColorPanel" alignment="1" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -566,25 +566,25 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jSlider4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="transparencySlider" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                          <Component id="jCheckBox3" min="-2" max="-2" attributes="0"/>
+                          <Component id="innerSurfaceSolidCheckbox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jCheckBox4" min="-2" max="-2" attributes="0"/>
+                          <Component id="useGlyphsCheckbox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBox7" min="-2" max="-2" attributes="0"/>
+                          <Component id="useContoursCheckbox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="noneRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
+                          <Component id="colorOverlayRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jRadioButton3" min="-2" max="-2" attributes="0"/>
+                          <Component id="transparencyMappingRadioButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jRadioButton4" min="-2" max="-2" attributes="0"/>
+                          <Component id="innerSurfaceSolidRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -667,7 +667,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JSlider" name="jSlider4">
+                <Component class="javax.swing.JSlider" name="transparencySlider">
                   <Properties>
                     <Property name="majorTickSpacing" type="int" value="20"/>
                     <Property name="minorTickSpacing" type="int" value="5"/>
@@ -676,18 +676,18 @@
                     <Property name="value" type="int" value="100"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSlider4StateChanged"/>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="transparencySliderStateChanged"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox3">
+                <Component class="javax.swing.JCheckBox" name="innerSurfaceSolidCheckbox">
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.innerSurfaceSolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="innerSurfaceSolidCheckboxActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="noneRadioButton">
@@ -704,43 +704,43 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noneRadioButtonActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+                <Component class="javax.swing.JRadioButton" name="colorOverlayRadioButton">
                   <Properties>
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jRadioButton2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.colorOverlayRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton2ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="colorOverlayRadioButtonActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JRadioButton" name="jRadioButton3">
+                <Component class="javax.swing.JRadioButton" name="transparencyMappingRadioButton">
                   <Properties>
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jRadioButton3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.transparencyMappingRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="transparencyMappingRadioButtonActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JRadioButton" name="jRadioButton4">
+                <Component class="javax.swing.JRadioButton" name="innerSurfaceSolidRadioButton">
                   <Properties>
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jRadioButton4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.innerSurfaceSolidRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton4ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="innerSurfaceSolidRadioButtonActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel15">
@@ -750,14 +750,14 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox4">
+                <Component class="javax.swing.JCheckBox" name="useGlyphsCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.useGlyphsCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox4ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="useGlyphsCheckboxActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel16">
@@ -798,35 +798,35 @@
                     </DimensionLayout>
                   </Layout>
                 </Container>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox7">
+                <Component class="javax.swing.JCheckBox" name="useContoursCheckbox">
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.useContoursCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox7ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="useContoursCheckboxActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox5">
+                <Component class="javax.swing.JCheckBox" name="secondarySolidCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.secondarySolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox5ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="secondarySolidCheckboxActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="jCheckBox6">
+                <Component class="javax.swing.JCheckBox" name="primarySolidCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jCheckBox6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.primarySolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox6ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="primarySolidCheckboxActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

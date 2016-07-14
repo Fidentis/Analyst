@@ -91,19 +91,19 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         processComparisonButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        compMethodComboBox = new javax.swing.JComboBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        useDatabaseCheckbox = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        enableScaleCheckbox = new javax.swing.JCheckBox();
         deafultDatabaseRadioButton = new javax.swing.JRadioButton();
         chooseDatabaseRadioButton = new javax.swing.JRadioButton();
         createDatabaseRadioButton = new javax.swing.JRadioButton();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jSlider3 = new javax.swing.JSlider();
+        fpThresholdSlider = new javax.swing.JSlider();
         jLabel12 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -115,19 +115,19 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         primaryColorPanel = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jSlider4 = new javax.swing.JSlider();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        transparencySlider = new javax.swing.JSlider();
+        innerSurfaceSolidCheckbox = new javax.swing.JCheckBox();
         noneRadioButton = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        colorOverlayRadioButton = new javax.swing.JRadioButton();
+        transparencyMappingRadioButton = new javax.swing.JRadioButton();
+        innerSurfaceSolidRadioButton = new javax.swing.JRadioButton();
         jLabel15 = new javax.swing.JLabel();
-        jCheckBox4 = new javax.swing.JCheckBox();
+        useGlyphsCheckbox = new javax.swing.JCheckBox();
         jLabel16 = new javax.swing.JLabel();
         fogColorPanel = new javax.swing.JPanel();
-        jCheckBox7 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
+        useContoursCheckbox = new javax.swing.JCheckBox();
+        secondarySolidCheckbox = new javax.swing.JCheckBox();
+        primarySolidCheckbox = new javax.swing.JCheckBox();
         exportLandmarksButton = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
@@ -187,12 +187,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel3.text")); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hausdorff Distance", "Procrustes Analysis" }));
-        jComboBox1.setMinimumSize(new java.awt.Dimension(191, 25));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(191, 25));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        compMethodComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hausdorff Distance", "Procrustes Analysis" }));
+        compMethodComboBox.setMinimumSize(new java.awt.Dimension(191, 25));
+        compMethodComboBox.setPreferredSize(new java.awt.Dimension(191, 25));
+        compMethodComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                compMethodComboBoxActionPerformed(evt);
             }
         });
 
@@ -200,19 +200,19 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel7.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox1.text")); // NOI18N
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(useDatabaseCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.useDatabaseCheckbox.text")); // NOI18N
+        useDatabaseCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                useDatabaseCheckboxActionPerformed(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel8.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox2.text")); // NOI18N
-        jCheckBox2.addChangeListener(new javax.swing.event.ChangeListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(enableScaleCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.enableScaleCheckbox.text")); // NOI18N
+        enableScaleCheckbox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox2StateChanged(evt);
+                enableScaleCheckboxStateChanged(evt);
             }
         });
 
@@ -254,14 +254,14 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
-        jSlider3.setMajorTickSpacing(20);
-        jSlider3.setMinorTickSpacing(5);
-        jSlider3.setPaintLabels(true);
-        jSlider3.setPaintTicks(true);
-        jSlider3.setValue(30);
-        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+        fpThresholdSlider.setMajorTickSpacing(20);
+        fpThresholdSlider.setMinorTickSpacing(5);
+        fpThresholdSlider.setPaintLabels(true);
+        fpThresholdSlider.setPaintTicks(true);
+        fpThresholdSlider.setValue(30);
+        fpThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider3StateChanged(evt);
+                fpThresholdSliderStateChanged(evt);
             }
         });
 
@@ -276,7 +276,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(fpThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -284,10 +284,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCheckBox2))
+                                .addComponent(enableScaleCheckbox))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
-                                .addComponent(jCheckBox1))))
+                                .addComponent(useDatabaseCheckbox))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,11 +306,11 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox2))
+                    .addComponent(enableScaleCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
+                    .addComponent(useDatabaseCheckbox))
                 .addGap(1, 1, 1)
                 .addComponent(deafultDatabaseRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -323,7 +323,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
@@ -335,7 +335,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         tresholdTable.put(new Integer(60), new JLabel("0,6"));
         tresholdTable.put(new Integer(80), new JLabel("0,8"));
         tresholdTable.put(new Integer(100), new JLabel("1"));
-        jSlider3.setLabelTable(tresholdTable);
+        fpThresholdSlider.setLabelTable(tresholdTable);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jButton2.text")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -395,22 +395,22 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel14.text")); // NOI18N
 
-        jSlider4.setMajorTickSpacing(20);
-        jSlider4.setMinorTickSpacing(5);
-        jSlider4.setPaintLabels(true);
-        jSlider4.setPaintTicks(true);
-        jSlider4.setValue(100);
-        jSlider4.addChangeListener(new javax.swing.event.ChangeListener() {
+        transparencySlider.setMajorTickSpacing(20);
+        transparencySlider.setMinorTickSpacing(5);
+        transparencySlider.setPaintLabels(true);
+        transparencySlider.setPaintTicks(true);
+        transparencySlider.setValue(100);
+        transparencySlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider4StateChanged(evt);
+                transparencySliderStateChanged(evt);
             }
         });
 
-        jCheckBox3.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox3.text")); // NOI18N
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+        innerSurfaceSolidCheckbox.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(innerSurfaceSolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.innerSurfaceSolidCheckbox.text")); // NOI18N
+        innerSurfaceSolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
+                innerSurfaceSolidCheckboxActionPerformed(evt);
             }
         });
 
@@ -423,36 +423,36 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
-        buttonGroup1.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jRadioButton2.text")); // NOI18N
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(colorOverlayRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(colorOverlayRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.colorOverlayRadioButton.text")); // NOI18N
+        colorOverlayRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                colorOverlayRadioButtonActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jRadioButton3);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton3, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jRadioButton3.text")); // NOI18N
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(transparencyMappingRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(transparencyMappingRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.transparencyMappingRadioButton.text")); // NOI18N
+        transparencyMappingRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                transparencyMappingRadioButtonActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jRadioButton4);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton4, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jRadioButton4.text")); // NOI18N
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(innerSurfaceSolidRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(innerSurfaceSolidRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.innerSurfaceSolidRadioButton.text")); // NOI18N
+        innerSurfaceSolidRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
+                innerSurfaceSolidRadioButtonActionPerformed(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel15.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox4.text")); // NOI18N
-        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(useGlyphsCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.useGlyphsCheckbox.text")); // NOI18N
+        useGlyphsCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox4ActionPerformed(evt);
+                useGlyphsCheckboxActionPerformed(evt);
             }
         });
 
@@ -478,25 +478,25 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jCheckBox7.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox7, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox7.text")); // NOI18N
-        jCheckBox7.addActionListener(new java.awt.event.ActionListener() {
+        useContoursCheckbox.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(useContoursCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.useContoursCheckbox.text")); // NOI18N
+        useContoursCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox7ActionPerformed(evt);
+                useContoursCheckboxActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox5, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox5.text")); // NOI18N
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(secondarySolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.secondarySolidCheckbox.text")); // NOI18N
+        secondarySolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox5ActionPerformed(evt);
+                secondarySolidCheckboxActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox6, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jCheckBox6.text")); // NOI18N
-        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(primarySolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.primarySolidCheckbox.text")); // NOI18N
+        primarySolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox6ActionPerformed(evt);
+                primarySolidCheckboxActionPerformed(evt);
             }
         });
 
@@ -515,7 +515,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                             .addComponent(jLabel16))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(visualizationPanelLayout.createSequentialGroup()
                                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -523,21 +523,21 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                     .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox5)
-                                    .addComponent(jCheckBox6))
+                                    .addComponent(secondarySolidCheckbox)
+                                    .addComponent(primarySolidCheckbox))
                                 .addContainerGap())))
                     .addGroup(visualizationPanelLayout.createSequentialGroup()
                         .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox7)
-                            .addComponent(jCheckBox4)
-                            .addComponent(jCheckBox3)
+                            .addComponent(useContoursCheckbox)
+                            .addComponent(useGlyphsCheckbox)
+                            .addComponent(innerSurfaceSolidCheckbox)
                             .addGroup(visualizationPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton4)
-                                    .addComponent(jRadioButton3)
-                                    .addComponent(jRadioButton2)
+                                    .addComponent(innerSurfaceSolidRadioButton)
+                                    .addComponent(transparencyMappingRadioButton)
+                                    .addComponent(colorOverlayRadioButton)
                                     .addComponent(noneRadioButton))))
                         .addContainerGap(72, Short.MAX_VALUE))))
         );
@@ -549,7 +549,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBox6, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(primarySolidCheckbox, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(visualizationPanelLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
@@ -557,7 +557,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     .addGroup(visualizationPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jCheckBox5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(secondarySolidCheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(secondaryColorPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -566,23 +566,23 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14)
-                    .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
-                .addComponent(jCheckBox3)
+                .addComponent(innerSurfaceSolidCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox4)
+                .addComponent(useGlyphsCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox7)
+                .addComponent(useContoursCheckbox)
                 .addGap(7, 7, 7)
                 .addGroup(visualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(noneRadioButton)
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton2)
+                .addComponent(colorOverlayRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton3)
+                .addComponent(transparencyMappingRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton4))
+                .addComponent(innerSurfaceSolidRadioButton))
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.exportLandmarksButton.text")); // NOI18N
@@ -610,7 +610,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jLabel3))
                             .addGap(18, 18, 18)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(compMethodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
@@ -631,7 +631,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(compMethodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -666,9 +666,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpTreshold(jSlider3.getValue());
-    }//GEN-LAST:event_jSlider3StateChanged
+    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpTreshold(fpThresholdSlider.getValue());
+    }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (chooseDatabaseRadioButton.isSelected()) {
@@ -717,12 +717,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jButton1.setVisible(false);
     }//GEN-LAST:event_deafultDatabaseRadioButtonActionPerformed
 
-    private void jCheckBox2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox2StateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpScaling(jCheckBox2.isSelected());
-    }//GEN-LAST:event_jCheckBox2StateChanged
+    private void enableScaleCheckboxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_enableScaleCheckboxStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpScaling(enableScaleCheckbox.isSelected());
+    }//GEN-LAST:event_enableScaleCheckboxStateChanged
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        if (jCheckBox1.isSelected()) {
+    private void useDatabaseCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useDatabaseCheckboxActionPerformed
+        if (useDatabaseCheckbox.isSelected()) {
             deafultDatabaseRadioButton.setVisible(true);
             chooseDatabaseRadioButton.setVisible(true);
             createDatabaseRadioButton.setVisible(true);
@@ -747,35 +747,37 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             jButton1.setVisible(false);
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseDatabase(0);
         }
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_useDatabaseCheckboxActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+    private void compMethodComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compMethodComboBoxActionPerformed
+        if (((ComparisonMethod) compMethodComboBox.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
             jPanel1.setVisible(true);
             //  visualisationPanel.setVisible(false);
 
         }
-        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+        if ((ComparisonMethod) compMethodComboBox.getSelectedItem() == ComparisonMethod.HAUSDORFF_DIST ||
+               (ComparisonMethod) compMethodComboBox.getSelectedItem() == ComparisonMethod.HAUSDORFF_CURV ) {
             jPanel1.setVisible(false);
             //  visualisationPanel.setVisible(true);
 
         }
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setComparisonMethod((ComparisonMethod) compMethodComboBox.getSelectedItem());
+    }//GEN-LAST:event_compMethodComboBoxActionPerformed
 
     public void computeComparison(final ProjectTopComponent tc) {
         Model main = tc.getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
         Model compare = tc.getViewerPanel_2Faces().getListener2().getModel(); //vedlajsi model v pravom panele
+        final Comparison2Faces c = tc.getProject().getSelectedComparison2Faces();
 
         if (main == null || compare == null) {
             System.out.print("Some models were not loaded.");
             return;
         }
 
-        if (tc.getProject().getSelectedComparison2Faces().getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {//no reistration
+        if (c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {//no reistration
             ModelLoader loader = new ModelLoader();
-            main = loader.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, false);
-            compare = loader.loadModel(tc.getProject().getSelectedComparison2Faces().getModel2().getFile(), false, false);
+            main = loader.loadModel(c.getModel1().getFile(), false, false);
+            compare = loader.loadModel(c.getModel2().getFile(), false, false);
         }
         final Model mainFace = compare;
         final Model compareFace = main;
@@ -792,22 +794,20 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                     p.start(100);
 
                     processComparisonButton.setEnabled(false);
-                    tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(false);
+                    c.setCompareButtonEnabled(false);
                     //Computing Hausdorff Distance
-                    if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
-                            || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
+                    if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST
+                            || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV) {
                         List<Float> hdDistance = null;
 
-                        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
-                            //KdTree mainF = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getMainFace();
-                            //List<Vector3f> usedNormals = compareFace.getNormals();
+                        if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
                             KdTree mainF;
                             
-                            if(tc.getProject().getSelectedComparison2Faces().getIcpMetric() == ICPmetric.VERTEX_TO_MESH){
-                                mainF = new KdTreeFaces(tc.getProject().getSelectedComparison2Faces().getModel2().getVerts(),
-                                        tc.getProject().getSelectedComparison2Faces().getModel2().getFaces());
+                            if(c.getIcpMetric() == ICPmetric.VERTEX_TO_MESH){
+                                mainF = new KdTreeFaces(c.getModel2().getVerts(),
+                                        c.getModel2().getFaces());
                             }else{
-                                mainF = new KdTreeIndexed(tc.getProject().getSelectedComparison2Faces().getModel2().getVerts());
+                                mainF = new KdTreeIndexed(c.getModel2().getVerts());
                             }
                             
                             List<Vector3f> usedNormals = compareFace.getNormals();
@@ -827,19 +827,19 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                             hdDistance = HausdorffDistance.instance().hDistance(mainF, compareFace.getVerts(), usedNormals, true);
                         } else {
                             //in case vertex-to-plane metric was used created new kd-tree to be able to get index of nearest neighbor
-                            KdTreeIndexed mainF = new KdTreeIndexed(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1().getVerts());
-                            double[] mainCurvature = new Curvature_jv(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel1()).getCurvature(CurvatureType.Gaussian);
-                            double[] secondaryCurvature = new Curvature_jv(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().getModel2()).getCurvature(CurvatureType.Gaussian);
+                            KdTreeIndexed mainF = new KdTreeIndexed(c.getModel2().getVerts());
+                            double[] mainCurvature = new Curvature_jv(c.getModel2()).getCurvature(CurvatureType.Gaussian);
+                            double[] secondaryCurvature = new Curvature_jv(c.getModel1()).getCurvature(CurvatureType.Gaussian);
 
                             p.setDisplayName("Computing Nearest Neighbor curvature...");
                             p.progress(90);
                             hdDistance = NearestCurvature.instance().nearestCurvature(mainF, compareFace.getVerts(), mainCurvature, secondaryCurvature);
-                            //hdDistance = ComparisonMetrics.instance().thresholdValuesKeepSort(hdDistance, 0.99f, false);
+                            //hdDistance = ComparisonMetrics.instance().thresoldValuesKeepSort(hdDistance, 0.99f, false);
                         }
 
                         tc.getViewerPanel_2Faces().getListener1().setProcrustes(false);
 
-                        tc.getProject().getSelectedComparison2Faces().setHd(hdDistance);
+                        c.setHd(hdDistance);
                         List<Float> sortedValuesRel = SortUtils.instance().sortValues(hdDistance);
                         List<Float> absValues = new LinkedList<>();
 
@@ -849,10 +849,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                         List<Float> sortedValuesAbs = SortUtils.instance().sortValues(absValues);
 
-                        tc.getProject().getSelectedComparison2Faces().setSortedHdValuesAbs(sortedValuesAbs);
-                        tc.getProject().getSelectedComparison2Faces().setSortedHdValuesRelative(sortedValuesRel);
+                        c.setSortedHdValuesAbs(sortedValuesAbs);
+                        c.setSortedHdValuesRelative(sortedValuesRel);
 
-                        HDpaintingInfo info = new HDpaintingInfo(hdDistance, tc.getProject().getSelectedComparison2Faces().getModel1(), true);
+                        HDpaintingInfo info = new HDpaintingInfo(hdDistance, c.getModel1(), true);
                         float[] minColor = {0.298f, 0.0f, 0.898f};
                         Color minCol = new Color(76, 0, 229);
                         float[] maxColor = {0.898f, 0.1f, 0.133f};
@@ -862,18 +862,18 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                         HDpainting paintMain = new HDpainting(info);
 
-                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setHdColor1(minCol);
-                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setHdColor2(maxCol);
+                        c.setHdColor1(minCol);
+                        c.setHdColor2(maxCol);
 
                         tc.getViewerPanel_2Faces().getListener1().drawHD(true);
                         tc.getViewerPanel_2Faces().getListener1().setHdPaint(paintMain);
                         tc.getViewerPanel_2Faces().getListener1().setHdInfo(info);
-                        tc.getProject().getSelectedComparison2Faces().setHDP(paintMain);
-                        tc.getProject().getSelectedComparison2Faces().setHdPaintingInfo(info);
+                        c.setHDP(paintMain);
+                        c.setHdPaintingInfo(info);
 
-                        tc.getProject().getSelectedComparison2Faces().setNumericalResults(setValues(hdDistance));
-                        tc.getProject().getSelectedComparison2Faces().setLowerHDTreshold(0.0f);
-                        tc.getProject().getSelectedComparison2Faces().setUpperHDTreshold(1f);
+                        c.setNumericalResults(setValues(hdDistance));
+                        c.setLowerHDTreshold(0.0f);
+                        c.setUpperHDTreshold(1f);
 
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                     } else {
@@ -906,7 +906,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                 facialPoints = fpUniverse.getFacialPoints();
                                 PsDebug.getConsole().setVisible(false);
 
-                                tc.getProject().getSelectedComparison2Faces().addFacialPoints(facialPoints);
+                                c.addFacialPoints(facialPoints);
                             }
 
                         }
@@ -915,7 +915,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                         PApaintingInfo paInfo = new PApaintingInfo(null, null, 0);
 
-                        if (jCheckBox2.isSelected()) {
+                        if (enableScaleCheckbox.isSelected()) {
                             tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
 
@@ -929,29 +929,29 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
 
                         //choosing type of used database
-                        if (jCheckBox1.isSelected()) {
+                        if (useDatabaseCheckbox.isSelected()) {
                             Procrustes2Models procrustes = null;
                             try {
                                 if (deafultDatabaseRadioButton.isSelected()) {
                                     procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
+                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), enableScaleCheckbox.isSelected());
 
                                 } else if (chooseDatabaseRadioButton.isSelected()) {
                                     if (!jTextField1.getText().endsWith(".txt")) {
                                         throw new IllegalArgumentException("Cannot be used as database.");
                                     } else {
                                         procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), jCheckBox2.isSelected());
+                                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), enableScaleCheckbox.isSelected());
                                     }
                                 } else {
-                                    List<List<FacialPoint>> list = tc.getProject().getSelectedComparison2Faces().getDatabasePoints();
+                                    List<List<FacialPoint>> list = c.getDatabasePoints();
                                     procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, jCheckBox2.isSelected());
+                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, enableScaleCheckbox.isSelected());
                                 }
 
-                                String result = procrustes.compare2ModelsWithDatabase(jSlider3.getValue() / 100f);
+                                String result = procrustes.compare2ModelsWithDatabase(fpThresholdSlider.getValue() / 100f);
   
-                                tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
+                                c.setNumericalResults(result);
 
                                 paInfo.setGpa(procrustes.getGpa());
    
@@ -967,10 +967,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                             //Procrustes analysis without using database
                             try {
                                 Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jCheckBox2.isSelected());
+                                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), enableScaleCheckbox.isSelected());
 
-                                String result = procrustes.compare2Models(jSlider3.getValue() / 100f);
-                                tc.getProject().getSelectedComparison2Faces().setNumericalResults(result);
+                                String result = procrustes.compare2Models(fpThresholdSlider.getValue() / 100f);
+                                c.setNumericalResults(result);
 
                                 paInfo.setPa(procrustes.getPa());
                                 paInfo.setPa2(procrustes.getPa2());
@@ -980,7 +980,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                 Exceptions.printStackTrace(ex);
                                 p.finish();
                                 processComparisonButton.setEnabled(true);
-                                tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
+                                c.setCompareButtonEnabled(true);
                             }
                         }
 
@@ -989,8 +989,8 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                     }
                     processComparisonButton.setEnabled(true);
-                    tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
-                    tc.getProject().getSelectedComparison2Faces().setState(3);
+                    c.setCompareButtonEnabled(true);
+                    c.setState(3);
 
                     tc.getViewerPanel_2Faces().setResultButtonVisible(false, 0);
 
@@ -1004,7 +1004,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                      p.finish();
                 }
                 
-                TwoFacesGUISetup.setUpComparisonResultDefaultData(tc.getProject().getSelectedComparison2Faces());
+                TwoFacesGUISetup.setUpComparisonResultDefaultData(c);
                 
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
                         GUIController.getConfigurationTopComponent().addPairComparisonResults();
@@ -1073,14 +1073,15 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         colorDialog.setVisible(true);
     }//GEN-LAST:event_primaryColorPanelMouseClicked
 
-    private void jSlider4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider4StateChanged
+    private void transparencySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_transparencySliderStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setOverlayTransparency(transparencySlider.getValue());
         setColors();
-    }//GEN-LAST:event_jSlider4StateChanged
+    }//GEN-LAST:event_transparencySliderStateChanged
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(jCheckBox3.isSelected());
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setInnerSurfaceSolid(jCheckBox3.isSelected());
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
+    private void innerSurfaceSolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_innerSurfaceSolidCheckboxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(innerSurfaceSolidCheckbox.isSelected());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setInnerSurfaceSolid(innerSurfaceSolidCheckbox.isSelected());
+    }//GEN-LAST:event_innerSurfaceSolidCheckboxActionPerformed
 
     private void noneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noneRadioButtonActionPerformed
         if (noneRadioButton.isSelected()) {
@@ -1089,31 +1090,31 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_noneRadioButtonActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        if (jRadioButton2.isSelected()) {
+    private void colorOverlayRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorOverlayRadioButtonActionPerformed
+        if (colorOverlayRadioButton.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(1);
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(1);
         }
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_colorOverlayRadioButtonActionPerformed
 
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        if (jRadioButton3.isSelected()) {
+    private void transparencyMappingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transparencyMappingRadioButtonActionPerformed
+        if (transparencyMappingRadioButton.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(2);
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(2);
         }
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
+    }//GEN-LAST:event_transparencyMappingRadioButtonActionPerformed
 
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        if (jRadioButton4.isSelected()) {
+    private void innerSurfaceSolidRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_innerSurfaceSolidRadioButtonActionPerformed
+        if (innerSurfaceSolidRadioButton.isSelected()) {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(3);
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFogVersion(3);
         }
-    }//GEN-LAST:event_jRadioButton4ActionPerformed
+    }//GEN-LAST:event_innerSurfaceSolidRadioButtonActionPerformed
 
-    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(jCheckBox4.isSelected());
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseGlyphs(jCheckBox4.isSelected());
-    }//GEN-LAST:event_jCheckBox4ActionPerformed
+    private void useGlyphsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useGlyphsCheckboxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(useGlyphsCheckbox.isSelected());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseGlyphs(useGlyphsCheckbox.isSelected());
+    }//GEN-LAST:event_useGlyphsCheckboxActionPerformed
 
     private void fogColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fogColorPanelMouseClicked
         activeColorPanel = fogColorPanel;
@@ -1121,18 +1122,20 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         colorDialog.setVisible(true);
     }//GEN-LAST:event_fogColorPanelMouseClicked
 
-    private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(jCheckBox7.isSelected());
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseContours(jCheckBox7.isSelected());
-    }//GEN-LAST:event_jCheckBox7ActionPerformed
+    private void useContoursCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useContoursCheckboxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(useContoursCheckbox.isSelected());
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseContours(useContoursCheckbox.isSelected());
+    }//GEN-LAST:event_useContoursCheckboxActionPerformed
 
-    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+    private void secondarySolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secondarySolidCheckboxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setIsSecondarySolid(secondarySolidCheckbox.isSelected());
         setColors();
-    }//GEN-LAST:event_jCheckBox5ActionPerformed
+    }//GEN-LAST:event_secondarySolidCheckboxActionPerformed
 
-    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+    private void primarySolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_primarySolidCheckboxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setIsPrimarySolid(primarySolidCheckbox.isSelected());
         setColors();
-    }//GEN-LAST:event_jCheckBox6ActionPerformed
+    }//GEN-LAST:event_primarySolidCheckboxActionPerformed
 
     private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
@@ -1144,7 +1147,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
     public boolean getScaleEnabled() {
-        return jCheckBox2.isSelected();
+        return enableScaleCheckbox.isSelected();
     }
 
     public void setProcessComparisonEnabled(boolean en) {
@@ -1161,18 +1164,18 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     }
 
     private void setupComparisonMethods(Comparison2Faces c) {
-        jComboBox1.removeAllItems();
+        compMethodComboBox.removeAllItems();
         for (int i = 0; i < ComparisonMethod.values().length; i++) {
-            jComboBox1.addItem(ComparisonMethod.values()[i]);
+            compMethodComboBox.addItem(ComparisonMethod.values()[i]);
             if (c.getComparisonMethod() == ComparisonMethod.values()[i]) {
-                jComboBox1.setSelectedIndex(i);
+                compMethodComboBox.setSelectedIndex(i);
             }
         }
         /*    if((c.getRegistrationMethod() == 0)){
          jComboBox1.removeItemAt(0);
          }*/
         if ((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)) {
-            jComboBox1.removeItemAt(1);
+            compMethodComboBox.removeItemAt(1);
         }
 
     }
@@ -1184,19 +1187,50 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         }else{
             exportLandmarksButton.setVisible(false);
         }
+ 
         
-        TwoFacesGUISetup.setUpValuesCompConfiguration(jComboBox1, jCheckBox2, jCheckBox1, jSlider3,
-                primaryColorPanel, jCheckBox6, secondaryColorPanel, jCheckBox5, fogColorPanel, jSlider4, 
-                jCheckBox3, jCheckBox4, jCheckBox7, noneRadioButton,
-                jRadioButton2, jRadioButton3, jRadioButton4, c);
+       compMethodComboBox.setSelectedItem(c.getComparisonMethod());
+       
+       //FP
+       enableScaleCheckbox.setSelected(c.isFpScaling());
+       useDatabaseCheckbox.setSelected(c.getUseDatabase() != 0);
+       fpThresholdSlider.setValue(c.getFpTreshold());
+       
+       //overlay
+        primaryColorPanel.setBackground(c.getPrimaryColor());
+        primarySolidCheckbox.setSelected(c.isIsPrimarySolid());
+        secondaryColorPanel.setBackground(c.getSecondaryColor());
+        secondarySolidCheckbox.setSelected(c.isIsSecondarySolid());
+        fogColorPanel.setBackground(c.getFogColor());
+        transparencySlider.setValue((int) c.getOverlayTransparency());
+        innerSurfaceSolidCheckbox.setSelected(c.isInnerSurfaceSolid());
+        useGlyphsCheckbox.setSelected(c.isUseGlyphs());
+        useContoursCheckbox.setSelected(c.isUseContours());
+        
+        switch(c.getFogVersion()){
+            case 0:
+                noneRadioButton.setSelected(true);
+                break;
+            case 1:
+                colorOverlayRadioButton.setSelected(true);
+                break;
+            case 2:
+                transparencyMappingRadioButton.setSelected(true);
+                break;
+            case 3:
+                innerSurfaceSolidRadioButton.setSelected(true);
+                break;
+            default:
+                noneRadioButton.setSelected(true);
+        }
         
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(c.getFogVersion());
         
         setupComparisonMethods(c);
-        jSlider3.setValue(c.getFpTreshold());
+ 
         switch (c.getUseDatabase()) {
             case 0:
-                jCheckBox1.setSelected(false);
+                useDatabaseCheckbox.setSelected(false);
                 deafultDatabaseRadioButton.setVisible(false);
                 chooseDatabaseRadioButton.setVisible(false);
                 createDatabaseRadioButton.setVisible(false);
@@ -1204,7 +1238,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 jButton1.setVisible(false);
                 break;
             case 1:
-                jCheckBox1.setSelected(true);
+                useDatabaseCheckbox.setSelected(true);
                 deafultDatabaseRadioButton.setVisible(true);
                 chooseDatabaseRadioButton.setVisible(true);
                 createDatabaseRadioButton.setVisible(true);
@@ -1213,7 +1247,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 deafultDatabaseRadioButton.setSelected(true);
                 break;
             case 2:
-                jCheckBox1.setSelected(true);
+                useDatabaseCheckbox.setSelected(true);
                 deafultDatabaseRadioButton.setVisible(true);
                 chooseDatabaseRadioButton.setVisible(true);
                 createDatabaseRadioButton.setVisible(true);
@@ -1222,7 +1256,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 chooseDatabaseRadioButton.setSelected(true);
                 break;
             case 3:
-                jCheckBox1.setSelected(true);
+                useDatabaseCheckbox.setSelected(true);
                 deafultDatabaseRadioButton.setVisible(true);
                 chooseDatabaseRadioButton.setVisible(true);
                 createDatabaseRadioButton.setVisible(true);
@@ -1233,10 +1267,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         }
         setColors();
         
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(jCheckBox7.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(jCheckBox3.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(jCheckBox5.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(buttonGroup1.getSelection().getMnemonic());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(c.isUseContours());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(c.isInnerSurfaceSolid());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(c.isUseGlyphs());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(c.getFogVersion());
         
         processComparisonButton.setEnabled(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().isCompareButtonEnabled());
 
@@ -1247,13 +1281,13 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         Comparison2Faces tc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
         float[] color = new float[4];
         primaryColorPanel.getBackground().getRGBColorComponents(color);
-        color[3] = jCheckBox5.isSelected() ? 1 : jSlider4.getValue() / (float) 100;
+        color[3] = secondarySolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
         tc.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
         c.setPrimaryColor(color);
 
         float[] color2 = new float[4];
         secondaryColorPanel.getBackground().getRGBColorComponents(color2);
-        color2[3] = jCheckBox6.isSelected() ? 1 : jSlider4.getValue() / (float) 100;
+        color2[3] = primarySolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
         tc.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
         c.setSecondaryColor(color2);
 
@@ -1261,6 +1295,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         fogColorPanel.getBackground().getRGBColorComponents(color3);
 
         c.setFogColor(color3);
+        tc.setFogColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color3, 1));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1270,25 +1305,23 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JRadioButton chooseDatabaseRadioButton;
     private javax.swing.JFileChooser chooser;
     private javax.swing.JDialog colorDialog;
+    private javax.swing.JRadioButton colorOverlayRadioButton;
+    private javax.swing.JComboBox compMethodComboBox;
     private javax.swing.JRadioButton createDatabaseRadioButton;
     private javax.swing.JRadioButton deafultDatabaseRadioButton;
+    private javax.swing.JCheckBox enableScaleCheckbox;
     private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel fogColorPanel;
+    private javax.swing.JSlider fpThresholdSlider;
+    private javax.swing.JCheckBox innerSurfaceSolidCheckbox;
+    private javax.swing.JRadioButton innerSurfaceSolidRadioButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JColorChooser jColorChooser1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1301,19 +1334,21 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSlider jSlider3;
-    private javax.swing.JSlider jSlider4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JRadioButton noneRadioButton;
     private javax.swing.JPanel primaryColorPanel;
+    private javax.swing.JCheckBox primarySolidCheckbox;
     private javax.swing.JButton processComparisonButton;
     private javax.swing.JPanel secondaryColorPanel;
+    private javax.swing.JCheckBox secondarySolidCheckbox;
+    private javax.swing.JRadioButton transparencyMappingRadioButton;
+    private javax.swing.JSlider transparencySlider;
+    private javax.swing.JCheckBox useContoursCheckbox;
+    private javax.swing.JCheckBox useDatabaseCheckbox;
+    private javax.swing.JCheckBox useGlyphsCheckbox;
     private javax.swing.JPanel visualizationPanel;
     // End of variables declaration//GEN-END:variables
 }

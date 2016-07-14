@@ -24,6 +24,7 @@ import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
@@ -345,6 +346,12 @@ public final class OpenProject implements ActionListener {
 
     private void createComparison2Faces(Element projectE, ProjectTopComponent tc) {
         Comparison2Faces comparison = tc.getProject().getSelectedComparison2Faces();
+        
+        
+        TwoFacesGUISetup.setUpDefaultRegistrationData(comparison);
+        TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(comparison);
+        TwoFacesGUISetup.setUpComparisonResultDefaultData(comparison);
+        
         NodeList children = projectE.getChildNodes();
         Element primaryE = null;
         Element secondaryE = null;

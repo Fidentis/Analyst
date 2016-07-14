@@ -368,7 +368,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         jSlider4.setMaximum(1000);
         jSlider4.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jSlider4.toolTipText")); // NOI18N
-        jSlider4.setValue(50);
         jSlider4.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSlider4StateChanged(evt);

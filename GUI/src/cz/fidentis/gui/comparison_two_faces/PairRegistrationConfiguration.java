@@ -106,8 +106,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         undersamplingCombobox = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         randomPanel = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        percentageJRadio = new javax.swing.JRadioButton();
+        numberJRadio = new javax.swing.JRadioButton();
         percentageSpinner = new javax.swing.JSpinner();
         numberSpinner = new javax.swing.JSpinner();
         icpMetricLabel = new javax.swing.JLabel();
@@ -300,6 +300,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         undersamplingRadiusSlider.setMinorTickSpacing(5);
         undersamplingRadiusSlider.setPaintLabels(true);
         undersamplingRadiusSlider.setPaintTicks(true);
+        undersamplingRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                undersamplingRadiusSliderStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout discPanelLayout = new javax.swing.GroupLayout(discPanel);
         discPanel.setLayout(discPanelLayout);
@@ -332,20 +337,20 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel14.text")); // NOI18N
 
-        buttonGroup2.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, org.openide.util.NbBundle.getMessage(GUIController.class, "registration.undersampling.percentage")); // NOI18N
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup2.add(percentageJRadio);
+        percentageJRadio.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(percentageJRadio, org.openide.util.NbBundle.getMessage(GUIController.class, "registration.undersampling.percentage")); // NOI18N
+        percentageJRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                percentageJRadioActionPerformed(evt);
             }
         });
 
-        buttonGroup2.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, org.openide.util.NbBundle.getMessage(GUIController.class, "registration.undersampling.number")); // NOI18N
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup2.add(numberJRadio);
+        org.openide.awt.Mnemonics.setLocalizedText(numberJRadio, org.openide.util.NbBundle.getMessage(GUIController.class, "registration.undersampling.number")); // NOI18N
+        numberJRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                numberJRadioActionPerformed(evt);
             }
         });
 
@@ -372,11 +377,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(randomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(randomPanelLayout.createSequentialGroup()
-                        .addComponent(jRadioButton2)
+                        .addComponent(numberJRadio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(numberSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(randomPanelLayout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(percentageJRadio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(percentageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
@@ -385,11 +390,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             .addGroup(randomPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(randomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
+                    .addComponent(percentageJRadio)
                     .addComponent(percentageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(randomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton2)
+                    .addComponent(numberJRadio)
                     .addComponent(numberSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -932,21 +937,24 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final Model mainFace = tc.getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
         final Model compareFace = tc.getViewerPanel_2Faces().getListener2().getModel(); //vedlajsi model v pravom panele
+        final Comparison2Faces c = tc.getProject().getSelectedComparison2Faces(); //data model
+
         jButton1.setEnabled(false);
-        if (methodCombobox.getSelectedIndex() == 1) {
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                if (methodCombobox.getSelectedIndex() == 1) {
 
-            if (mainFace == null || compareFace == null) {
-                System.out.print("Some models were not loaded.");
-                return;
-            }
+                    if (mainFace == null || compareFace == null) {
+                        System.out.print("Some models were not loaded.");
+                        return;
+                    }
 
-            Runnable run = new Runnable() {
-                @Override
-                public void run() {
                     ProgressHandle p;
                     p = ProgressHandleFactory.createHandle("Computing ICP...");
 
                     try {
+
                         p.start(100);
 
                         Icp.instance().setP(p);
@@ -955,25 +963,25 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         Model mFace = mainFace;
                         Model cFace = compareFace;
 
-                        if(symModCheckbox.isSelected()){                            
+                        if (c.isUseSymmetry()) {
                             SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(mFace);
                             SurfaceComparisonProcessing.instance().createSymetricModelNoCopy(cFace);
                         }
-                        
-                        if (icpMetricComboBox.getSelectedItem() == ICPmetric.VERTEX_TO_VERTEX) {
+
+                        if (c.getIcpMetric() == ICPmetric.VERTEX_TO_VERTEX) {
                             mainF = new KdTreeIndexed(mainFace.getVerts());
                         } else {
                             mainF = new KdTreeFaces(mainFace.getVerts(), mainFace.getFaces());
-                        }                       
-                        
-                        tc.getProject().getSelectedComparison2Faces().setMainFace(mainF);
+                        }
 
-                        Methods m = (Methods) undersamplingCombobox.getSelectedItem();
+                        c.setMainFace(mainF);
+
+                        Methods m = Methods.values()[c.getMethod()];
                         Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
                         float value = getUndersampleValue(m, t);
 
-                        SurfaceComparisonProcessing.instance().processOneToOne(mainF, compareFace, (Integer) maxIterSpinner.getValue(), icpScaleCheckbox.isSelected(), (Float) errorSpinner.getValue(),
-                                m, t, value, tc.getProject().getSelectedComparison2Faces());
+                        SurfaceComparisonProcessing.instance().processOneToOne(mainF, compareFace, c.getICPmaxIteration(), c.getScaleEnabled(), c.getICPerrorRate(),
+                                m, t, value, c);
 
                         p.finish();
 
@@ -981,7 +989,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         tc.getViewerPanel_2Faces().getListener1().addModel(cFace);
 
                         jButton1.setEnabled(true);
-                        tc.getProject().getSelectedComparison2Faces().setState(2);
+                        c.setState(2);
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
 
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
@@ -993,113 +1001,95 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     } catch (Exception ex) {
                         Exceptions.printStackTrace(ex);
                         jButton1.setEnabled(true);
-                    }finally{
+                    } finally {
                         p.finish();
                     }
+                } else if (methodCombobox.getSelectedIndex()
+                        == 0) {
+                    try {
+                        Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(), mainFace.getVerts(),
+                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), compareFace.getVerts(), c.isFpScaling());
+
+                        List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
+                        c.getModel1().setVerts(procrustes.getPa().getVertices());
+                        c.getModel2().setVerts(procrustes.getPa2().getVertices());
+
+                        tc.getViewerPanel_2Faces().getListener1().setModels(tc.getProject().getSelectedComparison2Faces().getModel1());
+                        tc.getViewerPanel_2Faces().getListener2().setModels(tc.getProject().getSelectedComparison2Faces().getModel2());
+
+                        tc.getViewerPanel_2Faces().getListener1().setFacialPoints(procrustes.getPa().getFacialPoints());
+                        tc.getViewerPanel_2Faces().getListener2().setFacialPoints(procrustes.getPa2().getFacialPoints());
+                        c.setMainFp(procrustes.getPa().getFacialPoints());
+                        c.setSecondaryFp(procrustes.getPa2().getFacialPoints());
+
+                        if (fpScaleCheckBox.isSelected()) {
+                            //tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 7);
+                            tc.getViewerPanel_2Faces().getListener1().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
+
+                            //tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 7);
+                            tc.getViewerPanel_2Faces().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
+                        }
+
+                        procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
+                        procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
+
+                        c.setCompFTransformations(trans);
+
+                    } catch (FileNotFoundException ex) {
+                        System.err.println(ex);
+                        Exceptions.printStackTrace(ex);
+
+                    }
+
+                    ModelLoader l = new ModelLoader();
+
+                    //nacitaj prvy model otoceny!!  ??
+                    //   Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
+                    Model model = tc.getViewerPanel_2Faces().getListener2().getModel();
+                    tc.getViewerPanel_2Faces().getListener1().addModel(model);
+
+                    c.setState(2);
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
+
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
+                    if (continueComparisonCheckbox.isSelected()) {
+                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
+                    }
+
+                } else {
+
+                    ModelLoader l = new ModelLoader();
+                    Model model = l.loadModel(c.getModel2().getFile(), false, true);
+                    tc.getViewerPanel_2Faces().getListener1().addModel(model);
+
+                    c.setState(2);
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
+
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
+
+                    if (continueComparisonCheckbox.isSelected()) {
+                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
+                    }
                 }
-            };
-            Thread t = new Thread(run);
-            t.start(); // start the task and progress visualisation 
 
-        } else if (methodCombobox.getSelectedIndex() == 0) {
-            try {
-                Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(), tc.getViewerPanel_2Faces().getListener1().getModel().getVerts(),
-                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), tc.getViewerPanel_2Faces().getListener2().getModel().getVerts(), fpScaleCheckBox.isSelected());
-
-                /*procrustes.compare2Models(jSlider3.getValue() / 100f);
-             
-
-                tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getGpa().getPA(0).getVertices());
-                tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getGpa().getPA(1).getVertices());*/
-                List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
-                tc.getProject().getSelectedComparison2Faces().getModel1().setVerts(procrustes.getPa().getVertices());
-                tc.getProject().getSelectedComparison2Faces().getModel2().setVerts(procrustes.getPa2().getVertices());
-
-                tc.getViewerPanel_2Faces().getListener1().setModels(tc.getProject().getSelectedComparison2Faces().getModel1());
-                tc.getViewerPanel_2Faces().getListener2().setModels(tc.getProject().getSelectedComparison2Faces().getModel2());
+                c.setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
+                TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(tc.getProject().getSelectedComparison2Faces());
                 
-                tc.getViewerPanel_2Faces().getListener1().setFacialPoints(procrustes.getPa().getFacialPoints());
-                tc.getViewerPanel_2Faces().getListener2().setFacialPoints(procrustes.getPa2().getFacialPoints());
-                tc.getProject().getSelectedComparison2Faces().setMainFp(procrustes.getPa().getFacialPoints());
-                tc.getProject().getSelectedComparison2Faces().setSecondaryFp(procrustes.getPa2().getFacialPoints());
-
-                if (fpScaleCheckBox.isSelected()) {
-                    //tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 7);
-                    tc.getViewerPanel_2Faces().getListener1().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
-
-                    //tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 7);
-                    tc.getViewerPanel_2Faces().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
-                }/* else {
-                    tc.getViewerPanel_2Faces().getListener1().setCameraPosition(0, 0, 300);
-                 //   tc.getViewerPanel_2Faces().getListener1(). setFacialPointRadius(jSlider1.getValue());
-                    
-                    tc.getViewerPanel_2Faces().getListener2().setCameraPosition(0, 0, 300);
-                 //   tc.getViewerPanel_2Faces().getListener2(). setFacialPointRadius(jSlider1.getValue());
-                }*/
-
-                procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
-                procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
-                
-                /*tc.getViewerPanel_2Faces().getListener1().setFacialPoints(procrustes.getPa().getFacialPoints());
-                tc.getViewerPanel_2Faces().getListener2().setFacialPoints(procrustes.getPa2().getFacialPoints());*/
-                
-                tc.getProject().getSelectedComparison2Faces().setCompFTransformations(trans);
-                
-                //Icp.instance().reverseTransformations(trans, tc.getViewerPanel_2Faces().getListener2().getModel().getVerts(), false);
-                
-                
-            } catch (FileNotFoundException ex) {
-                System.err.println(ex);
-                Exceptions.printStackTrace(ex);
-
+                if (GUIController.getSelectedProjectTopComponent() == tc) {
+                     GUIController.getConfigurationTopComponent().addComparisonComponent();
+                }
             }
 
-            ModelLoader l = new ModelLoader();
+        };
+        Thread t = new Thread(run);
 
-            //nacitaj prvy model otoceny!!
-            //   Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
-            Model model = tc.getViewerPanel_2Faces().getListener2().getModel();
-            tc.getViewerPanel_2Faces().getListener1().addModel(model);
+        t.start(); // start the task and progress visualisation 
 
-            tc.getProject().getSelectedComparison2Faces().setState(2);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
-
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
-            if (continueComparisonCheckbox.isSelected()) {
-                GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-            }
-
-        } else {
-            
-            ModelLoader l = new ModelLoader();
-            Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel2().getFile(), false, true);
-            tc.getViewerPanel_2Faces().getListener1().addModel(model);
-
-            tc.getProject().getSelectedComparison2Faces().setState(2);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
-
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
-
-            if (continueComparisonCheckbox.isSelected()) {
-                GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-            }
-        }
-        tc.getProject().getSelectedComparison2Faces().setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
         
-        //set up used values -- can delete setting up stuff from previous parts then
-        /*TwoFacesGUISetup.setUpUsedRegistrationData(methodCombobox, fpScaleCheckBox, fpThresholdSlider, showFpInfoCheckbox, fpColorPanel, fpSizeSlider,
-                icpMetricComboBox, icpScaleCheckbox, symModCheckbox, errorSpinner, maxIterSpinner, 
-                undersamplingCombobox, percentageSpinner, numberSpinner, jRadioButton1, jRadioButton2, undersamplingRadiusSlider, continueComparisonCheckbox, 
-                tc.getProject().getSelectedComparison2Faces());*/
-        TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(tc.getProject().getSelectedComparison2Faces());
-        
-        if (GUIController.getSelectedProjectTopComponent() == tc) {
-                GUIController.getConfigurationTopComponent().addComparisonComponent();
-        }
-
         //keep this line in GUI
+
         GUIController.updateNavigator();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1218,15 +1208,17 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpScaling(fpScaleCheckBox.isSelected());
     }//GEN-LAST:event_fpScaleCheckBoxStateChanged
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void percentageJRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percentageJRadioActionPerformed
         percentageSpinner.setEnabled(true);
         numberSpinner.setEnabled(false);
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setType(Type.PERCENTAGE.ordinal());
+    }//GEN-LAST:event_percentageJRadioActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void numberJRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberJRadioActionPerformed
         percentageSpinner.setEnabled(false);
         numberSpinner.setEnabled(true);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setType(Type.NUMBER.ordinal());
+    }//GEN-LAST:event_numberJRadioActionPerformed
 
     private void percentageSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_percentageSpinnerStateChanged
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(Float.parseFloat(percentageSpinner.getValue().toString()));
@@ -1234,7 +1226,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     private void numberSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numberSpinnerStateChanged
         //was messing up programme if value was taken directly
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(Float.parseFloat(numberSpinner.getValue().toString()));
+        if(numberSpinner.getValue() != null)
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(Float.parseFloat(numberSpinner.getValue().toString()));
     }//GEN-LAST:event_numberSpinnerStateChanged
 
     private void undersamplingComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undersamplingComboboxActionPerformed
@@ -1264,6 +1257,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void symModCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModCheckboxActionPerformed
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseSymmetry(symModCheckbox.isSelected());
     }//GEN-LAST:event_symModCheckboxActionPerformed
+
+    private void undersamplingRadiusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_undersamplingRadiusSliderStateChanged
+       GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(undersamplingRadiusSlider.getValue());
+    }//GEN-LAST:event_undersamplingRadiusSliderStateChanged
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1294,16 +1291,53 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         if(c.isFirstCreated())
             TwoFacesGUISetup.setUpDefaultRegistrationData(c);
         
-        /*errorSpinner.setValue(c.getICPerrorRate());
-        maxIterSpinner.setValue(c.getICPmaxIteration());
-        fpColorPanel.setBackground(c.getPointColor());
-        fpSizeSlider.setValue(c.getFpSize());
-        showFpInfoCheckbox.setSelected(c.isShowPointInfo());*/
+        
         setRegistrationMethods(c.getRegistrationMethod());
         
-        TwoFacesGUISetup.setUpValuesRegistration(methodCombobox, fpScaleCheckBox, fpThresholdSlider, showFpInfoCheckbox, fpColorPanel, fpSizeSlider,
-                icpMetricComboBox, icpScaleCheckbox, symModCheckbox, errorSpinner, maxIterSpinner, 
-                undersamplingCombobox, percentageSpinner, numberSpinner, jRadioButton1, jRadioButton2, undersamplingRadiusSlider, continueComparisonCheckbox, c);
+        
+        //set up values from data model
+       methodCombobox.setSelectedIndex(c.getRegistrationMethod().ordinal());
+       
+       //FP
+       fpScaleCheckBox.setSelected(c.isFpScaling());
+       fpThresholdSlider.setValue(c.getFpTreshold());
+       showFpInfoCheckbox.setSelected(c.isShowPointInfo());
+       fpColorPanel.setBackground(c.getPointColor());
+       fpSizeSlider.setValue(c.getFpSize());
+       
+       //ICP
+       icpMetricComboBox.setSelectedIndex(c.getIcpMetric().ordinal());
+       icpScaleCheckbox.setSelected(c.getScaleEnabled());
+       symModCheckbox.setSelected(c.isUseSymmetry());
+       errorSpinner.setValue(c.getICPerrorRate());
+       maxIterSpinner.setValue(c.getICPmaxIteration());
+       undersamplingCombobox.setSelectedIndex(c.getMethod());
+       
+       //default values
+       percentageSpinner.setValue(c.getValue());
+       numberSpinner.setValue(c.getValue());
+       undersamplingRadiusSlider.setValue((int) c.getValue());
+       
+       if(Methods.values()[c.getMethod()] == Methods.Curvature ||
+           Methods.values()[c.getMethod()] == Methods.Random){
+           if(Type.values()[c.getType()] == Type.NUMBER){
+               percentageSpinner.setValue(50);
+               percentageSpinner.setEnabled(false);
+               numberJRadio.setSelected(true);
+               numberSpinner.setEnabled(true);
+           }else{
+               numberSpinner.setValue(0);
+               percentageJRadio.setSelected(true);
+               percentageSpinner.setEnabled(true);
+               numberSpinner.setEnabled(false);
+           }
+       }else if(Methods.values()[c.getMethod()] == Methods.Disc){
+           percentageSpinner.setValue(50);
+           numberSpinner.setValue(0);
+           numberSpinner.setEnabled(false);
+       }
+       
+       continueComparisonCheckbox.setSelected(c.isContinueComparison());
 
 
         //icpScaleCheckbox.setSelected(c.getScaleEnabled());
@@ -1375,8 +1409,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -1386,7 +1418,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox methodCombobox;
     private javax.swing.JCheckBox mouthCheckbox;
     private javax.swing.JCheckBox noseCheckbox;
+    private javax.swing.JRadioButton numberJRadio;
     private javax.swing.JSpinner numberSpinner;
+    private javax.swing.JRadioButton percentageJRadio;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel procrustesPanel;
     private javax.swing.JPanel randomPanel;
