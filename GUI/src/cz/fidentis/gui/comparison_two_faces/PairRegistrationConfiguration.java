@@ -186,7 +186,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addGap(0, 69, Short.MAX_VALUE))
         );
 
-        methodCombobox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Feature Points (GPA)", "Surface (ICP)", "No registration" }));
+        methodCombobox.setModel(new DefaultComboBoxModel<>(RegistrationMethod.values()));
         methodCombobox.setMaximumSize(new java.awt.Dimension(115, 25));
         methodCombobox.setMinimumSize(new java.awt.Dimension(115, 20));
         methodCombobox.setPreferredSize(new java.awt.Dimension(115, 20));
@@ -831,20 +831,23 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }
 
     private void methodComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_methodComboboxActionPerformed
-        if (methodCombobox.getSelectedIndex() == 0) {
-            procrustesPanel.setVisible(true);
-            icpPanel.setVisible(false);
-            jButton1.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
-            exportPointsButton.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
-
-        } else if (methodCombobox.getSelectedIndex() == 1) {
-            procrustesPanel.setVisible(false);
-            icpPanel.setVisible(true);
-            jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
-        } else {
-            procrustesPanel.setVisible(false);
-            icpPanel.setVisible(false);
-            jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+        switch ((RegistrationMethod) methodCombobox.getSelectedItem()) {
+            case PROCRUSTES:
+                procrustesPanel.setVisible(true);
+                icpPanel.setVisible(false);
+                jButton1.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
+                exportPointsButton.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
+                break;
+            case HAUSDORFF:
+                procrustesPanel.setVisible(false);
+                icpPanel.setVisible(true);
+                jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+                break;
+            default:
+                procrustesPanel.setVisible(false);
+                icpPanel.setVisible(false);
+                jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+                break;
         }
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
 
@@ -943,7 +946,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                if (methodCombobox.getSelectedIndex() == 1) {
+                if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
 
                     if (mainFace == null || compareFace == null) {
                         System.out.print("Some models were not loaded.");
@@ -995,7 +998,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
 
-                        if (continueComparisonCheckbox.isSelected()) {
+                        if (c.isContinueComparison()) {
                             GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
                         }
                     } catch (Exception ex) {
@@ -1004,8 +1007,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     } finally {
                         p.finish();
                     }
-                } else if (methodCombobox.getSelectedIndex()
-                        == 0) {
+                } else if (c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES) {
                     try {
                         Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(), mainFace.getVerts(),
                                 tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), compareFace.getVerts(), c.isFpScaling());
@@ -1053,7 +1055,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
-                    if (continueComparisonCheckbox.isSelected()) {
+                    if (c.isContinueComparison()) {
                         GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
                     }
 
@@ -1069,12 +1071,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
 
-                    if (continueComparisonCheckbox.isSelected()) {
+                    if (c.isContinueComparison()) {
                         GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
                     }
                 }
 
-                c.setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
+                //c.setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
                 TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(tc.getProject().getSelectedComparison2Faces());
                 
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
@@ -1275,15 +1277,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     }
 
-    private void setRegistrationMethods(RegistrationMethod regMethod) {
-        methodCombobox.removeAllItems();
-        for (int i = 0; i < RegistrationMethod.values().length; i++) {
-            methodCombobox.addItem(RegistrationMethod.values()[i]);
-            if (regMethod == RegistrationMethod.values()[i]) {
-                methodCombobox.setSelectedIndex(i);
-            }
-        }
-    }
 
     public void setConfiguration() {
         Comparison2Faces c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
@@ -1292,7 +1285,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             TwoFacesGUISetup.setUpDefaultRegistrationData(c);
         
         
-        setRegistrationMethods(c.getRegistrationMethod());
+        methodCombobox.setSelectedItem(c.getRegistrationMethod());
         
         
         //set up values from data model
@@ -1318,9 +1311,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
        numberSpinner.setValue(c.getValue());
        undersamplingRadiusSlider.setValue((int) c.getValue());
        
-       if(Methods.values()[c.getMethod()] == Methods.Curvature ||
-           Methods.values()[c.getMethod()] == Methods.Random){
-           if(Type.values()[c.getType()] == Type.NUMBER){
+       if(c.getMethod() == Methods.Curvature.ordinal() ||
+           c.getMethod() == Methods.Random.ordinal()){
+           if(c.getType() == Type.NUMBER.ordinal()){
                percentageSpinner.setValue(50);
                percentageSpinner.setEnabled(false);
                numberJRadio.setSelected(true);
@@ -1331,7 +1324,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                percentageSpinner.setEnabled(true);
                numberSpinner.setEnabled(false);
            }
-       }else if(Methods.values()[c.getMethod()] == Methods.Disc){
+       }else if(c.getMethod() == Methods.Disc.ordinal()){
            percentageSpinner.setValue(50);
            numberSpinner.setValue(0);
            numberSpinner.setEnabled(false);

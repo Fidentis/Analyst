@@ -158,12 +158,8 @@
           <SubComponents>
             <Component class="javax.swing.JComboBox" name="methodCombobox">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="Feature Points (GPA)"/>
-                    <StringItem index="1" value="Surface (ICP)"/>
-                    <StringItem index="2" value="No registration"/>
-                  </StringArray>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new DefaultComboBoxModel&lt;&gt;(RegistrationMethod.values())" type="code"/>
                 </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[115, 25]"/>

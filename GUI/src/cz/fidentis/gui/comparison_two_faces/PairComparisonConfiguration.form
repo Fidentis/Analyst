@@ -127,7 +127,7 @@
                           </Group>
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                               <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jButton10" alignment="0" pref="279" max="32767" attributes="0"/>
+                              <Component id="exportFacesButton" alignment="0" pref="279" max="32767" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="visualizationPanel" alignment="0" max="32767" attributes="0"/>
@@ -135,7 +135,7 @@
                           </Group>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="exportLandmarksButton" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jButton2" alignment="0" pref="279" max="32767" attributes="0"/>
+                              <Component id="backRegistrationButton" alignment="0" pref="279" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="293" max="32767" attributes="0"/>
@@ -166,11 +166,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton10" min="-2" max="-2" attributes="0"/>
+                      <Component id="exportFacesButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="exportLandmarksButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="backRegistrationButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="72" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -212,11 +212,8 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="compMethodComboBox">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
-                    <StringItem index="0" value="Hausdorff Distance"/>
-                    <StringItem index="1" value="Procrustes Analysis"/>
-                  </StringArray>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" preCode="compMethodComboBox.removeAllItems();">
+                  <Connection code="new DefaultComboBoxModel&lt;&gt;(ComparisonMethod.values())" type="code"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[191, 25]"/>
@@ -455,26 +452,26 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="backRegistrationButton">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jButton2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.backRegistrationButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backRegistrationButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JSeparator" name="jSeparator1">
             </Component>
-            <Component class="javax.swing.JButton" name="jButton10">
+            <Component class="javax.swing.JButton" name="exportFacesButton">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.jButton10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.exportFacesButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton10ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportFacesButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JSeparator" name="jSeparator2">

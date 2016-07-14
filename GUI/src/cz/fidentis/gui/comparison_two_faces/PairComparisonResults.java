@@ -29,6 +29,7 @@ import java.awt.Dimension;
 import java.awt.color.ColorSpace;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -309,7 +310,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel3.text")); // NOI18N
 
-        VisualizationBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Color map", "Vectors", "Transparency+Fog" }));
+        VisualizationBox.setModel(new DefaultComboBoxModel<>(VisualizationType.values()));
         VisualizationBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VisualizationBoxActionPerformed(evt);
@@ -633,7 +634,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        colorSchemeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
+        colorSchemeComboBox.setModel(new DefaultComboBoxModel<>(ColorScheme.values()));
         colorSchemeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 colorSchemeComboBoxActionPerformed(evt);
@@ -1222,10 +1223,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if(c.getHdPaintingInfo() == null)
             return;
         
-        c.setVisualization(VisualizationBox.getSelectedIndex());
+        c.setVisualization(((VisualizationType)VisualizationBox.getSelectedItem()).ordinal());
 
         //Colormap
-        if (c.getVisualization() == 0) {
+        if (c.getVisualization() == VisualizationType.COLORMAP.ordinal()) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1240,7 +1241,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
         
         //transparency
-        if (c.getVisualization() == 2) {
+        if (c.getVisualization() == VisualizationType.TRANSPARENCY.ordinal()) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1254,7 +1255,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
 
         //vectors
-        if (c.getVisualization() == 1) {
+        if (c.getVisualization() == VisualizationType.VECTORS.ordinal()) {
             densLabel.setVisible(true);
             density.setVisible(true);
             cylLength.setVisible(true);
@@ -1437,8 +1438,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if(bc.getHDP() == null)
             return;
         
-        bc.setColorScheme(colorSchemeComboBox.getSelectedIndex());
-        bc.getHDP().getInfo().setColorScheme(ColorScheme.values()[colorSchemeComboBox.getSelectedIndex()]);
+        bc.setColorScheme(((ColorScheme)colorSchemeComboBox.getSelectedItem()).ordinal());
+        bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
     private void maxThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxThresholdSliderStateChanged
@@ -1552,6 +1553,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 noneRadioButton.setSelected(true);
         }
 
+        VisualizationBox.removeItem(VisualizationType.CROSSSECTION);
 
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {

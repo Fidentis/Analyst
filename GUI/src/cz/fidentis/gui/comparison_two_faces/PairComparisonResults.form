@@ -394,12 +394,8 @@
                 </Component>
                 <Component class="javax.swing.JComboBox" name="VisualizationBox">
                   <Properties>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="3">
-                        <StringItem index="0" value="Color map"/>
-                        <StringItem index="1" value="Vectors"/>
-                        <StringItem index="2" value="Transparency+Fog"/>
-                      </StringArray>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new DefaultComboBoxModel&lt;&gt;(VisualizationType.values())" type="code"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -977,12 +973,8 @@
                     </Component>
                     <Component class="javax.swing.JComboBox" name="colorSchemeComboBox">
                       <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="3">
-                            <StringItem index="0" value="Sequential"/>
-                            <StringItem index="1" value="Diverging"/>
-                            <StringItem index="2" value="Rainbow"/>
-                          </StringArray>
+                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="new DefaultComboBoxModel&lt;&gt;(ColorScheme.values())" type="code"/>
                         </Property>
                       </Properties>
                       <Events>
