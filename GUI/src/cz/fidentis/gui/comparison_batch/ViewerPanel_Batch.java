@@ -489,7 +489,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
 
         Vector3f p = new Vector3f(startPlanePoint);
         p.add(n);
-        setPlanePoint(p, false);
+        setPlanePoint(p, true);
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(true);
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setPlanePoint(p);
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(false);

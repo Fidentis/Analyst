@@ -45,6 +45,8 @@ public class ComparisonListenerInfo {
     private boolean showAllCuts;
     private boolean showSamplingRays;
     private boolean showVectors = true;
+    private boolean showBoxplot = false;
+    private boolean showBoxplotFunction = true;
     private boolean render;
     private Vector3f planePoint = new Vector3f(0, 0, 0);
     private Vector3f planeNormal = new Vector3f(1, 0, 0);
@@ -55,6 +57,7 @@ public class ComparisonListenerInfo {
     private ArrayList<Vector2f> samplePoints;
     private ArrayList<Vector2f> sampleNormals;
     private ArrayList<ArrayList<Vector2f>> distancePoints;
+    private ArrayList<ArrayList<Float>> pointDistances; 
     private ArrayList<Vector2f> averagedistancePoints;
     
     private ArrayList<float[]> sampleVetices = new ArrayList<>();
@@ -286,6 +289,24 @@ public class ComparisonListenerInfo {
         this.showVectors = showVectors;
     }
 
+    public boolean isShowBoxplot() {
+        return showBoxplot;
+    }
+
+    public void setShowBoxplot(boolean showBoxplot) {
+        this.showBoxplot = showBoxplot;
+    }
+
+    public boolean isShowBoxplotFunction() {
+        return showBoxplotFunction;
+    }
+
+    public void setShowBoxplotFunction(boolean showBoxplotFunction) {
+        this.showBoxplotFunction = showBoxplotFunction;
+    }
+    
+    
+
     public boolean isRender() {
         return render;
     }
@@ -358,6 +379,15 @@ public class ComparisonListenerInfo {
         this.distancePoints = distancePoints;
     }
 
+    public ArrayList<ArrayList<Float>> getPointDistances() {
+        return pointDistances;
+    }
+
+    public void setPointDistances(ArrayList<ArrayList<Float>> pointDistances) {
+        this.pointDistances = pointDistances;
+    }  
+
+
     public ArrayList<Vector2f> getAveragedistancePoints() {
         return averagedistancePoints;
     }
@@ -405,6 +435,8 @@ public class ComparisonListenerInfo {
     public void setVerticesInfo(ArrayList<ArrayList<VertexInfo>> verticesInfo) {
         this.verticesInfo = verticesInfo;
     }
+    
+    
     
     
 }

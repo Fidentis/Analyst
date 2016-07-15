@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
 /**
@@ -110,6 +111,7 @@ public class IntersectionUtils {
                 }
             }
         }
+
         return tempLists;
     }
 
@@ -179,6 +181,12 @@ public class IntersectionUtils {
         return connectLists(connectPoints(a, b), 0.1f);
     }
 
+    public static float getDistance(Vector2f a, Vector2f b) {
+        Vector2f p = new Vector2f(a);
+        p.sub(b);
+        return p.length();
+    }
+
     public static float distanceBetweenVertices(Model m, int aIndex, int bIndex) {
         Vector3f a = m.getVerts().get(aIndex);
         Vector3f b = m.getVerts().get(bIndex);
@@ -230,8 +238,8 @@ public class IntersectionUtils {
                 Vector3f triangle[] = {m.getVerts().get(idx[0] - 1), m.getVerts().get(idx[1] - 1), m.getVerts().get(idx[2] - 1)};
 
                 boolean connected = false;
-                for (Integer j: facesTmp) {
-                    int idxj[] = m.getFaces().getFaceVertIdxs(j);                    
+                for (Integer j : facesTmp) {
+                    int idxj[] = m.getFaces().getFaceVertIdxs(j);
                     for (int k = 0; k < 3; k++) {
                         if (idx[0] == idxj[k] || idx[1] == idxj[k] || idx[2] == idxj[k]) {
                             connected = true;
@@ -356,7 +364,7 @@ public class IntersectionUtils {
      * @return distance of points pA and pB along the surface intersection with
      * given plane
      */
-    public static float findSurfaceDistanceBetweenPoints(Model model, Vector3f planeNormal, Vector3f planePoint, Vector3f pA, Vector3f pB, float threshold,Set<Integer> faces) {
+    public static float findSurfaceDistanceBetweenPoints(Model model, Vector3f planeNormal, Vector3f planePoint, Vector3f pA, Vector3f pB, float threshold, Set<Integer> faces) {
         ArrayList<Integer> tmpFaces = new ArrayList<>();
         LinkedList<Vector3f> a = new LinkedList<>();
         LinkedList<Vector3f> b = new LinkedList<>();
@@ -365,19 +373,19 @@ public class IntersectionUtils {
             int idx[] = model.getFaces().getFaceVertIdxs(i);
             Vector3f triangle[] = {model.getVerts().get(idx[0] - 1), model.getVerts().get(idx[1] - 1), model.getVerts().get(idx[2] - 1)};
             findTrianglePlaneIntersection(a, b, triangle, planeNormal, planePoint);
-            if(a.size()>size){
+            if (a.size() > size) {
                 tmpFaces.add(i);
                 size++;
             }
-            
+
         }
 
         LinkedList<LinkedList<Vector3f>> lists = connectLists(connectPoints(new LinkedList<>(a), new LinkedList<>(b)), 10f);
         float distance = Float.MAX_VALUE;
         for (LinkedList<Vector3f> list : lists) {
-          //  if (getDistance(list.getLast(), list.getFirst()) < 0.5f) {
-          //      list.addFirst(list.getLast());
-          //  }
+            //  if (getDistance(list.getLast(), list.getFirst()) < 0.5f) {
+            //      list.addFirst(list.getLast());
+            //  }
             float dist_temp = 0;
             if (list.contains(pB) && list.contains(pA)) {
                 temp = list;
@@ -388,16 +396,15 @@ public class IntersectionUtils {
 
                 for (int i = min; i < max; i++) {
                     Vector3f u = new Vector3f(list.get(i));
-                    if(a.contains(u)){
+                    if (a.contains(u)) {
                         faces.add(tmpFaces.get(a.indexOf(u)));
                         faces.add(tmpFaces.get(a.lastIndexOf(u)));
                     }
-                    if(b.contains(u)){
+                    if (b.contains(u)) {
                         faces.add(tmpFaces.get(b.indexOf(u)));
                         faces.add(tmpFaces.get(b.lastIndexOf(u)));
                     }
-                    
-                    
+
                     u.sub(list.get(i + 1));
                     dist_temp += u.length();
                 }
@@ -456,7 +463,6 @@ public class IntersectionUtils {
         u.sub(b);
         return u.length();
     }*/
-
     private static void findTrianglePlaneIntersection(LinkedList<Vector3f> a, LinkedList<Vector3f> b, Vector3f[] triangle, Vector3f n, Vector3f p) {
         Vector3f in = findSegmentPlaneIntersection(triangle[0], triangle[1], n, p);
         Vector3f in1 = findSegmentPlaneIntersection(triangle[1], triangle[2], n, p);
@@ -569,6 +575,34 @@ public class IntersectionUtils {
 
     /**
      *
+     * @param p1A segment1 point1
+     * @param p1B segment1 point2
+     * @param p2A segment2 point1
+     * @param p2B segment2 point2
+     * @return intersection of 2 segments, if it doesn't exist returns null
+     */
+    public static Vector2f findSegmentSegmentIntersection(Vector2f p1A, Vector2f p1B, Vector2f p2A, Vector2f p2B) {
+        float s1_x, s1_y, s2_x, s2_y;
+        s1_x = p1B.x - p1A.x;
+        s1_y = p1B.y - p1A.y;
+        s2_x = p2B.x - p2A.x;
+        s2_y = p2B.y - p2A.y;
+
+        float s, t;
+        s = (-s1_y * (p1A.x - p2A.x) + s1_x * (p1A.y - p2A.y)) / (-s2_x * s1_y + s1_x * s2_y);
+        t = (s2_x * (p1A.y - p2A.y) - s2_y * (p1A.x - p2A.x)) / (-s2_x * s1_y + s1_x * s2_y);
+
+        Vector2f intersection = null;
+        if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+            // Collision detected
+            intersection = new Vector2f(p1A.x + (t * s1_x), p1A.y + (t * s1_y));
+        }
+
+        return intersection; // No collision
+    }
+
+    /**
+     *
      * @param triangle triangle for intersection calculation.
      * @param p point to be tested
      * @return true if point lies in triangle
@@ -602,13 +636,16 @@ public class IntersectionUtils {
     }
 
     /**
-     * Find projection of the point to triangle edges. Returned projection is the one with smallest distance to original point p.
-     * If AB is the edge of triangle, projected point might not be on edge AB, but rather on ray AB.
+     * Find projection of the point to triangle edges. Returned projection is
+     * the one with smallest distance to original point p. If AB is the edge of
+     * triangle, projected point might not be on edge AB, but rather on ray AB.
+     *
      * @param p - point to project
      * @param a - point of triangle
      * @param b - point of triangle
      * @param c - point of triangle
-     * @return projection of point p to edges AB, BC and CA, which has smallest distance to original point
+     * @return projection of point p to edges AB, BC and CA, which has smallest
+     * distance to original point
      */
     public static Vector3f projectionToTriangleEdges(Vector3f p, Vector3f a, Vector3f b, Vector3f c) {
         Vector3f[] projections = new Vector3f[3];

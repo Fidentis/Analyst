@@ -67,6 +67,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
     private static final float MINIMAL_WIDTH = 50;
     private boolean zoom = false;
     private Rectangle2D[][] matrix = new Rectangle2D[50][50];
+    private Point lastSelection = new Point(-1, -1);
 
     private float peakStrength = 5;
 
@@ -202,6 +203,19 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (evt.getX() > activeArea.getMinX() && evt.getY() > activeArea.getMinY() && evt.getX() < activeArea.getMaxX() && evt.getY() < activeArea.getMaxY()) {
             lastClickedPoint = evt.getPoint();
+            int column = 0;
+            int row = 0;
+
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix.length; j++) {
+                    if (matrix[i][j] != null && matrix[i][j].contains(lastClickedPoint)) {
+                        column = i;
+                        row = j;
+                    }
+                }
+            }
+            lastSelection = new Point(column, row);
+
             select = true;
             this.repaint();
             if (SwingUtilities.isRightMouseButton(evt)) {
@@ -218,7 +232,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                         int size = values.length;
                         float x = mousePosition.x;
                         float y = mousePosition.y;
-                        int column = 0;
+                        /*    int column = 0;
                         int row = 0;
 
                         for (int i = 0; i < matrix.length; i++) {
@@ -228,13 +242,12 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                                     row = j;
                                 }
                             }
-                        }
+                        }*/
 
-      //                  int column = (int) Math.floor((x - 70) / (cellWidth + 1));
-      //                  int row = (int) Math.floor((y - 70) / (cellHeight + 1));
-
-                        String model2 = modelNames[(int) values[size - 1][column]];
-                        String model1 = modelNames[(int) values[row][size - 1]];
+                        //                  int column = (int) Math.floor((x - 70) / (cellWidth + 1));
+                        //                  int row = (int) Math.floor((y - 70) / (cellHeight + 1));
+                        String model2 = modelNames[(int) values[size - 1][lastSelection.x]];
+                        String model1 = modelNames[(int) values[lastSelection.y][size - 1]];
                         pairFrame.setTitle(model1 + " vs. " + model2);
                         BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
                         ModelLoader ml = new ModelLoader();
@@ -246,10 +259,10 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                             models = bc.getRegistrationResults();
                         }
 
-                        Model primary = ml.loadModel(models.get(row), false, false);
+                        Model primary = ml.loadModel(models.get(lastSelection.y), false, false);
                         pairComparisonPanel.getListener().addModel(primary);
-                        pairComparisonPanel.getListener().addModel(ml.loadModel(models.get(column), false, false));
-                        List<Float> values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), row, column, true);
+                        pairComparisonPanel.getListener().addModel(ml.loadModel(models.get(lastSelection.x), false, false));
+                        List<Float> values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), lastSelection.y, lastSelection.x, true);
                         HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
                         HDpainting hdp = new HDpainting(info);
                         pairComparisonPanel.getListener().setHdPaint(hdp);
@@ -345,8 +358,6 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                 slider2Tip.y = slider2P + y;
             }
             this.repaint();
-        } else {
-            moveCamera(evt);
         }
     }//GEN-LAST:event_formMouseDragged
 
@@ -511,7 +522,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                     g2.draw(r);
                     matrix[i][j] = r;
                 } else {
-                    Rectangle2D r = new Rectangle2D.Double(70 + (i * (cellWidth))+i, 70 + (j * (cellHeight)) + j, cellWidth+1, cellHeight+1);
+                    Rectangle2D r = new Rectangle2D.Double(70 + (i * (cellWidth)) + i, 70 + (j * (cellHeight)) + j, cellWidth + 1, cellHeight + 1);
                     g2.fill(r);
                     g2.setPaint(Color.WHITE);
                     g2.draw(r);
@@ -640,16 +651,16 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
     }
 
     private void paintSelection(Graphics2D g2, int numValuesX, int numValuesY) {
-        float x = lastClickedPoint.x;
-        float y = lastClickedPoint.y;
-        x = (float) Math.floor((x - 70) / (cellWidth + 1));
-        y = (float) Math.floor((y - 70) / (cellHeight + 1));
-        g2.setPaint(Color.BLACK);
-        g2.setStroke(new BasicStroke(2));
-        g2.draw(new Rectangle2D.Double(69 + (x * cellWidth) + x, 40, cellWidth + 3, 31 + (numValuesY * (cellHeight + 1))));
-        g2.draw(new Rectangle2D.Double(37, 69 + (y * cellHeight) + y, 34 + (numValuesX * (cellWidth + 1)), cellHeight + 3));
+        if (select) {
+            Rectangle2D r = matrix[lastSelection.x][lastSelection.y];
+            
+            g2.setPaint(Color.BLACK);
+            g2.setStroke(new BasicStroke(2));
+            g2.draw(new Rectangle2D.Double(r.getMinX(), 40, r.getWidth(), 31 + (numValuesY * (cellHeight + 1))));
+            g2.draw(new Rectangle2D.Double(37, r.getMinY(), 34 + (numValuesX * (cellWidth + 1)), r.getHeight()));
 
-        g2.setStroke(new BasicStroke(1));
+            g2.setStroke(new BasicStroke(1));
+        }
 
     }
 
@@ -689,22 +700,6 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
 
     }
 
-    private void moveCamera(MouseEvent e) {
-        /*    try {
-            Point2D dragEndScreen = e.getPoint();
-            Point2D dragStart = transformPoint(dragStartScreen);
-            Point2D dragEnd = transformPoint(dragEndScreen);
-            double dx = dragEnd.getX() - dragStart.getX();
-            double dy = dragEnd.getY() - dragStart.getY();
-            coordTransform.translate(dx, dy);
-            dragStartScreen = dragEndScreen;
-            dragEndScreen = null;
-            targetComponent.repaint();
-        } catch (NoninvertibleTransformException ex) {
-            ex.printStackTrace();
-        }*/
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem jMenuItem1;
@@ -720,7 +715,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         if (!reset) {
             float x = lastClickedPoint.x;
             float y = lastClickedPoint.y;
-            row = (int) Math.floor((y - 70) / (cellHeight + 1));
+            row =lastSelection.y; //(int) Math.floor((y - 70) / (cellHeight + 1));
         } else {
             row = values.length - 1;
         }
@@ -749,7 +744,7 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
         if (!reset) {
             float x = lastClickedPoint.x;
             float y = lastClickedPoint.y;
-            column = (int) Math.floor((x - 70) / (cellWidth + 1));
+            column = lastSelection.x;//(int) Math.floor((x - 70) / (cellWidth + 1));
         } else {
             column = values[0].length - 1;
         }

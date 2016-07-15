@@ -42,6 +42,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -58,6 +60,7 @@ import static javax.media.opengl.GL.GL_FLOAT;
 import static javax.media.opengl.GL.GL_FRAMEBUFFER;
 import static javax.media.opengl.GL.GL_FRAMEBUFFER_COMPLETE;
 import static javax.media.opengl.GL.GL_FRONT;
+import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
 import static javax.media.opengl.GL.GL_LESS;
 import static javax.media.opengl.GL.GL_LINES;
 import static javax.media.opengl.GL.GL_LINE_LOOP;
@@ -66,6 +69,7 @@ import static javax.media.opengl.GL.GL_MIRRORED_REPEAT;
 import static javax.media.opengl.GL.GL_NEAREST;
 import static javax.media.opengl.GL.GL_NICEST;
 import static javax.media.opengl.GL.GL_NONE;
+import static javax.media.opengl.GL.GL_POINTS;
 import static javax.media.opengl.GL.GL_STATIC_DRAW;
 import static javax.media.opengl.GL.GL_TEXTURE;
 import static javax.media.opengl.GL.GL_TEXTURE0;
@@ -76,6 +80,7 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_WRAP_S;
 import static javax.media.opengl.GL.GL_TEXTURE_WRAP_T;
+import static javax.media.opengl.GL.GL_TRIANGLES;
 import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 import static javax.media.opengl.GL.GL_UNSIGNED_BYTE;
 import static javax.media.opengl.GL.GL_UNSIGNED_INT;
@@ -93,6 +98,8 @@ import static javax.media.opengl.GL2ES2.GL_VERTEX_SHADER;
 import static javax.media.opengl.GL2GL3.GL_ALL_BARRIER_BITS;
 import static javax.media.opengl.GL2GL3.GL_ATOMIC_COUNTER_BUFFER;
 import static javax.media.opengl.GL2GL3.GL_DYNAMIC_COPY;
+import static javax.media.opengl.GL2GL3.GL_FILL;
+import static javax.media.opengl.GL2GL3.GL_LINE;
 import static javax.media.opengl.GL2GL3.GL_PIXEL_UNPACK_BUFFER;
 import static javax.media.opengl.GL2GL3.GL_R32UI;
 import static javax.media.opengl.GL2GL3.GL_READ_WRITE;
@@ -123,8 +130,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     /*private HDpainting hdPaint;
     private HDpaintingInfo hdInfo;
     private boolean paintHD = false;*/
-    
-    private ComparisonListenerInfo info;           
+    private ComparisonListenerInfo info;
 
     private GLUT glut = new GLUT();
     private int[] viewport = new int[4];
@@ -136,7 +142,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private ArrayList<Model> models = new ArrayList<>();*/
     private boolean showPlane = true;
 
-   /* private int indexOfSelectedPoint = -1;
+    /* private int indexOfSelectedPoint = -1;
     private float facialPointRadius = 2;
     private float[] colorOfPoint = new float[]{1f, 0f, 0f, 1.0f};
     //
@@ -144,7 +150,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private PApaintingInfo paInfo;
 
     private boolean procrustes = false;*/
-
     private Vector3f[] selectionCube = new Vector3f[5];
     private Point selectionStart = null;
     private Point selectionEnd = null;
@@ -165,7 +170,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private ArrayList<Vector2f> sampleNormals = new ArrayList<>();
     private ArrayList<ArrayList<Vector2f>> distancePoints = new ArrayList<>();
     private ArrayList<Vector2f> averagedistancePoints = new ArrayList<>();*/
-
     private static final int MAX_FRAMEBUFFER_WIDTH = 2048;
     private static final int MAX_FRAMEBUFFER_HEIGHT = 2048;
 
@@ -189,7 +193,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private int fogUniform;
     private int fogColorUniform;
     private int fogVersion;
-    private int  colorSchemeUniform;
+    private int colorSchemeUniform;
     private boolean secondaryListener = false;
     private int minColorUniform;
     private int maxColorUniform;
@@ -216,7 +220,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     /*private float[] primaryColor = {51f / 255f, 153f / 255f, 1f, 1.0f};
     private float[] secondaryColor = {1f, 1f, 0f, 1.0f};
     private float[] fogColor = {0f, 0f, 255f, 1.0f};*/
-
     private int innerSurfaceSolid = 1;
     private boolean useGlyphs = false;
     Texture cross;
@@ -238,7 +241,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private ArrayList<Set<Integer>> usedFaces = new ArrayList<>();
     private ArrayList<float[]> sampleVetices = new ArrayList<>();
     private ArrayList<ArrayList<VertexInfo>> verticesInfo = new ArrayList<>();*/
-
     //private boolean distanceface = true;
     /*private boolean contours = true;
     private boolean showAllCuts;
@@ -247,7 +249,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private boolean render;
     private Vector3f planePoint = new Vector3f(0, 0, 0);
     private Vector3f planeNormal = new Vector3f(1, 0, 0);*/
-
     //  private boolean primaryModelSet;
     public ComparisonGLEventListener() {
         info = new ComparisonListenerInfo();
@@ -306,74 +307,71 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             gl.glPushAttrib(GL_ALL_ATTRIB_BITS);
             info.getPaPainting().drawPointsAfterPA(gl, glut);
             gl.glPopAttrib();
-        } else {
-
-            if (info.isPaintHD()) {
-                /**
-                 * edited - 11.03.2015 Jakub Palenik multiple visualizations of
-                 * HDpaint based on hdPaint attribute vType of ENUM
-                 * VisualizationType
-                 */
-                switch (info.getHdInfo().getvType()) {
-                    case COLORMAP:
-                        paintHD();
-                        if (selectionCube[3] != null && !info.getHdInfo().isIsSelection()) {
-                            if (info.getHdInfo().getsType() == SelectionType.ELLIPSE) {
-                                paintSelectionEllipse();
-                            }
-                            if (info.getHdInfo().getsType() == SelectionType.RECTANGLE) {
-                                paintSelectionRectangle();
-                            }
-
+        } else if (info.isPaintHD()) {
+            /**
+             * edited - 11.03.2015 Jakub Palenik multiple visualizations of
+             * HDpaint based on hdPaint attribute vType of ENUM
+             * VisualizationType
+             */
+            switch (info.getHdInfo().getvType()) {
+                case COLORMAP:
+                    paintHD();
+                    if (selectionCube[3] != null && !info.getHdInfo().isIsSelection()) {
+                        if (info.getHdInfo().getsType() == SelectionType.ELLIPSE) {
+                            paintSelectionEllipse();
                         }
-                        break;
-                    case TRANSPARENCY:
-                        trasparencyRender();
-                        break;
-                    case VECTORS:
-                        info.getHdPaint().paintNormals(gl);
-                        break;
-                    case CROSSSECTION:
-                        if (secondaryListener) {
-                            slicesAllRender();
-                        } else {
-                            sliceMainRender();
+                        if (info.getHdInfo().getsType() == SelectionType.RECTANGLE) {
+                            paintSelectionRectangle();
                         }
-                        break;
-                    default:
-                        break;
-                }
-            } else if (info.getModels().size() == 2) {
-                   trasparencyRender();
-            } else {
-                for (int i = 0; i < info.getModels().size(); i++) {
-                    if (info.getModels().get(i) != null) {
-                        gl.glPushMatrix();
-                        float[] color = {0.8667f, 0.7176f, 0.6275f, 1f};
-                        float[] colorKs = {0, 0, 0, 1f};
 
-                        //  float[] color = {0.868f, 0.64f, 0.548f, 1f};
-                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
-                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0);
-                        gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 10);
-
-                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, colorKs, 0);
-                        if (drawTextures) {
-                            info.getModels().get(i).draw(gl);
-                        } else {
-
-                            info.getModels().get(i).drawWithoutTextures(gl);
-
-                        }
-                        if (info.getFacialPoints() != null) {
-                            drawFacialPoints(info.getFacialPoints());
-                        }
-                        gl.glDisable(GL.GL_BLEND);
-                        gl.glPopMatrix();
                     }
-                }
-
+                    break;
+                case TRANSPARENCY:
+                    trasparencyRender();
+                    break;
+                case VECTORS:
+                    info.getHdPaint().paintNormals(gl);
+                    break;
+                case CROSSSECTION:
+                    if (secondaryListener) {
+                        slicesAllRender();
+                    } else {
+                        sliceMainRender();
+                    }
+                    break;
+                default:
+                    break;
             }
+        } else if (info.getModels().size() == 2) {
+            trasparencyRender();
+        } else {
+            for (int i = 0; i < info.getModels().size(); i++) {
+                if (info.getModels().get(i) != null) {
+                    gl.glPushMatrix();
+                    float[] color = {0.8667f, 0.7176f, 0.6275f, 1f};
+                    float[] colorKs = {0, 0, 0, 1f};
+
+                    //  float[] color = {0.868f, 0.64f, 0.548f, 1f};
+                    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
+                    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0);
+                    gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 10);
+
+                    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, colorKs, 0);
+                    if (drawTextures) {
+                        info.getModels().get(i).draw(gl);
+                    } else {
+
+                        info.getModels().get(i).drawWithoutTextures(gl);
+
+                    }
+                    if (info.getFacialPoints() != null) {
+                        drawFacialPoints(info.getFacialPoints());
+                    }
+                    gl.glDisable(GL.GL_BLEND);
+                    gl.glPopMatrix();
+                }
+            }
+
         }
 
         gl.glPopMatrix();
@@ -452,7 +450,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             gl.glUniform1f(minDistanceUniform, info.getHdInfo().getMinDistance());
             gl.glUniform1f(maxDistanceUniform, info.getHdInfo().getMaxDistance());
         }
-        gl.glUniform1i(colorSchemeUniform,info.getHdInfo().getColorScheme().ordinal());
+        gl.glUniform1i(colorSchemeUniform, info.getHdInfo().getColorScheme().ordinal());
         gl.glUniform1f(globalMaxDistanceUniform, info.getHdInfo().getMaxDistance());
         gl.glUniform1f(globalMinDistanceUniform, info.getHdInfo().getMinDistance());
         gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -519,10 +517,166 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private void slicesAllRender() {
         gl.glPushAttrib(GL_ALL_ATTRIB_BITS);
         gl.glDisable(GL_LIGHTING);
-        if (info.isShowAllCuts()) {
 
+        gl.glLineWidth(info.getCutThickness());
+
+        gl.glClear(GL_DEPTH_BUFFER_BIT);
+        if (info.isShowSamplingRays()) {
+            gl.glColor4fv(info.getColorOfCut(), 0);
+            if (!info.getLists2().isEmpty()) {
+                for (LinkedList<Vector2f> l : info.getLists2().get(0)) {
+                    for (int i = 1; i < info.getSamplePoints().size(); i++) {
+                        if (info.getSamplePoints().get(i) != null) {
+                            gl.glLineWidth(info.getCutThickness() + 1);
+                            gl.glBegin(GL_LINES);
+                            gl.glVertex2d(info.getSamplePoints().get(i).x, info.getSamplePoints().get(i).y);
+                            gl.glVertex2d(l.get(i).x, l.get(i).y);
+                            gl.glEnd();
+                        }
+                    }
+                }
+            }
+        }
+        if (info.isShowBoxplot() || info.isShowBoxplotFunction()) {
+            gl.glColor4fv(info.getColorOfCut(), 0);
+            //intersections/normals
+            //  for (ArrayList<Vector2f> l : info.getDistancePoints()) {
+            ArrayList<Vector2f> midline = new ArrayList<>();
+            ArrayList<Vector2f> left = new ArrayList<>();
+            ArrayList<Vector2f> right = new ArrayList<>();
+            for (int i = 1; i < info.getSamplePoints().size(); i++) {
+                if (info.getSamplePoints().get(i) != null) {
+                    gl.glLineWidth(info.getCutThickness());
+                    Vector2f n = new Vector2f(info.getSampleNormals().get(i));
+                    n.normalize();
+                    Vector2f a = new Vector2f(n);
+                    Vector2f c = new Vector2f(n);
+                    Vector2f n2 = new Vector2f(-n.y, n.x);
+                    n2.normalize();
+                    n2.scale(info.getCutThickness());
+                    Vector2f n3 = new Vector2f(n2);
+                    n3.scale(-1);
+                    int size = info.getPointDistances().get(i).size();
+                    if (size > 0) {
+                        a.scale(info.getPointDistances().get(i).get(size / 4));
+                        a.add(info.getSamplePoints().get(i));
+                        Vector2f b = new Vector2f(a);
+
+                        c.scale(info.getPointDistances().get(i).get(3 * size / 4));
+                        c.add(info.getSamplePoints().get(i));
+                        Vector2f d = new Vector2f(c);
+
+                        if (midline.size() >= 2 && IntersectionUtils.findSegmentSegmentIntersection(midline.get(midline.size() - 2), a, midline.get(midline.size() - 1), c) != null) {
+                            midline.add(new Vector2f(c));
+                            midline.add(new Vector2f(a));
+                        } else {
+                            midline.add(new Vector2f(a));
+                            midline.add(new Vector2f(c));
+                        }
+
+                        a.add(n2);
+                        b.add(n3);
+                        c.add(n3);
+                        d.add(n2);
+
+                        if (info.isShowBoxplot()) {
+                            gl.glBegin(GL_TRIANGLES);
+                            gl.glVertex2d(a.x, a.y);
+                            gl.glVertex2d(b.x, b.y);
+                            //     gl.glVertex2d(b.x, b.y);
+                            gl.glVertex2d(c.x, c.y);
+                            gl.glVertex2d(c.x, c.y);
+                            gl.glVertex2d(d.x, d.y);
+                            //     gl.glVertex2d(d.x, d.y);
+                            gl.glVertex2d(a.x, a.y);
+                            gl.glEnd();
+                        }
+                        float iqr = info.getPointDistances().get(i).get(3 * size / 4) - info.getPointDistances().get(i).get(size / 4);
+                        float median = info.getPointDistances().get(i).get(size / 2);
+                        float bottomWhisker = Float.POSITIVE_INFINITY;
+                        float topWhisker = Float.NEGATIVE_INFINITY;
+                        for (int k = 0; k < info.getPointDistances().get(i).size(); k++) {
+                            if (info.getPointDistances().get(i).get(k) > (median - (iqr * 1.5)) && bottomWhisker == Float.POSITIVE_INFINITY) {
+                                bottomWhisker = info.getPointDistances().get(i).get(k);
+                            }
+                            if (info.getPointDistances().get(i).get(k) < (median + (iqr * 1.5))) {
+                                topWhisker = info.getPointDistances().get(i).get(k);
+                            }
+                        }
+                        Vector2f aWhisk = new Vector2f(n);
+                        aWhisk.scale(topWhisker);
+                        aWhisk.add(info.getSamplePoints().get(i));
+                        Vector2f bWhisk = new Vector2f(n);
+                        bWhisk.scale(bottomWhisker);
+                        bWhisk.add(info.getSamplePoints().get(i));
+
+                        left.add(new Vector2f(aWhisk));
+                        right.add(new Vector2f(bWhisk));
+
+                        if (info.isShowBoxplot()) {
+                            gl.glBegin(GL_LINES);
+                            gl.glVertex2d(aWhisk.x, aWhisk.y);
+                            gl.glVertex2d(bWhisk.x, bWhisk.y);
+
+                            gl.glVertex2d(aWhisk.x + n2.x, aWhisk.y + n2.y);
+                            gl.glVertex2d(aWhisk.x + n3.x, aWhisk.y + n3.y);
+
+                            gl.glVertex2d(bWhisk.x + n2.x, bWhisk.y + n2.y);
+                            gl.glVertex2d(bWhisk.x + n3.x, bWhisk.y + n3.y);
+                            gl.glEnd();
+                        }
+                        gl.glPointSize(info.getCutThickness() + 1);
+                        gl.glBegin(GL_POINTS);
+                        for (int k = 0; k < info.getPointDistances().get(i).size(); k++) {
+                            if (info.getPointDistances().get(i).get(k) < bottomWhisker || info.getPointDistances().get(i).get(k) > topWhisker) {
+                                Vector2f p = new Vector2f(n);
+                                p.scale(info.getPointDistances().get(i).get(k));
+                                p.add(info.getSamplePoints().get(i));
+                                gl.glVertex2d(p.x, p.y);
+                            }
+                        }
+                        gl.glEnd();
+                    }
+                }
+                //  }
+            }
+            if (info.isShowBoxplotFunction()) {
+                gl.glBegin(GL_TRIANGLE_STRIP);
+                for (Vector2f m : midline) {
+                    gl.glVertex2d(m.x, m.y);
+                }
+                gl.glEnd();
+
+                gl.glBegin(GL_LINE_STRIP);
+                for (Vector2f m : left) {
+                    gl.glVertex2d(m.x, m.y);
+                }
+                gl.glEnd();
+
+                gl.glBegin(GL_LINE_STRIP);
+                for (Vector2f m : right) {
+                    gl.glVertex2d(m.x, m.y);
+                }
+                gl.glEnd();
+            }
+        }
+        gl.glClear(GL_DEPTH_BUFFER_BIT);
+        gl.glLineWidth(info.getCutThickness() + 1);
+        gl.glColor3f(1, 0, 0);
+
+        if (!info.getLists2().isEmpty()) {
+            for (LinkedList<Vector2f> l : info.getLists2().get(0)) {
+                gl.glBegin(GL_LINE_STRIP);
+                for (int i = 0; i < l.size() - 1; i++) {
+                    gl.glVertex2d(l.get(i).x, l.get(i).y);
+                }
+                gl.glEnd();
+            }
+        }
+
+        if (info.isShowAllCuts()) {
             gl.glLineWidth(info.getCutThickness());
-            gl.glColor4fv(info.getColorOfCut(),0);
+            gl.glColor4fv(info.getColorOfCut(), 0);
             for (LinkedList<LinkedList<Vector2f>> list : info.getLists2()) {
 
                 for (LinkedList<Vector2f> l : list) {
@@ -537,46 +691,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             }
 
         }
-        gl.glClear(GL_DEPTH_BUFFER_BIT);
-        gl.glLineWidth(info.getCutThickness()+1);
-        gl.glColor3f(1, 0, 0);
-        if (!info.getLists2().isEmpty()) {
-            for (LinkedList<Vector2f> l : info.getLists2().get(0)) {
-                gl.glBegin(GL_LINE_STRIP);
-                for (int i = 0; i < l.size() - 1; i++) {
-                    gl.glVertex2d(l.get(i).x, l.get(i).y);
 
-                }
-                gl.glEnd();
-            }
-        }
-        gl.glLineWidth(info.getCutThickness());
-        /*
-         gl.glColor3f(1, 0, 0);
-         gl.glPointSize(10);
-         gl.glBegin(GL_POINTS);
-         for (Vector2f p : samplePoints) {
-         gl.glVertex3d(p.x, p.y, 0);
-         }
-         gl.glEnd();
-         */
-        if (info.isShowSamplingRays()) {
-             gl.glColor4fv(info.getColorOfCut(),0);
-
-            //intersections/normals
-            gl.glBegin(GL_LINES);
-            for (ArrayList<Vector2f> l : info.getDistancePoints()) {
-                for (int i = 0; i < l.size(); i++) {
-                    if (l.get(i) != null) {
-                        gl.glVertex2d(info.getSamplePoints().get(i).x, info.getSamplePoints().get(i).y);
-                        gl.glVertex2d(l.get(i).x, l.get(i).y);
-
-                    }
-                }
-            }
-            gl.glEnd();
-        }
-        gl.glLineWidth(info.getCutThickness()+1);
+        gl.glLineWidth(info.getCutThickness() + 1);
         if (info.isShowVectors()) {
             gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
             //average
@@ -773,7 +889,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private void sampleList(LinkedList<LinkedList<Vector2f>> lists) {
         ArrayList<Vector2f> points = new ArrayList<>();
         ArrayList<Vector2f> normals = new ArrayList<>();
-        float step = 15;
+
+        float step = 3;
 
         if (lists != null && lists.size() > 0) {
 
@@ -782,6 +899,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                 Vector2f x = new Vector2f(lists.getFirst().get(1));
                 x.sub(lists.getFirst().get(0));
                 normals.add(new Vector2f(x.y, -x.x));
+                normals.get(0).normalize();
             }
 
             for (LinkedList<Vector2f> list : lists) {
@@ -789,22 +907,35 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                 for (int i = 1; i < list.size(); i++) {
                     Vector2f v = new Vector2f(list.get(i));
                     v.sub(list.get(i - 1));
-                    if ((distance + v.length()) >= step) {
-                        Vector2f u = new Vector2f(list.get(i - 1));
-                        float tmpDistance = v.length() - (step - distance);
-                        v.scale((step - distance) / v.length());
-                        u.add(v);
-                        points.add(u);
-                        Vector2f n = new Vector2f(v.y, -v.x);
-                        normals.add(n);
+                    if (v.length() > 0) {
+                        if ((distance + v.length()) >= step) {
+                            Vector2f u = new Vector2f(list.get(i - 1));
+                            float length = v.length();
+                            float tmpDistance = length - (step - distance);
+                            v.normalize();
+                            Vector2f n = new Vector2f(-v.y, v.x);
+                            normals.add(n);
+                            v.scale(step - distance);
+                            u.add(v);
+                            points.add(u);
+                            distance = tmpDistance;
+                            while (distance > step) {
+                                v.normalize();
+                                v.scale(step);
+                                u.add(v);
+                                points.add(u);
+                                normals.add(n);
+                                distance = distance - step;
+                            }
 
-                        distance = tmpDistance;
-                    } else {
-                        distance += v.length();
+                        } else {
+                            distance += v.length();
+                        }
                     }
                 }
             }
         }
+
         info.setSamplePoints(points);
         info.setSampleNormals(normals);
     }
@@ -838,7 +969,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             }
             finalLists.add(tmpLists);
         }
-        
+
         info.setLists2(finalLists);
     }
 
@@ -872,11 +1003,31 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             }
             points.add(pts);
         }
-        
+
         info.setDistancePoints(points);
 
+        ArrayList<ArrayList<Float>> distances = new ArrayList<>();
+        for (int i = 0; i < info.getSamplePoints().size(); i++) {
+            ArrayList<Float> ptDistances = new ArrayList<>();
+            for (int j = 1; j < points.size(); j++) {
+                if (points.get(j).get(i) != null) {
+                    Vector2f pb = points.get(j).get(i);
+                    Vector2f pa = info.getSamplePoints().get(i);
+                    Vector2f n = info.getSampleNormals().get(i);
+                    Vector2f ab = new Vector2f(pb);
+                    ab.sub(pa);
+                    float dot = n.dot(ab);
+                    ptDistances.add(Math.signum(dot) * ab.length());
+                } else {
+                    //  ptDistances.add(null);
+                }
+            }
+            Collections.sort(ptDistances);
+            distances.add(ptDistances);
+        }
+        info.setPointDistances(distances);
+
         //average
-        
         List<Vector2f> averagedistancePoints = new ArrayList<>();
         ArrayList<Integer> counters = new ArrayList<>();
         for (Vector2f samplePoint : info.getSamplePoints()) {
@@ -902,7 +1053,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                 averagedistancePoints.set(i, new Vector2f(averagedistancePoints.get(i).x / counters.get(i), averagedistancePoints.get(i).y / counters.get(i)));
             }
         }
-        
+
         info.setAveragedistancePoints((ArrayList<Vector2f>) averagedistancePoints);
 
     }
@@ -1303,7 +1454,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             }
             i++;
         }
-        
+
         float[] fogColor = info.getFogColor();
 
         //rendering of final image
@@ -1471,7 +1622,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     @Override
     public void setModels(Model model) {
         info.setModel(model);
-        if (info.getModels().size()==2) {
+        if (info.getModels().size() == 2) {
             sampleModels(info.getModels());
         }
 
@@ -1479,7 +1630,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
     public void addModel(Model model) {
         info.addModel(model);
-        if (info.getModels().size()==2) {
+        if (info.getModels().size() == 2) {
             sampleModels(info.getModels());
         }
     }
@@ -1662,7 +1813,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     @Override
     public void setModels(ArrayList<Model> models) {
         info.setModels(models);
-        if (info.getModels().size()==2 ) {
+        if (info.getModels().size() == 2) {
             sampleModels(info.getModels());
         }
     }
@@ -1745,7 +1896,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void initComputation() {
-       info.initFpUniverse();
+        info.initFpUniverse();
     }
 
     public void initFpUniverse(List<FacialPoint> points) {
@@ -1797,8 +1948,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     public FacialPoint getFacialPoint(int index) {
         return info.getFacialPoints().get(index);
     }
-    
-    public void setModelIndex(int index, Model m){
+
+    public void setModelIndex(int index, Model m) {
         info.getModels().set(index, m);
     }
 
@@ -2240,7 +2391,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         globalMaxDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "maxThreshDistance");
         globalMinDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "minThreshDistance");
 
-
         checkProgramStatus(gl, ColorMapReductionShadersId, 3);
 
     }
@@ -2404,7 +2554,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         cn.sub(ct);
 
         p = m.findLinePlaneIntersection(m.getRayEndPoint(), ln, cn, ct);
-            //p = m.getRayEndPoint();
+        //p = m.getRayEndPoint();
 
         //}
         return p;
@@ -2427,11 +2577,11 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void clearSelection() {
-        if(info.getHdInfo() != null){
+        if (info.getHdInfo() != null) {
             info.getHdInfo().setIsSelection(false);
             info.getHdInfo().setIsRecomputed(false);
         }
-        
+
         selectionStart = null;
         selectionEnd = null;
         selectionCube = new Vector3f[5];
@@ -2481,8 +2631,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             if (angle != 0) {
                 Vector3f w = rotateAroundAxe(v, axe, -angle);
                 gl.glVertex3d(w.x, w.y, w.z);
-            }else{
-                 gl.glVertex3d(v.x, v.y, v.z);
+            } else {
+                gl.glVertex3d(v.x, v.y, v.z);
             }
 
             // Math.cos(degInRad) * Math.abs(zradius) + selectionCube[0].z - zradius
@@ -2516,22 +2666,21 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         gl.glEnd();
         gl.glEnable(GL_LIGHTING);
     }
-    
-    public void setTransformations(List<ICPTransformation> trans){
+
+    public void setTransformations(List<ICPTransformation> trans) {
         info.setTransformations(trans);
     }
 
     public void setColorOfCuts(float[] color) {
-         info.setColorOfCut(color);
+        info.setColorOfCut(color);
     }
 
     public void setCutThickness(float f) {
         info.setCutThickness(f);
     }
 
-    
-    public GL2 getGLContext(){
-        return gl; 
+    public GL2 getGLContext() {
+        return gl;
     }
-    
+
 }
