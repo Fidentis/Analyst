@@ -494,6 +494,16 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setValuesTypeIndex(Integer.parseInt(attr));
         }
+        
+        attr = projectE.getAttribute("continueComparison");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setContinueComparison(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("firstCreated");
+        if(attr != null && !attr.isEmpty()){
+            comparison.setFirstCreated(Boolean.parseBoolean(attr));
+        }
 
         if (primaryE != null) {
             Element modelE = (Element) primaryE.getElementsByTagName("model").item(0);

@@ -272,6 +272,8 @@ public final class SaveProject implements ActionListener {
         }
 
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
+        comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
+        comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
 
         zipDirectory(auxFile, null);
 

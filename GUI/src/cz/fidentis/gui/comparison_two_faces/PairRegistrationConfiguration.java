@@ -967,7 +967,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         }                       
                         
                         tc.getProject().getSelectedComparison2Faces().setMainFace(mainF);
-                        tc.getProject().getSelectedComparison2Faces().setUseSymmetry(symModCheckbox.isSelected());
+                        //tc.getProject().getSelectedComparison2Faces().setUseSymmetry(symModCheckbox.isSelected());
 
                         Methods m = (Methods) undersamplingCombobox.getSelectedItem();
                         Type t = SurfaceComparisonProcessing.instance().getSelectedType(m, buttonGroup2);
@@ -997,10 +997,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
                         }
 
-                        tc.getProject().getSelectedComparison2Faces().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
+                        /*tc.getProject().getSelectedComparison2Faces().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
                         tc.getProject().getSelectedComparison2Faces().setMethod(m.ordinal());
                         tc.getProject().getSelectedComparison2Faces().setType(t.ordinal());
-                        tc.getProject().getSelectedComparison2Faces().setValue(value);
+                        tc.getProject().getSelectedComparison2Faces().setValue(value);*/
                     } catch (Exception ex) {
                         Exceptions.printStackTrace(ex);
                         jButton1.setEnabled(true);
@@ -1103,6 +1103,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
         }
         tc.getProject().getSelectedComparison2Faces().setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
+        
+        //set up used values -- can delete setting up stuff from previous parts then
+        TwoFacesGUISetup.setUpUsedRegistrationData(methodCombobox, fpScaleCheckBox, fpThresholdSlider, showFpInfoCheckbox, fpColorPanel, fpSizeSlider,
+                icpMetricComboBox, icpScaleCheckbox, symModCheckbox, errorSpinner, maxIterSpinner, 
+                undersamplingCombobox, percentageSpinner, numberSpinner, jRadioButton1, jRadioButton2, undersamplingRadiusSlider, continueComparisonCheckbox, 
+                tc.getProject().getSelectedComparison2Faces());
 
         //keep this line in GUI
         GUIController.updateNavigator();
@@ -1292,6 +1298,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         Comparison2Faces c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
+        
+        if(c.isFirstCreated())
+            TwoFacesGUISetup.setUpDefaultRegistrationData(c);
+        
         /*errorSpinner.setValue(c.getICPerrorRate());
         maxIterSpinner.setValue(c.getICPmaxIteration());
         fpColorPanel.setBackground(c.getPointColor());
@@ -1299,9 +1309,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         showFpInfoCheckbox.setSelected(c.isShowPointInfo());*/
         setRegistrationMethods(c.getRegistrationMethod());
         
-        TwoFacesGUISetup.defaultValuesRegistration(methodCombobox, fpScaleCheckBox, fpThresholdSlider, showFpInfoCheckbox, fpColorPanel, fpSizeSlider,
+        TwoFacesGUISetup.setUpValuesRegistration(methodCombobox, fpScaleCheckBox, fpThresholdSlider, showFpInfoCheckbox, fpColorPanel, fpSizeSlider,
                 icpMetricComboBox, icpScaleCheckbox, symModCheckbox, errorSpinner, maxIterSpinner, 
-                undersamplingCombobox, percentageSpinner, numberSpinner, jRadioButton1, undersamplingRadiusSlider, continueComparisonCheckbox);
+                undersamplingCombobox, percentageSpinner, numberSpinner, jRadioButton1, jRadioButton2, undersamplingRadiusSlider, continueComparisonCheckbox, c);
 
 
         //icpScaleCheckbox.setSelected(c.getScaleEnabled());
