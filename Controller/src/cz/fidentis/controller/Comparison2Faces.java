@@ -58,6 +58,14 @@ public class Comparison2Faces {
     
     private Color primaryColor = new Color(51,153,255, 255);        //color for primary model when overlaid before comparison(blueish?)
     private Color secondaryColor = new Color(255,255,0,255);        //color for secondary model when overlaid before comparison(yellow)
+    private boolean isPrimarySolid = false;
+    private boolean isSecondarySolid = false;
+    private Color fogColor;
+    private float overlayTransparency;
+    private boolean innerSurfaceSolid;
+    private boolean useGlyphs;
+    private boolean useContours;
+    private int fogVersion;
     
    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
     private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
@@ -87,16 +95,62 @@ public class Comparison2Faces {
     private float value;          //undersampling value
     
     private boolean firstCreated = true;
+    
+    //comparison results
+    private int visualization;
+    private int colorScheme;
+    private int vectorDensity;
+    private int vectorLength;
+    private int cylinderRadius;
 
-    public Comparison2Faces() {
-    }
 
+    
     public boolean isFirstCreated() {
         return firstCreated;
     }
 
     public void setFirstCreated(boolean firstCreated) {
         this.firstCreated = firstCreated;
+    }
+
+    public int getVisualization() {
+        return visualization;
+    }
+
+    public void setVisualization(int visualization) {
+        this.visualization = visualization;
+    }
+
+    public int getColorScheme() {
+        return colorScheme;
+    }
+
+    public void setColorScheme(int colorScheme) {
+        this.colorScheme = colorScheme;
+    }
+
+    public int getVectorDensity() {
+        return vectorDensity;
+    }
+
+    public void setVectorDensity(int vectorDensity) {
+        this.vectorDensity = vectorDensity;
+    }
+
+    public int getVectorLength() {
+        return vectorLength;
+    }
+
+    public void setVectorLength(int vectorLength) {
+        this.vectorLength = vectorLength;
+    }
+
+    public int getCylinderRadius() {
+        return cylinderRadius;
+    }
+
+    public void setCylinderRadius(int cylinderRadius) {
+        this.cylinderRadius = cylinderRadius;
     }
        
     
@@ -122,6 +176,70 @@ public class Comparison2Faces {
 
     public void setHdPaintingInfo(HDpaintingInfo hdPaintingInfo) {
         this.hdPaintingInfo = hdPaintingInfo;
+    }
+
+    public boolean isIsPrimarySolid() {
+        return isPrimarySolid;
+    }
+
+    public void setIsPrimarySolid(boolean isPrimarySolid) {
+        this.isPrimarySolid = isPrimarySolid;
+    }
+
+    public boolean isIsSecondarySolid() {
+        return isSecondarySolid;
+    }
+
+    public void setIsSecondarySolid(boolean isSecondarySoldi) {
+        this.isSecondarySolid = isSecondarySoldi;
+    }
+
+    public boolean isInnerSurfaceSolid() {
+        return innerSurfaceSolid;
+    }
+
+    public void setInnerSurfaceSolid(boolean innerSurfaceSolid) {
+        this.innerSurfaceSolid = innerSurfaceSolid;
+    }  
+
+    public int getFogVersion() {
+        return fogVersion;
+    }
+
+    public void setFogVersion(int fogVersion) {
+        this.fogVersion = fogVersion;
+    }
+
+    public Color getFogColor() {
+        return fogColor;
+    }
+
+    public void setFogColor(Color fogColor) {
+        this.fogColor = fogColor;
+    }
+
+    public float getOverlayTransparency() {
+        return overlayTransparency;
+    }
+
+    public void setOverlayTransparency(float overlayTransparency) {
+        this.overlayTransparency = overlayTransparency;
+    }
+
+    public boolean isUseGlyphs() {
+        return useGlyphs;
+    }
+
+    public void setUseGlyphs(boolean useGlyphs) {
+        this.useGlyphs = useGlyphs;
+    }
+
+    public boolean isUseContours() {
+        return useContours;
+    }
+
+    public void setUseContours(boolean useContours) {
+        this.useContours = useContours;
     }
 
     public float getLowerHDTreshold() {

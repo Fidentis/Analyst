@@ -274,6 +274,23 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
         comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
+        
+        //comparison configuration
+        comparisonE.setAttribute("primarySolid", String.valueOf(comparison.isIsPrimarySolid()));
+        comparisonE.setAttribute("secondarySolid", String.valueOf(comparison.isIsSecondarySolid()));
+        comparisonE.setAttribute("fogColor", String.valueOf(comparison.getFogColor().getRGB()));
+        comparisonE.setAttribute("overlayTransparency", String.valueOf(comparison.getOverlayTransparency()));
+        comparisonE.setAttribute("innerSurfaceSolid", String.valueOf(comparison.isInnerSurfaceSolid()));
+        comparisonE.setAttribute("useGlyphs", String.valueOf(comparison.isUseGlyphs()));
+        comparisonE.setAttribute("useContours", String.valueOf(comparison.isUseContours()));
+        comparisonE.setAttribute("fogVersion", String.valueOf(comparison.getFogVersion()));
+        
+        //comparison result
+        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
+        comparisonE.setAttribute("colorScheme", String.valueOf(comparison.getColorScheme()));
+        comparisonE.setAttribute("vectorDensity", String.valueOf(comparison.getVectorDensity()));
+        comparisonE.setAttribute("vectorLength", String.valueOf(comparison.getVectorLength()));
+        comparisonE.setAttribute("cylinderRadius", String.valueOf(comparison.getCylinderRadius()));
 
         zipDirectory(auxFile, null);
 
