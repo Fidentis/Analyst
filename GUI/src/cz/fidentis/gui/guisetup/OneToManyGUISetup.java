@@ -6,7 +6,11 @@
 package cz.fidentis.gui.guisetup;
 
 import cz.fidentis.comparison.ComparisonMethod;
+import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
+import cz.fidentis.controller.OneToManyComparison;
+import cz.fidentis.visualisation.ColorScheme;
+import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -14,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -36,6 +41,7 @@ public class OneToManyGUISetup {
    private static final float ERROR_VALUE = 0.05f;
    private static final int MAX_ITERATION = 15;
    private static final int UNDERSAMPLING_INDEX = 0;
+   private static final int TYPE_INDEX = 1;
    private static final int PERCENTAGE_VALUE = 50;
    private static final int NUMBER_SPINNER = 0;
    private static final int UNDERSAMPLING_RADIUS = 50;
@@ -47,9 +53,9 @@ public class OneToManyGUISetup {
    
    //comparison results
    private static final int SELECTED_METRIC = 0;
-   private static final float X_PLANE_POSITION = 0f;
-   private static final float Y_PLANE_POSITION = 0f;
-   private static final float Z_PLANE_POSITION = 0f;
+   private static final int SELECTED_PLANE = 0;
+   private static final Vector3f ARBITRARY_NORMAL = new Vector3f(1,0,0);
+   private static final Vector3f PLANE_POSITION = new Vector3f();
    private static final int CROSSCUT_SIZE = 50;
    private static final int CROSSCUT_THICKNESS = 50;
    private static final Color CROSSCUT_COLOR = new Color(255,255,255);
@@ -58,11 +64,11 @@ public class OneToManyGUISetup {
    private static final boolean ALL_CUTS = false;
    private static final boolean SAMPLINGR_RAYS = false;
    
-   private static final int VISUALIZATION = 0;
+   private static final VisualizationType VISUALIZATION = VisualizationType.COLORMAP;
    private static final int VALUES_TYPE = 0;
    private static final int MAX_THRESHOLD = 100;
    private static final int MIN_THRESHOLD = 0;
-   private static final int COLOR_SCHEME = 0;
+   private static final ColorScheme COLOR_SCHEME = ColorScheme.GREEN_BLUE;
    
    private static final int VECTOR_DENSITY = 10;
    private static final int CYLINDER_LENGTH = 1;
@@ -71,80 +77,70 @@ public class OneToManyGUISetup {
    private static final int FP_DISTANCE = 0;
 
     
-    //is same as in 1:1, except registration is not enum, need to change that
-    public static void defaultValuesRegistration(JComboBox selectedRegistration, JCheckBox fpScale, JSlider fpThreshold, JCheckBox showFpInfo, JPanel fpColor, JSlider fpSize,
-           JComboBox icpMetric, JCheckBox icpScale, JCheckBox symModels, JSpinner icpError, JSpinner maxIteration, JComboBox icpUndersampling, 
-           JSpinner undersamplingPercentage, JSpinner undersamplingNumber, JRadioButton selectedUndersampling, JSlider undersamplingRadius,
-           JCheckBox continueComparison){
-         
-       selectedRegistration.setSelectedItem(SELECTED_REGISTRATION);
+    //set up data for 1:N registraiton
+    public static void setUpDefaultRegistrationData(OneToManyComparison data){
+       
+        data.setRegistrationMethod(SELECTED_REGISTRATION);
        
        //FP
-       fpScale.setSelected(FP_SCALE);
-       fpThreshold.setValue(FP_THRESHOLD);
-       showFpInfo.setSelected(SHOW_FP_INFO);
-       fpColor.setBackground(FP_COLOR);
-       fpSize.setValue(FP_SIZE);
+       data.setFpScaling(FP_SCALE);
+       data.setFpTreshold(FP_THRESHOLD);
+       data.setShowPointInfo(SHOW_FP_INFO);
+       data.setPointColor(FP_COLOR);
+       data.setFpSize(FP_SIZE);
        
        //ICP
-       icpMetric.setSelectedIndex(ICP_METRIC);
-       icpScale.setSelected(ICP_SCALE);
-       symModels.setSelected(SYMMETRIC_MODELS);
-       icpError.setValue(ERROR_VALUE);
-       maxIteration.setValue(MAX_ITERATION);
-       icpUndersampling.setSelectedIndex(UNDERSAMPLING_INDEX);
-       undersamplingPercentage.setValue(PERCENTAGE_VALUE);
-       undersamplingNumber.setValue(NUMBER_SPINNER);
-       selectedUndersampling.setSelected(true);
-       undersamplingRadius.setValue(UNDERSAMPLING_RADIUS);
+       data.setIcpMetric(ICPmetric.values()[ICP_METRIC]);
+       data.setScaleEnabled(ICP_SCALE);
+       data.setUseSymmetry(SYMMETRIC_MODELS);
+       data.setICPerrorRate(ERROR_VALUE);
+       data.setICPmaxIteration(MAX_ITERATION);
+       data.setMethod(UNDERSAMPLING_INDEX);
+       data.setType(TYPE_INDEX);
+       data.setValue(PERCENTAGE_VALUE);
        
-       continueComparison.setSelected(CONTINUE_COMPARISON);
-         
+       data.setContinueComparison(CONTINUE_COMPARISON);
+       data.setFirstCreated(false);                 
      }
      
-     public static void defaultValuesComparisonConfiguration(JComboBox comparisonMethod, JCheckBox createAvgFace, JCheckBox fpScaling, JSlider fpThrehsold){
-         
-         comparisonMethod.setSelectedItem(COMPARISON_METHOD);
-         createAvgFace.setSelected(CREATE_AVG_FACE);
-         fpScaling.setSelected(FP_SCALE);
-         fpThrehsold.setValue(FP_THRESHOLD);
+
+     //set data for 1:N comparison configuration
+     public static void defaultValuesComparisonConfiguration(OneToManyComparison data){  
+         data.setComparisonMethod(COMPARISON_METHOD);
+         data.setCreateAvgFace(CREATE_AVG_FACE);
+         data.setFpScaling(FP_SCALE);
+         data.setFpTreshold(FP_THRESHOLD);
      }
      
-     public static void defaultValuesComparisonResult(JComboBox comparisonMetric, JComboBox visualization, JComboBox values, 
-           JRadioButton selectedPlane, JSpinner planeXposition, JSpinner planeYposition, JSpinner planeZposition, JSlider cutSize, JSlider cutThickness, 
-           JPanel vectorColor, JCheckBox highlightCuts, JCheckBox showVectors, JCheckBox allCuts, JCheckBox samplingRays,
-           JSlider maxThresh, JSpinner maxThrehsSpinner,
-           JSlider minThresh, JSpinner minThreshSpinner, JComboBox colorScheme, JSlider vectorRadius, JSlider vectorLength, JSlider cylinderRadius,
-           JSlider fpDistance, JSlider fpSize){
+     //set data for 1:N comparison results
+     public static void defaultValuesComparisonResults(OneToManyComparison data){
+       
+         data.setVisualization(VISUALIZATION);
+         data.setValuesTypeIndex(VALUES_TYPE);
+         data.setMetricTypeIndex(SELECTED_METRIC);
+       
+         data.setHausdorfMaxTreshold(MAX_THRESHOLD);
+         data.setHausdorfMinTreshold(MIN_THRESHOLD);
          
-       visualization.setSelectedIndex(VISUALIZATION);
-       values.setSelectedItem(VALUES_TYPE);
-       
-       maxThresh.setValue(MAX_THRESHOLD);
-       maxThrehsSpinner.setValue(MAX_THRESHOLD);
-       minThresh.setValue(MIN_THRESHOLD);
-       minThreshSpinner.setValue(MIN_THRESHOLD);
-       
-       colorScheme.setSelectedIndex(COLOR_SCHEME);
-       vectorRadius.setValue(VECTOR_DENSITY);
-       vectorLength.setValue(CYLINDER_LENGTH);
-       cylinderRadius.setValue(CYLINDER_RADIUS);
-       
-       fpDistance.setValue(FP_DISTANCE);
-       fpSize.setValue(FP_SIZE);
-       
-       comparisonMetric.setSelectedIndex(SELECTED_METRIC);
-       selectedPlane.setSelected(true);
-       planeXposition.setValue(X_PLANE_POSITION);
-       planeYposition.setValue(Y_PLANE_POSITION);
-       planeZposition.setValue(Z_PLANE_POSITION);
-       cutSize.setValue(CROSSCUT_SIZE);
-       cutThickness.setValue(CROSSCUT_THICKNESS);
-       vectorColor.setBackground(CROSSCUT_COLOR);
-       highlightCuts.setSelected(HIGHLIGHT_CUTS);
-       showVectors.setSelected(CROSSCUT_VECTORS);
-       allCuts.setSelected(ALL_CUTS);
-       samplingRays.setSelected(SAMPLINGR_RAYS);
+         data.setUsedColorScheme(COLOR_SCHEME);
+         data.setCylinderRadius(CYLINDER_RADIUS);
+         data.setVectorDensity(VECTOR_DENSITY);
+         data.setVectorLength(CYLINDER_LENGTH);
          
+         data.setFpDistance(FP_DISTANCE);
+         data.setFpSize(FP_SIZE);  
+       
+         data.setCrossCutPlaneIndex(SELECTED_PLANE);
+         data.setArbitraryPlanePos(ARBITRARY_NORMAL);
+         data.setPlanePosition(PLANE_POSITION);
+         data.setCrosscutSize(CROSSCUT_SIZE);
+         data.setCrosscutThickness(CROSSCUT_THICKNESS);
+         data.setCrosscutColor(CROSSCUT_COLOR);       
+       
+         data.setHighlightCuts(HIGHLIGHT_CUTS);
+         data.setShowVectors(CROSSCUT_VECTORS);
+         data.setAllCuts(ALL_CUTS);
+         data.setSamplingRays(SAMPLINGR_RAYS);
      }
+   
 }

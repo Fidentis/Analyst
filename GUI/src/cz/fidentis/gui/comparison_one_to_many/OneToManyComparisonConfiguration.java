@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.netbeans.api.progress.ProgressHandle;
@@ -72,13 +73,13 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        compMethodComboBox = new javax.swing.JComboBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        fpScalingCheckBox = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
-        jSlider3 = new javax.swing.JSlider();
+        fpThresholdSlider = new javax.swing.JSlider();
         jLabel12 = new javax.swing.JLabel();
         processComparisonButton = new javax.swing.JButton();
         createAvgLabel = new javax.swing.JLabel();
@@ -93,34 +94,34 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.jLabel3.text")); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hausdorff Distance", "Procrustes Analysis" }));
-        jComboBox1.setMinimumSize(new java.awt.Dimension(187, 20));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(187, 20));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        compMethodComboBox.setModel(new DefaultComboBoxModel(ComparisonMethod.values()));
+        compMethodComboBox.setMinimumSize(new java.awt.Dimension(187, 20));
+        compMethodComboBox.setPreferredSize(new java.awt.Dimension(187, 20));
+        compMethodComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                compMethodComboBoxActionPerformed(evt);
             }
         });
 
         jPanel2.setVisible(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.jCheckBox2.text")); // NOI18N
-        jCheckBox2.addChangeListener(new javax.swing.event.ChangeListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(fpScalingCheckBox, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.fpScalingCheckBox.text")); // NOI18N
+        fpScalingCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox2StateChanged(evt);
+                fpScalingCheckBoxStateChanged(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.jLabel8.text")); // NOI18N
 
-        jSlider3.setMajorTickSpacing(20);
-        jSlider3.setMinorTickSpacing(5);
-        jSlider3.setPaintLabels(true);
-        jSlider3.setPaintTicks(true);
-        jSlider3.setValue(30);
-        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+        fpThresholdSlider.setMajorTickSpacing(20);
+        fpThresholdSlider.setMinorTickSpacing(5);
+        fpThresholdSlider.setPaintLabels(true);
+        fpThresholdSlider.setPaintTicks(true);
+        fpThresholdSlider.setValue(30);
+        fpThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider3StateChanged(evt);
+                fpThresholdSliderStateChanged(evt);
             }
         });
 
@@ -135,11 +136,11 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addGap(18, 18, 18)
-                        .addComponent(jCheckBox2)))
+                        .addComponent(fpScalingCheckBox)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -147,11 +148,11 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox2))
+                    .addComponent(fpScalingCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         Hashtable tresholdTable = new Hashtable();
@@ -161,7 +162,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         tresholdTable.put(new Integer(60), new JLabel("0,6"));
         tresholdTable.put(new Integer(80), new JLabel("0,8"));
         tresholdTable.put(new Integer(100), new JLabel("1"));
-        jSlider3.setLabelTable(tresholdTable);
+        fpThresholdSlider.setLabelTable(tresholdTable);
 
         org.openide.awt.Mnemonics.setLocalizedText(processComparisonButton, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.processComparisonButton.text")); // NOI18N
         processComparisonButton.addActionListener(new java.awt.event.ActionListener() {
@@ -176,6 +177,11 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         createAvgCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 createAvgCheckBoxStateChanged(evt);
+            }
+        });
+        createAvgCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createAvgCheckBoxActionPerformed(evt);
             }
         });
 
@@ -233,18 +239,17 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(exportLandmarksButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jSeparator1)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGap(66, 66, 66)
-                            .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel3)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(compMethodComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -256,7 +261,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(compMethodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,21 +290,23 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpTreshold(jSlider3.getValue());
-    }//GEN-LAST:event_jSlider3StateChanged
+    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpTreshold(fpThresholdSlider.getValue());
+    }//GEN-LAST:event_fpThresholdSliderStateChanged
 
-    private void jCheckBox2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox2StateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpScaling(jCheckBox2.isSelected());
-    }//GEN-LAST:event_jCheckBox2StateChanged
+    private void fpScalingCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpScalingCheckBoxStateChanged
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpScaling(fpScalingCheckBox.isSelected());
+    }//GEN-LAST:event_fpScalingCheckBoxStateChanged
 
     public void computeComparison(final ProjectTopComponent tc){
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
-                if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
-                        || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
+                OneToManyComparison c = tc.getProject().getSelectedOneToManyComparison();
+                
+                if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST
+                        || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV) {
                     //Computing Hausdorff Distance
 
                     ProgressHandle p;
@@ -312,21 +319,21 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                         List<Float> results;
                         List<ArrayList<Float>> numResults;
-                        List<File> models = tc.getProject().getSelectedOneToManyComparison().getRegisteredModels();
-                        List<File> origModels = tc.getProject().getSelectedOneToManyComparison().getModels();
+                        List<File> models = c.getRegisteredModels();
+                        List<File> origModels = c.getModels();
 
                         if (models == null) {
-                            models = tc.getProject().getSelectedOneToManyComparison().getModels();
+                            models = c.getModels();
                         }
 
                         Model mainF = tc.getOneToManyViewerPanel().getListener1().getModel();
                         ModelLoader ml = new ModelLoader();
-                        if (tc.getProject().getSelectedOneToManyComparison().getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
-                            mainF = ml.loadModel(tc.getProject().getSelectedOneToManyComparison().getPrimaryModel().getFile(), false, false);
+                        if (c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
+                            mainF = ml.loadModel(c.getPrimaryModel().getFile(), false, false);
                         }
 
                         boolean createAvg = createAvgCheckBox.isSelected();
-                        tc.getProject().getSelectedOneToManyComparison().setCreateAvgFace(createAvg);                        
+                        c.setCreateAvgFace(createAvg);                        
                         
                         //TODO: pick which model is template?
                         Model template = ml.loadModel(models.get(0), Boolean.FALSE, false);
@@ -334,7 +341,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().removeModel();
                         tc.getOneToManyViewerPanel().getListener2().setModels(template);
 
-                        ICPmetric metric = tc.getProject().getSelectedOneToManyComparison().getIcpMetric();
+                        ICPmetric metric = c.getIcpMetric();
                         if (metric == null) {
                             metric = ICPmetric.VERTEX_TO_VERTEX;
                         }
@@ -344,9 +351,9 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         }
                         KdTree templateTree;
                         List<Float> var;
-                        tc.getProject().getSelectedOneToManyComparison().setAvgFace(template);
+                        c.setAvgFace(template);
 
-                        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+                        if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
 
                             if (metric == ICPmetric.VERTEX_TO_VERTEX) {
                                 templateTree = new KdTreeIndexed(template.getVerts());
@@ -358,7 +365,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                             numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_DIST);
                         } else {
                             templateTree = new KdTreeIndexed(template.getVerts());
-                            metric = ICPmetric.VERTEX_TO_VERTEX;
+                            c.setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
 
                             Curvature_jv mainCurv = new Curvature_jv(mainF);
                             results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true,
@@ -378,15 +385,15 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                         sortedResAbs = SortUtils.instance().sortValues(absVal);
 
-                        tc.getProject().getSelectedOneToManyComparison().setSortedHdAbs(sortedResAbs);
-                        tc.getProject().getSelectedOneToManyComparison().setSortedHdRel(sortedResRes);
+                        c.setSortedHdAbs(sortedResAbs);
+                        c.setSortedHdRel(sortedResRes);
 
                         String strRes = setValues(var, origModels, mainF.getName(), 0);
 
-                        tc.getProject().getSelectedOneToManyComparison().setNumResults(numResults);
-                        tc.getProject().getSelectedOneToManyComparison().setNumericalResults(strRes);
+                        c.setNumResults(numResults);
+                        c.setNumericalResults(strRes);
 
-                        tc.getProject().getSelectedOneToManyComparison().setHd(results);
+                        c.setHd(results);
 
                         HDpaintingInfo info = new HDpaintingInfo(results, tc.getOneToManyViewerPanel().getListener1().getModel(), true);
                         float[] minColor = {0.298f, 0.0f, 0.898f};
@@ -398,14 +405,14 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                         HDpainting hd = new HDpainting(info);
 
-                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHdColor1(minCol);
-                        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setHdColor2(maxCol);
+                        c.setHdColor1(minCol);
+                        c.setHdColor2(maxCol);
 
                         tc.getOneToManyViewerPanel().getListener1().drawHD(true);
                         tc.getOneToManyViewerPanel().getListener1().setHdPaint(hd);
                         tc.getOneToManyViewerPanel().getListener1().setHdInfo(info);
-                        tc.getProject().getSelectedOneToManyComparison().setHDP(hd);
-                        tc.getProject().getSelectedOneToManyComparison().setHdPaintingInfo(info);
+                        c.setHDP(hd);
+                        c.setHdPaintingInfo(info);
 
                         p.finish();
                     } catch (Exception ex) {
@@ -419,40 +426,32 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                     //Starting Procrustes Comparison
                     List<List<FacialPoint>> list = new ArrayList();
-                    int size = tc.getProject().getSelectedOneToManyComparison().getModels().size();
+                    int size = c.getModels().size();
                     for (int i = 0; i < size; i++) {
-                        List<FacialPoint> facialPoints = tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
-                                tc.getProject().getSelectedOneToManyComparison().getModels().get(i).getName());
+                        List<FacialPoint> facialPoints = c.getFacialPoints(
+                                c.getModels().get(i).getName());
                         list.add(facialPoints);
                     }
 
                     //Created list of points
                     Procrustes1ToMany procrustes = new Procrustes1ToMany(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints(),
-                            list, jCheckBox2.isSelected());
+                            list, c.isFpScaling());
 
-                    //String result = procrustes.compare1WithN(jSlider3.getValue() / 100f);
-                    String result = procrustes.compare1toN(jSlider3.getValue() / 100f, tc.getOneToManyViewerPanel().getListener1().getModel().getName(),
-                            tc.getProject().getSelectedOneToManyComparison().getModels());
-                    tc.getProject().getSelectedOneToManyComparison().setNumericalResults(result);
+                    String result = procrustes.compare1toN(c.getFpTreshold() / 100f, tc.getOneToManyViewerPanel().getListener1().getModel().getName(),
+                            c.getModels());
+                    c.setNumericalResults(result);
 
-                    // GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getCanvas2().setDescriptionText(result);
                     tc.getOneToManyViewerPanel().getListener2().setProcrustes(true);
 
                     PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), procrustes.getPa(), 1);
-                    /*tc.getOneToManyViewerPanel().getListener2().setTypePA(1);
-                    tc.getOneToManyViewerPanel().getListener2().setPa(procrustes.getPa());
-                    tc.getOneToManyViewerPanel().getListener2().setGpa(procrustes.getGpa());
-                    tc.getOneToManyViewerPanel().getListener2().setEnhance(0);*/
+ 
 
-                    if (jCheckBox2.isSelected()) {
+                    if (c.isFpScaling()) {
                         tc.getOneToManyViewerPanel().getListener2().setCameraPosition(0, 0, 700);
                         paInfo.setPointSize(30 * 3);
-                        //paInfo.setPointSize(30 / (float) (30));
-                        //tc.getOneToManyViewerPanel().getListener2().setFpSize(30 / (float) (30));
                     } else {
                         tc.getOneToManyViewerPanel().getListener2().setCameraPosition(0, 0, 700);
                         paInfo.setPointSize(30 * 3);
-                        //tc.getOneToManyViewerPanel().getListener2().setFpSize(30 * 3);
                     }
 
                     tc.getOneToManyViewerPanel().getListener2().setPaInfo(paInfo);
@@ -460,20 +459,16 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
                     repaint();
                 }
+                
+                //set up default comparison result values
+                OneToManyGUISetup.defaultValuesComparisonResults(c);
 
-                tc.getProject().getSelectedOneToManyComparison().setState(3);
-                tc.getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
-
-                /*if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
-                    tc.getProject().getSelectedOneToManyComparison().setResults(0);
-                } else if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
-                    tc.getProject().getSelectedOneToManyComparison().setResults(1);
-                }else{
-                    tc.getProject().getSelectedOneToManyComparison().setResults(2);
-                }*/
+                c.setState(3);
+               
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
                     GUIController.getConfigurationTopComponent().addOneToManyComparisonResults();
                 }
+                
                 GUIController.updateNavigator();
             }
         };
@@ -488,22 +483,22 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         
     }//GEN-LAST:event_processComparisonButtonActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+    private void compMethodComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compMethodComboBoxActionPerformed
+        if (((ComparisonMethod)compMethodComboBox.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
             jPanel2.setVisible(true);
             
             createAvgCheckBox.setVisible(false);
             createAvgLabel.setVisible(false);
         }
-        if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+        if (((ComparisonMethod)compMethodComboBox.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
             jPanel2.setVisible(false);
             
             createAvgCheckBox.setVisible(true);
             createAvgLabel.setVisible(true);
         }
 
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod)jComboBox1.getSelectedItem());
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod)compMethodComboBox.getSelectedItem());
+    }//GEN-LAST:event_compMethodComboBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
    
@@ -536,9 +531,9 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel());
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
-    public boolean getScaleEnabled() {
-        return jCheckBox2.isSelected();
-    }
+    private void createAvgCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAvgCheckBoxActionPerformed
+       GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setCreateAvgFace(createAvgCheckBox.isSelected());
+    }//GEN-LAST:event_createAvgCheckBoxActionPerformed
 
     public void setProcessComparisonEnabled(boolean en) {
         processComparisonButton.setEnabled(en);
@@ -560,52 +555,42 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         
         return strResults.toString();
     }
-    
-      private void setupComparisonMethods(OneToManyComparison c){
-        jComboBox1.removeAllItems();
-        for (int i = 0; i < ComparisonMethod.values().length; i++) {
-            jComboBox1.addItem(ComparisonMethod.values()[i]);
-            if(c.getComparisonMethod()==ComparisonMethod.values()[i]){
-                jComboBox1.setSelectedIndex(i);
-            }
-        }
-        
-        /*createAvgCheckBox.setSelected(c.isCreateAvgFace());
-        if((c.getRegistrationMethod() == 0)){
-            jComboBox1.removeItemAt(0);
-        }*/
-        if((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)){
-            jComboBox1.removeItemAt(1);
-        }
-        
-    }
 
     public void setConfiguration() {
         OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
+        
+        //because some items might need to be removed based on the mode later
+        compMethodComboBox.setModel(new DefaultComboBoxModel(ComparisonMethod.values()));
+        
         if(c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES){
             exportLandmarksButton.setVisible(true);
         }else{
             exportLandmarksButton.setVisible(false);
         }
-        
-        OneToManyGUISetup.defaultValuesComparisonConfiguration(jComboBox1, createAvgCheckBox, jCheckBox2, jSlider3);
-        
-        //jCheckBox2.setSelected(c.isFpScaling());
-        setupComparisonMethods(c);
-        //jSlider3.setValue(c.getFpTreshold());
+                
+        compMethodComboBox.setSelectedItem(c.getComparisonMethod());
+        createAvgCheckBox.setSelected(c.isCreateAvgFace());
+        fpScalingCheckBox.setSelected(c.isFpScaling());
+        fpThresholdSlider.setValue(c.getFpTreshold());
+
+         if((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)){
+            compMethodComboBox.removeItemAt(1);
+        }
+         
         processComparisonButton.setEnabled(c.isCompareButtonEnabled());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox compMethodComboBox;
     private javax.swing.JCheckBox createAvgCheckBox;
     private javax.swing.JLabel createAvgLabel;
     private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JCheckBox fpScalingCheckBox;
+    private javax.swing.JSlider fpThresholdSlider;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -616,7 +601,6 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSlider jSlider3;
     private javax.swing.JButton processComparisonButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -439,6 +439,48 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
+        
+        comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
+        
+        comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
+        
+        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
+        
+        comparisonE.setAttribute("crossCutPlaneIndex", String.valueOf(comparison.getCrossCutPlaneIndex()));
+        
+        comparisonE.setAttribute("arbitraryPlanePosX", String.valueOf(comparison.getArbitraryPlanePos().x));
+        
+        comparisonE.setAttribute("arbitraryPlanePosY", String.valueOf(comparison.getArbitraryPlanePos().y));
+        
+        comparisonE.setAttribute("arbitraryPlanePosZ", String.valueOf(comparison.getArbitraryPlanePos().z));
+        
+        comparisonE.setAttribute("planePosX", String.valueOf(comparison.getPlanePosition().x));
+        
+        comparisonE.setAttribute("planePosY", String.valueOf(comparison.getPlanePosition().y));
+        
+        comparisonE.setAttribute("planePosZ", String.valueOf(comparison.getPlanePosition().z));
+        
+        comparisonE.setAttribute("crosscutSize", String.valueOf(comparison.getCrosscutSize()));
+        
+        comparisonE.setAttribute("crosscutThickness", String.valueOf(comparison.getCrosscutThickness()));
+        
+        comparisonE.setAttribute("crosscutColor", String.valueOf(comparison.getCrosscutColor().getRGB()));
+        
+        comparisonE.setAttribute("highlightCuts", String.valueOf(comparison.isHighlightCuts()));
+        
+        comparisonE.setAttribute("showVectors", String.valueOf(comparison.isShowVectors()));
+        
+        comparisonE.setAttribute("allCuts", String.valueOf(comparison.isAllCuts()));
+        
+        comparisonE.setAttribute("samplingRays", String.valueOf(comparison.isSamplingRays()));
+        
+        comparisonE.setAttribute("vectorDensity", String.valueOf(comparison.getVectorDensity()));
+        
+        comparisonE.setAttribute("vectorLength", String.valueOf(comparison.getVectorLength()));
+        
+        comparisonE.setAttribute("cylinderRadius", String.valueOf(comparison.getCylinderRadius()));
+        
+        comparisonE.setAttribute("colorScheme", String.valueOf(comparison.getUsedColorScheme()));
 
         zipDirectory(auxFile, null);
 

@@ -30,6 +30,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
+import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.procrustes.PApainting;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
@@ -776,6 +777,116 @@ public final class OpenProject implements ActionListener {
         if (attr != null && !attr.isEmpty()) {
             comparison.setMetricTypeIndex(Integer.parseInt(attr));
         }
+        attr = projectE.getAttribute("continueComparison");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setContinueComparison(Boolean.parseBoolean(attr));
+        }
+        attr = projectE.getAttribute("firstCreated");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setFirstCreated(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("visualization");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setVisualization(VisualizationType.valueOf(attr));
+        }
+        
+        attr = projectE.getAttribute("crossCutPlaneIndex");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setCrossCutPlaneIndex(Integer.parseInt(attr));
+        }
+        
+        Vector3f v = new Vector3f();
+        attr = projectE.getAttribute("arbitraryPlanePosX");
+        if (attr != null && !attr.isEmpty()) {
+            v.x = Float.parseFloat(attr);
+        }
+        
+        attr = projectE.getAttribute("arbitraryPlanePosY");
+        if (attr != null && !attr.isEmpty()) {
+            v.y = Float.parseFloat(attr);
+        }
+        
+        attr = projectE.getAttribute("arbitraryPlanePosZ");
+        if (attr != null && !attr.isEmpty()) {
+            v.z = Float.parseFloat(attr);
+        }
+        
+        comparison.setArbitraryPlanePos(v);
+        
+        v = new Vector3f();
+        attr = projectE.getAttribute("planePosX");
+        if (attr != null && !attr.isEmpty()) {
+            v.x = Float.parseFloat(attr);
+        }
+        
+        attr = projectE.getAttribute("planePosY");
+        if (attr != null && !attr.isEmpty()) {
+            v.y = Float.parseFloat(attr);
+        }
+        
+        attr = projectE.getAttribute("planePosZ");
+        if (attr != null && !attr.isEmpty()) {
+            v.z = Float.parseFloat(attr);
+        }
+        
+        comparison.setPlanePosition(v);
+        
+        attr = projectE.getAttribute("crosscutSize");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setCrosscutSize(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("crosscutThickness");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setCrosscutThickness(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("crosscutColor");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setCrosscutColor(new Color(Integer.parseInt(attr)));
+        }
+        
+        attr = projectE.getAttribute("highlightCuts");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setHighlightCuts(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("showVectors");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setShowVectors(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("allCuts");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setAllCuts(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("samplingRays");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setSamplingRays(Boolean.parseBoolean(attr));
+        }
+        
+        attr = projectE.getAttribute("vectorDensity");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setVectorDensity(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("vectorLength");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setVectorLength(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("cylinderRadius");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setCylinderRadius(Integer.parseInt(attr));
+        }
+        
+        attr = projectE.getAttribute("colorScheme");
+        if (attr != null && !attr.isEmpty()) {
+            comparison.setUsedColorScheme(ColorScheme.valueOf(attr));
+        }  
+        
 
         if (primaryE != null) {
             Element modelE = (Element) primaryE.getElementsByTagName("model").item(0);

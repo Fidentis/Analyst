@@ -1174,6 +1174,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         }else{
             exportLandmarksButton.setVisible(false);
         }
+        
+        //because some items need to be dynamically added/removed
+        compMethodComboBox.setModel(new DefaultComboBoxModel(ComparisonMethod.values()));
  
         
         //use database currently unavailable
