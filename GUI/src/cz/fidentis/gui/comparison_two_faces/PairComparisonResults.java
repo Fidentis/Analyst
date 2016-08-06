@@ -977,14 +977,14 @@ public class PairComparisonResults extends javax.swing.JPanel {
         float maxUsedValues;
         List<Float> list;
 
-        if (valuesComboBox.getSelectedIndex() == 0) {
+        if (getContext().getValuesTypeIndex() == 0) {
             list = getContext().getSortedHdValuesRelative();
         } else {
             list = getContext().getSortedHdValuesAbs();
         }
 
         int size = list.size();
-        int index = (int) (size * (maxThresholdSlider.getValue() / 100f));
+        int index = (int) (size * (getContext().getHausdorfMaxTreshold() / 100f));
 
         if (index == 0) {
             maxUsedValues = list.get(0);
@@ -1003,7 +1003,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         List<Float> list;
 
-        if (valuesComboBox.getSelectedIndex() == 0) {
+        if (getContext().getValuesTypeIndex() == 0) {
             list = getContext().getSortedHdValuesRelative();
         } else {
             list = getContext().getSortedHdValuesAbs();
@@ -1012,7 +1012,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         int size = list.size();
 
         float minUsedValues;
-        int index2 = (int) (size * (minThreshSlider.getValue() / 100f));
+        int index2 = (int) (size * (getContext().getHausdorfMinTreshold() / 100f));
 
         if (index2 == 0) {
             minUsedValues = list.get(0);
@@ -1134,7 +1134,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
             @Override
             public void run() {
                 ProgressHandle p;
-                Comparison2Faces c = tc.getProject().getSelectedComparison2Faces();
+                Comparison2Faces c = getContext();
                 List<Float> hdDistance = c.getHd();
                 List<Float> thresholdedValues;
                 p = ProgressHandleFactory.createHandle("Recomputing comparison...");
@@ -1144,7 +1144,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
                     p.start();
 
-                    if (valuesComboBox.getSelectedIndex() == 1) {         //absolute is set
+                    if (c.getValuesTypeIndex() == 1) {         //absolute is set
                         List<Float> absolute = new ArrayList<Float>();
                         for (Float hdDistance1 : hdDistance) {
                             absolute.add(Math.abs(hdDistance1));
@@ -1174,13 +1174,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
                     String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);
                     
-                    /*tc.getProject().getSelectedComparison2Faces().setLowerHDTreshold(((Integer) minThreshSpinner.getValue()) / 100f);
-                    tc.getProject().getSelectedComparison2Faces().setUpperHDTreshold(((Integer) maxThresholdSpinner.getValue()) / 100f);*/
-                    
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
                     c.setNumericalResults(res);
-                    //c.setValuesTypeIndex(valuesComboBox.getSelectedIndex());
                     p.finish();
 
                     /*if (GUIController.getSelectedProjectTopComponent() == tc) {
@@ -1268,15 +1264,14 @@ public class PairComparisonResults extends javax.swing.JPanel {
             updateHistograms();
 
             //Setting density param 
-            ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-            HDpaintingInfo info = tc.getProject().getSelectedComparison2Faces().getHdPaintingInfo();
+            HDpaintingInfo info = c.getHdPaintingInfo();
 
             info.setvType(VisualizationType.VECTORS);
             info.setLenghtFactor(0.5f);
-            info.setDensity(density.getValue());
-            info.setCylLengthFactor(cylLength.getValue());
-            info.setCylRadius(cylRadius.getValue());
-            info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
+            info.setDensity(c.getVectorDensity());
+            info.setCylLengthFactor(c.getVectorLength());
+            info.setCylRadius(c.getCylinderRadius());
+            info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(c.getVectorDensity()));
             info.setRecompute(true);   
         }
         
@@ -1412,7 +1407,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
-        List<Float> l = valuesComboBox.getSelectedIndex() == 0 ? getContext().getSortedHdValuesRelative() : getContext().getSortedHdValuesAbs();
+        List<Float> l = getContext().getValuesTypeIndex() == 0 ? getContext().getSortedHdValuesRelative() : getContext().getSortedHdValuesAbs();
         int count = 0;
         int count2 = 0;
         for (int i = 0; i < l.size(); i++) {
@@ -1426,9 +1421,11 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
         float percent = count / (float) l.size();
         maxThresholdSlider.setValue((int) (percent * 100));
+        getContext().setHausdorfMaxTreshold((int) (percent * 100));
 
         float percent2 = count2 / (float) l.size();
         minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        getContext().setHausdorfMinTreshold(100 - (int) (percent2 * 100));
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void colorSchemeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorSchemeComboBoxActionPerformed

@@ -878,6 +878,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
+                    Comparison2Faces c = getContext();
+                    
                     calculatePointsButton.setEnabled(false);
                     FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
                             jButton1, exportPointsButton, calculatePointsButton);
@@ -885,8 +887,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
                     tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
                     
-                    getContext().setMainFp(res.getMainFps());
-                    getContext().setSecondaryFp(res.getSecondaryFps());
+                    c.setMainFp(res.getMainFps());
+                    c.setSecondaryFp(res.getSecondaryFps());
                 }
             };
 

@@ -865,15 +865,16 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(getContext().getModels(), 
+                    OneToManyComparison c = getContext();
+                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
                     tc.getOneToManyViewerPanel().getListener1().getModel());
             
-                    getContext().setFacialPoints(res.getFacialPoints());
-                    getContext().setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
+                    c.setFacialPoints(res.getFacialPoints());
+                    c.setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
                     tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
                     
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
-                        getContext().getFacialPoints(
+                        c.getFacialPoints(
                                 tc.getOneToManyViewerPanel().getListener2().getModel().getName()
                         ));
             
@@ -1021,9 +1022,9 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     }
 
                     if (c.isFpScaling()) {
-                        tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(fpSizeSlider.getValue() / 30f);
+                        tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(c.getFpSize() / 30f);
 
-                        tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 30f);
+                        tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(c.getFpSize() / 30f);
                     }
 
                     ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");

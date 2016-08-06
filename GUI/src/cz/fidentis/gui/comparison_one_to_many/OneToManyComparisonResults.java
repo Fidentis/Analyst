@@ -1506,8 +1506,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     private void fpDistanceSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpDistanceSliderStateChanged
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getPaInfo().setEnhance(fpDistanceSlider.getValue());
-
-        //GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setEnhance(jSlider2.getValue());
         repaint();
         getContext().setFpDistance(fpDistanceSlider.getValue());
     }//GEN-LAST:event_fpDistanceSliderStateChanged
@@ -1834,7 +1832,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_metricComboBoxActionPerformed
 
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
-        List<Float> l = valuesComboBox.getSelectedIndex() == 0 ? getContext().getSortedHdRel() : getContext().getSortedHdAbs();
+        List<Float> l = getContext().getValuesTypeIndex() == 0 ? getContext().getSortedHdRel() : getContext().getSortedHdAbs();
         int count = 0;
         int count2 = 0;
         for (int i = 0; i < l.size(); i++) {
@@ -1848,9 +1846,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         }
         float percent = count / (float) l.size();
         maxThresholdSlider.setValue((int) (percent * 100));
+        getContext().setHausdorfMaxTreshold((int) (percent * 100));
+        
 
         float percent2 = count2 / (float) l.size();
         minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        getContext().setHausdorfMinTreshold(100 - (int) (percent2 * 100));
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void heatplotButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButton1ActionPerformed

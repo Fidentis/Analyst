@@ -305,8 +305,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             @Override
             public void run() {
                 
-                ComparisonMethod usedCM = getContext().getComparisonMethod();
                 OneToManyComparison c = getContext();
+                ComparisonMethod usedCM = c.getComparisonMethod();                
                 
                 if (usedCM == ComparisonMethod.HAUSDORFF_DIST
                         || usedCM == ComparisonMethod.HAUSDORFF_CURV) {
@@ -354,7 +354,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         }
                         KdTree templateTree;
                         List<Float> var;
-                        getContext().setAvgFace(template);
+                        c.setAvgFace(template);
 
                         if (usedCM == ComparisonMethod.HAUSDORFF_DIST) {
 
@@ -367,7 +367,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                             results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, usedCM);
                         } else {
                             templateTree = new KdTreeIndexed(template.getVerts());
-                            getContext().setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
+                            c.setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
 
                             Curvature_jv mainCurv = new Curvature_jv(mainF);
                             results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true,
@@ -584,7 +584,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             compMethodComboBox.removeItemAt(1);
         }
          
-        processComparisonButton.setEnabled(getContext().isCompareButtonEnabled());
+        processComparisonButton.setEnabled(c.isCompareButtonEnabled());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
