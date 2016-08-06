@@ -47,7 +47,7 @@ import org.openide.util.Exceptions;
  * @author Katka
  */
 public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
-
+    
     /**
      * Creates new form RegistrationConfiguration
      */
@@ -837,13 +837,13 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             icpPanel.setVisible(false);
             registerButton.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
         }
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setRegistrationMethod((RegistrationMethod) regMethodComboBox.getSelectedItem());
+        getContext().setRegistrationMethod((RegistrationMethod) regMethodComboBox.getSelectedItem());
 
     }//GEN-LAST:event_regMethodComboBoxActionPerformed
 
     private void fpShowInfoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpShowInfoCheckBoxActionPerformed
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().showInfo(fpShowInfoCheckBox.isSelected());
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setShowPointInfo(fpShowInfoCheckBox.isSelected());
+        getContext().setShowPointInfo(fpShowInfoCheckBox.isSelected());
     }//GEN-LAST:event_fpShowInfoCheckBoxActionPerformed
 
     private void fpColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fpColorPanelMouseClicked
@@ -865,15 +865,15 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(tc.getProject().getSelectedOneToManyComparison().getModels(), 
+                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(getContext().getModels(), 
                     tc.getOneToManyViewerPanel().getListener1().getModel());
             
-                    tc.getProject().getSelectedOneToManyComparison().setFacialPoints(res.getFacialPoints());
-                    tc.getProject().getSelectedOneToManyComparison().setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
+                    getContext().setFacialPoints(res.getFacialPoints());
+                    getContext().setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
                     tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
                     
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
-                        tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
+                        getContext().getFacialPoints(
                                 tc.getOneToManyViewerPanel().getListener2().getModel().getName()
                         ));
             
@@ -915,7 +915,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        final OneToManyComparison c = tc.getProject().getSelectedOneToManyComparison();
+        final OneToManyComparison c = getContext();
         registerButton.setEnabled(false);
         Runnable run = new Runnable() {
 
@@ -966,12 +966,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         results = SurfaceComparisonProcessing.instance().processOneToMany(mainF, models, c.getICPmaxIteration(), c.getScaleEnabled(), c.getICPerrorRate(),
                                 m, t, value, c);
                         c.setRegisteredModels(results);
-                        /*c.setUseSymmetry(symModelsCheckbox.isSelected());
-                        tc.getProject().getSelectedOneToManyComparison().setIcpMetric(metric);
-                        tc.getProject().getSelectedOneToManyComparison().setMethod(m.ordinal());
-                        tc.getProject().getSelectedOneToManyComparison().setType(t.ordinal());
-                        tc.getProject().getSelectedOneToManyComparison().setValue(value);*/
-
+                        
                         p.finish();
                     } catch (Exception ex) {
                         registerButton.setEnabled(true);
@@ -1008,7 +1003,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     //clear all current Feature Points in listener
                     c.clearFacialPoints();
 
-                    for (int i = 0; i < tc.getProject().getSelectedOneToManyComparison().getPreregiteredModels().size(); i++) {
+                    for (int i = 0; i < c.getPreregiteredModels().size(); i++) {
      
                         c.getPreregiteredModels().get(i).setVerts(procrustes.getPa2().get(i).getVertices());
                         //add new rotated facial points
@@ -1099,7 +1094,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     }
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        OneToManyComparison c = tc.getProject().getSelectedOneToManyComparison();
+        OneToManyComparison c = getContext();
         List<FpModel> loaded = FPImportExport.instance().importPoints(tc, true);
         
         if(loaded == null || loaded.isEmpty()){
@@ -1173,7 +1168,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private void exportFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportFPButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         FPImportExport.instance().exportOneToMany(tc,
-                tc.getProject().getSelectedOneToManyComparison(),
+                getContext(),
                 tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel());
 
     }//GEN-LAST:event_exportFPButtonActionPerformed
@@ -1187,11 +1182,11 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_validateFPButtonActionPerformed
 
     private void icpErrorSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_icpErrorSpinnerStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setICPerrorRate((float) icpErrorSpinner.getValue());
+        getContext().setICPerrorRate((float) icpErrorSpinner.getValue());
     }//GEN-LAST:event_icpErrorSpinnerStateChanged
 
     private void maxIterationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxIterationSpinnerStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setICPmaxIteration((int) maxIterationSpinner.getValue());
+        getContext().setICPmaxIteration((int) maxIterationSpinner.getValue());
     }//GEN-LAST:event_maxIterationSpinnerStateChanged
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -1204,38 +1199,38 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void icpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpScaleCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setScaleEnabled(icpScaleCheckBox.isSelected());
+        getContext().setScaleEnabled(icpScaleCheckBox.isSelected());
     }//GEN-LAST:event_icpScaleCheckBoxActionPerformed
 
     private void fpScaleCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpScaling(fpScaleCheckBox.isSelected());
+        getContext().setFpScaling(fpScaleCheckBox.isSelected());
     }//GEN-LAST:event_fpScaleCheckBoxStateChanged
 
     private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpTreshold(fpThresholdSlider.getValue());
+        getContext().setFpTreshold(fpThresholdSlider.getValue());
     }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void percentageRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percentageRadioButtonActionPerformed
         percentageSpinner.setEnabled(true);
         numberSpinner.setEnabled(false);
         
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setType(Type.PERCENTAGE.ordinal());
+        getContext().setType(Type.PERCENTAGE.ordinal());
     }//GEN-LAST:event_percentageRadioButtonActionPerformed
 
     private void numberRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberRadioButtonActionPerformed
         percentageSpinner.setEnabled(false);
         numberSpinner.setEnabled(true);
         
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setType(Type.NUMBER.ordinal());
+       getContext().setType(Type.NUMBER.ordinal());
     }//GEN-LAST:event_numberRadioButtonActionPerformed
 
     private void percentageSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_percentageSpinnerStateChanged
-       GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setValue(Float.parseFloat(percentageSpinner.getValue().toString()));
+       getContext().setValue(Float.parseFloat(percentageSpinner.getValue().toString()));
     }//GEN-LAST:event_percentageSpinnerStateChanged
 
     private void numberSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numberSpinnerStateChanged
         if(numberSpinner.getValue() != null)
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setValue(Float.parseFloat(numberSpinner.getValue().toString()));
+            getContext().setValue(Float.parseFloat(numberSpinner.getValue().toString()));
     }//GEN-LAST:event_numberSpinnerStateChanged
 
     private void undersamplingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undersamplingComboBoxActionPerformed
@@ -1254,39 +1249,39 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             break;
         }
         
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setMethod(((Methods)undersamplingComboBox.getSelectedItem()).ordinal());
+        getContext().setMethod(((Methods)undersamplingComboBox.getSelectedItem()).ordinal());
     }//GEN-LAST:event_undersamplingComboBoxActionPerformed
 
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
+        getContext().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
 
     private void symModelsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModelsCheckboxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setUseSymmetry(symModelsCheckbox.isSelected());
+        getContext().setUseSymmetry(symModelsCheckbox.isSelected());
     }//GEN-LAST:event_symModelsCheckboxActionPerformed
 
     private void continueComparisonCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueComparisonCheckBoxActionPerformed
-       GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setContinueComparison(continueComparisonCheckBox.isSelected());
+       getContext().setContinueComparison(continueComparisonCheckBox.isSelected());
     }//GEN-LAST:event_continueComparisonCheckBoxActionPerformed
 
     private void radiusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radiusSliderStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setValue(radiusSlider.getValue());
+        getContext().setValue(radiusSlider.getValue());
     }//GEN-LAST:event_radiusSliderStateChanged
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setPointColor(fpColorPanel.getBackground());
+        getContext().setPointColor(fpColorPanel.getBackground());
     }
 
     private void setFacialPointRadius() {
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setFacialPointRadius(fpSizeSlider.getValue() / 10.0f);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 10.0f);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpSize(fpSizeSlider.getValue());
+        getContext().setFpSize(fpSizeSlider.getValue());
     }
 
     public void setConfiguration() {
-        OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
+        OneToManyComparison c = getContext();
         
         if(c.isFirstCreated())
             OneToManyGUISetup.setUpDefaultRegistrationData(c);
@@ -1341,6 +1336,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         }
  
 
+    }
+    
+    private OneToManyComparison getContext(){
+        return GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
     }
     
  

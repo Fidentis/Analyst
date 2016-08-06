@@ -849,7 +849,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
                 break;
         }
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
+        getContext().setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
 
     }//GEN-LAST:event_methodComboboxActionPerformed
 
@@ -857,7 +857,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         //change listener to take info from Comparison2Faces where showInfo was used!
         
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().showInfo(showFpInfoCheckbox.isSelected());
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setShowPointInfo(showFpInfoCheckbox.isSelected());
+        getContext().setShowPointInfo(showFpInfoCheckbox.isSelected());
     }//GEN-LAST:event_showFpInfoCheckboxActionPerformed
 
     private void fpColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fpColorPanelMouseClicked
@@ -885,8 +885,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
                     tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
                     
-                    tc.getProject().getSelectedComparison2Faces().setMainFp(res.getMainFps());
-                    tc.getProject().getSelectedComparison2Faces().setSecondaryFp(res.getSecondaryFps());
+                    getContext().setMainFp(res.getMainFps());
+                    getContext().setSecondaryFp(res.getSecondaryFps());
                 }
             };
 
@@ -940,7 +940,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final Model mainFace = tc.getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
         final Model compareFace = tc.getViewerPanel_2Faces().getListener2().getModel(); //vedlajsi model v pravom panele
-        final Comparison2Faces c = tc.getProject().getSelectedComparison2Faces(); //data model
+        final Comparison2Faces c = getContext(); //data model
 
         jButton1.setEnabled(false);
         Runnable run = new Runnable() {
@@ -1016,8 +1016,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         c.getModel1().setVerts(procrustes.getPa().getVertices());
                         c.getModel2().setVerts(procrustes.getPa2().getVertices());
 
-                        tc.getViewerPanel_2Faces().getListener1().setModels(tc.getProject().getSelectedComparison2Faces().getModel1());
-                        tc.getViewerPanel_2Faces().getListener2().setModels(tc.getProject().getSelectedComparison2Faces().getModel2());
+                        tc.getViewerPanel_2Faces().getListener1().setModels(c.getModel1());
+                        tc.getViewerPanel_2Faces().getListener2().setModels(c.getModel2());
 
                         tc.getViewerPanel_2Faces().getListener1().setFacialPoints(procrustes.getPa().getFacialPoints());
                         tc.getViewerPanel_2Faces().getListener2().setFacialPoints(procrustes.getPa2().getFacialPoints());
@@ -1077,7 +1077,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 }
 
                 //c.setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
-                TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(tc.getProject().getSelectedComparison2Faces());
+                TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(c);
                 
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
                      GUIController.getConfigurationTopComponent().addComparisonComponent();
@@ -1189,47 +1189,47 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_validateButtonActionPerformed
 
     private void errorSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_errorSpinnerStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setICPerrorRate((float) errorSpinner.getValue());
+        getContext().setICPerrorRate((float) errorSpinner.getValue());
 
     }//GEN-LAST:event_errorSpinnerStateChanged
 
     private void maxIterSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxIterSpinnerStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setICPmaxIteration((int) maxIterSpinner.getValue());
+        getContext().setICPmaxIteration((int) maxIterSpinner.getValue());
 
     }//GEN-LAST:event_maxIterSpinnerStateChanged
 
     private void icpScaleCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpScaleCheckboxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setScaleEnabled(icpScaleCheckbox.isSelected());
+        getContext().setScaleEnabled(icpScaleCheckbox.isSelected());
     }//GEN-LAST:event_icpScaleCheckboxActionPerformed
 
     private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpTreshold(fpThresholdSlider.getValue());
+        getContext().setFpTreshold(fpThresholdSlider.getValue());
     }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void fpScaleCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpScaling(fpScaleCheckBox.isSelected());
+        getContext().setFpScaling(fpScaleCheckBox.isSelected());
     }//GEN-LAST:event_fpScaleCheckBoxStateChanged
 
     private void percentageJRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percentageJRadioActionPerformed
         percentageSpinner.setEnabled(true);
         numberSpinner.setEnabled(false);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setType(Type.PERCENTAGE.ordinal());
+       getContext().setType(Type.PERCENTAGE.ordinal());
     }//GEN-LAST:event_percentageJRadioActionPerformed
 
     private void numberJRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberJRadioActionPerformed
         percentageSpinner.setEnabled(false);
         numberSpinner.setEnabled(true);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setType(Type.NUMBER.ordinal());
+        getContext().setType(Type.NUMBER.ordinal());
     }//GEN-LAST:event_numberJRadioActionPerformed
 
     private void percentageSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_percentageSpinnerStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(Float.parseFloat(percentageSpinner.getValue().toString()));
+        getContext().setValue(Float.parseFloat(percentageSpinner.getValue().toString()));
     }//GEN-LAST:event_percentageSpinnerStateChanged
 
     private void numberSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numberSpinnerStateChanged
         //was messing up programme if value was taken directly
         if(numberSpinner.getValue() != null)
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(Float.parseFloat(numberSpinner.getValue().toString()));
+            getContext().setValue(Float.parseFloat(numberSpinner.getValue().toString()));
     }//GEN-LAST:event_numberSpinnerStateChanged
 
     private void undersamplingComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undersamplingComboboxActionPerformed
@@ -1249,37 +1249,37 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 break;
         }
         
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setMethod(undersamplingCombobox.getSelectedIndex());
+        getContext().setMethod(undersamplingCombobox.getSelectedIndex());
     }//GEN-LAST:event_undersamplingComboboxActionPerformed
 
     private void icpMetricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpMetricComboBoxActionPerformed
-       GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
+      getContext().setIcpMetric((ICPmetric) icpMetricComboBox.getSelectedItem());
     }//GEN-LAST:event_icpMetricComboBoxActionPerformed
 
     private void symModCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModCheckboxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setUseSymmetry(symModCheckbox.isSelected());
+        getContext().setUseSymmetry(symModCheckbox.isSelected());
     }//GEN-LAST:event_symModCheckboxActionPerformed
 
     private void undersamplingRadiusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_undersamplingRadiusSliderStateChanged
-       GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setValue(undersamplingRadiusSlider.getValue());
+       getContext().setValue(undersamplingRadiusSlider.getValue());
     }//GEN-LAST:event_undersamplingRadiusSliderStateChanged
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setPointColor(fpColorPanel.getBackground());
+        getContext().setPointColor(fpColorPanel.getBackground());
 
     }
 
     private void setFacialPointRadius() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFacialPointRadius(fpSizeSlider.getValue() / 10.0f);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 10.0f);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setFpSize(fpSizeSlider.getValue());
+        getContext().setFpSize(fpSizeSlider.getValue());
 
     }
 
 
     public void setConfiguration() {
-        Comparison2Faces c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
+        Comparison2Faces c = getContext();
         
         if(c.isFirstCreated())
             TwoFacesGUISetup.setUpDefaultRegistrationData(c);
@@ -1342,6 +1342,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             exportPointsButton.setEnabled(true);
         }
 
+    }
+    
+    private Comparison2Faces getContext(){
+        return GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces();
     }
 
     public void updateRegisterButtonEnabled() {

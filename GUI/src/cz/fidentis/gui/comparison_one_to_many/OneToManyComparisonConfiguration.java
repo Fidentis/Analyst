@@ -49,6 +49,7 @@ import org.openide.util.Exceptions;
 public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
+    
 
     /**
      * Creates new form ComparisonConfiguration
@@ -291,11 +292,11 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpTreshold(fpThresholdSlider.getValue());
+        getContext().setFpTreshold(fpThresholdSlider.getValue());
     }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void fpScalingCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpScalingCheckBoxStateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setFpScaling(fpScalingCheckBox.isSelected());
+        getContext().setFpScaling(fpScalingCheckBox.isSelected());
     }//GEN-LAST:event_fpScalingCheckBoxStateChanged
 
     public void computeComparison(final ProjectTopComponent tc){
@@ -303,10 +304,12 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
             @Override
             public void run() {
-                OneToManyComparison c = tc.getProject().getSelectedOneToManyComparison();
                 
-                if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST
-                        || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV) {
+                ComparisonMethod usedCM = getContext().getComparisonMethod();
+                OneToManyComparison c = getContext();
+                
+                if (usedCM == ComparisonMethod.HAUSDORFF_DIST
+                        || usedCM == ComparisonMethod.HAUSDORFF_CURV) {
                     //Computing Hausdorff Distance
 
                     ProgressHandle p;
@@ -332,7 +335,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                             mainF = ml.loadModel(c.getPrimaryModel().getFile(), false, false);
                         }
 
-                        boolean createAvg = createAvgCheckBox.isSelected();
+                        boolean createAvg = c.isCreateAvgFace();
                         c.setCreateAvgFace(createAvg);                        
                         
                         //TODO: pick which model is template?
@@ -351,9 +354,9 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         }
                         KdTree templateTree;
                         List<Float> var;
-                        c.setAvgFace(template);
+                        getContext().setAvgFace(template);
 
-                        if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
+                        if (usedCM == ComparisonMethod.HAUSDORFF_DIST) {
 
                             if (metric == ICPmetric.VERTEX_TO_VERTEX) {
                                 templateTree = new KdTreeIndexed(template.getVerts());
@@ -361,18 +364,17 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                                 templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
                             }
 
-                            results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, ComparisonMethod.HAUSDORFF_DIST);
-                            numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_DIST);
+                            results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, usedCM);
                         } else {
                             templateTree = new KdTreeIndexed(template.getVerts());
-                            c.setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
+                            getContext().setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
 
                             Curvature_jv mainCurv = new Curvature_jv(mainF);
                             results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true,
-                                    mainCurv.getCurvature(CurvatureType.Gaussian), ComparisonMethod.HAUSDORFF_CURV);
-                            numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, ComparisonMethod.HAUSDORFF_CURV);
-
+                                    mainCurv.getCurvature(CurvatureType.Gaussian), usedCM);
                         }
+                        
+                        numResults = SurfaceComparisonProcessing.instance().compareOneToManyNumeric(mainF, models, true, usedCM);
 
                         var = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, 1.f, 0.0f, 0, true);
                         List<Float> sortedResRes = SortUtils.instance().sortValues(results);
@@ -497,7 +499,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             createAvgLabel.setVisible(true);
         }
 
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setComparisonMethod((ComparisonMethod)compMethodComboBox.getSelectedItem());
+        getContext().setComparisonMethod((ComparisonMethod)compMethodComboBox.getSelectedItem());
     }//GEN-LAST:event_compMethodComboBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -509,35 +511,35 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
 
         model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getModel().getFile(), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setModels(model);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setState(1);
+        getContext().setState(1);
         GUIController.getConfigurationTopComponent().addOneToManyRegistrationComponent();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().saveRegisteredModelsOneToMany(tc, tc.getProject().getSelectedOneToManyComparison().getRegisteredModels(),
-                tc.getProject().getSelectedOneToManyComparison().getModels(), 
-                tc.getProject().getSelectedOneToManyComparison().getPrimaryModel(), "_1n");
+        ResultExports.instance().saveRegisteredModelsOneToMany(tc, getContext().getRegisteredModels(),
+                getContext().getModels(), 
+                getContext().getPrimaryModel(), "_1n");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void createAvgCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_createAvgCheckBoxStateChanged
-        // TODO add your handling code here:
+  
     }//GEN-LAST:event_createAvgCheckBoxStateChanged
 
     private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
      final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         FPImportExport.instance().exportOneToMany(tc,
-                tc.getProject().getSelectedOneToManyComparison(),
+                getContext(),
                 tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel());
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
     private void createAvgCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAvgCheckBoxActionPerformed
-       GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setCreateAvgFace(createAvgCheckBox.isSelected());
+       getContext().setCreateAvgFace(createAvgCheckBox.isSelected());
     }//GEN-LAST:event_createAvgCheckBoxActionPerformed
 
     public void setProcessComparisonEnabled(boolean en) {
         processComparisonButton.setEnabled(en);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setCompareButtonEnabled(en);
+        getContext().setCompareButtonEnabled(en);
     }
 
     private String setValues(List<Float> hdDistance, List<File> models, String mainFace, int varianceMethod) {
@@ -555,10 +557,15 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         
         return strResults.toString();
     }
+    
+    private OneToManyComparison getContext(){
+        return GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
+    }
 
     public void setConfiguration() {
-        OneToManyComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();
+        OneToManyComparison c = getContext();
         
+          
         //because some items might need to be removed based on the mode later
         compMethodComboBox.setModel(new DefaultComboBoxModel(ComparisonMethod.values()));
         
@@ -577,7 +584,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             compMethodComboBox.removeItemAt(1);
         }
          
-        processComparisonButton.setEnabled(c.isCompareButtonEnabled());
+        processComparisonButton.setEnabled(getContext().isCompareButtonEnabled());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
