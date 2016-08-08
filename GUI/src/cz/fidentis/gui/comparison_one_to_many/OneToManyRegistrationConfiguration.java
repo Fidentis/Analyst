@@ -1063,7 +1063,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     GUIController.getConfigurationTopComponent().addOneToManyComparisonComponent();
                 }
                 registerButton.setEnabled(true);
-                if (continueComparisonCheckBox.isSelected()) {
+                if (c.isContinueComparison()) {
                     GUIController.getConfigurationTopComponent().getOneToManyComparisonConfiguration().computeComparison(tc);
                 }
                 GUIController.updateNavigator();
