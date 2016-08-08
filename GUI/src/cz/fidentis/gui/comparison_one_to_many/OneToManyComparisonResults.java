@@ -973,7 +973,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addGap(8, 8, 8)
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, 0, 90, Short.MAX_VALUE)
+                        .addComponent(jComboBox1, 0, 92, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -1827,6 +1827,70 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         updateHistograms();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
 
+   /*  private void setupVisualizationControls() {
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+            colormapPanel.setVisible(true);
+            slicesPanel.setVisible(false);
+            densLabel.setVisible(false);
+            density.setVisible(false);
+            if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
+                tc.getViewerPanel_Batch().sliceViewerVisible(false);
+            }
+            tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.COLORMAP);
+
+        }
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+            densLabel.setVisible(true);
+            density.setVisible(true);
+            colormapPanel.setVisible(false);
+            slicesPanel.setVisible(false);
+            if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
+                tc.getViewerPanel_Batch().sliceViewerVisible(false);
+            }
+            tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.VECTORS);
+
+        }
+        if (VisualizationBox.getSelectedItem().equals(VisualizationType.CROSSSECTION.toString())) {
+            densLabel.setVisible(false);
+            density.setVisible(false);
+            colormapPanel.setVisible(false);
+            slicesPanel.setVisible(true);
+
+            tc.getViewerPanel_Batch().getListener2().removeModel();
+            tc.getViewerPanel_Batch().sliceViewerVisible(true);
+            tc.getViewerPanel_Batch().getListener2().setSecondaryListener(true);
+            tc.getViewerPanel_Batch().getListener2().setHdInfo(tc.getProject().getSelectedBatchComparison().getHDinfo());
+            tc.getViewerPanel_Batch().getListener2().setPaintHD(true);
+            tc.getViewerPanel_Batch().getListener().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()));
+            Runnable run = new Runnable() {
+
+                @Override
+                public void run() {
+                    ModelLoader l = new ModelLoader();
+                    ArrayList<Model> models = new ArrayList<>();
+                    models.add(tc.getProject().getSelectedBatchComparison().getAverageFace());
+                    List<File> md = tc.getProject().getSelectedBatchComparison().getRegistrationResults().size() > 0 ? tc.getProject().getSelectedBatchComparison().getRegistrationResults() : tc.getProject().getSelectedBatchComparison().getModels();
+                    for (int i = 0; i < md.size(); i++) {
+                        Model m = l.loadModel(md.get(i), false, false);
+                        models.add(m);
+                    }
+                    tc.getViewerPanel_Batch().getListener2().setModels(models);
+                    tc.getViewerPanel_Batch().getListener().setPrimaryModel();
+                    tc.getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+
+                    tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.CROSSSECTION);
+
+                }
+            };
+
+            Thread t = new Thread(run);
+            t.start();
+
+        }
+    }*/
+    
+    
     private void metricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metricComboBoxActionPerformed
           getContext().setMetricTypeIndex(metricComboBox.getSelectedIndex());
     }//GEN-LAST:event_metricComboBoxActionPerformed
