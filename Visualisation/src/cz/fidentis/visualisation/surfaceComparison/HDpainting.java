@@ -295,7 +295,7 @@ public class HDpainting {
             vecE.add(vecN);*/
 
             vecN.normalize();
-            vecN.scale(sig * info.getCylLengthFactor());
+            vecN.scale(sig * info.getCylLengthFactor() * info.getCylLengthFactor());
             vecE.add(vecN);
             
             //scale radius to 5th of previous size
