@@ -750,6 +750,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel2.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(continueComparisonCheckbox, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.continueComparisonCheckbox.text")); // NOI18N
+        continueComparisonCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                continueComparisonCheckboxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -794,7 +799,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(continueComparisonCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel5);
@@ -807,7 +812,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1021, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1000,9 +1005,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
 
-                        if (c.isContinueComparison()) {
-                            GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-                        }
+                      
                     } catch (Exception ex) {
                         Exceptions.printStackTrace(ex);
                         jButton1.setEnabled(true);
@@ -1057,9 +1060,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
-                    if (c.isContinueComparison()) {
-                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-                    }
+                    
 
                 } else {
 
@@ -1073,17 +1074,18 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
                     GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
 
-                    if (c.isContinueComparison()) {
-                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-                    }
+                   
                 }
 
-                //c.setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
                 TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(c);
                 
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
                      GUIController.getConfigurationTopComponent().addComparisonComponent();
                 }
+                
+                if (c.isContinueComparison()) {
+                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
+                    }
             }
 
         };
@@ -1265,6 +1267,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void undersamplingRadiusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_undersamplingRadiusSliderStateChanged
        getContext().setValue(undersamplingRadiusSlider.getValue());
     }//GEN-LAST:event_undersamplingRadiusSliderStateChanged
+
+    private void continueComparisonCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueComparisonCheckboxActionPerformed
+        getContext().setContinueComparison(continueComparisonCheckbox.isSelected());
+    }//GEN-LAST:event_continueComparisonCheckboxActionPerformed
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
