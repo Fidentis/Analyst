@@ -1861,6 +1861,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             density.setVisible(true);
             colorMapPanel.setVisible(false);
             slicesPanel.setVisible(false);
+            c.getHdPaintingInfo().setDensity(c.getVectorDensity());
+            c.getHdPaintingInfo().setCylLengthFactor(c.getVectorLength());
+            c.getHdPaintingInfo().setCylRadius(c.getCylinderRadius());
+            c.getHdPaintingInfo().setIndicesForNormals(c.getHdPaintingInfo().getGraph().indicesFordDensityNormals(c.getVectorDensity()));
+
+
+            tc.getOneToManyViewerPanel().getListener2().setHdInfo(c.getHdPaintingInfo());
 
             c.getHdPaintingInfo().setvType(VisualizationType.VECTORS);
             tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
@@ -1909,6 +1916,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             c.getHdPaintingInfo().setvType(VisualizationType.CROSSSECTION);
 
         }
+
     }
 
 

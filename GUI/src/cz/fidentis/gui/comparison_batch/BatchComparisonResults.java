@@ -1660,7 +1660,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         maxTresholdValueChanged = false;
     }
-    
+
     private void setMinThreshValue() {
 
         List<Float> list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getSortedHd();
@@ -1668,7 +1668,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         int size = list.size();
 
         float minUsedValues;
-         int index2 = (int) (size * (minThreshSlider.getValue() / 100f));
+        int index2 = (int) (size * (minThreshSlider.getValue() / 100f));
 
         if (index2 == 0) {
             minUsedValues = list.get(0);
@@ -1679,9 +1679,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setMinThreshValue(minUsedValues);
         minTresholdValueChanged = false;
     }
-    
-    
-    
+
+
     private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
 
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
@@ -1727,7 +1726,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     info.setUseRelative(jComboBox4.getSelectedIndex() == 0);
 
                     numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(tc.getProject().getSelectedBatchComparison().getHdCSVresults(),
-                            jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, 
+                            jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f,
                             (int) minThreshSpinner.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
                     tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().
                             batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels, (int) jSpinner1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f));
@@ -1743,7 +1742,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     updateHistograms();
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
-                }finally{
+                } finally {
                     p.finish();
                 }
             }
@@ -1815,6 +1814,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             density.setVisible(true);
             colormapPanel.setVisible(false);
             slicesPanel.setVisible(false);
+             tc.getProject().getSelectedBatchComparison().getHDinfo().setDensity(density.getValue());
+             tc.getProject().getSelectedBatchComparison().getHDinfo().setCylLengthFactor(cylLength.getValue());
+             tc.getProject().getSelectedBatchComparison().getHDinfo().setCylRadius(cylRadius.getValue());
+             tc.getProject().getSelectedBatchComparison().getHDinfo().setIndicesForNormals(tc.getProject().getSelectedBatchComparison().getHDinfo().getGraph().indicesFordDensityNormals(density.getValue()));
+
             if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
                 tc.getViewerPanel_Batch().sliceViewerVisible(false);
             }
@@ -2195,17 +2199,17 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         for (int i = 0; i < l.size(); i++) {
             if (l.get(i) <= GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMaxThreshValue()) {
                 count++;
-            } 
+            }
             if (l.get(i) >= GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMinThreshValue()) {
                 count2++;
-            } 
-            
+            }
+
         }
         float percent = count / (float) l.size();
         jSlider1.setValue((int) (percent * 100));
-        
+
         float percent2 = count2 / (float) l.size();
-        minThreshSlider.setValue(100- (int) (percent2 * 100));
+        minThreshSlider.setValue(100 - (int) (percent2 * 100));
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
@@ -2268,7 +2272,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_minThreshSliderStateChanged
 
     private void minThreshSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSpinnerStateChanged
-         if (!minTresholdValueChanged) {
+        if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfMinTreshold(Integer.valueOf(minThreshSpinner.getValue().toString()));
             minThreshSlider.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfMinTreshold());
@@ -2279,7 +2283,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
     private void jSlider4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider4StateChanged
-        plotsDrawingPanelBatchNumerical1.setPeakStrength(jSlider4.getValue()/(float)10);
+        plotsDrawingPanelBatchNumerical1.setPeakStrength(jSlider4.getValue() / (float) 10);
     }//GEN-LAST:event_jSlider4StateChanged
 
     public histogramPanel getHistogram() {
@@ -2349,7 +2353,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         histogram1.recomputeSliderPosition();
         histogram1.revalidate();
         histogram1.repaint();
-
 
     }
 
