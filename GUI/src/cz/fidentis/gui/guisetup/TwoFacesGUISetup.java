@@ -99,55 +99,6 @@ public class TwoFacesGUISetup {
        data.setFirstCreated(false);       
    }
    
-
-   //sets up overlay values from data model
-    private static void overlaySetup(JPanel primaryPanel, JCheckBox solidPrimary, JPanel secondaryPanel, JCheckBox secondarySolid, JPanel fogPanel, JSlider overlayTransparency, JCheckBox innerSurfaceSolid, JCheckBox useGlyphs, JCheckBox useContours
-            , JRadioButton noneFogging, JRadioButton colorOverlayFogging, JRadioButton transparencyFogging, JRadioButton innerSurfaceFogging, Comparison2Faces data) {
-        //overlay
-        primaryPanel.setBackground(data.getPrimaryColor());
-        solidPrimary.setSelected(data.isIsPrimarySolid());
-        secondaryPanel.setBackground(data.getSecondaryColor());
-        secondarySolid.setSelected(data.isIsSecondarySolid());
-        fogPanel.setBackground(data.getFogColor());
-        overlayTransparency.setValue((int) data.getOverlayTransparency());
-        innerSurfaceSolid.setSelected(data.isInnerSurfaceSolid());
-        useGlyphs.setSelected(data.isUseGlyphs());
-        useContours.setSelected(data.isUseContours());
-        
-        switch(data.getFogVersion()){
-            case 0:
-                noneFogging.setSelected(true);
-                break;
-            case 1:
-                colorOverlayFogging.setSelected(true);
-                break;
-            case 2:
-                transparencyFogging.setSelected(true);
-                break;
-            case 3:
-                innerSurfaceFogging.setSelected(true);
-                break;
-            default:
-                noneFogging.setSelected(true);
-        }
-    }
-    
-    //sets up gui values from data model
-    public static void setUpValuesCompConfiguration(JComboBox comparisonMethod, JCheckBox fpScaling, JCheckBox useDatabase, JSlider fpThreshold,
-           JPanel primaryPanel, JCheckBox solidPrimary, JPanel secondaryPanel, JCheckBox secondarySolid, JPanel fogPanel, JSlider overlayTransparency, 
-           JCheckBox innerSurfaceSolid, JCheckBox useGlyphs, JCheckBox useContours, JRadioButton noneFogging, JRadioButton colorOverlayFogging, JRadioButton transparencyFogging, JRadioButton innerSurfaceFogging,
-           Comparison2Faces data){
-        
-       comparisonMethod.setSelectedItem(data.getComparisonMethod());
-       
-       //FP
-       fpScaling.setSelected(data.isFpScaling());
-       useDatabase.setSelected(data.getUseDatabase() != 0);
-       fpThreshold.setValue(data.getFpTreshold());
-       
-       overlaySetup(primaryPanel, solidPrimary, secondaryPanel, secondarySolid, fogPanel, overlayTransparency, 
-           innerSurfaceSolid, useGlyphs, useContours, noneFogging, colorOverlayFogging, transparencyFogging, innerSurfaceFogging, data);
-    }
     
     //sets up default values to data model
     public static void setUpDefaultComparisonConfigurationData(Comparison2Faces data){
@@ -175,33 +126,6 @@ public class TwoFacesGUISetup {
        data.setUseContours(USE_COUNTOURS);
        data.setFogVersion(FOG_VERSION);
     }
-    
-    //sets up GUI for comparison results based on data information
-   public static void setUpComparisonResult(JComboBox visualization, JComboBox values, JSlider maxThresh, JSpinner maxThrehsSpinner,
-           JSlider minThresh, JSpinner minThreshSpinner, JComboBox colorScheme, JSlider vectorRadius, JSlider vectorLength, JSlider cylinderRadius,
-           JPanel primaryPanel, JCheckBox solidPrimary, JPanel secondaryPanel, JCheckBox secondarySolid, JPanel fogPanel, JSlider overlayTransparency, 
-           JCheckBox innerSurfaceSolid, JCheckBox useGlyphs, JCheckBox useContours, JRadioButton selectedFogging, JSlider fpDistance, JSlider fpSize, 
-           JRadioButton noneFogging, JRadioButton colorOverlayFogging, JRadioButton transparencyFogging, JRadioButton innerSurfaceFogging, Comparison2Faces data){
-       
-       visualization.setSelectedIndex(data.getVisualization());
-       values.setSelectedItem(data.getValuesTypeIndex());
-       
-       maxThresh.setValue(data.getHausdorfMaxTreshold());
-       maxThrehsSpinner.setValue(data.getHausdorfMaxTreshold());
-       minThresh.setValue(data.getHausdorfMinTreshold());
-       minThreshSpinner.setValue(data.getHausdorfMinTreshold());
-       
-       colorScheme.setSelectedIndex(data.getColorScheme());
-       vectorRadius.setValue(data.getVectorDensity());
-       vectorLength.setValue(data.getVectorLength());
-       cylinderRadius.setValue(data.getCylinderRadius());
-       
-       fpDistance.setValue(data.getFpDistance());
-       fpSize.setValue(data.getFpSize());
-       
-       overlaySetup(primaryPanel, solidPrimary, secondaryPanel, secondarySolid, fogPanel, overlayTransparency, innerSurfaceSolid, useGlyphs, useContours,
-               noneFogging, colorOverlayFogging, transparencyFogging, innerSurfaceFogging, data);   
-   }
    
    //sets up default comparison result data
    public static void setUpComparisonResultDefaultData(Comparison2Faces data){
