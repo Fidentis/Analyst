@@ -1161,7 +1161,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     }
                     if (VisualizationType.values()[c.getVisualization()] == VisualizationType.VECTORS) {
                         info.setvType(VisualizationType.VECTORS);
-                        info.setLenghtFactor(0.5f);
                     }
                     //Setting density param 
                     info.setDensity(density.getValue());
@@ -1267,7 +1266,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
             HDpaintingInfo info = c.getHdPaintingInfo();
 
             info.setvType(VisualizationType.VECTORS);
-            info.setLenghtFactor(0.5f);
             info.setDensity(c.getVectorDensity());
             info.setCylLengthFactor(c.getVectorLength());
             info.setCylRadius(c.getCylinderRadius());

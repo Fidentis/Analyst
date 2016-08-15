@@ -1324,11 +1324,15 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
            percentageSpinner.setValue(50);
            numberSpinner.setValue(0);
            numberSpinner.setEnabled(false);
+       }else{
+           percentageSpinner.setValue(50);
+           numberSpinner.setValue(50);
+           radiusSlider.setValue(50);
        }
        
        continueComparisonCheckBox.setSelected(c.isContinueComparison());
         
-        if ((regMethodComboBox.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
+        if ((c.getRegistrationMethod().ordinal() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
             registerButton.setEnabled(false);
             exportFPButton.setEnabled(false);
         } else {
@@ -1345,7 +1349,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     
  
     public void updateRegisterButtonEnabled() {
-        if ((regMethodComboBox.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
+        if ((getContext().getRegistrationMethod().ordinal() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
             registerButton.setEnabled(false);
             exportFPButton.setEnabled(false);
         } else {

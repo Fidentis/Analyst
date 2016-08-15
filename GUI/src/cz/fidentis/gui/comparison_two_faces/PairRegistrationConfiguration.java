@@ -1336,6 +1336,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
            percentageSpinner.setValue(50);
            numberSpinner.setValue(0);
            numberSpinner.setEnabled(false);
+       }else{
+           percentageSpinner.setValue(50);
+           numberSpinner.setValue(50);
+           undersamplingRadiusSlider.setValue(50);
        }
        
        continueComparisonCheckbox.setSelected(c.isContinueComparison());
