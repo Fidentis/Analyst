@@ -859,13 +859,15 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
     private void calculateFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateFPButtonActionPerformed
         if (areModelsLoaded(GUIController.getSelectedProjectTopComponent())) {
+            final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+            final OneToManyComparison c = getContext();
+            
             //calculatePoints();
             Runnable run = new Runnable() {
 
                 @Override
                 public void run() {
-                    final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-                    OneToManyComparison c = getContext();
+                    
                     FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
                     tc.getOneToManyViewerPanel().getListener1().getModel());
             

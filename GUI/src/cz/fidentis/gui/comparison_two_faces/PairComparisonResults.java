@@ -1129,12 +1129,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final Comparison2Faces c = getContext();
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
                 ProgressHandle p;
-                Comparison2Faces c = getContext();
+                
                 List<Float> hdDistance = c.getHd();
                 List<Float> thresholdedValues;
                 p = ProgressHandleFactory.createHandle("Recomputing comparison...");

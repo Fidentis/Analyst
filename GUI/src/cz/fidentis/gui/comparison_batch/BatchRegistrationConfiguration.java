@@ -410,11 +410,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel15.text")); // NOI18N
 
-        facesComboBox.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                facesComboBoxItemStateChanged(evt);
-            }
-        });
         facesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 facesComboBoxActionPerformed(evt);
@@ -872,12 +867,14 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     }
 
     private void registrationMethodComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrationMethodComboBoxActionPerformed
-        if (registrationMethodComboBox.getSelectedItem() == RegistrationMethod.PROCRUSTES) {
+        RegistrationMethod regMeth = (RegistrationMethod) registrationMethodComboBox.getSelectedItem();
+        
+        if (regMeth == RegistrationMethod.PROCRUSTES) {
             jPanel1.setVisible(true);
             jPanel3.setVisible(false);
             jButton1.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
             jButton7.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
-        } else if (registrationMethodComboBox.getSelectedItem() == RegistrationMethod.HAUSDORFF) {
+        } else if (regMeth == RegistrationMethod.HAUSDORFF) {
             jPanel1.setVisible(false);
             jPanel3.setVisible(true);
             jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
@@ -887,7 +884,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
         }
         
-        getContext().setRegistrationMethod((RegistrationMethod) registrationMethodComboBox.getSelectedItem());
+        getContext().setRegistrationMethod(regMeth);
 
     }//GEN-LAST:event_registrationMethodComboBoxActionPerformed
 
@@ -965,14 +962,17 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final BatchComparison c = getContext();
         jButton1.setEnabled(false);
-        tc.getProject().getSelectedBatchComparison().setRegisterButtonEnabled(false);
+        c.setRegisterButtonEnabled(false);
+        
+        
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
                 ProgressHandle p = ProgressHandleFactory.createHandle("Registrating faces...");
-                BatchComparison c = getContext();
+                
 
                 try {
                     if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
@@ -1318,10 +1318,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private void symModelsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_symModelsCheckboxActionPerformed
         getContext().setUseSymmetry(symModelsCheckbox.isSelected());
     }//GEN-LAST:event_symModelsCheckboxActionPerformed
-
-    private void facesComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_facesComboBoxItemStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_facesComboBoxItemStateChanged
 
     private void continueComparisonCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueComparisonCheckBoxActionPerformed
        getContext().setContinueComparison(continueComparisonCheckBox.isSelected());

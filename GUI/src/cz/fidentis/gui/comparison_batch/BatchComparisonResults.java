@@ -22,6 +22,7 @@ import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utils.SortUtils;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.histogram.histogramPanel;
+import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
@@ -1465,10 +1466,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void fpSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpSizeSliderStateChanged
         getContext().setFpSize(fpSizeSlider.getValue());
         
-        if(GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo() == null)
-            return;
-        
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(fpSizeSlider.getValue() * 3);
+        PApaintingInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo();
+        if(info == null)
+            info.setPointSize(fpSizeSlider.getValue() * 3);
         
     }//GEN-LAST:event_fpSizeSliderStateChanged
 
@@ -1691,12 +1691,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
 
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final BatchComparison c = getContext();
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
-                BatchComparison c = getContext();
-                
+                                
                 ProgressHandle p;
                 List<Float> variance;
                 HDpaintingInfo info;

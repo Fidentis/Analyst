@@ -300,12 +300,13 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_fpScalingCheckBoxStateChanged
 
     public void computeComparison(final ProjectTopComponent tc){
+        final OneToManyComparison c = getContext();
+        
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
                 
-                OneToManyComparison c = getContext();
                 ComparisonMethod usedCM = c.getComparisonMethod();                
                 
                 if (usedCM == ComparisonMethod.HAUSDORFF_DIST

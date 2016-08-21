@@ -276,13 +276,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     public void computeComparison(final ProjectTopComponent tc) {
-
+        final BatchComparison c = getContext();
+        
         Runnable run;
         run = new Runnable() {
 
             @Override
             public void run() {
-                BatchComparison c = getContext();
                 
                 processComparisonButton.setEnabled(false);
                 c.setCompareButtonEnabled(false);
@@ -511,8 +511,6 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         fpScaleCheckBox.setSelected(c.isFpScaling());
         jButton2.setVisible(reg == RegistrationMethod.HAUSDORFF);
         exportLandmarksButton.setVisible(reg == RegistrationMethod.PROCRUSTES);
-        /*fpScaleCheckBox.setVisible(reg == RegistrationMethod.PROCRUSTES);
-        fpThresholdSlider.setVisible(reg == RegistrationMethod.PROCRUSTES);*/
         
         procrustesPanel.setVisible(c.getComparisonMethod() == ComparisonMethod.PROCRUSTES);
         
