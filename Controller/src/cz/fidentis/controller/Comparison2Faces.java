@@ -6,10 +6,15 @@ import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.controller.ProjectTree.Node;
+import cz.fidentis.controller.data.ColormapData;
+import cz.fidentis.controller.data.TransparencyData;
+import cz.fidentis.controller.data.VectorsData;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.model.Model;
+import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
+import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
@@ -53,22 +58,7 @@ public class Comparison2Faces {
     
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
-    private Color hdColor1 = Color.green;           //redundant?
-    private Color hdColor2 = Color.red;
     
-    private Color primaryColor = new Color(51,153,255, 255);        //color for primary model when overlaid before comparison(blueish?)
-    private Color secondaryColor = new Color(255,255,0,255);        //color for secondary model when overlaid before comparison(yellow)
-    private boolean isPrimarySolid = false;
-    private boolean isSecondarySolid = false;
-    private Color fogColor;
-    private float overlayTransparency;
-    private boolean innerSurfaceSolid;
-    private boolean useGlyphs;
-    private boolean useContours;
-    private int fogVersion;
-    
-   private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
-    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private float lowerHDTreshold;
     private float upperHDTreshold;
     private boolean fpScaling;          //whether feature points are scaled or not
@@ -97,13 +87,37 @@ public class Comparison2Faces {
     private boolean firstCreated = true;
     
     //comparison results
-    private int visualization;
-    private int colorScheme;
-    private int vectorDensity;
-    private int vectorLength;
-    private int cylinderRadius;
+    private VisualizationType visualization;
+    
+    private TransparencyData transparencyViz = new TransparencyData();
+    private VectorsData vectorsViz = new VectorsData();
+    private ColormapData colormapViz = new ColormapData();
+    
+    
 
+    public TransparencyData getTransparencyViz() {
+        return transparencyViz;
+    }
 
+    public void setTransparencyViz(TransparencyData transparencyViz) {
+        this.transparencyViz = transparencyViz;
+    }
+
+    public VectorsData getVectorsViz() {
+        return vectorsViz;
+    }
+
+    public void setVectorsViz(VectorsData vectorsViz) {
+        this.vectorsViz = vectorsViz;
+    }
+
+    public ColormapData getColormapViz() {
+        return colormapViz;
+    }
+
+    public void setColormapViz(ColormapData colormapViz) {
+        this.colormapViz = colormapViz;
+    }
     
     public boolean isFirstCreated() {
         return firstCreated;
@@ -113,44 +127,44 @@ public class Comparison2Faces {
         this.firstCreated = firstCreated;
     }
 
-    public int getVisualization() {
+    public VisualizationType getVisualization() {
         return visualization;
     }
 
-    public void setVisualization(int visualization) {
+    public void setVisualization(VisualizationType visualization) {
         this.visualization = visualization;
     }
 
-    public int getColorScheme() {
-        return colorScheme;
+    public ColorScheme getColorScheme() {
+        return colormapViz.getUsedColorScheme();
     }
 
-    public void setColorScheme(int colorScheme) {
-        this.colorScheme = colorScheme;
+    public void setColorScheme(ColorScheme colorScheme) {
+        colormapViz.setUsedColorScheme(colorScheme);
     }
 
     public int getVectorDensity() {
-        return vectorDensity;
+        return vectorsViz.getVectorDensity();
     }
 
     public void setVectorDensity(int vectorDensity) {
-        this.vectorDensity = vectorDensity;
+        vectorsViz.setVectorDensity(vectorDensity);
     }
 
     public int getVectorLength() {
-        return vectorLength;
+        return vectorsViz.getVectorLength();
     }
 
     public void setVectorLength(int vectorLength) {
-        this.vectorLength = vectorLength;
+        vectorsViz.setVectorLength(vectorLength);
     }
 
     public int getCylinderRadius() {
-        return cylinderRadius;
+        return vectorsViz.getCylinderRadius();
     }
 
     public void setCylinderRadius(int cylinderRadius) {
-        this.cylinderRadius = cylinderRadius;
+        vectorsViz.setCylinderRadius(cylinderRadius);
     }
        
     
@@ -179,67 +193,67 @@ public class Comparison2Faces {
     }
 
     public boolean isIsPrimarySolid() {
-        return isPrimarySolid;
+        return transparencyViz.isIsPrimarySolid();
     }
 
     public void setIsPrimarySolid(boolean isPrimarySolid) {
-        this.isPrimarySolid = isPrimarySolid;
+        transparencyViz.setIsPrimarySolid(isPrimarySolid);
     }
 
     public boolean isIsSecondarySolid() {
-        return isSecondarySolid;
+        return transparencyViz.isIsSecondarySolid();
     }
 
     public void setIsSecondarySolid(boolean isSecondarySoldi) {
-        this.isSecondarySolid = isSecondarySoldi;
+        transparencyViz.setIsSecondarySolid(isSecondarySoldi);
     }
 
     public boolean isInnerSurfaceSolid() {
-        return innerSurfaceSolid;
+        return transparencyViz.isInnerSurfaceSolid();
     }
 
     public void setInnerSurfaceSolid(boolean innerSurfaceSolid) {
-        this.innerSurfaceSolid = innerSurfaceSolid;
+        transparencyViz.setInnerSurfaceSolid(innerSurfaceSolid);
     }  
 
     public int getFogVersion() {
-        return fogVersion;
+        return transparencyViz.getFogVersion();
     }
 
     public void setFogVersion(int fogVersion) {
-        this.fogVersion = fogVersion;
+        transparencyViz.setFogVersion(fogVersion);
     }
 
     public Color getFogColor() {
-        return fogColor;
+        return transparencyViz.getFogColor();
     }
 
     public void setFogColor(Color fogColor) {
-        this.fogColor = fogColor;
+        transparencyViz.setFogColor(fogColor);
     }
 
     public float getOverlayTransparency() {
-        return overlayTransparency;
+        return transparencyViz.getOverlayTransparency();
     }
 
     public void setOverlayTransparency(float overlayTransparency) {
-        this.overlayTransparency = overlayTransparency;
+        transparencyViz.setOverlayTransparency(overlayTransparency);
     }
 
     public boolean isUseGlyphs() {
-        return useGlyphs;
+        return transparencyViz.isUseGlyphs();
     }
 
     public void setUseGlyphs(boolean useGlyphs) {
-        this.useGlyphs = useGlyphs;
+        transparencyViz.setUseGlyphs(useGlyphs);
     }
 
     public boolean isUseContours() {
-        return useContours;
+        return transparencyViz.isUseContours();
     }
 
     public void setUseContours(boolean useContours) {
-        this.useContours = useContours;
+        transparencyViz.setUseContours(useContours);
     }
 
     public float getLowerHDTreshold() {
@@ -349,19 +363,19 @@ public class Comparison2Faces {
     }
 
     public Color getPrimaryColor() {
-        return primaryColor;
+        return transparencyViz.getPrimaryColor();
     }
 
     public void setPrimaryColor(Color primaryColor) {
-        this.primaryColor = primaryColor;
+        transparencyViz.setPrimaryColor(primaryColor);
     }
 
     public Color getSecondaryColor() {
-        return secondaryColor;
+        return transparencyViz.getSecondaryColor();
     }
 
     public void setSecondaryColor(Color secondaryColor) {
-        this.secondaryColor = secondaryColor;
+        transparencyViz.setSecondaryColor(secondaryColor);
     }
             
 
@@ -481,36 +495,20 @@ public class Comparison2Faces {
         this.pointColor = pointColor;
     }
 
-    public Color getHdColor1() {
-        return hdColor1;
-    }
-
-    public void setHdColor1(Color hdColor1) {
-        this.hdColor1 = hdColor1;
-    }
-
-    public Color getHdColor2() {
-        return hdColor2;
-    }
-
-    public void setHdColor2(Color hdColor2) {
-        this.hdColor2 = hdColor2;
-    }
-
    public int getHausdorfMaxTreshold() {
-        return hausdorfMaxTreshold;
+        return colormapViz.getHausdorfMaxTreshold();
     }
 
     public void setHausdorfMaxTreshold(int hausdorfTreshold) {
-        this.hausdorfMaxTreshold = hausdorfTreshold;
+        colormapViz.setHausdorfMaxTreshold(hausdorfTreshold);
     }
 
     public int getHausdorfMinTreshold() {
-        return hausdorfMinTreshold;
+        return colormapViz.getHausdorfMinTreshold();
     }
 
     public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
-        this.hausdorfMinTreshold = hausdorfMinTreshold;
+        colormapViz.setHausdorfMinTreshold(hausdorfMinTreshold);
     }   
 
     public boolean isFpScaling() {

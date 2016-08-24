@@ -1157,12 +1157,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     HDpaintingInfo info = c.getHdPaintingInfo();
 
                     // Setting visualization type
-                    if (VisualizationType.values()[c.getVisualization()] == VisualizationType.COLORMAP) {
+                    if (c.getVisualization() == VisualizationType.COLORMAP) {
                         info.setvType(VisualizationType.COLORMAP);
                     }
-                    if (VisualizationType.values()[c.getVisualization()] == VisualizationType.VECTORS) {
+                    if (c.getVisualization() == VisualizationType.VECTORS) {
                         info.setvType(VisualizationType.VECTORS);
                     }
+                    
                     //Setting density param 
                     info.setDensity(density.getValue());
                     info.setCylLengthFactor(cylLength.getValue());
@@ -1219,10 +1220,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if(c.getHdPaintingInfo() == null)
             return;
         
-        c.setVisualization(((VisualizationType)VisualizationBox.getSelectedItem()).ordinal());
+        c.setVisualization((VisualizationType)VisualizationBox.getSelectedItem());
 
         //Colormap
-        if (c.getVisualization() == VisualizationType.COLORMAP.ordinal()) {
+        if (c.getVisualization() == VisualizationType.COLORMAP) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1237,7 +1238,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
         
         //transparency
-        if (c.getVisualization() == VisualizationType.TRANSPARENCY.ordinal()) {
+        if (c.getVisualization() == VisualizationType.TRANSPARENCY) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1251,7 +1252,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
 
         //vectors
-        if (c.getVisualization() == VisualizationType.VECTORS.ordinal()) {
+        if (c.getVisualization() == VisualizationType.VECTORS) {
             densLabel.setVisible(true);
             density.setVisible(true);
             cylLength.setVisible(true);
@@ -1434,7 +1435,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if(bc.getHDP() == null)
             return;
         
-        bc.setColorScheme(((ColorScheme)colorSchemeComboBox.getSelectedItem()).ordinal());
+        bc.setColorScheme(((ColorScheme)colorSchemeComboBox.getSelectedItem()));
         bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
@@ -1509,7 +1510,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         result = c.getNumericalResults();
         
-       VisualizationBox.setSelectedIndex(c.getVisualization());
+       VisualizationBox.setSelectedItem(c.getVisualization());
        valuesComboBox.setSelectedItem(c.getValuesTypeIndex());
        
        maxThresholdSlider.setValue(c.getHausdorfMaxTreshold());
@@ -1517,7 +1518,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
        minThreshSlider.setValue(c.getHausdorfMinTreshold());
        minThreshSpinner.setValue(c.getHausdorfMinTreshold());
        
-       colorSchemeComboBox.setSelectedIndex(c.getColorScheme());
+       colorSchemeComboBox.setSelectedItem(c.getColorScheme());
        density.setValue(c.getVectorDensity());
        cylLength.setValue(c.getVectorLength());
        cylRadius.setValue(c.getCylinderRadius());
