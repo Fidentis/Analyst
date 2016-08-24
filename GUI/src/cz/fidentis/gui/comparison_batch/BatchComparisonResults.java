@@ -22,6 +22,7 @@ import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utils.SortUtils;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.histogram.histogramPanel;
+import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
@@ -69,12 +70,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }
 
     public void showProcrustesControls() {
-        jSpinner1.setVisible(false);
-        jSlider1.setVisible(false);
+        maxThresholdSpinner.setVisible(false);
+        maxThresholdSlider.setVisible(false);
         jLabel14.setVisible(false);
 
         jLabel13.setVisible(false);
-        jComboBox4.setVisible(false);
+        valuesComboBox.setVisible(false);
         jPanel1.setVisible(false);
         colormapPanel.setVisible(false);
         slicesPanel.setVisible(false);
@@ -84,23 +85,21 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jButton8.setVisible(false);
         exportDistToMeanButton.setVisible(true);
         exportSymetricResults.setVisible(false);
-        BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
-        jSlider2.setValue(c.getFpDistance());
-        sizeSlider.setValue(c.getFpSize());
+
         comparisonButton.setVisible(false);
         heatplotButton1.setVisible(false);
         heatplotButton.setVisible(false);
     }
 
     public void showHausdorfControls() {
-        jSpinner1.setVisible(true);
-        jSlider1.setVisible(true);
+        maxThresholdSpinner.setVisible(true);
+        maxThresholdSlider.setVisible(true);
         jLabel14.setVisible(true);
 
         jLabel13.setVisible(true);
-        jComboBox4.setVisible(true);
+        valuesComboBox.setVisible(true);
         jLabel13.setVisible(true);
-        jComboBox4.setVisible(true);
+        valuesComboBox.setVisible(true);
         jPanel1.setVisible(true);
         jPanel2.setVisible(false);
         jButton9.setVisible(true);
@@ -111,7 +110,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         comparisonButton.setVisible(true);
         heatplotButton1.setVisible(true);
         heatplotButton.setVisible(true);
-        setupVisualizationControls();
+        setupVisualizationControls(getContext().getVisualization());
 
     }
 
@@ -169,13 +168,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel(null);
-        jSlider1 = new javax.swing.JSlider();
-        jComboBox2 = new javax.swing.JComboBox();
+        maxThresholdSlider = new javax.swing.JSlider();
+        metricComboBox = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox();
+        valuesComboBox = new javax.swing.JComboBox();
         jLabel13 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        maxThresholdSpinner = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
         VisualizationBox = new javax.swing.JComboBox();
         density = new javax.swing.JSlider();
@@ -187,10 +186,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         minThreshSlider = new javax.swing.JSlider();
         minThreshSpinner = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
-        jSlider2 = new javax.swing.JSlider();
+        fpDistanceSlider = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
         sizeLabel = new javax.swing.JLabel();
-        sizeSlider = new javax.swing.JSlider();
+        fpSizeSlider = new javax.swing.JSlider();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -201,10 +200,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         exportSymetricResults = new javax.swing.JButton();
         slicesPanel = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
+        xyRadioButton = new javax.swing.JRadioButton();
+        yzRadioButton = new javax.swing.JRadioButton();
+        xzRadioButton = new javax.swing.JRadioButton();
+        arbitraryRadioButton = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
         normalSpinnerX = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
@@ -219,12 +218,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jSlider3 = new javax.swing.JSlider();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        crosscutSizeSlider = new javax.swing.JSlider();
+        highlightCutsCheckBox = new javax.swing.JCheckBox();
+        samplingRaysCheckBox = new javax.swing.JCheckBox();
+        allCutsCheckBox = new javax.swing.JCheckBox();
+        vectorsCheckBox = new javax.swing.JCheckBox();
+        showPlaneCheckBox = new javax.swing.JCheckBox();
         densLabel2 = new javax.swing.JLabel();
         densLabel1 = new javax.swing.JLabel();
         thickness = new javax.swing.JSlider();
@@ -236,7 +235,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         selectionButton = new javax.swing.JToggleButton();
         jButton11 = new javax.swing.JButton();
         jComboBox3 = new javax.swing.JComboBox();
-        jComboBox6 = new javax.swing.JComboBox();
+        colorSchemeComboBox = new javax.swing.JComboBox();
         jLabel21 = new javax.swing.JLabel();
         heatplotButton1 = new javax.swing.JButton();
         alignResButton = new javax.swing.JButton();
@@ -601,31 +600,31 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        jSlider1.setMajorTickSpacing(20);
-        jSlider1.setMinorTickSpacing(5);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
-        jSlider1.setValue(100);
-        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+        maxThresholdSlider.setMajorTickSpacing(20);
+        maxThresholdSlider.setMinorTickSpacing(5);
+        maxThresholdSlider.setPaintLabels(true);
+        maxThresholdSlider.setPaintTicks(true);
+        maxThresholdSlider.setValue(100);
+        maxThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider1StateChanged(evt);
+                maxThresholdSliderStateChanged(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Root Mean Square", "Arithmetic Mean", "Geometric Mean", "Minimal Distance", "Maximal Distance", "Variance", "75 percentil" }));
-        jComboBox2.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jComboBox2.toolTipText")); // NOI18N
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        metricComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Root Mean Square", "Arithmetic Mean", "Geometric Mean", "Minimal Distance", "Maximal Distance", "Variance", "75 percentil" }));
+        metricComboBox.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.metricComboBox.toolTipText")); // NOI18N
+        metricComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                metricComboBoxActionPerformed(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel14.text")); // NOI18N
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Relative", "Absolute" }));
-        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+        valuesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Relative", "Absolute" }));
+        valuesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox4ActionPerformed(evt);
+                valuesComboBoxActionPerformed(evt);
             }
         });
 
@@ -633,16 +632,16 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel4.text")); // NOI18N
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(100, 0, 100, 1));
-        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+        maxThresholdSpinner.setModel(new javax.swing.SpinnerNumberModel(100, 0, 100, 1));
+        maxThresholdSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinner1StateChanged(evt);
+                maxThresholdSpinnerStateChanged(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel3.text")); // NOI18N
 
-        VisualizationBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Color map", "Vectors", "Cross-sections" }));
+        VisualizationBox.setModel(new javax.swing.DefaultComboBoxModel(VisualizationType.values()));
         VisualizationBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VisualizationBoxActionPerformed(evt);
@@ -656,6 +655,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         density.setValue(10);
         density.setVisible(false);
         densLabel.setVisible(false);
+        density.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                densityStateChanged(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(densLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.densLabel.text")); // NOI18N
 
@@ -669,6 +673,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         cylLength.setSnapToTicks(true);
         cylLength.setValue(1);
         cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
+        cylLength.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cylLengthStateChanged(evt);
+            }
+        });
 
         cylRadius.setMajorTickSpacing(1);
         cylRadius.setMaximum(10);
@@ -678,6 +687,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         cylRadius.setValue(1);
         cylRadius.setVisible(false);
         cylRadiusLabel.setVisible(false);
+        cylRadius.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cylRadiusStateChanged(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(cylRadiusLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.cylRadiusLabel.text")); // NOI18N
 
@@ -721,11 +735,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(metricComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(valuesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -748,17 +762,17 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(metricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(valuesComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                     .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -782,14 +796,14 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jSlider2.setMajorTickSpacing(20);
-        jSlider2.setMinorTickSpacing(5);
-        jSlider2.setPaintLabels(true);
-        jSlider2.setPaintTicks(true);
-        jSlider2.setValue(0);
-        jSlider2.addChangeListener(new javax.swing.event.ChangeListener() {
+        fpDistanceSlider.setMajorTickSpacing(20);
+        fpDistanceSlider.setMinorTickSpacing(5);
+        fpDistanceSlider.setPaintLabels(true);
+        fpDistanceSlider.setPaintTicks(true);
+        fpDistanceSlider.setValue(0);
+        fpDistanceSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider2StateChanged(evt);
+                fpDistanceSliderStateChanged(evt);
             }
         });
 
@@ -797,16 +811,16 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(sizeLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.sizeLabel.text")); // NOI18N
 
-        sizeSlider.setMajorTickSpacing(20);
-        sizeSlider.setMaximum(50);
-        sizeSlider.setMinimum(10);
-        sizeSlider.setMinorTickSpacing(5);
-        sizeSlider.setPaintLabels(true);
-        sizeSlider.setPaintTicks(true);
-        sizeSlider.setValue(30);
-        sizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        fpSizeSlider.setMajorTickSpacing(20);
+        fpSizeSlider.setMaximum(50);
+        fpSizeSlider.setMinimum(10);
+        fpSizeSlider.setMinorTickSpacing(5);
+        fpSizeSlider.setPaintLabels(true);
+        fpSizeSlider.setPaintTicks(true);
+        fpSizeSlider.setValue(30);
+        fpSizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sizeSliderStateChanged(evt);
+                fpSizeSliderStateChanged(evt);
             }
         });
 
@@ -827,8 +841,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(fpSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fpDistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(sizeLabel))
                 .addContainerGap())
             .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -839,11 +853,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fpDistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fpSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton6))
         );
@@ -901,36 +915,36 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel8.text")); // NOI18N
 
-        buttonGroup1.add(jRadioButton1);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton1.text")); // NOI18N
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(xyRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(xyRadioButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.xyRadioButton.text")); // NOI18N
+        xyRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                xyRadioButtonActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jRadioButton5);
-        jRadioButton5.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton5.text")); // NOI18N
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(yzRadioButton);
+        yzRadioButton.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(yzRadioButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.yzRadioButton.text")); // NOI18N
+        yzRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
+                yzRadioButtonActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jRadioButton6);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton6.text")); // NOI18N
-        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(xzRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(xzRadioButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.xzRadioButton.text")); // NOI18N
+        xzRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton6ActionPerformed(evt);
+                xzRadioButtonActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jRadioButton7);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton7, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jRadioButton7.text")); // NOI18N
-        jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(arbitraryRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(arbitraryRadioButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.arbitraryRadioButton.text")); // NOI18N
+        arbitraryRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton7ActionPerformed(evt);
+                arbitraryRadioButtonActionPerformed(evt);
             }
         });
 
@@ -998,54 +1012,54 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel20, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel20.text")); // NOI18N
 
-        jSlider3.setMajorTickSpacing(10);
-        jSlider3.setMinimum(10);
-        jSlider3.setMinorTickSpacing(5);
-        jSlider3.setPaintLabels(true);
-        jSlider3.setPaintTicks(true);
-        jSlider3.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jSlider3.toolTipText")); // NOI18N
-        jSlider2.setValue(10);
-        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+        crosscutSizeSlider.setMajorTickSpacing(10);
+        crosscutSizeSlider.setMinimum(10);
+        crosscutSizeSlider.setMinorTickSpacing(5);
+        crosscutSizeSlider.setPaintLabels(true);
+        crosscutSizeSlider.setPaintTicks(true);
+        crosscutSizeSlider.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.crosscutSizeSlider.toolTipText")); // NOI18N
+        fpDistanceSlider.setValue(10);
+        crosscutSizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider3StateChanged(evt);
+                crosscutSizeSliderStateChanged(evt);
             }
         });
 
-        jCheckBox3.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox3.text")); // NOI18N
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+        highlightCutsCheckBox.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(highlightCutsCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.highlightCutsCheckBox.text")); // NOI18N
+        highlightCutsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
+                highlightCutsCheckBoxActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox5.text")); // NOI18N
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(samplingRaysCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.samplingRaysCheckBox.text")); // NOI18N
+        samplingRaysCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox5ActionPerformed(evt);
+                samplingRaysCheckBoxActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox4.text")); // NOI18N
-        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(allCutsCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.allCutsCheckBox.text")); // NOI18N
+        allCutsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox4ActionPerformed(evt);
+                allCutsCheckBoxActionPerformed(evt);
             }
         });
 
-        jCheckBox6.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox6.text")); // NOI18N
-        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+        vectorsCheckBox.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(vectorsCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.vectorsCheckBox.text")); // NOI18N
+        vectorsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox6ActionPerformed(evt);
+                vectorsCheckBoxActionPerformed(evt);
             }
         });
 
-        jCheckBox1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jCheckBox1.text")); // NOI18N
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        showPlaneCheckBox.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(showPlaneCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.showPlaneCheckBox.text")); // NOI18N
+        showPlaneCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                showPlaneCheckBoxActionPerformed(evt);
             }
         });
 
@@ -1102,7 +1116,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())
-                    .addComponent(jSlider3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(slicesPanelLayout.createSequentialGroup()
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1138,37 +1152,37 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
                                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton7)
+                                    .addComponent(arbitraryRadioButton)
                                     .addGroup(slicesPanelLayout.createSequentialGroup()
-                                        .addComponent(jRadioButton1)
+                                        .addComponent(xyRadioButton)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton5)
+                                        .addComponent(yzRadioButton)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton6))))
+                                        .addComponent(xzRadioButton))))
                             .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(slicesPanelLayout.createSequentialGroup()
                                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox3)
-                                    .addComponent(jCheckBox1))
+                                    .addComponent(highlightCutsCheckBox)
+                                    .addComponent(showPlaneCheckBox))
                                 .addGap(23, 23, 23)
                                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox5)
+                                    .addComponent(samplingRaysCheckBox)
                                     .addGroup(slicesPanelLayout.createSequentialGroup()
-                                        .addComponent(jCheckBox6)
+                                        .addComponent(vectorsCheckBox)
                                         .addGap(41, 41, 41)
-                                        .addComponent(jCheckBox4)))))
+                                        .addComponent(allCutsCheckBox)))))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         slicesPanelLayout.setVerticalGroup(
             slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(slicesPanelLayout.createSequentialGroup()
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
+                    .addComponent(xyRadioButton)
                     .addComponent(jLabel8)
-                    .addComponent(jRadioButton5)
-                    .addComponent(jRadioButton6))
+                    .addComponent(yzRadioButton)
+                    .addComponent(xzRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton7)
+                .addComponent(arbitraryRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(normalSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1189,7 +1203,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel20)
                 .addGap(2, 2, 2)
-                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(thickness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1200,13 +1214,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jCheckBox6)
-                    .addComponent(jCheckBox4))
+                    .addComponent(highlightCutsCheckBox)
+                    .addComponent(vectorsCheckBox)
+                    .addComponent(allCutsCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1)))
+                    .addComponent(samplingRaysCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showPlaneCheckBox)))
         );
 
         Hashtable<Integer, JLabel> labels =
@@ -1221,7 +1235,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         labels.put(80, new JLabel("8"));
         labels.put(90, new JLabel("9"));
         labels.put(100, new JLabel("10"));
-        jSlider3.setLabelTable(labels);
+        crosscutSizeSlider.setLabelTable(labels);
 
         org.openide.awt.Mnemonics.setLocalizedText(comparisonButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.comparisonButton.text")); // NOI18N
         comparisonButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1275,10 +1289,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
-        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
+        colorSchemeComboBox.setModel(new javax.swing.DefaultComboBoxModel(ColorScheme.values()));
+        colorSchemeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox6ActionPerformed(evt);
+                colorSchemeComboBoxActionPerformed(evt);
             }
         });
 
@@ -1294,7 +1308,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1310,7 +1324,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(histogram1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1436,45 +1450,41 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+    private void maxThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxThresholdSliderStateChanged
 
         if (!maxTresholdValueChanged) {
             maxTresholdValueChanged = true;
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfMaxTreshold(jSlider1.getValue());
-            jSpinner1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfMaxTreshold());
+            getContext().setHausdorfMaxTreshold(maxThresholdSlider.getValue());
+            maxThresholdSpinner.setValue(getContext().getHausdorfMaxTreshold());
 
             setMaxThreshValue();
         }
         updateHistograms();
 
-    }//GEN-LAST:event_jSlider1StateChanged
+    }//GEN-LAST:event_maxThresholdSliderStateChanged
 
-    private void sizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sizeSliderStateChanged
-        if (GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().getScaleEnabled()) {
-            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(sizeSlider.getValue() / (float) (30));
-            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFpSize(sizeSlider.getValue() / (float) (30));
+    private void fpSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpSizeSliderStateChanged
+        getContext().setFpSize(fpSizeSlider.getValue());
+        
+        PApaintingInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo();
+        if(info == null)
+            info.setPointSize(fpSizeSlider.getValue() * 3);
+        
+    }//GEN-LAST:event_fpSizeSliderStateChanged
 
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
-        } else {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setPointSize(sizeSlider.getValue() * 3);
-            //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFpSize(sizeSlider.getValue() * 3);
-        }
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setFpSize(sizeSlider.getValue());
-    }//GEN-LAST:event_sizeSliderStateChanged
-
-    private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider2StateChanged
+    private void fpDistanceSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpDistanceSliderStateChanged
         if (GUIController.getSelectedProjectTopComponent() != null) {
             if (GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo() != null) {
-                GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setEnhance(jSlider2.getValue());
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setEnhance(fpDistanceSlider.getValue());
             }
             //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setEnhance(jSlider2.getValue());
             repaint();
 
-            if (GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison() != null) {
-                GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setFpDistance(jSlider2.getValue());
+            if (getContext() != null) {
+                getContext().setFpDistance(fpDistanceSlider.getValue());
             }
         }
-    }//GEN-LAST:event_jSlider2StateChanged
+    }//GEN-LAST:event_fpDistanceSliderStateChanged
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         colorDialog.setVisible(false);
@@ -1483,15 +1493,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         colorDialog.setVisible(false);
         activeColorPanel.setBackground(jColorChooser1.getColor());
-
-        HDpaintingInfo hdp;
-
-        try {
-            hdp = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
-
-        } catch (NullPointerException ex) {
-            hdp = null;
-        }
 
         //    horizontalGradient1.repaint();
         histogramPanel1.repaint();
@@ -1582,20 +1583,21 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setState(2);
+        getContext().setState(2);
         GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setProcrustes(false);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().drawHD(false);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().sliceViewerVisible(false);
 
-        if (GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getAverageFace());
+        if (getContext().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(getContext().getAverageFace());
 
         } else {
             ModelLoader ml = new ModelLoader();
-            Model m = ml.loadModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModel(0), false, true);
+            Model m = ml.loadModel(getContext().getModel(0), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
-                    GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getFacialPoints(m.getName())
+                    getContext().getFacialPoints(m.getName())
             );
         }
 
@@ -1608,11 +1610,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             @Override
             public void run() {
+                BatchComparison c = getContext();
+                
                 final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-                ResultExports.instance().saveAuxBatch(tc, tc.getProject().getSelectedBatchComparison().getModels(),
-                        tc.getProject().getSelectedBatchComparison().getHdVisualResults(),
-                        jComboBox4.getSelectedIndex() == 0,
-                        tc.getProject().getSelectedBatchComparison().getHdCSVresults().getPath());
+                ResultExports.instance().saveAuxBatch(tc, c.getModels(),
+                        c.getHdVisualResults(),
+                        c.getValuesTypeIndex() == 0,
+                        c.getHdCSVresults().getPath());
 
             }
         };
@@ -1623,31 +1627,33 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().saveAvgFace(tc, tc.getProject().getSelectedBatchComparison().getAverageFace(),
+        ResultExports.instance().saveAvgFace(tc, getContext().getAverageFace(),
                 "_batch");
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        //GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setVariance(jComboBox2.getSelectedIndex());
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    private void metricComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metricComboBoxActionPerformed
+        getContext().setMetricTypeIndex(metricComboBox.getSelectedIndex());
+    }//GEN-LAST:event_metricComboBoxActionPerformed
 
-    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+    private void maxThresholdSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxThresholdSpinnerStateChanged
         if (!maxTresholdValueChanged) {
             maxTresholdValueChanged = true;
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfMaxTreshold(Integer.valueOf(jSpinner1.getValue().toString()));
-            jSlider1.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfMaxTreshold());
+            getContext().setHausdorfMaxTreshold(Integer.valueOf(maxThresholdSpinner.getValue().toString()));
+            maxThresholdSlider.setValue(getContext().getHausdorfMaxTreshold());
 
             setMaxThreshValue();
         }
         updateHistograms();
-    }//GEN-LAST:event_jSpinner1StateChanged
+    }//GEN-LAST:event_maxThresholdSpinnerStateChanged
 
     private void setMaxThreshValue() {
         float maxUsedValues;
-        List<Float> list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getSortedHd();
+        BatchComparison c = getContext();
+        
+        List<Float> list = c.getSortedHd();
 
         int size = list.size();
-        int index = (int) (size * (jSlider1.getValue() / 100f));
+        int index = (int) (size * (c.getHausdorfMaxTreshold() / 100f));
 
         if (index == 0) {
             maxUsedValues = list.get(0);
@@ -1655,19 +1661,20 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             maxUsedValues = list.get(index - 1);
         }
 
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setMaxThreshValue(maxUsedValues);
+        c.getHDinfo().setMaxThreshValue(maxUsedValues);
 
         maxTresholdValueChanged = false;
     }
     
     private void setMinThreshValue() {
+        BatchComparison c = getContext();
 
-        List<Float> list = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getSortedHd();
+        List<Float> list = c.getSortedHd();
 
         int size = list.size();
 
         float minUsedValues;
-         int index2 = (int) (size * (minThreshSlider.getValue() / 100f));
+         int index2 = (int) (size * (c.getHausdorfMinTreshold() / 100f));
 
         if (index2 == 0) {
             minUsedValues = list.get(0);
@@ -1675,7 +1682,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             minUsedValues = list.get(index2 - 1);
         }
 
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setMinThreshValue(minUsedValues);
+        c.getHDinfo().setMinThreshValue(minUsedValues);
         minTresholdValueChanged = false;
     }
     
@@ -1684,17 +1691,19 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
 
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final BatchComparison c = getContext();
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
+                                
                 ProgressHandle p;
                 List<Float> variance;
                 HDpaintingInfo info;
                 ArrayList<ArrayList<Float>> numResults;
                 List<Float> sortedHd;
-                List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
-                ArrayList<ArrayList<Float>> results = tc.getProject().getSelectedBatchComparison().getHdVisualResults();
+                List<File> originalModels = c.getModels();
+                ArrayList<ArrayList<Float>> results = c.getHdVisualResults();
 
                 p = ProgressHandleFactory.createHandle("Computing comparison...");
                 p.start();
@@ -1704,35 +1713,28 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         //TODO error
                     }
 
-                    info = tc.getProject().getSelectedBatchComparison().getHDinfo();
+                    info = c.getHDinfo();
 
-                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
-                        info.setvType(VisualizationType.COLORMAP);
-                    }
-                    if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
-                        info.setvType(VisualizationType.VECTORS);
-                        info.setLenghtFactor(3.0f);
-                    }
+                    info.setvType(c.getVisualization());
 
-                    info.setDensity(density.getValue());
-                    info.setCylLengthFactor(cylLength.getValue());
-                    info.setCylRadius(cylRadius.getValue());
-                    info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(density.getValue()));
+                    info.setDensity(c.getVectorDensity());
+                    info.setCylLengthFactor(c.getVectorLength());
+                    info.setCylRadius(c.getCylinderRadius());
+                    info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(c.getVectorDensity()));
                     info.setRecompute(true);
 
-                    variance = SurfaceComparisonProcessing.instance().computeVariation(results, jComboBox2.getSelectedIndex(), jComboBox4.getSelectedIndex() == 0);
+                    variance = SurfaceComparisonProcessing.instance().computeVariation(results, c.getMetricTypeIndex(), c.getValuesTypeIndex() == 0);
                     sortedHd = SortUtils.instance().sortValues(variance);
                     info.setDistance(variance);
-                    info.setUseRelative(jComboBox4.getSelectedIndex() == 0);
+                    info.setUseRelative(c.getValuesTypeIndex() == 0);
 
-                    numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(tc.getProject().getSelectedBatchComparison().getHdCSVresults(),
-                            jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels().size(), (Integer) jSpinner1.getValue() / 100f, 
-                            (int) minThreshSpinner.getValue() / 100f, jComboBox4.getSelectedIndex() == 0);
-                    tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().
-                            batchCompareNumericalResultsTable(numResults, jComboBox2.getSelectedIndex(), originalModels, (int) jSpinner1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f));
-                    tc.getProject().getSelectedBatchComparison().setValuesTypeIndex(jComboBox4.getSelectedIndex());
-                    tc.getProject().getSelectedBatchComparison().setMetricTypeIndex(jComboBox2.getSelectedIndex());
-                    tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
+                    numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(c.getHdCSVresults(),
+                            c.getMetricTypeIndex(), c.getModels().size(), c.getHausdorfMaxTreshold() / 100f, 
+                            c.getHausdorfMinTreshold() / 100f, c.getValuesTypeIndex() == 0);
+                    c.setNumericalResults(SurfaceComparisonProcessing.instance().
+                            batchCompareNumericalResultsTable(numResults, c.getMetricTypeIndex(), originalModels, c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f));
+ 
+                    c.setSortedHd(sortedHd);
 
                     p.finish();
 
@@ -1752,18 +1754,20 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         t.start();
     }//GEN-LAST:event_comparisonButtonActionPerformed
 
-    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox4ActionPerformed
+    private void valuesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valuesComboBoxActionPerformed
+        getContext().setValuesTypeIndex(valuesComboBox.getSelectedIndex());
+    }//GEN-LAST:event_valuesComboBoxActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().saveRegisteredModelsBatch(tc, tc.getProject().getSelectedBatchComparison().getRegistrationResults(),
-                tc.getProject().getSelectedBatchComparison().getModels(), "_batch");
+        ResultExports.instance().saveRegisteredModelsBatch(tc, getContext().getRegistrationResults(),
+                getContext().getModels(), "_batch");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
-        if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+        VisualizationType vt = (VisualizationType) VisualizationBox.getSelectedItem();
+        
+        if (vt == VisualizationType.COLORMAP) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1773,7 +1777,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             colormapPanel.setVisible(true);
 
         }
-        if (VisualizationBox.getSelectedItem().equals(VisualizationType.TRANSPARENCY.toString())) {
+        if (vt == VisualizationType.TRANSPARENCY) {
             densLabel.setVisible(false);
             density.setVisible(false);
             cylLength.setVisible(false);
@@ -1783,7 +1787,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         }
 
-        if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+        if (vt == VisualizationType.VECTORS) {
             densLabel.setVisible(true);
             density.setVisible(true);
             cylLength.setVisible(true);
@@ -1791,64 +1795,70 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             cylRadius.setVisible(true);
             cylRadiusLabel.setVisible(true);
         }
+        
+        getContext().setVisualization(vt);
 
-        setupVisualizationControls();
+        setupVisualizationControls(vt);
         updateHistograms();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
 
-    private void setupVisualizationControls() {
+    private void setupVisualizationControls(VisualizationType vt) {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP.toString())) {
+        final BatchComparison c = getContext();
+        
+        if (vt == VisualizationType.COLORMAP) {
             colormapPanel.setVisible(true);
             slicesPanel.setVisible(false);
             densLabel.setVisible(false);
             density.setVisible(false);
-            if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
-                tc.getViewerPanel_Batch().sliceViewerVisible(false);
-            }
-            tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.COLORMAP);
+
+            tc.getViewerPanel_Batch().sliceViewerVisible(false);
+
+            c.getHDinfo().setvType(VisualizationType.COLORMAP);
 
         }
-        if (VisualizationBox.getSelectedItem().equals(VisualizationType.VECTORS.toString())) {
+        if (vt == VisualizationType.VECTORS) {
             densLabel.setVisible(true);
             density.setVisible(true);
             colormapPanel.setVisible(false);
             slicesPanel.setVisible(false);
-            if (tc.getProject().getSelectedBatchComparison().getHDinfo().getvType() == VisualizationType.CROSSSECTION) {
-                tc.getViewerPanel_Batch().sliceViewerVisible(false);
-            }
-            tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.VECTORS);
+
+            tc.getViewerPanel_Batch().sliceViewerVisible(false);
+
+            c.getHDinfo().setvType(VisualizationType.VECTORS);
 
         }
-        if (VisualizationBox.getSelectedItem().equals(VisualizationType.CROSSSECTION.toString())) {
+        if (vt == VisualizationType.CROSSSECTION) {
             densLabel.setVisible(false);
             density.setVisible(false);
             colormapPanel.setVisible(false);
             slicesPanel.setVisible(true);
+            
+            c.getHDinfo().setvType(VisualizationType.COLORMAP);
 
             tc.getViewerPanel_Batch().getListener2().removeModel();
             tc.getViewerPanel_Batch().sliceViewerVisible(true);
             tc.getViewerPanel_Batch().getListener2().setSecondaryListener(true);
-            tc.getViewerPanel_Batch().getListener2().setHdInfo(tc.getProject().getSelectedBatchComparison().getHDinfo());
+            tc.getViewerPanel_Batch().getListener2().setHdInfo(c.getHDinfo());
             tc.getViewerPanel_Batch().getListener2().setPaintHD(true);
-            tc.getViewerPanel_Batch().getListener().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()));
+            tc.getViewerPanel_Batch().getListener().setPlanePoint(c.getPlanePosition());
             Runnable run = new Runnable() {
 
                 @Override
                 public void run() {
                     ModelLoader l = new ModelLoader();
                     ArrayList<Model> models = new ArrayList<>();
-                    models.add(tc.getProject().getSelectedBatchComparison().getAverageFace());
-                    List<File> md = tc.getProject().getSelectedBatchComparison().getRegistrationResults().size() > 0 ? tc.getProject().getSelectedBatchComparison().getRegistrationResults() : tc.getProject().getSelectedBatchComparison().getModels();
+                    models.add(c.getAverageFace());
+                    List<File> md = c.getRegistrationResults().size() > 0 ? c.getRegistrationResults() : c.getModels();
                     for (int i = 0; i < md.size(); i++) {
                         Model m = l.loadModel(md.get(i), false, false);
                         models.add(m);
                     }
                     tc.getViewerPanel_Batch().getListener2().setModels(models);
                     tc.getViewerPanel_Batch().getListener().setPrimaryModel();
-                    tc.getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+                    tc.getViewerPanel_Batch().setPlaneNormal(c.getArbitraryPlanePos(), true);
 
-                    tc.getProject().getSelectedBatchComparison().getHDinfo().setvType(VisualizationType.CROSSSECTION);
+                    c.getHDinfo().setvType(VisualizationType.CROSSSECTION);
 
                 }
             };
@@ -1884,8 +1894,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         jFrame2.setSize(600, 400);
-        List<Float> f = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getDistance();
-        histogramPanel1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        List<Float> f = getContext().getHDinfo().getDistance();
+        histogramPanel1.setHdp(getContext().getHDinfo());
         histogramPanel1.setValues(f);
 
         jFrame2.setVisible(true);
@@ -1911,10 +1921,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void selectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionButtonActionPerformed
         if (jComboBox3.getSelectedItem().equals(SelectionType.RECTANGLE.toString())) {
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.RECTANGLE);
+            getContext().getHDinfo().setsType(SelectionType.RECTANGLE);
         }
         if (jComboBox3.getSelectedItem().equals(SelectionType.ELLIPSE.toString())) {
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.ELLIPSE);
+            getContext().getHDinfo().setsType(SelectionType.ELLIPSE);
         }
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setSelection(selectionButton.isSelected());
     }//GEN-LAST:event_selectionButtonActionPerformed
@@ -1938,9 +1948,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
 
             plotsDrawingPanelBatchNumerical1.setValues(values);
-            String names[] = new String[GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels().size()];
+            String names[] = new String[getContext().getModels().size()];
             int i = 0;
-            for (File f : GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels()) {
+            for (File f : getContext().getModels()) {
                 names[i] = f.getName();
                 i++;
             }
@@ -1961,108 +1971,138 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void exportDistToMeanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDistToMeanButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportCSVnumeric(tc, tc.getProject().getSelectedBatchComparison().getDistanceToMeanConfiguration());
+        ResultExports.instance().exportCSVnumeric(tc, getContext().getDistanceToMeanConfiguration());
     }//GEN-LAST:event_exportDistToMeanButtonActionPerformed
 
     private void exportSymetricResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportSymetricResultsActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportSymetricRes(tc, tc.getProject().getSelectedBatchComparison().getNumericalResults(),
-                jComboBox2.getSelectedIndex(), tc.getProject().getSelectedBatchComparison().getModels(), (int) jSlider1.getValue() / 100f, (int) minThreshSpinner.getValue() / 100f);
+        BatchComparison c = getContext();
+        ResultExports.instance().exportSymetricRes(tc, c.getNumericalResults(),
+                c.getMetricTypeIndex(), c.getModels(), c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f);
     }//GEN-LAST:event_exportSymetricResultsActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void xyRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xyRadioButtonActionPerformed
         setNormalControlsEnabled(false);
         normalSpinnerX.setValue(0f);
         normalSpinnerY.setValue(0f);
         normalSpinnerZ.setValue(1f);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f(0f, 0f, 1f), true);
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+        getContext().getArbitraryPlanePos().x = 0f;
+        getContext().getArbitraryPlanePos().y = 0f;
+        getContext().getArbitraryPlanePos().z = 1f;
+        getContext().setCrossCutPlaneIndex(0);
+    }//GEN-LAST:event_xyRadioButtonActionPerformed
 
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+    private void yzRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yzRadioButtonActionPerformed
         setNormalControlsEnabled(false);
         normalSpinnerX.setValue(1f);
         normalSpinnerY.setValue(0f);
         normalSpinnerZ.setValue(0f);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f(1f, 0f, 0f), true);
-    }//GEN-LAST:event_jRadioButton5ActionPerformed
+        getContext().getArbitraryPlanePos().x = 1f;
+        getContext().getArbitraryPlanePos().y = 0f;
+        getContext().getArbitraryPlanePos().z = 0f;
+        getContext().setCrossCutPlaneIndex(1);
+    }//GEN-LAST:event_yzRadioButtonActionPerformed
 
-    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+    private void xzRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xzRadioButtonActionPerformed
         setNormalControlsEnabled(false);
         normalSpinnerX.setValue(0f);
         normalSpinnerY.setValue(1f);
         normalSpinnerZ.setValue(0f);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f(0f, 1f, 0f), true);
-    }//GEN-LAST:event_jRadioButton6ActionPerformed
+        getContext().getArbitraryPlanePos().x = 0f;
+        getContext().getArbitraryPlanePos().y = 1f;
+        getContext().getArbitraryPlanePos().z = 0f;
+        getContext().setCrossCutPlaneIndex(2);
+    }//GEN-LAST:event_xzRadioButtonActionPerformed
 
-    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
-        if (jRadioButton7.isSelected()) {
+    private void arbitraryRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arbitraryRadioButtonActionPerformed
+        if (arbitraryRadioButton.isSelected()) {
             setNormalControlsEnabled(true);
+            
         }
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
-    }//GEN-LAST:event_jRadioButton7ActionPerformed
+        
+        BatchComparison c = getContext();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(c.getArbitraryPlanePos(), true);
+
+        c.setCrossCutPlaneIndex(3);
+    }//GEN-LAST:event_arbitraryRadioButtonActionPerformed
 
     private void normalSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerXStateChanged
         if (normalSpinnerX.isEnabled() && !valuesModified) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+            getContext().getArbitraryPlanePos().x = (float) normalSpinnerX.getValue();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerXStateChanged
 
     private void normalSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerYStateChanged
         if (normalSpinnerY.isEnabled() && !valuesModified) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+            getContext().getArbitraryPlanePos().y = (float) normalSpinnerY.getValue();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerYStateChanged
 
     private void normalSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerZStateChanged
         if (normalSpinnerZ.isEnabled() && !valuesModified) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()), true);
+            getContext().getArbitraryPlanePos().z = (float) normalSpinnerZ.getValue();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerZStateChanged
 
     private void positionSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerZStateChanged
         if (!valuesModified) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
+            getContext().getPlanePosition().z = (float) positionSpinnerZ.getValue();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerZStateChanged
 
     private void positionSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerYStateChanged
         if (!valuesModified) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
+            getContext().getPlanePosition().y = (float) positionSpinnerY.getValue();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerYStateChanged
 
     private void positionSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerXStateChanged
         if (!valuesModified) {
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(new Vector3f((float) positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue()), true);
+            getContext().getPlanePosition().x = (float) positionSpinnerX.getValue();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerXStateChanged
 
-    private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setVectroScale(jSlider3.getValue() / (float) 10);
-    }//GEN-LAST:event_jSlider3StateChanged
+    private void crosscutSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_crosscutSizeSliderStateChanged
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setVectroScale(crosscutSizeSlider.getValue() / (float) 10);
+        getContext().setCrosscutSize(crosscutSizeSlider.getValue());
+    }//GEN-LAST:event_crosscutSizeSliderStateChanged
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setHighlightCuts(jCheckBox3.isSelected());
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
+    private void highlightCutsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highlightCutsCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setHighlightCuts(highlightCutsCheckBox.isSelected());
+        getContext().setHighlightCuts(highlightCutsCheckBox.isSelected());
+    }//GEN-LAST:event_highlightCutsCheckBoxActionPerformed
 
-    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowSamplingRays(jCheckBox5.isSelected());
-    }//GEN-LAST:event_jCheckBox5ActionPerformed
+    private void samplingRaysCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_samplingRaysCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowSamplingRays(samplingRaysCheckBox.isSelected());
+        getContext().setSamplingRays(samplingRaysCheckBox.isSelected());
+    }//GEN-LAST:event_samplingRaysCheckBoxActionPerformed
 
-    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowAllCuts(jCheckBox4.isSelected());
-    }//GEN-LAST:event_jCheckBox4ActionPerformed
+    private void allCutsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allCutsCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowAllCuts(allCutsCheckBox.isSelected());
+        getContext().setAllCuts(allCutsCheckBox.isSelected());
+    }//GEN-LAST:event_allCutsCheckBoxActionPerformed
 
-    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowVectors(jCheckBox6.isSelected());
-    }//GEN-LAST:event_jCheckBox6ActionPerformed
+    private void vectorsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vectorsCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowVectors(vectorsCheckBox.isSelected());
+        getContext().setShowVectors(vectorsCheckBox.isSelected());
+    }//GEN-LAST:event_vectorsCheckBoxActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setShowPlane(jCheckBox1.isSelected());
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    private void showPlaneCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPlaneCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setShowPlane(showPlaneCheckBox.isSelected());
+        getContext().setShowPlane(showPlaneCheckBox.isSelected());
+    }//GEN-LAST:event_showPlaneCheckBoxActionPerformed
 
     private void heatplotButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButton1ActionPerformed
-        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        BatchComparison bc = getContext();
         jComboBox1.removeAllItems();
         jComboBox1.addItem("Average face");
         for (int i = 0; i < bc.getModels().size(); i++) {
@@ -2083,9 +2123,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         }
 
-        String names[] = new String[GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels().size()];
+        String names[] = new String[bc.getModels().size()];
         int i = 0;
-        for (File f : GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModels()) {
+        for (File f :bc.getModels()) {
             names[i] = f.getName();
             i++;
         }
@@ -2106,7 +2146,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_heatplotButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        BatchComparison bc = getContext();
         ArrayList<ArrayList<Float>> res = new ArrayList<ArrayList<Float>>();
         if (jComboBox1.getSelectedIndex() == 0) {
             res = bc.getHdVisualResults();
@@ -2129,9 +2169,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void plotsDrawingPanelAuxiliary2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_plotsDrawingPanelAuxiliary2MouseClicked
-        final BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        final BatchComparison bc = getContext();
         plotsDrawingPanelAuxiliary2.mouseClicked(evt);
-        System.out.println();
+
         if (plotsDrawingPanelAuxiliary2.getSelectedModelIndex() > -1 && plotsDrawingPanelAuxiliary2.getSelectedModelIndex() < bc.getModels().size()) {
             pairFrame.setVisible(true);
             pairComparisonPanel.clear();
@@ -2180,37 +2220,39 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
         if (jComboBox3.getSelectedItem().equals(SelectionType.RECTANGLE.toString())) {
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.RECTANGLE);
+            getContext().getHDinfo().setsType(SelectionType.RECTANGLE);
         }
         if (jComboBox3.getSelectedItem().equals(SelectionType.ELLIPSE.toString())) {
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().setsType(SelectionType.ELLIPSE);
+            getContext().getHDinfo().setsType(SelectionType.ELLIPSE);
         }
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
-        List<Float> l = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getSortedHd();
+        List<Float> l = getContext().getSortedHd();
         int count = 0;
         int count2 = 0;
         for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) <= GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMaxThreshValue()) {
+            if (l.get(i) <= getContext().getHDinfo().getMaxThreshValue()) {
                 count++;
             } 
-            if (l.get(i) >= GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo().getMinThreshValue()) {
+            if (l.get(i) >= getContext().getHDinfo().getMinThreshValue()) {
                 count2++;
             } 
             
         }
         float percent = count / (float) l.size();
-        jSlider1.setValue((int) (percent * 100));
+        maxThresholdSlider.setValue((int) (percent * 100));
         
         float percent2 = count2 / (float) l.size();
         minThreshSlider.setValue(100- (int) (percent2 * 100));
     }//GEN-LAST:event_histogram1MouseDragged
 
-    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
-        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
-        bc.getHDP().getInfo().setColorScheme(ColorScheme.values()[jComboBox6.getSelectedIndex()]);
-    }//GEN-LAST:event_jComboBox6ActionPerformed
+    private void colorSchemeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorSchemeComboBoxActionPerformed
+        BatchComparison bc = getContext();
+        bc.setUsedColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
+        
+        bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
+    }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
         plotsDrawingPanelBatchNumerical1.setScheme(ColorScheme.values()[jComboBox5.getSelectedIndex()]);
@@ -2230,7 +2272,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox8ActionPerformed
 
     private void alignResButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alignResButtonActionPerformed
-        BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        BatchComparison bc = getContext();
         String[][] values = TableProcessing.instance().alignmentInfoTable(bc.getIcpMetric(), bc.getScaleEnabled(), bc.getICPerrorRate(),
                 bc.getICPmaxIteration(), bc.getICPnumberOfHeads(), bc.getModel(bc.getTemplateIndex()).getName(), Methods.values()[bc.getMethod()],
                 Type.values()[bc.getType()], bc.getValue());
@@ -2245,6 +2287,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void thicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_thicknessStateChanged
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setCutThickness(thickness.getValue() / 10f);
+        getContext().setCrosscutThickness(thickness.getValue());
     }//GEN-LAST:event_thicknessStateChanged
 
     private void colorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorPanelMouseClicked
@@ -2252,14 +2295,15 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jColorChooser1.setColor(colorPanel.getBackground());
         colorDialog.setVisible(true);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setColorOfCuts(colorPanel.getBackground().getRGBColorComponents(new float[3]));
+        getContext().setCrosscutColor(colorPanel.getBackground());
 
     }//GEN-LAST:event_colorPanelMouseClicked
 
     private void minThreshSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSliderStateChanged
         if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfMinTreshold(minThreshSlider.getValue());
-            minThreshSpinner.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfMinTreshold());
+            getContext().setHausdorfMinTreshold(minThreshSlider.getValue());
+            minThreshSpinner.setValue(getContext().getHausdorfMinTreshold());
 
             setMinThreshValue();
         }
@@ -2269,8 +2313,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void minThreshSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSpinnerStateChanged
          if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHausdorfMinTreshold(Integer.valueOf(minThreshSpinner.getValue().toString()));
-            minThreshSlider.setValue(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHausdorfMinTreshold());
+            getContext().setHausdorfMinTreshold(Integer.valueOf(minThreshSpinner.getValue().toString()));
+            minThreshSlider.setValue(getContext().getHausdorfMinTreshold());
 
             setMinThreshValue();
         }
@@ -2281,23 +2325,104 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         plotsDrawingPanelBatchNumerical1.setPeakStrength(jSlider4.getValue()/(float)10);
     }//GEN-LAST:event_jSlider4StateChanged
 
+    private void densityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_densityStateChanged
+        getContext().setVectorDensity(density.getValue());
+    }//GEN-LAST:event_densityStateChanged
+
+    private void cylLengthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylLengthStateChanged
+       getContext().setVectorLength(cylLength.getValue());
+    }//GEN-LAST:event_cylLengthStateChanged
+
+    private void cylRadiusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylRadiusStateChanged
+       getContext().setCylinderRadius(cylRadius.getValue());
+    }//GEN-LAST:event_cylRadiusStateChanged
+
     public histogramPanel getHistogram() {
         return histogram1;
     }
+    
+    private BatchComparison getContext(){
+        return GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+    }
 
     public void setConfiguration() {
-        jSpinner1.setVisible(false);
-        jSlider1.setVisible(false);
+        maxThresholdSpinner.setVisible(false);
+        maxThresholdSlider.setVisible(false);
         jLabel14.setVisible(false);
-        BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        BatchComparison c = getContext();
 
-        thickness.setValue(10);
-        jSlider1.setValue(c.getHausdorfMaxTreshold());
-        jSpinner1.setValue(c.getHausdorfMaxTreshold());
-        minThreshSlider.setValue(c.getHausdorfMinTreshold());
+        
+        metricComboBox.setSelectedIndex(c.getMetricTypeIndex());
+        VisualizationBox.setSelectedItem(c.getVisualization());
+        valuesComboBox.setSelectedIndex(c.getValuesTypeIndex());
+        
+        //crosscutPlane
+        switch(c.getCrossCutPlaneIndex()){
+            case 0:
+                xyRadioButton.setSelected(true);
+                break;
+            case 1:
+                yzRadioButton.setSelected(true);
+                break;
+            case 2:
+                xzRadioButton.setSelected(true);
+                break;
+            case 3:
+                arbitraryRadioButton.setSelected(true);
+                break;                
+        }
+        
+        normalSpinnerX.setValue(c.getArbitraryPlanePos().x);
+        normalSpinnerY.setValue(c.getArbitraryPlanePos().y);
+        normalSpinnerZ.setValue(c.getArbitraryPlanePos().z);
+        
+        positionSpinnerX.setValue(c.getPlanePosition().x);
+        positionSpinnerY.setValue(c.getPlanePosition().y);
+        positionSpinnerZ.setValue(c.getPlanePosition().z);
+        
+        crosscutSizeSlider.setValue(c.getCrosscutSize());
+        thickness.setValue(c.getCrosscutThickness());
+        colorPanel.setBackground(c.getCrosscutColor());
+        
+        highlightCutsCheckBox.setSelected(c.isHighlightCuts());
+        vectorsCheckBox.setSelected(c.isShowVectors());
+        allCutsCheckBox.setSelected(c.isAllCuts());
+        samplingRaysCheckBox.setSelected(c.isSamplingRays());
+        showPlaneCheckBox.setSelected(c.isShowPlane());
+        
+        //vector visualization
+        density.setValue(c.getVectorDensity());
+        cylLength.setValue(c.getVectorLength());
+        cylRadius.setValue(c.getCylinderRadius());
+        
+        //colormaps
+        maxThresholdSlider.setValue(c.getHausdorfMaxTreshold());
+        maxThresholdSpinner.setValue(c.getHausdorfMaxTreshold());
         minThreshSpinner.setValue(c.getHausdorfMinTreshold());
-        jComboBox2.setSelectedIndex(c.getMetricTypeIndex());
-        jComboBox4.setSelectedIndex(c.getValuesTypeIndex());
+        minThreshSlider.setValue(c.getHausdorfMinTreshold());
+        colorSchemeComboBox.setSelectedItem(c.getUsedColorScheme());
+        
+        
+        
+        //fp
+        fpDistanceSlider.setValue(c.getFpDistance());
+        fpSizeSlider.setValue(c.getFpSize());
+        
+        VisualizationBox.removeItem(VisualizationType.TRANSPARENCY);
+
+        if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
+            showProcrustesControls();
+        }
+        if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
+                || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
+            showHausdorfControls();
+            if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV) {
+                jLabel5.setVisible(false);
+                jLabel13.setVisible(false);
+                valuesComboBox.setVisible(false);
+            }
+
+        }
 
         updateHistograms();
 
@@ -2305,23 +2430,25 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().sliceViewerVisible(false);
             showProcrustesControls();
         }
-        if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
+        
+       /* if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
                 || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
 
             showHausdorfControls();
 
             if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV) {
                 jLabel13.setVisible(false);
-                jComboBox4.setVisible(false);
+                valuesComboBox.setVisible(false);
             }
 
-        }
+        }*/
 
         if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
             alignResButton.setVisible(true);
         } else {
             alignResButton.setVisible(false);
         }
+        
         result = c.getNumericalResults();
     }
 
@@ -2330,20 +2457,20 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }
 
     public void updateHistograms() {
-        HDpaintingInfo hdp = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo();
+        HDpaintingInfo hdp = getContext().getHDinfo();
 
         if (hdp == null) {
             return;
         }
 
         List<Float> f = hdp.getDistance();
-        histogramPanel1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogramPanel1.setHdp(getContext().getHDinfo());
         histogramPanel1.recomputeSliderPosition();
         histogramPanel1.setValues(f);
         histogramPanel1.revalidate();
         histogramPanel1.repaint();
 
-        histogram1.setHdp(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getHDinfo());
+        histogram1.setHdp(getContext().getHDinfo());
         histogram1.setValues(f);
         histogram1.recomputeSliderPosition();
         histogram1.revalidate();
@@ -2357,11 +2484,15 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton alignResButton;
     private javax.swing.JFrame alignmentFrame;
     private javax.swing.JTable alignmentTable;
+    private javax.swing.JCheckBox allCutsCheckBox;
+    private javax.swing.JRadioButton arbitraryRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JPanel colorPanel;
+    private javax.swing.JComboBox colorSchemeComboBox;
     private javax.swing.JPanel colormapPanel;
     private javax.swing.JButton comparisonButton;
+    private javax.swing.JSlider crosscutSizeSlider;
     private javax.swing.JSlider cylLength;
     private javax.swing.JLabel cylLengthLabel;
     private javax.swing.JSlider cylRadius;
@@ -2372,8 +2503,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider density;
     private javax.swing.JButton exportDistToMeanButton;
     private javax.swing.JButton exportSymetricResults;
+    private javax.swing.JSlider fpDistanceSlider;
+    private javax.swing.JSlider fpSizeSlider;
     private javax.swing.JButton heatplotButton;
     private javax.swing.JButton heatplotButton1;
+    private javax.swing.JCheckBox highlightCutsCheckBox;
     private cz.fidentis.visualisation.histogram.histogramPanel histogram1;
     private cz.fidentis.visualisation.histogram.histogramPanel histogramPanel1;
     private javax.swing.JButton jButton1;
@@ -2388,18 +2522,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
     private javax.swing.JComboBox jComboBox5;
-    private javax.swing.JComboBox jComboBox6;
     private javax.swing.JComboBox jComboBox7;
     private javax.swing.JComboBox jComboBox8;
     private javax.swing.JDialog jDialog1;
@@ -2434,20 +2560,15 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSlider jSlider1;
-    private javax.swing.JSlider jSlider2;
-    private javax.swing.JSlider jSlider3;
     private javax.swing.JSlider jSlider4;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JSlider maxThresholdSlider;
+    private javax.swing.JSpinner maxThresholdSpinner;
+    private javax.swing.JComboBox metricComboBox;
     private javax.swing.JSlider minThreshSlider;
     private javax.swing.JSpinner minThreshSpinner;
     private javax.swing.JSpinner normalSpinnerX;
@@ -2460,11 +2581,17 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSpinner positionSpinnerX;
     private javax.swing.JSpinner positionSpinnerY;
     private javax.swing.JSpinner positionSpinnerZ;
+    private javax.swing.JCheckBox samplingRaysCheckBox;
     private javax.swing.JToggleButton selectionButton;
+    private javax.swing.JCheckBox showPlaneCheckBox;
     private javax.swing.JLabel sizeLabel;
-    private javax.swing.JSlider sizeSlider;
     private javax.swing.JPanel slicesPanel;
     private javax.swing.JSlider thickness;
+    private javax.swing.JComboBox valuesComboBox;
+    private javax.swing.JCheckBox vectorsCheckBox;
+    private javax.swing.JRadioButton xyRadioButton;
+    private javax.swing.JRadioButton xzRadioButton;
+    private javax.swing.JRadioButton yzRadioButton;
     // End of variables declaration//GEN-END:variables
 
 }

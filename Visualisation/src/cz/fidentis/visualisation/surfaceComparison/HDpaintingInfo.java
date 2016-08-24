@@ -40,8 +40,6 @@ public class HDpaintingInfo {
     private VisualizationType vType = VisualizationType.COLORMAP;
     private ColorScheme colorScheme = ColorScheme.GREEN_BLUE; 
     private SelectionType sType = SelectionType.RECTANGLE;
-    
-    private float lenghtFactor = 0.0f;
 
    // VECTORS VISUALIZATION VARIABLES
     public Graph2 graph;
@@ -272,14 +270,6 @@ public class HDpaintingInfo {
 
     public void setvType(VisualizationType vType) {
         this.vType = vType;
-    }
-
-    public float getLenghtFactor() {
-        return lenghtFactor;
-    }
-
-    public void setLenghtFactor(float lenghtFactor) {
-        this.lenghtFactor = lenghtFactor;
     }
 
     public Model getModel() {

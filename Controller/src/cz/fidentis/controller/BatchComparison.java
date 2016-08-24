@@ -8,14 +8,17 @@ import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.controller.ProjectTree.Node;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.model.Model;
+import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
+import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.vecmath.Vector3f;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -83,6 +86,173 @@ public class BatchComparison {
     private Node node_average;
     private Node node_result;
     private final ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
+    
+    private boolean continueComparison = false;
+    private boolean firstCreated = true;
+    
+    private VisualizationType visualization;   
+    private int crossCutPlaneIndex = 0;
+    private Vector3f arbitraryPlanePos = new Vector3f();
+    private Vector3f planePosition = new Vector3f(1,0,0);
+    private int crosscutSize;
+    private int crosscutThickness;
+    private Color crosscutColor;
+    private boolean highlightCuts;
+    private boolean showVectors;
+    private boolean allCuts;
+    private boolean samplingRays;
+    private boolean showPlane;
+    
+    private int vectorDensity;
+    private int vectorLength;
+    private int cylinderRadius;
+    
+    private ColorScheme usedColorScheme;
+
+    public boolean isShowPlane() {
+        return showPlane;
+    }
+
+    public void setShowPlane(boolean showPlane) {
+        this.showPlane = showPlane;
+    }
+    
+
+    public VisualizationType getVisualization() {
+        return visualization;
+    }
+
+    public void setVisualization(VisualizationType visualization) {
+        this.visualization = visualization;
+    }
+
+    public int getCrossCutPlaneIndex() {
+        return crossCutPlaneIndex;
+    }
+
+    public void setCrossCutPlaneIndex(int crossCutPlaneIndex) {
+        this.crossCutPlaneIndex = crossCutPlaneIndex;
+    }
+
+    public Vector3f getArbitraryPlanePos() {
+        return arbitraryPlanePos;
+    }
+
+    public void setArbitraryPlanePos(Vector3f arbitraryPlanePos) {
+        this.arbitraryPlanePos = arbitraryPlanePos;
+    }
+
+    public Vector3f getPlanePosition() {
+        return planePosition;
+    }
+
+    public void setPlanePosition(Vector3f planePosition) {
+        this.planePosition = planePosition;
+    }
+
+    public int getCrosscutSize() {
+        return crosscutSize;
+    }
+
+    public void setCrosscutSize(int crosscutSize) {
+        this.crosscutSize = crosscutSize;
+    }
+
+    public int getCrosscutThickness() {
+        return crosscutThickness;
+    }
+
+    public void setCrosscutThickness(int crosscutThickness) {
+        this.crosscutThickness = crosscutThickness;
+    }
+
+    public Color getCrosscutColor() {
+        return crosscutColor;
+    }
+
+    public void setCrosscutColor(Color crosscutColor) {
+        this.crosscutColor = crosscutColor;
+    }
+
+    public boolean isHighlightCuts() {
+        return highlightCuts;
+    }
+
+    public void setHighlightCuts(boolean highlightCuts) {
+        this.highlightCuts = highlightCuts;
+    }
+
+    public boolean isShowVectors() {
+        return showVectors;
+    }
+
+    public void setShowVectors(boolean showVectors) {
+        this.showVectors = showVectors;
+    }
+
+    public boolean isAllCuts() {
+        return allCuts;
+    }
+
+    public void setAllCuts(boolean allCuts) {
+        this.allCuts = allCuts;
+    }
+
+    public boolean isSamplingRays() {
+        return samplingRays;
+    }
+
+    public void setSamplingRays(boolean samplingRays) {
+        this.samplingRays = samplingRays;
+    }
+
+    public int getVectorDensity() {
+        return vectorDensity;
+    }
+
+    public void setVectorDensity(int vectorDensity) {
+        this.vectorDensity = vectorDensity;
+    }
+
+    public int getVectorLength() {
+        return vectorLength;
+    }
+
+    public void setVectorLength(int vectorLength) {
+        this.vectorLength = vectorLength;
+    }
+
+    public int getCylinderRadius() {
+        return cylinderRadius;
+    }
+
+    public void setCylinderRadius(int cylinderRadius) {
+        this.cylinderRadius = cylinderRadius;
+    }
+
+    public ColorScheme getUsedColorScheme() {
+        return usedColorScheme;
+    }
+
+    public void setUsedColorScheme(ColorScheme usedColorScheme) {
+        this.usedColorScheme = usedColorScheme;
+    }
+
+    public boolean isContinueComparison() {
+        return continueComparison;
+    }
+
+    public void setContinueComparison(boolean continueComparison) {
+        this.continueComparison = continueComparison;
+    }
+
+    public boolean isFirstCreated() {
+        return firstCreated;
+    }
+
+    public void setFirstCreated(boolean firstCreated) {
+        this.firstCreated = firstCreated;
+    }
 
     public ArrayList<Model> getPreregiteredModels() {
         return preRegiteredModels;

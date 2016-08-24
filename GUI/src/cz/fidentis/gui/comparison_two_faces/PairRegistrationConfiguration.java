@@ -878,12 +878,13 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     private void calculatePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculatePointsButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final Comparison2Faces c = getContext();
         if (areModelsLoaded(tc)) {
             Runnable run = new Runnable() {
 
                 @Override
                 public void run() {
-                    Comparison2Faces c = getContext();
+                    
                     
                     calculatePointsButton.setEnabled(false);
                     FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
@@ -1336,6 +1337,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
            percentageSpinner.setValue(50);
            numberSpinner.setValue(0);
            numberSpinner.setEnabled(false);
+       }else{
+           percentageSpinner.setValue(50);
+           numberSpinner.setValue(50);
+           undersamplingRadiusSlider.setValue(50);
        }
        
        continueComparisonCheckbox.setSelected(c.isContinueComparison());

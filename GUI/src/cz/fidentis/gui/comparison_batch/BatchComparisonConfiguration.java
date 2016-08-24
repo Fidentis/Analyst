@@ -11,6 +11,7 @@ import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.guisetup.BatchGUIsetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -32,6 +33,7 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Exceptions;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -67,13 +69,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        comparisonComboBox = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         procrustesPanel = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        fpScaleCheckBox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
-        jSlider3 = new javax.swing.JSlider();
+        fpThresholdSlider = new javax.swing.JSlider();
         processComparisonButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -86,12 +88,12 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.jLabel3.text")); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hausdorff Distance", "Procrustes Analysis" }));
-        jComboBox1.setMinimumSize(new java.awt.Dimension(182, 20));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(182, 20));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        comparisonComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hausdorff Distance", "Procrustes Analysis" }));
+        comparisonComboBox.setMinimumSize(new java.awt.Dimension(182, 20));
+        comparisonComboBox.setPreferredSize(new java.awt.Dimension(182, 20));
+        comparisonComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                comparisonComboBoxActionPerformed(evt);
             }
         });
 
@@ -110,24 +112,24 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.jLabel8.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.jCheckBox2.text")); // NOI18N
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(fpScaleCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.fpScaleCheckBox.text")); // NOI18N
+        fpScaleCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                fpScaleCheckBoxActionPerformed(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.jLabel12.text")); // NOI18N
 
-        jSlider3.setMajorTickSpacing(20);
-        jSlider3.setMinorTickSpacing(5);
-        jSlider3.setPaintLabels(true);
-        jSlider3.setPaintTicks(true);
-        jSlider3.setSnapToTicks(true);
-        jSlider3.setValue(30);
-        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+        fpThresholdSlider.setMajorTickSpacing(20);
+        fpThresholdSlider.setMinorTickSpacing(5);
+        fpThresholdSlider.setPaintLabels(true);
+        fpThresholdSlider.setPaintTicks(true);
+        fpThresholdSlider.setSnapToTicks(true);
+        fpThresholdSlider.setValue(30);
+        fpThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider3StateChanged(evt);
+                fpThresholdSliderStateChanged(evt);
             }
         });
 
@@ -138,11 +140,11 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
             .addGroup(procrustesPanelLayout.createSequentialGroup()
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
-                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
             .addGroup(procrustesPanelLayout.createSequentialGroup()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox2)
+                .addComponent(fpScaleCheckBox)
                 .addContainerGap(159, Short.MAX_VALUE))
         );
         procrustesPanelLayout.setVerticalGroup(
@@ -151,11 +153,11 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox2))
+                    .addComponent(fpScaleCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -166,7 +168,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         tresholdTable.put(new Integer(60), new JLabel("0,6"));
         tresholdTable.put(new Integer(80), new JLabel("0,8"));
         tresholdTable.put(new Integer(100), new JLabel("1"));
-        jSlider3.setLabelTable(tresholdTable);
+        fpThresholdSlider.setLabelTable(tresholdTable);
 
         org.openide.awt.Mnemonics.setLocalizedText(processComparisonButton, org.openide.util.NbBundle.getMessage(BatchComparisonConfiguration.class, "BatchComparisonConfiguration.processComparisonButton.text")); // NOI18N
         processComparisonButton.addActionListener(new java.awt.event.ActionListener() {
@@ -214,7 +216,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(comparisonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2)
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -237,7 +239,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comparisonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -274,21 +276,16 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     public void computeComparison(final ProjectTopComponent tc) {
-        //        final Model mainFace = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
-        //        final Model compareFace = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel(); //vedlajsi model v pravom panele
-        //
-        //        if (mainFace == null || compareFace == null) {
-        //            System.out.print("Some models were not loaded.");
-        //            return;
-        //        }
-
+        final BatchComparison c = getContext();
+        
         Runnable run;
         run = new Runnable() {
 
             @Override
             public void run() {
+                
                 processComparisonButton.setEnabled(false);
-                tc.getProject().getSelectedBatchComparison().setCompareButtonEnabled(false);
+                c.setCompareButtonEnabled(false);
                 ProgressHandle p;
 
                 p = ProgressHandleFactory.createHandle("Computing comparison...");
@@ -296,37 +293,39 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                 try {
                     GUIController.setPauseButtonVisible(true);
                     p.start();
+                    
+                    ComparisonMethod compM = c.getComparisonMethod();
 
                     //Computing Hausdorff Distance
-                    if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST
-                            || ((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_CURV) {
+                    if (compM == ComparisonMethod.HAUSDORFF_DIST
+                            || compM == ComparisonMethod.HAUSDORFF_CURV) {
                         p.setDisplayName("Computing comparison...");
                         SurfaceComparisonProcessing.setP(p);
 
                         ArrayList<ArrayList<Float>> results;
                         ArrayList<ArrayList<Float>> numResults;
                         List<Float> variance;
-                        List<File> originalModels = tc.getProject().getSelectedBatchComparison().getModels();
-                        List<File> models = tc.getProject().getSelectedBatchComparison().getRegistrationResults();
+                        List<File> originalModels = c.getModels();
+                        List<File> models = c.getRegistrationResults();
                         if (models == null) {
                             models = originalModels;
                         }
                         ModelLoader ml = new ModelLoader();
-                        Model template = ml.loadModel(models.get(tc.getProject().getSelectedBatchComparison().getTemplateIndex()), false, false);
+                        Model template = ml.loadModel(models.get(c.getTemplateIndex()), false, false);
 
                         tc.getViewerPanel_Batch().getListener().getModels().set(0, template);
 
                         try {
                             //visual results
-                            results = SurfaceComparisonProcessing.instance().compareFaces(template, models, true, (ComparisonMethod) jComboBox1.getSelectedItem(),
-                                    tc.getProject().getSelectedBatchComparison().getIcpMetric());
-                            tc.getProject().getSelectedBatchComparison().setHdVisualResults(results);
+                            results = SurfaceComparisonProcessing.instance().compareFaces(template, models, true, compM,
+                                    c.getIcpMetric());
+                            c.setHdVisualResults(results);
 
-                            tc.getProject().getSelectedBatchComparison().setAverageFace(template);
+                           c.setAverageFace(template);
 
                             variance = SurfaceComparisonProcessing.instance().computeVariation(results, 0, true);
 
-                            tc.getProject().getSelectedBatchComparison().setHd(variance);
+                            c.setHd(variance);
 
                             //check
                             float[] minColor = {0.298f, 0.0f, 0.898f};
@@ -340,67 +339,62 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
                             HDpainting paintMain = new HDpainting(info);
 
-                            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHdColor1(minCol);
-                            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setHdColor2(maxCol);
+                            c.setHdColor1(minCol);
+                            c.setHdColor2(maxCol);
 
                             tc.getViewerPanel_Batch().getListener().setHdPaint(paintMain);
                             tc.getViewerPanel_Batch().getListener().setHdInfo(info);
-                            tc.getProject().getSelectedBatchComparison().setHDP(paintMain);
-                            tc.getProject().getSelectedBatchComparison().setHDinfo(info);
+                            c.setHDP(paintMain);
+                            c.setHDinfo(info);
                             tc.getViewerPanel_Batch().getListener().drawHD(true);
 
                             //numerical results
                             numResults = SurfaceComparisonProcessing.instance().batchCompareNumericalResults(models, 0, true,
-                                    1.0f, 0.0f, (ComparisonMethod) jComboBox1.getSelectedItem(), tc.getProject().getSelectedBatchComparison());
+                                    1.0f, 0.0f, compM, c);
 
                             List<Float> sortedHd = SortUtils.instance().sortValues(variance);
 
-                            tc.getProject().getSelectedBatchComparison().setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels, 1f, 0f));
-                            tc.getProject().getSelectedBatchComparison().setSortedHd(sortedHd);
+                            c.setNumericalResults(SurfaceComparisonProcessing.instance().batchCompareNumericalResultsTable(numResults, 0, originalModels, 1f, 0f));
+                            c.setSortedHd(sortedHd);
 
                         } catch (FileManipulationException ex) {
                             //osefuj error
                         }
 
-                    } else if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+                    } else if (compM == ComparisonMethod.PROCRUSTES) {
 
                         //Starting procrustes comparison
                         List<List<FacialPoint>> list = new ArrayList();
-                        int size = tc.getProject().getSelectedBatchComparison().getModels().size();
+                        int size = c.getModels().size();
                         for (int i = 0; i < size; i++) {
-                            List<FacialPoint> facialPoints = tc.getProject().getSelectedBatchComparison().getFacialPoints(
-                                    tc.getProject().getSelectedBatchComparison().getModels().get(i).getName());
+                            List<FacialPoint> facialPoints = c.getFacialPoints(
+                                    c.getModels().get(i).getName());
                             list.add(facialPoints);
                         }
 
                         //List of points was created
-                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, jCheckBox2.isSelected());
+                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, c.isFpScaling());
 
                         //String result = procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
-                        String result = procrustes.compareBatch(tc.getProject().getSelectedBatchComparison().getModels());
-                        tc.getProject().getSelectedBatchComparison().setDistanceToMeanConfiguration(procrustes.distanceToMean());
+                        String result = procrustes.compareBatch(c.getModels());
+                        c.setDistanceToMeanConfiguration(procrustes.distanceToMean());
 
                         //GPA done
                         //GUIController.getConfigurationTopComponent().getBatchComparisonResults().setNumericalResult(result);
-                        tc.getProject().getSelectedBatchComparison().setNumericalResults(result);
+                        c.setNumericalResults(result);
 
                         //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1().setDescriptionText(result);
                         tc.getViewerPanel_Batch().getListener().setProcrustes(true);
 
                         PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), null, 2);
 
-                        /*tc.getViewerPanel_Batch().getListener().setTypePA(2);
-                    tc.getViewerPanel_Batch().getListener().setGpa(procrustes.getGpa());
-                    tc.getViewerPanel_Batch().getListener().setEnhance(0);*/
-                        if (jCheckBox2.isSelected()) {
+                        if (c.isFpScaling()) {      //??
                             tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
-                            //paInfo.setPointSize(30 / (float) (30));
-                            //tc.getViewerPanel_Batch().getListener().setFpSize(30 / (float) (30));
+
                         } else {
                             tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
-                            //tc.getViewerPanel_Batch().getListener().setFpSize(30 * 3);
                         }
 
                         tc.getViewerPanel_Batch().getListener().setPaInfo(paInfo);
@@ -410,21 +404,20 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                     }
 
                     processComparisonButton.setEnabled(true);
-                    tc.getProject().getSelectedBatchComparison().setCompareButtonEnabled(true);
+                    c.setCompareButtonEnabled(true);
                     p.finish();
+                    
+                    //set up default comparison result data
+                    BatchGUIsetup.defaultValuesComparisonResults(c);
 
-                    tc.getProject().getSelectedBatchComparison().setState(3);
-                    tc.getProject().getSelectedBatchComparison().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
+                    c.setState(3);
 
-                    /*if (((ComparisonMethod)jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
-                    tc.getProject().getSelectedBatchComparison().setResults(0);
-                } else {
-                    tc.getProject().getSelectedBatchComparison().setResults(1);
-
-                }*/
                     if (GUIController.getSelectedProjectTopComponent() == tc) {
                         GUIController.getConfigurationTopComponent().addBatchComparisonResults();
                     }
+                    
+                    //set up default comparison result data
+                    
                     GUIController.setPauseButtonVisible(false);
                     GUIController.updateNavigator();
                 } catch (Exception ex) {
@@ -444,110 +437,102 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         computeComparison(GUIController.getSelectedProjectTopComponent());
     }//GEN-LAST:event_processComparisonButtonActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setFpScaling(jCheckBox2.isSelected());
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
+        getContext().setFpScaling(fpScaleCheckBox.isSelected());
+    }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
+    private void comparisonComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonComboBoxActionPerformed
+        ComparisonMethod compM = (ComparisonMethod) comparisonComboBox.getSelectedItem();
+        
+        if (compM == ComparisonMethod.PROCRUSTES) {
             procrustesPanel.setVisible(true);
         }
-        if (((ComparisonMethod) jComboBox1.getSelectedItem()) == ComparisonMethod.HAUSDORFF_DIST) {
+        if (compM == ComparisonMethod.HAUSDORFF_DIST ||
+                compM == ComparisonMethod.HAUSDORFF_CURV) {
             procrustesPanel.setVisible(false);
 
         }
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setComparisonMethod((ComparisonMethod) jComboBox1.getSelectedItem());
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+       
+        getContext().setComparisonMethod(compM);
+    }//GEN-LAST:event_comparisonComboBoxActionPerformed
 
-    private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setFpTreshold(jSlider3.getValue());
-    }//GEN-LAST:event_jSlider3StateChanged
+    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
+        getContext().setFpTreshold(fpThresholdSlider.getValue());
+    }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setState(1);
+        getContext().setState(1);
         GUIController.getConfigurationTopComponent().addBatchRegistrationComponent();
         ModelLoader ml = new ModelLoader();
-        Model m = ml.loadModel(GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().getModel(0), false, true);
+        Model m = ml.loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().saveAvgFace(tc, tc.getProject().getSelectedBatchComparison().getAverageFace(),
+        ResultExports.instance().saveAvgFace(tc, getContext().getAverageFace(),
                 "_batch");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().saveRegisteredModelsBatch(tc, tc.getProject().getSelectedBatchComparison().getRegistrationResults(),
-                tc.getProject().getSelectedBatchComparison().getModels(), "_batch");
+        ResultExports.instance().saveRegisteredModelsBatch(tc, getContext().getRegistrationResults(),
+                getContext().getModels(), "_batch");
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        FPImportExport.instance().exportBatch(tc, tc.getProject().getSelectedBatchComparison());
+        FPImportExport.instance().exportBatch(tc, getContext());
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
     public Boolean getScaleEnabled() {
-        return jCheckBox2.isSelected();
+        return fpScaleCheckBox.isSelected();
     }
 
     public void setProcessComparisonEnabled(boolean en) {
         processComparisonButton.setEnabled(en);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().setCompareButtonEnabled(en);
+        getContext().setCompareButtonEnabled(en);
     }
 
-    private void setupComparisonMethods(BatchComparison c) {
-        jComboBox1.removeAllItems();
-        for (int i = 0; i < ComparisonMethod.values().length; i++) {
-            jComboBox1.addItem(ComparisonMethod.values()[i]);
-            if (c.getComparisonMethod() == ComparisonMethod.values()[i]) {
-                jComboBox1.setSelectedIndex(i);
-            }
-        }
-        /*  if((c.getRegistrationMethod() == 0)){
-            jComboBox1.removeItemAt(0);
-        }*/
-        if ((c.getRegistrationMethod() != RegistrationMethod.PROCRUSTES)) {
-            jComboBox1.removeItemAt(1);
-        }
-
+    private BatchComparison getContext(){
+        return GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
     }
-
+    
     public void setConfiguration() {
-        BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        BatchComparison c = getContext();
+        RegistrationMethod reg = c.getRegistrationMethod();
         
-        if(c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES){
-            exportLandmarksButton.setVisible(true);
-        }else{
-            exportLandmarksButton.setVisible(false);
+        //because some items might need to be removed based on the mode later
+        comparisonComboBox.setModel(new DefaultComboBoxModel(ComparisonMethod.values()));
+
+        
+        comparisonComboBox.setSelectedItem(c.getComparisonMethod());
+        fpScaleCheckBox.setSelected(c.isFpScaling());
+        jButton2.setVisible(reg == RegistrationMethod.HAUSDORFF);
+        exportLandmarksButton.setVisible(reg == RegistrationMethod.PROCRUSTES);
+        
+        procrustesPanel.setVisible(c.getComparisonMethod() == ComparisonMethod.PROCRUSTES);
+        
+        fpThresholdSlider.setValue(c.getFpTreshold());
+        
+        if(reg != RegistrationMethod.PROCRUSTES){
+           comparisonComboBox.removeItemAt(1);
         }
         
-        jCheckBox2.setSelected(c.isFpScaling());
-        setupComparisonMethods(c);
-        jButton2.setVisible((c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF));
-        jSlider3.setValue(c.getFpTreshold());
         processComparisonButton.setEnabled(c.isCompareButtonEnabled());
     }
 
-    /* private String setValues(List<Float> hdDistance) {
-     return ("Min: " + HausdorffDistance.instance().findMinDistance(hdDistance) + "\n"
-     + "Max: " + HausdorffDistance.instance().findMaxDistance(hdDistance) + "\n"
-     + "RSM: " + HausdorffDistance.instance().rootMeanSqr(hdDistance) + "\n"
-     + "Arithmetic Mean: " + HausdorffDistance.instance().aritmeticMean(hdDistance) + "\n"
-     + "Geomertic Mean: " + HausdorffDistance.instance().geometricMean(hdDistance));
-     }*/
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox comparisonComboBox;
     private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JCheckBox fpScaleCheckBox;
+    private javax.swing.JSlider fpThresholdSlider;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -557,7 +542,6 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSlider jSlider3;
     private javax.swing.JButton processComparisonButton;
     private javax.swing.JPanel procrustesPanel;
     // End of variables declaration//GEN-END:variables

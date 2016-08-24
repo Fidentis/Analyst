@@ -1129,12 +1129,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final Comparison2Faces c = getContext();
         Runnable run = new Runnable() {
 
             @Override
             public void run() {
                 ProgressHandle p;
-                Comparison2Faces c = getContext();
+                
                 List<Float> hdDistance = c.getHd();
                 List<Float> thresholdedValues;
                 p = ProgressHandleFactory.createHandle("Recomputing comparison...");
@@ -1161,7 +1162,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     }
                     if (VisualizationType.values()[c.getVisualization()] == VisualizationType.VECTORS) {
                         info.setvType(VisualizationType.VECTORS);
-                        info.setLenghtFactor(0.5f);
                     }
                     //Setting density param 
                     info.setDensity(density.getValue());
@@ -1267,7 +1267,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
             HDpaintingInfo info = c.getHdPaintingInfo();
 
             info.setvType(VisualizationType.VECTORS);
-            info.setLenghtFactor(0.5f);
             info.setDensity(c.getVectorDensity());
             info.setCylLengthFactor(c.getVectorLength());
             info.setCylRadius(c.getCylinderRadius());

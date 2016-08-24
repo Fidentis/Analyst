@@ -1716,7 +1716,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     if (c.getVisualization() == VisualizationType.VECTORS) {
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
                         info.setvType(VisualizationType.VECTORS);
-                        info.setLenghtFactor(3.0f);
                         ModelLoader l = new ModelLoader();
 
                         Model modelShown =c.getAvgFace();
