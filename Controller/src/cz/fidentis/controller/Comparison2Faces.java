@@ -6,9 +6,9 @@ import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.controller.ProjectTree.Node;
-import cz.fidentis.controller.data.ColormapData;
-import cz.fidentis.controller.data.TransparencyData;
-import cz.fidentis.controller.data.VectorsData;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.TransparencyConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.model.Model;
 import cz.fidentis.visualisation.ColorScheme;
@@ -89,33 +89,33 @@ public class Comparison2Faces {
     //comparison results
     private VisualizationType visualization;
     
-    private TransparencyData transparencyViz = new TransparencyData();
-    private VectorsData vectorsViz = new VectorsData();
-    private ColormapData colormapViz = new ColormapData();
+    private TransparencyConfig transparencyViz = new TransparencyConfig();
+    private VectorsConfig vectorsViz = new VectorsConfig();
+    private ColormapConfig colormapViz = new ColormapConfig();
     
     
 
-    public TransparencyData getTransparencyViz() {
+    public TransparencyConfig getTransparencyViz() {
         return transparencyViz;
     }
 
-    public void setTransparencyViz(TransparencyData transparencyViz) {
+    public void setTransparencyViz(TransparencyConfig transparencyViz) {
         this.transparencyViz = transparencyViz;
     }
 
-    public VectorsData getVectorsViz() {
+    public VectorsConfig getVectorsViz() {
         return vectorsViz;
     }
 
-    public void setVectorsViz(VectorsData vectorsViz) {
+    public void setVectorsViz(VectorsConfig vectorsViz) {
         this.vectorsViz = vectorsViz;
     }
 
-    public ColormapData getColormapViz() {
+    public ColormapConfig getColormapViz() {
         return colormapViz;
     }
 
-    public void setColormapViz(ColormapData colormapViz) {
+    public void setColormapViz(ColormapConfig colormapViz) {
         this.colormapViz = colormapViz;
     }
     

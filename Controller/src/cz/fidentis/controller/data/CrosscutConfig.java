@@ -9,10 +9,11 @@ import java.awt.Color;
 import javax.vecmath.Vector3f;
 
 /**
- *
+ * Class holding configuration for crosscuts visualization
+ * 
  * @author xferkova
  */
-public class CrosscutData {
+public class CrosscutConfig {
     private int crossCutPlaneIndex;
     private Vector3f arbitraryPlanePos;
     private Vector3f planePosition;
@@ -25,7 +26,7 @@ public class CrosscutData {
     private boolean samplingRays;
     private boolean showPlane;
 
-    public CrosscutData() {
+    public CrosscutConfig() {
     }
 
     public int getCrossCutPlaneIndex() {

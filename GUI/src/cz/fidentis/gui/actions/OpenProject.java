@@ -18,10 +18,10 @@ import cz.fidentis.controller.Composite;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.controller.Project;
-import cz.fidentis.controller.data.ColormapData;
-import cz.fidentis.controller.data.CrosscutData;
-import cz.fidentis.controller.data.TransparencyData;
-import cz.fidentis.controller.data.VectorsData;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
+import cz.fidentis.controller.data.TransparencyConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
@@ -548,17 +548,17 @@ public final class OpenProject implements ActionListener {
         }
         
         if(transpE != null){
-            TransparencyData data = parseTransparencyData(transpE);
+            TransparencyConfig data = parseTransparencyData(transpE);
             comparison.setTransparencyViz(data);
         }
         
         if(colorE != null){
-            ColormapData data = parseColormapData(colorE);
+            ColormapConfig data = parseColormapData(colorE);
             comparison.setColormapViz(data);
         }
         
         if(vectorsE != null){
-            VectorsData data = parseVectorsData(vectorsE);
+            VectorsConfig data = parseVectorsData(vectorsE);
             comparison.setVectorsViz(data);
         }
 
@@ -799,17 +799,17 @@ public final class OpenProject implements ActionListener {
         }
         
         if(colorE != null){
-            ColormapData data = parseColormapData(colorE);
+            ColormapConfig data = parseColormapData(colorE);
             comparison.setColormapViz(data);
         }
         
         if(vectorsE != null){
-            VectorsData data = parseVectorsData(vectorsE);
+            VectorsConfig data = parseVectorsData(vectorsE);
             comparison.setVectorsViz(data);
         }
         
         if(crossE != null){
-            CrosscutData data = parseCrosscutData(crossE);
+            CrosscutConfig data = parseCrosscutData(crossE);
             comparison.setCrosscutViz(data);
         }
 
@@ -1085,17 +1085,17 @@ public final class OpenProject implements ActionListener {
         }
         
         if(crossE != null){
-            CrosscutData data = parseCrosscutData(crossE);
+            CrosscutConfig data = parseCrosscutData(crossE);
             comparison.setCrosscutViz(data);
         }
         
         if(colorE != null){
-            ColormapData data = parseColormapData(colorE);
+            ColormapConfig data = parseColormapData(colorE);
             comparison.setColormapViz(data);
         }
         
         if(vectorsE != null){
-            VectorsData data = parseVectorsData(vectorsE);
+            VectorsConfig data = parseVectorsData(vectorsE);
             comparison.setVectorsViz(data);
         }
 
@@ -1206,8 +1206,8 @@ public final class OpenProject implements ActionListener {
         return info;
     }
     
-    private CrosscutData parseCrosscutData(Element crossE){
-        CrosscutData crossViz = new CrosscutData();
+    private CrosscutConfig parseCrosscutData(Element crossE){
+        CrosscutConfig crossViz = new CrosscutConfig();
         
         crossViz.setCrossCutPlaneIndex(Integer.parseInt(crossE.getAttribute("crossCutPlaneIndex")));
                
@@ -1235,8 +1235,8 @@ public final class OpenProject implements ActionListener {
         return crossViz;
     }
     
-    private TransparencyData parseTransparencyData(Element transE){
-        TransparencyData data = new TransparencyData();
+    private TransparencyConfig parseTransparencyData(Element transE){
+        TransparencyConfig data = new TransparencyConfig();
         
         data.setPrimaryColor(new Color(Integer.parseInt(transE.getAttribute("primaryColor"))));
         data.setSecondaryColor(new Color(Integer.parseInt(transE.getAttribute("secondaryColor"))));
@@ -1252,8 +1252,8 @@ public final class OpenProject implements ActionListener {
         return data;
     }
     
-    private VectorsData parseVectorsData(Element vectorsE){
-        VectorsData data = new VectorsData();
+    private VectorsConfig parseVectorsData(Element vectorsE){
+        VectorsConfig data = new VectorsConfig();
         
         data.setVectorDensity(Integer.parseInt(vectorsE.getAttribute("vectorDensity")));
         data.setVectorLength(Integer.parseInt(vectorsE.getAttribute("vectorLength")));
@@ -1262,8 +1262,8 @@ public final class OpenProject implements ActionListener {
         return data;      
     }
     
-    private ColormapData parseColormapData(Element colorE){
-        ColormapData data = new ColormapData();
+    private ColormapConfig parseColormapData(Element colorE){
+        ColormapConfig data = new ColormapConfig();
         
         data.setHausdorfMaxTreshold(Integer.parseInt(colorE.getAttribute("haussdorfMaxTreshold")));
         data.setHausdorfMinTreshold(Integer.parseInt(colorE.getAttribute("haussdorfMinTreshold")));

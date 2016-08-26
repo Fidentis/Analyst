@@ -6,9 +6,9 @@ import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.controller.ProjectTree.Node;
-import cz.fidentis.controller.data.ColormapData;
-import cz.fidentis.controller.data.CrosscutData;
-import cz.fidentis.controller.data.VectorsData;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.model.Model;
 import cz.fidentis.visualisation.ColorScheme;
@@ -91,31 +91,31 @@ public class BatchComparison {
     
     private VisualizationType visualization;   
 
-    private VectorsData vectorsViz = new VectorsData();
-    private CrosscutData crosscutViz = new CrosscutData();
-    private ColormapData colormapViz = new ColormapData();
+    private VectorsConfig vectorsViz = new VectorsConfig();
+    private CrosscutConfig crosscutViz = new CrosscutConfig();
+    private ColormapConfig colormapViz = new ColormapConfig();
 
-    public VectorsData getVectorsViz() {
+    public VectorsConfig getVectorsViz() {
         return vectorsViz;
     }
 
-    public void setVectorsViz(VectorsData vectorsViz) {
+    public void setVectorsViz(VectorsConfig vectorsViz) {
         this.vectorsViz = vectorsViz;
     }
 
-    public CrosscutData getCrosscutViz() {
+    public CrosscutConfig getCrosscutViz() {
         return crosscutViz;
     }
 
-    public void setCrosscutViz(CrosscutData crosscutViz) {
+    public void setCrosscutViz(CrosscutConfig crosscutViz) {
         this.crosscutViz = crosscutViz;
     }
 
-    public ColormapData getColormapViz() {
+    public ColormapConfig getColormapViz() {
         return colormapViz;
     }
 
-    public void setColormapViz(ColormapData colormapViz) {
+    public void setColormapViz(ColormapConfig colormapViz) {
         this.colormapViz = colormapViz;
     }
     

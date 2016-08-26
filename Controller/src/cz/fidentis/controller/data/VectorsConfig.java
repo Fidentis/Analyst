@@ -6,15 +6,16 @@
 package cz.fidentis.controller.data;
 
 /**
- *
+ * Class holding configuration for vectors visualization
+ * 
  * @author xferkova
  */
-public class VectorsData {
+public class VectorsConfig {
     private int vectorDensity;
     private int vectorLength;
     private int cylinderRadius;
 
-    public VectorsData() {
+    public VectorsConfig() {
     }
 
     public int getVectorDensity() {

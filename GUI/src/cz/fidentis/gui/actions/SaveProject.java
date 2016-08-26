@@ -20,10 +20,10 @@ import cz.fidentis.controller.Composite;
 import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.controller.BatchComparison;
-import cz.fidentis.controller.data.ColormapData;
-import cz.fidentis.controller.data.CrosscutData;
-import cz.fidentis.controller.data.TransparencyData;
-import cz.fidentis.controller.data.VectorsData;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
+import cz.fidentis.controller.data.TransparencyConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.enums.FileExtensions;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
@@ -706,7 +706,7 @@ public final class SaveProject implements ActionListener {
         infoE.setAttribute("pointRadius", String.valueOf(info.getFacialPointRadius()));
     }
     
-    private void appendCrosscutData(CrosscutData data, Element parent){
+    private void appendCrosscutData(CrosscutConfig data, Element parent){
         Element crossE = parent.getOwnerDocument().createElement("crosscutData");
         parent.appendChild(crossE);
         
@@ -727,7 +727,7 @@ public final class SaveProject implements ActionListener {
         crossE.setAttribute("samplingRays", String.valueOf(data.isSamplingRays()));      
     }
     
-    private void appendTransparencyData(TransparencyData data, Element parent){
+    private void appendTransparencyData(TransparencyConfig data, Element parent){
         Element transE = parent.getOwnerDocument().createElement("transparencyData");
         parent.appendChild(transE);
         
@@ -744,7 +744,7 @@ public final class SaveProject implements ActionListener {
         transE.setAttribute("fogVersion", String.valueOf(data.getFogVersion()));
     }
     
-    private void appendVectorsData(VectorsData data, Element parent){
+    private void appendVectorsData(VectorsConfig data, Element parent){
         Element vectorsE = parent.getOwnerDocument().createElement("vectorsData");
         parent.appendChild(vectorsE);
         
@@ -753,7 +753,7 @@ public final class SaveProject implements ActionListener {
         vectorsE.setAttribute("cylinderRadius", String.valueOf(data.getCylinderRadius()));    
     }
     
-    private void appendColormapData(ColormapData data, Element parent){
+    private void appendColormapData(ColormapConfig data, Element parent){
         Element colorE = parent.getOwnerDocument().createElement("colormapData");
         parent.appendChild(colorE);
         

@@ -8,10 +8,11 @@ package cz.fidentis.controller.data;
 import java.awt.Color;
 
 /**
- *
+ * Class holding configuration for transparency (overlay) visualization
+ * 
  * @author xferkova
  */
-public class TransparencyData {
+public class TransparencyConfig {
     private Color primaryColor = new Color(51,153,255, 255);        //color for primary model when overlaid before comparison(blueish?)
     private Color secondaryColor = new Color(255,255,0,255);        //color for secondary model when overlaid before comparison(yellow)
     private boolean isPrimarySolid = false;
@@ -23,7 +24,7 @@ public class TransparencyData {
     private boolean useContours;
     private int fogVersion;
 
-    public TransparencyData() {
+    public TransparencyConfig() {
     }
 
     public Color getPrimaryColor() {

@@ -8,15 +8,16 @@ package cz.fidentis.controller.data;
 import cz.fidentis.visualisation.ColorScheme;
 
 /**
- *
+ * Class holding configuration for Colormap visualization
+ * 
  * @author xferkova
  */
-public class ColormapData {
+public class ColormapConfig {
     private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
     private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private ColorScheme usedColorScheme;
 
-    public ColormapData() {
+    public ColormapConfig() {
     }
 
     public int getHausdorfMaxTreshold() {
