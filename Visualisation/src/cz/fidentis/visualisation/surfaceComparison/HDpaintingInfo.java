@@ -25,17 +25,11 @@ public class HDpaintingInfo {
     private float minThreshValue = Float.NEGATIVE_INFINITY; 
     private float minSelection;
     private float maxSelection;
-    private boolean isSelection =false;
-    private boolean isRecomputed =false;
+    private boolean isSelection = false;
+    private boolean isRecomputed = false;
     ArrayList<Integer> selectionVertices= new ArrayList<>();
     
     private boolean useRelative;
-
-    private float[] minColor = {0.5f, 0, 0};
-    private float[] maxColor = {0, 1f, 0};
-    private float[] vector = {maxColor[0] - minColor[0],
-        maxColor[1] - minColor[1],
-        maxColor[2] - minColor[2]};
 
     private VisualizationType vType = VisualizationType.COLORMAP;
     private ColorScheme colorScheme = ColorScheme.GREEN_BLUE; 
@@ -213,18 +207,7 @@ public class HDpaintingInfo {
         maxThreshValue = maxSelection;
         this.isSelection = isSelection;
     }
- 
-     
-    
-    
-/*
-    public float getThreshPecent() {
-        return threshPecent;
-    }
 
-    public void setThreshPecent(float threshPecent) {
-        this.threshPecent = threshPecent;
-    }*/
 
     public boolean isUseRelative() {
         return useRelative;
@@ -232,36 +215,6 @@ public class HDpaintingInfo {
 
     public void setUseRelative(boolean useRelative) {
         this.useRelative = useRelative;
-    }
-
-    public float[] getMinColor() {
-        return minColor;
-    }
-
-    public void setMinColor(float[] minColor) {
-        this.minColor = minColor;
-        vector = new float[]{maxColor[0] - minColor[0],
-            maxColor[1] - minColor[1],
-            maxColor[2] - minColor[2]};
-    }
-
-    public float[] getMaxColor() {
-        return maxColor;
-    }
-
-    public void setMaxColor(float[] maxColor) {
-        this.maxColor = maxColor;
-        vector = new float[]{maxColor[0] - minColor[0],
-            maxColor[1] - minColor[1],
-            maxColor[2] - minColor[2]};
-    }
-
-    public float[] getVector() {
-        return vector;
-    }
-
-    public void setVector(float[] vector) {
-        this.vector = vector;
     }
 
     public VisualizationType getvType() {

@@ -859,17 +859,8 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         c.setSortedHdValuesRelative(sortedValuesRel);
 
                         HDpaintingInfo info = new HDpaintingInfo(hdDistance, c.getModel1(), true);
-                        float[] minColor = {0.298f, 0.0f, 0.898f};
-                        Color minCol = new Color(76, 0, 229);
-                        float[] maxColor = {0.898f, 0.1f, 0.133f};
-                        Color maxCol = new Color(229, 0, 34);
-                        info.setMinColor(minColor);
-                        info.setMaxColor(maxColor);
 
                         HDpainting paintMain = new HDpainting(info);
-
-                        c.setHdColor1(minCol);
-                        c.setHdColor2(maxCol);
 
                         tc.getViewerPanel_2Faces().getListener1().drawHD(true);
                         tc.getViewerPanel_2Faces().getListener1().setHdPaint(paintMain);

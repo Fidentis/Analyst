@@ -399,17 +399,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         c.setHd(results);
 
                         HDpaintingInfo info = new HDpaintingInfo(results, tc.getOneToManyViewerPanel().getListener1().getModel(), true);
-                        float[] minColor = {0.298f, 0.0f, 0.898f};
-                        Color minCol = new Color(76, 0, 229);
-                        float[] maxColor = {0.898f, 0.1f, 0.133f};
-                        Color maxCol = new Color(229, 0, 34);
-                        info.setMinColor(minColor);
-                        info.setMaxColor(maxColor);
-
                         HDpainting hd = new HDpainting(info);
-
-                        c.setHdColor1(minCol);
-                        c.setHdColor2(maxCol);
 
                         tc.getOneToManyViewerPanel().getListener1().drawHD(true);
                         tc.getOneToManyViewerPanel().getListener1().setHdPaint(hd);

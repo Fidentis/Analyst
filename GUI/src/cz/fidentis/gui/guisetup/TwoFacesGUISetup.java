@@ -9,6 +9,7 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.controller.Comparison2Faces;
+import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
 import javax.swing.JCheckBox;
@@ -62,11 +63,11 @@ public class TwoFacesGUISetup {
    private static final int FOG_VERSION = 0;
    
    //comparison results
-   private static final int VISUALIZATION = 0;
+   private static final VisualizationType VISUALIZATION = VisualizationType.COLORMAP;
    private static final int VALUES_TYPE = 0;
    private static final int MAX_THRESHOLD = 100;
    private static final int MIN_THRESHOLD = 0;
-   private static final int COLOR_SCHEME = 0;
+   private static final ColorScheme COLOR_SCHEME = ColorScheme.GREEN_BLUE;
    
    private static final int VECTOR_DENSITY = 10;
    private static final int CYLINDER_LENGTH = 1;

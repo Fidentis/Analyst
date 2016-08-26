@@ -327,20 +327,10 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
                             c.setHd(variance);
 
-                            //check
-                            float[] minColor = {0.298f, 0.0f, 0.898f};
-                            Color minCol = new Color(76, 0, 229);
-                            float[] maxColor = {0.898f, 0.1f, 0.133f};
-                            Color maxCol = new Color(229, 0, 34);
 
                             HDpaintingInfo info = new HDpaintingInfo(variance, template, true);
-                            info.setMinColor(minColor);
-                            info.setMaxColor(maxColor);
 
                             HDpainting paintMain = new HDpainting(info);
-
-                            c.setHdColor1(minCol);
-                            c.setHdColor2(maxCol);
 
                             tc.getViewerPanel_Batch().getListener().setHdPaint(paintMain);
                             tc.getViewerPanel_Batch().getListener().setHdInfo(info);
