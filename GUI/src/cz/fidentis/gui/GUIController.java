@@ -60,7 +60,6 @@ public class GUIController implements StatusLineElementProvider{
     public static String getPath() {
         return path;
     }
-    
 
 
     @SuppressWarnings("LeakingThisInConstructor")
@@ -305,5 +304,10 @@ public class GUIController implements StatusLineElementProvider{
                 GUIController.getNavigatorTopComponent().update();
             }
         });
+    }
+    
+    //debug only
+    public static void setPath(String path){
+        GUIController.path = path;
     }
 }

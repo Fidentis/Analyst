@@ -1208,24 +1208,42 @@ public final class OpenProject implements ActionListener {
     
     private CrosscutConfig parseCrosscutData(Element crossE){
         CrosscutConfig crossViz = new CrosscutConfig();
+        String attr;
         
         crossViz.setCrossCutPlaneIndex(Integer.parseInt(crossE.getAttribute("crossCutPlaneIndex")));
                
         Vector3f arbitraryPlane = new Vector3f();
-        arbitraryPlane.x = Float.parseFloat(crossE.getAttribute("arbitraryPlanePosX"));
-        arbitraryPlane.y = Float.parseFloat(crossE.getAttribute("arbitraryPlanePosY"));
-        arbitraryPlane.z = Float.parseFloat(crossE.getAttribute("arbitraryPlanePosZ"));
+        
+        attr = crossE.getAttribute("arbitraryPlanePosX");
+        if(attr != null && !attr.isEmpty())
+            arbitraryPlane.x = Float.parseFloat(attr);
+        attr = crossE.getAttribute("arbitraryPlanePosY");
+        if(attr != null && !attr.isEmpty())
+            arbitraryPlane.y = Float.parseFloat(attr);
+        attr = crossE.getAttribute("arbitraryPlanePosZ");
+        if(attr != null && !attr.isEmpty())
+            arbitraryPlane.z = Float.parseFloat(attr);
+        
         crossViz.setArbitraryPlanePos(arbitraryPlane);
         
         Vector3f planePos = new Vector3f();
-        planePos.x = Float.parseFloat(crossE.getAttribute("planePosX"));
-        planePos.y = Float.parseFloat(crossE.getAttribute("planePosY"));
-        planePos.z = Float.parseFloat(crossE.getAttribute("planePosZ"));
+        attr = crossE.getAttribute("planePosX");
+        if(attr != null && !attr.isEmpty())
+            planePos.x = Float.parseFloat(attr);
+        attr = crossE.getAttribute("planePosY");
+        if(attr != null && !attr.isEmpty())
+            planePos.y = Float.parseFloat(attr);
+        attr = crossE.getAttribute("planePosZ");
+        if(attr != null && !attr.isEmpty())
+            planePos.z = Float.parseFloat(attr);
         crossViz.setPlanePosition(planePos);
         
         crossViz.setCrosscutSize(Integer.parseInt(crossE.getAttribute("crosscutSize")));
         crossViz.setCrosscutThickness(Integer.parseInt(crossE.getAttribute("crosscutThickness")));
-        crossViz.setCrosscutColor(new Color(Integer.parseInt(crossE.getAttribute("crosscutColor"))));
+        
+        attr = crossE.getAttribute("crosscutColor");
+        if(attr != null && !attr.isEmpty())
+            crossViz.setCrosscutColor(new Color(Integer.parseInt(attr)));
         crossViz.setHighlightCuts(Boolean.parseBoolean(crossE.getAttribute("highlightCuts")));
         crossViz.setShowVector(Boolean.parseBoolean(crossE.getAttribute("showVectors")));
         crossViz.setAllCuts(Boolean.parseBoolean(crossE.getAttribute("allCuts")));
@@ -1237,12 +1255,19 @@ public final class OpenProject implements ActionListener {
     
     private TransparencyConfig parseTransparencyData(Element transE){
         TransparencyConfig data = new TransparencyConfig();
+        String attr;
         
-        data.setPrimaryColor(new Color(Integer.parseInt(transE.getAttribute("primaryColor"))));
-        data.setSecondaryColor(new Color(Integer.parseInt(transE.getAttribute("secondaryColor"))));
+        attr = transE.getAttribute("primaryColor");
+        if(attr != null && !attr.isEmpty())
+            data.setPrimaryColor(new Color(Integer.parseInt(attr)));
+        attr = transE.getAttribute("secondaryColor");
+        if(attr != null && !attr.isEmpty())
+            data.setSecondaryColor(new Color(Integer.parseInt(attr)));
         data.setIsPrimarySolid(Boolean.parseBoolean(transE.getAttribute("primarySolid")));
         data.setIsSecondarySolid(Boolean.parseBoolean(transE.getAttribute("secondarySolid")));
-        data.setFogColor(new Color(Integer.parseInt(transE.getAttribute("fogColor"))));
+        attr = transE.getAttribute("fogColor");
+        if(attr != null && !attr.isEmpty())
+            data.setFogColor(new Color(Integer.parseInt(attr)));
         data.setOverlayTransparency(Float.parseFloat(transE.getAttribute("overlayTransparency")));
         data.setInnerSurfaceSolid(Boolean.parseBoolean(transE.getAttribute("innerSurfaceSolid")));
         data.setUseGlyphs(Boolean.parseBoolean(transE.getAttribute("useGlyphs")));
@@ -1264,10 +1289,13 @@ public final class OpenProject implements ActionListener {
     
     private ColormapConfig parseColormapData(Element colorE){
         ColormapConfig data = new ColormapConfig();
+        String attr;
         
         data.setHausdorfMaxTreshold(Integer.parseInt(colorE.getAttribute("haussdorfMaxTreshold")));
         data.setHausdorfMinTreshold(Integer.parseInt(colorE.getAttribute("haussdorfMinTreshold")));
-        data.setUsedColorScheme(ColorScheme.valueOf(colorE.getAttribute("colorScheme")));
+        attr = colorE.getAttribute("colorScheme");
+        if(attr != null && !attr.isEmpty())
+            data.setUsedColorScheme(ColorScheme.valueOf(attr));
         
         return data;
     }

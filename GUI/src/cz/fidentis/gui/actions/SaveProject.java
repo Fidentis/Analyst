@@ -277,7 +277,8 @@ public final class SaveProject implements ActionListener {
             appendColormapData(comparison.getColormapViz(), comparisonE);
         
         //comparison result
-        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
+        if(comparison.getVisualization() != null)
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
   
         
 
@@ -425,7 +426,8 @@ public final class SaveProject implements ActionListener {
         
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
         
-        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
+        if(comparison.getVisualization() != null)
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
         
         if(comparison.getCrosscutViz() != null)
             appendCrosscutData(comparison.getCrosscutViz(), comparisonE);
@@ -564,7 +566,8 @@ public final class SaveProject implements ActionListener {
         
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
         
-        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
+        if(comparison.getVisualization() != null)
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
         
         if(comparison.getCrosscutViz() != null)
             appendCrosscutData(comparison.getCrosscutViz(), comparisonE);
@@ -710,16 +713,28 @@ public final class SaveProject implements ActionListener {
         Element crossE = parent.getOwnerDocument().createElement("crosscutData");
         parent.appendChild(crossE);
         
-        crossE.setAttribute("crossCutPlaneIndex", String.valueOf(data.getCrossCutPlaneIndex()));        
-        crossE.setAttribute("arbitraryPlanePosX", String.valueOf(data.getArbitraryPlanePos().x));        
-        crossE.setAttribute("arbitraryPlanePosY", String.valueOf(data.getArbitraryPlanePos().y));        
-        crossE.setAttribute("arbitraryPlanePosZ", String.valueOf(data.getArbitraryPlanePos().z));        
-        crossE.setAttribute("planePosX", String.valueOf(data.getPlanePosition().x));        
-        crossE.setAttribute("planePosY", String.valueOf(data.getPlanePosition().y));        
-        crossE.setAttribute("planePosZ", String.valueOf(data.getPlanePosition().z));        
+        crossE.setAttribute("crossCutPlaneIndex", String.valueOf(data.getCrossCutPlaneIndex()));   
+        
+        if(data.getArbitraryPlanePos() != null){
+            crossE.setAttribute("arbitraryPlanePosX", String.valueOf(data.getArbitraryPlanePos().x));        
+            crossE.setAttribute("arbitraryPlanePosY", String.valueOf(data.getArbitraryPlanePos().y));        
+            crossE.setAttribute("arbitraryPlanePosZ", String.valueOf(data.getArbitraryPlanePos().z));        
+        }
+        
+        if(data.getPlanePosition() != null){
+            crossE.setAttribute("planePosX", String.valueOf(data.getPlanePosition().x));        
+            crossE.setAttribute("planePosY", String.valueOf(data.getPlanePosition().y));        
+            crossE.setAttribute("planePosZ", String.valueOf(data.getPlanePosition().z));
+        }
+        
+                
         crossE.setAttribute("crosscutSize", String.valueOf(data.getCrosscutSize()));        
-        crossE.setAttribute("crosscutThickness", String.valueOf(data.getCrosscutThickness()));        
-        crossE.setAttribute("crosscutColor", String.valueOf(data.getCrosscutColor().getRGB()));        
+        crossE.setAttribute("crosscutThickness", String.valueOf(data.getCrosscutThickness())); 
+        
+        if(data.getCrosscutColor() != null){
+            crossE.setAttribute("crosscutColor", String.valueOf(data.getCrosscutColor().getRGB()));
+        }
+                
         crossE.setAttribute("highlightCuts", String.valueOf(data.isHighlightCuts()));        
         crossE.setAttribute("showVectors", String.valueOf(data.isShowVector()));        
         crossE.setAttribute("allCuts", String.valueOf(data.isAllCuts())); 
@@ -732,11 +747,14 @@ public final class SaveProject implements ActionListener {
         parent.appendChild(transE);
         
         //comparison configuration
-        transE.setAttribute("primaryColor", String.valueOf(data.getPrimaryColor().getRGB()));
-        transE.setAttribute("secondaryColor", String.valueOf(data.getSecondaryColor().getRGB()));
+        if(data.getPrimaryColor() != null)
+            transE.setAttribute("primaryColor", String.valueOf(data.getPrimaryColor().getRGB()));
+        if(data.getSecondaryColor() != null)
+            transE.setAttribute("secondaryColor", String.valueOf(data.getSecondaryColor().getRGB()));
         transE.setAttribute("primarySolid", String.valueOf(data.isIsPrimarySolid()));
         transE.setAttribute("secondarySolid", String.valueOf(data.isIsSecondarySolid()));
-        transE.setAttribute("fogColor", String.valueOf(data.getFogColor().getRGB()));
+        if(data.getFogColor() != null)
+            transE.setAttribute("fogColor", String.valueOf(data.getFogColor().getRGB()));
         transE.setAttribute("overlayTransparency", String.valueOf(data.getOverlayTransparency()));
         transE.setAttribute("innerSurfaceSolid", String.valueOf(data.isInnerSurfaceSolid()));
         transE.setAttribute("useGlyphs", String.valueOf(data.isUseGlyphs()));
@@ -759,7 +777,8 @@ public final class SaveProject implements ActionListener {
         
         colorE.setAttribute("haussdorfMaxTreshold", String.valueOf(data.getHausdorfMaxTreshold()));        
         colorE.setAttribute("haussdorfMinTreshold", String.valueOf(data.getHausdorfMinTreshold()));
-        colorE.setAttribute("colorScheme", String.valueOf(data.getUsedColorScheme()));
+        if(data.getUsedColorScheme() != null)
+            colorE.setAttribute("colorScheme", String.valueOf(data.getUsedColorScheme()));
     }
 
     private void appendModelTransformations(List<ArrayList<ICPTransformation>> transformations, Element parent) {
