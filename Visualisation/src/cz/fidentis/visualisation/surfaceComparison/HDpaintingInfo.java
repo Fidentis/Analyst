@@ -28,6 +28,13 @@ public class HDpaintingInfo {
     private boolean isSelection = false;
     private boolean isRecomputed = false;
     ArrayList<Integer> selectionVertices= new ArrayList<>();
+
+    private float[] minColor = {0.5f, 0, 0};
+    private float[] maxColor = {0, 1f, 0};
+    private float[] vector = {maxColor[0] - minColor[0],
+        maxColor[1] - minColor[1],
+        maxColor[2] - minColor[2]};
+
     
     private boolean useRelative;
 
@@ -261,10 +268,33 @@ public class HDpaintingInfo {
         this.colorScheme = colorScheme;
     }
     
-    
-    
-    
-    
-    
-    
+    public float[] getMinColor() {
+        return minColor;
+    }
+
+    public void setMinColor(float[] minColor) {
+        this.minColor = minColor;
+        vector = new float[]{maxColor[0] - minColor[0],
+            maxColor[1] - minColor[1],
+            maxColor[2] - minColor[2]};
+    }
+
+    public float[] getMaxColor() {
+        return maxColor;
+    }
+
+    public void setMaxColor(float[] maxColor) {
+        this.maxColor = maxColor;
+        vector = new float[]{maxColor[0] - minColor[0],
+            maxColor[1] - minColor[1],
+            maxColor[2] - minColor[2]};
+    }
+
+    public float[] getVector() {
+        return vector;
+    }
+
+    public void setVector(float[] vector) {
+        this.vector = vector;
+    }    
 }

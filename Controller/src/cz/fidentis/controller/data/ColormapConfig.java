@@ -14,7 +14,7 @@ import cz.fidentis.visualisation.ColorScheme;
  */
 public class ColormapConfig {
     private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
-    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
+    private int hausdorfMinTreshold = 0;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private ColorScheme usedColorScheme;
 
     public ColormapConfig() {

@@ -41,6 +41,65 @@ public class HDpainting {
         return info;
     }
 
+    /**
+     * Computes the color for currently processed point. Based on HSV color
+     * model.
+     *
+     * @param currentDistance - HD distance for the currently processed point
+     * @param maxDistance - max HD distance in the mesh
+     * @return float[] color - computed color
+     */
+    public float[] chooseColorHSVMapping(float currentDistance, float maxDistance, float minDistance) {
+
+        float currentParameter = (currentDistance - minDistance) / (maxDistance - minDistance);
+        Color minColor2int = new Color(info.getMinColor()[0], info.getMinColor()[1], info.getMinColor()[2]);
+        Color maxColor2int = new Color(info.getMaxColor()[0], info.getMaxColor()[1], info.getMaxColor()[2]);
+
+        float[] hsb1 = Color.RGBtoHSB(minColor2int.getRed(), minColor2int.getGreen(), minColor2int.getBlue(), null);
+        float h1 = hsb1[0];
+        float s1 = hsb1[1];
+        float b1 = hsb1[2];
+
+        float[] hsb2 = Color.RGBtoHSB(maxColor2int.getRed(), maxColor2int.getGreen(), maxColor2int.getBlue(), null);
+        float h2 = hsb2[0];
+        float s2 = hsb2[1];
+        float b2 = hsb2[2];
+
+        // determine clockwise and counter-clockwise distance between hues
+        float distCCW;
+        float distCW;
+
+        if (h1 >= h2) {
+            distCCW = h1 - h2;
+            distCW = 1 + h2 - h1;
+        } else {
+            distCCW = 1 + h1 - h2;
+            distCW = h2 - h1;
+        }
+
+        float hue;
+
+        if (distCW >= distCCW) {
+            hue = h1 + (distCW * currentParameter);
+        } else {
+            hue = h1 - (distCCW * currentParameter);
+        }
+
+        if (hue < 0) {
+            hue = 1 + hue;
+        }
+        if (hue > 1) {
+            hue = hue - 1;
+        }
+
+        float saturation = (1 - currentParameter) * s1 + currentParameter * s2;
+        float brightness = (1 - currentParameter) * b1 + currentParameter * b2;
+
+        Color hsb = Color.getHSBColor(hue, saturation, brightness);
+
+        return hsb.getRGBColorComponents(info.getVector());
+    }
+
  
     /**
      * @author Jakub Palenik recycled paintDistanceFace for rendering model of
