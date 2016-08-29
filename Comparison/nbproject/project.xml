@@ -67,6 +67,7 @@
             <public-packages>
                 <package>cz.fidentis.comparison</package>
                 <package>cz.fidentis.comparison.hausdorffDistance</package>
+                <package>cz.fidentis.comparison.hausdorffDistance.localDif</package>
                 <package>cz.fidentis.comparison.icp</package>
                 <package>cz.fidentis.comparison.procrustes</package>
             </public-packages>

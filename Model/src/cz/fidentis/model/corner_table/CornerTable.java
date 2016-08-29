@@ -224,4 +224,35 @@ public class CornerTable {
     public Corner[] getCornerNeighbors(int vertex) {
         return getCorner(vertex).vertexNeighbors();
     }
+    
+    /**
+     * 
+     * Find index neighbors by vertex
+     * 
+     * @param index primary vertex
+     * @param model model
+     * @return array of indexes of neighbors
+     */
+    public int[] getIndexNeighbors(int index, Model model) {
+        Corner main = new Corner();
+        int k = -1, c = 0;
+        int[] result;
+        
+        while(c == 0) {
+            k++;
+            if(index == model.getCornerTable().corners.get(k).vertex) {
+                main = model.getCornerTable().corners.get(k);
+                c++;
+            }
+            
+        }
+        
+        result = new int[main.vertexNeighbors().length];
+        
+        for(int i = 0; i < main.vertexNeighbors().length; i++){
+            result[i] = main.vertexNeighbors()[i].vertex;
+        }
+        
+        return result;
+    }
 }
