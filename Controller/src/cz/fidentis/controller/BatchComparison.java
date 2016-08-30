@@ -621,6 +621,7 @@ public class BatchComparison {
             node.removeChild(node.getChildren().indexOf(node_models));
             node_models = null;
         }
+        modelsAdded = true;
     }
     
     public void addFacialPoints(String model, List<FacialPoint> FP){
