@@ -1467,7 +1467,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         getContext().setFpSize(fpSizeSlider.getValue());
         
         PApaintingInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo();
-        if(info == null)
+        if(info != null)
             info.setPointSize(fpSizeSlider.getValue() * 3);
         
     }//GEN-LAST:event_fpSizeSliderStateChanged

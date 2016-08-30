@@ -1028,8 +1028,9 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                     m, t, value, metric, tc.getProject().getSelectedBatchComparison());
 
                             
-                            tc.getProject().getSelectedBatchComparison().setRegistrationResults(results);
-                            tc.getProject().getSelectedBatchComparison().setAverageFace(template);
+                            c.setRegistrationResults(results);
+                            c.setAverageFace(template);
+                            c.setModelsAdded(true);     //new avg face has to be computed since it's being overriden 
                        } catch (FileManipulationException ex) {
                             //osefuj vynimku
                             jButton1.setEnabled(true);

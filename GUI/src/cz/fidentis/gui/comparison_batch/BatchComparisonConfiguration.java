@@ -310,18 +310,29 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         if (models == null) {
                             models = originalModels;
                         }
-                        ModelLoader ml = new ModelLoader();
-                        Model template = ml.loadModel(models.get(c.getTemplateIndex()), false, false);
+                        Model template = null;
+                        
+                        //only compute new avg face if models were added
+                        if(c.isModelsAdded()){
+                            ModelLoader ml = new ModelLoader();
+                            template = ml.loadModel(models.get(c.getTemplateIndex()), false, false);
+                        }else{
+                            template = c.getAverageFace();
+                        }
+                        
 
                         tc.getViewerPanel_Batch().getListener().getModels().set(0, template);
 
                         try {
+                            
+                                                        
                             //visual results
                             results = SurfaceComparisonProcessing.instance().compareFaces(template, models, true, compM,
-                                    c.getIcpMetric());
+                                    c.getIcpMetric(), c.isModelsAdded());
                             c.setHdVisualResults(results);
 
                            c.setAverageFace(template);
+                           c.setModelsAdded(false);
 
                             variance = SurfaceComparisonProcessing.instance().computeVariation(results, 0, true);
 
@@ -451,8 +462,12 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        getContext().setState(1);
+        BatchComparison c = getContext();
+        
+        //get correct value for selected avg model
+        c.setTemplateIndex(c.getTemplateIndex() + 3);
+        
+        c.setState(1);
         GUIController.getConfigurationTopComponent().addBatchRegistrationComponent();
         ModelLoader ml = new ModelLoader();
         Model m = ml.loadModel(getContext().getModel(0), false, true);

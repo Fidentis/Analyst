@@ -94,7 +94,17 @@ public class BatchComparison {
     private VectorsConfig vectorsViz = new VectorsConfig();
     private CrosscutConfig crosscutViz = new CrosscutConfig();
     private ColormapConfig colormapViz = new ColormapConfig();
+    
+    private boolean modelsAdded = false;
+    
+    public boolean isModelsAdded() {
+        return modelsAdded;
+    }
 
+    public void setModelsAdded(boolean modelsAdded) {
+        this.modelsAdded = modelsAdded;
+    }
+    
     public VectorsConfig getVectorsViz() {
         return vectorsViz;
     }
@@ -600,6 +610,7 @@ public class BatchComparison {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }
         node_models.addChild(model);
+        modelsAdded = true;
     }
     
     public void removeModel(int index) {

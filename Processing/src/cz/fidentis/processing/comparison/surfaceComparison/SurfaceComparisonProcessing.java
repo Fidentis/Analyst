@@ -458,7 +458,7 @@ public class SurfaceComparisonProcessing {
      * @throws FileManipulationException if method couldn't save temporary
      * results on disk
      */
-    public ArrayList<ArrayList<Float>> compareFaces(Model template, List<File> compFs, boolean useRelative, ComparisonMethod method, ICPmetric metric) throws FileManipulationException {
+    public ArrayList<ArrayList<Float>> compareFaces(Model template, List<File> compFs, boolean useRelative, ComparisonMethod method, ICPmetric metric, boolean computeAvg) throws FileManipulationException {
         ArrayList<ArrayList<Float>> results = new ArrayList<ArrayList<Float>>(compFs.size());
         List<Vector3f> recomputedVertexNormals;
         List<Future<ArrayList<Float>>> list = new ArrayList<Future<ArrayList<Float>>>(compFs.size());
@@ -479,7 +479,8 @@ public class SurfaceComparisonProcessing {
             ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
             //computes average face to compare all meshes to
-            computeAverage(template, compFs, metric);
+            if(computeAvg)
+                computeAverage(template, compFs, metric);
             if (method == ComparisonMethod.HAUSDORFF_CURV) {
                 templateCurv = new Curvature_jv(template);
             }
