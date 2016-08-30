@@ -266,21 +266,23 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
         comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
-        
-        if(comparison.getTransparencyViz() != null)
+
+        if (comparison.getTransparencyViz() != null) {
             appendTransparencyData(comparison.getTransparencyViz(), comparisonE);
-        
-        if(comparison.getVectorsViz() != null)
+        }
+
+        if (comparison.getVectorsViz() != null) {
             appendVectorsData(comparison.getVectorsViz(), comparisonE);
-        
-        if(comparison.getColormapViz() != null)
+        }
+
+        if (comparison.getColormapViz() != null) {
             appendColormapData(comparison.getColormapViz(), comparisonE);
-        
+        }
+
         //comparison result
-        if(comparison.getVisualization() != null)
-            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
-  
-        
+        if (comparison.getVisualization() != null) {
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization().name()));
+        }
 
         zipDirectory(auxFile, null);
 
@@ -421,22 +423,26 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
-        
+
         comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
-        
+
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
-        
-        if(comparison.getVisualization() != null)
-            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
-        
-        if(comparison.getCrosscutViz() != null)
+
+        if (comparison.getVisualization() != null) {
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization().name()));
+        }
+
+        if (comparison.getCrosscutViz() != null) {
             appendCrosscutData(comparison.getCrosscutViz(), comparisonE);
-        
-        if(comparison.getVectorsViz() != null)
+        }
+
+        if (comparison.getVectorsViz() != null) {
             appendVectorsData(comparison.getVectorsViz(), comparisonE);
-        
-        if(comparison.getColormapViz() != null)
+        }
+
+        if (comparison.getColormapViz() != null) {
             appendColormapData(comparison.getColormapViz(), comparisonE);
+        }
 
         zipDirectory(auxFile, null);
 
@@ -561,23 +567,26 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("icpNumOfHeads", String.valueOf(comparison.getICPnumberOfHeads()));
 
         comparisonE.setAttribute("templateIndex", String.valueOf(comparison.getTemplateIndex()));
-        
+
         comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
-        
+
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
-        
-        if(comparison.getVisualization() != null)
-            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
-        
-        if(comparison.getCrosscutViz() != null)
+
+        if (comparison.getVisualization() != null) {
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization().name()));
+        }
+
+        if (comparison.getCrosscutViz() != null) {
             appendCrosscutData(comparison.getCrosscutViz(), comparisonE);
-        
-        if(comparison.getVectorsViz() != null)
+        }
+
+        if (comparison.getVectorsViz() != null) {
             appendVectorsData(comparison.getVectorsViz(), comparisonE);
-        
-        if(comparison.getColormapViz() != null)
+        }
+
+        if (comparison.getColormapViz() != null) {
             appendColormapData(comparison.getColormapViz(), comparisonE);
-        
+        }
 
         if (comparison.getRegistrationMethod() != null) {
             comparisonE.setAttribute("registrationMethod", comparison.getRegistrationMethod().name());
@@ -708,77 +717,80 @@ public final class SaveProject implements ActionListener {
         infoE.setAttribute("selectedConfig", String.valueOf(info.getIndexOfSelectedConfig()));
         infoE.setAttribute("pointRadius", String.valueOf(info.getFacialPointRadius()));
     }
-    
-    private void appendCrosscutData(CrosscutConfig data, Element parent){
+
+    private void appendCrosscutData(CrosscutConfig data, Element parent) {
         Element crossE = parent.getOwnerDocument().createElement("crosscutData");
         parent.appendChild(crossE);
-        
-        crossE.setAttribute("crossCutPlaneIndex", String.valueOf(data.getCrossCutPlaneIndex()));   
-        
-        if(data.getArbitraryPlanePos() != null){
-            crossE.setAttribute("arbitraryPlanePosX", String.valueOf(data.getArbitraryPlanePos().x));        
-            crossE.setAttribute("arbitraryPlanePosY", String.valueOf(data.getArbitraryPlanePos().y));        
-            crossE.setAttribute("arbitraryPlanePosZ", String.valueOf(data.getArbitraryPlanePos().z));        
+
+        crossE.setAttribute("crossCutPlaneIndex", String.valueOf(data.getCrossCutPlaneIndex()));
+
+        if (data.getArbitraryPlanePos() != null) {
+            crossE.setAttribute("arbitraryPlanePosX", String.valueOf(data.getArbitraryPlanePos().x));
+            crossE.setAttribute("arbitraryPlanePosY", String.valueOf(data.getArbitraryPlanePos().y));
+            crossE.setAttribute("arbitraryPlanePosZ", String.valueOf(data.getArbitraryPlanePos().z));
         }
-        
-        if(data.getPlanePosition() != null){
-            crossE.setAttribute("planePosX", String.valueOf(data.getPlanePosition().x));        
-            crossE.setAttribute("planePosY", String.valueOf(data.getPlanePosition().y));        
+
+        if (data.getPlanePosition() != null) {
+            crossE.setAttribute("planePosX", String.valueOf(data.getPlanePosition().x));
+            crossE.setAttribute("planePosY", String.valueOf(data.getPlanePosition().y));
             crossE.setAttribute("planePosZ", String.valueOf(data.getPlanePosition().z));
         }
-        
-                
-        crossE.setAttribute("crosscutSize", String.valueOf(data.getCrosscutSize()));        
-        crossE.setAttribute("crosscutThickness", String.valueOf(data.getCrosscutThickness())); 
-        
-        if(data.getCrosscutColor() != null){
+
+        crossE.setAttribute("crosscutSize", String.valueOf(data.getCrosscutSize()));
+        crossE.setAttribute("crosscutThickness", String.valueOf(data.getCrosscutThickness()));
+
+        if (data.getCrosscutColor() != null) {
             crossE.setAttribute("crosscutColor", String.valueOf(data.getCrosscutColor().getRGB()));
         }
-                
-        crossE.setAttribute("highlightCuts", String.valueOf(data.isHighlightCuts()));        
-        crossE.setAttribute("showVectors", String.valueOf(data.isShowVector()));        
-        crossE.setAttribute("allCuts", String.valueOf(data.isAllCuts())); 
-        crossE.setAttribute("showPlane", String.valueOf(data.isShowPlane()));      
-        crossE.setAttribute("samplingRays", String.valueOf(data.isSamplingRays()));      
+
+        crossE.setAttribute("highlightCuts", String.valueOf(data.isHighlightCuts()));
+        crossE.setAttribute("showVectors", String.valueOf(data.isShowVector()));
+        crossE.setAttribute("allCuts", String.valueOf(data.isAllCuts()));
+        crossE.setAttribute("showPlane", String.valueOf(data.isShowPlane()));
+        crossE.setAttribute("samplingRays", String.valueOf(data.isSamplingRays()));
     }
-    
-    private void appendTransparencyData(TransparencyConfig data, Element parent){
+
+    private void appendTransparencyData(TransparencyConfig data, Element parent) {
         Element transE = parent.getOwnerDocument().createElement("transparencyData");
         parent.appendChild(transE);
-        
+
         //comparison configuration
-        if(data.getPrimaryColor() != null)
+        if (data.getPrimaryColor() != null) {
             transE.setAttribute("primaryColor", String.valueOf(data.getPrimaryColor().getRGB()));
-        if(data.getSecondaryColor() != null)
+        }
+        if (data.getSecondaryColor() != null) {
             transE.setAttribute("secondaryColor", String.valueOf(data.getSecondaryColor().getRGB()));
+        }
         transE.setAttribute("primarySolid", String.valueOf(data.isIsPrimarySolid()));
         transE.setAttribute("secondarySolid", String.valueOf(data.isIsSecondarySolid()));
-        if(data.getFogColor() != null)
+        if (data.getFogColor() != null) {
             transE.setAttribute("fogColor", String.valueOf(data.getFogColor().getRGB()));
+        }
         transE.setAttribute("overlayTransparency", String.valueOf(data.getOverlayTransparency()));
         transE.setAttribute("innerSurfaceSolid", String.valueOf(data.isInnerSurfaceSolid()));
         transE.setAttribute("useGlyphs", String.valueOf(data.isUseGlyphs()));
         transE.setAttribute("useContours", String.valueOf(data.isUseContours()));
         transE.setAttribute("fogVersion", String.valueOf(data.getFogVersion()));
     }
-    
-    private void appendVectorsData(VectorsConfig data, Element parent){
+
+    private void appendVectorsData(VectorsConfig data, Element parent) {
         Element vectorsE = parent.getOwnerDocument().createElement("vectorsData");
         parent.appendChild(vectorsE);
-        
-        vectorsE.setAttribute("vectorDensity", String.valueOf(data.getVectorDensity()));        
-        vectorsE.setAttribute("vectorLength", String.valueOf(data.getVectorLength()));        
-        vectorsE.setAttribute("cylinderRadius", String.valueOf(data.getCylinderRadius()));    
+
+        vectorsE.setAttribute("vectorDensity", String.valueOf(data.getVectorDensity()));
+        vectorsE.setAttribute("vectorLength", String.valueOf(data.getVectorLength()));
+        vectorsE.setAttribute("cylinderRadius", String.valueOf(data.getCylinderRadius()));
     }
-    
-    private void appendColormapData(ColormapConfig data, Element parent){
+
+    private void appendColormapData(ColormapConfig data, Element parent) {
         Element colorE = parent.getOwnerDocument().createElement("colormapData");
         parent.appendChild(colorE);
-        
-        colorE.setAttribute("haussdorfMaxTreshold", String.valueOf(data.getHausdorfMaxTreshold()));        
+
+        colorE.setAttribute("haussdorfMaxTreshold", String.valueOf(data.getHausdorfMaxTreshold()));
         colorE.setAttribute("haussdorfMinTreshold", String.valueOf(data.getHausdorfMinTreshold()));
-        if(data.getUsedColorScheme() != null)
-            colorE.setAttribute("colorScheme", String.valueOf(data.getUsedColorScheme()));
+        if (data.getUsedColorScheme() != null) {
+            colorE.setAttribute("colorScheme", String.valueOf(data.getUsedColorScheme().name()));
+        }
     }
 
     private void appendModelTransformations(List<ArrayList<ICPTransformation>> transformations, Element parent) {
@@ -858,7 +870,7 @@ public final class SaveProject implements ActionListener {
             tc.setDisplayName(outFile.getName());
             tc.getProject().setName(outFile.getName());
             GUIController.updateNavigator();
-            
+
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
@@ -885,6 +897,19 @@ public final class SaveProject implements ActionListener {
             };
             Thread t = new Thread(r);
             t.start();
+        }
+    }
+
+    //debug
+    public void closeZip() {
+        try {
+            if (zipStream != null) {
+                zipStream.closeEntry();
+                zipStream.close();
+                zipStream = null;
+            }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }
 }
