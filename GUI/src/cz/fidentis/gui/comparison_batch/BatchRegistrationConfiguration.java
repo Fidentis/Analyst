@@ -26,6 +26,7 @@ import cz.fidentis.processing.featurePoints.FpProcessing;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
+import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
 import java.awt.Dimension;
 import java.io.File;
@@ -924,7 +925,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                              c.getFacialPoints(
                                     tc.getViewerPanel_Batch().getListener().getModel().getName()
                             ));
-                    c.setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
 
                     jButton1.setEnabled(areFPCalculated(tc));
                     jButton7.setEnabled(areFPCalculated(tc));
@@ -1042,13 +1042,16 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             
                         List<List<FacialPoint>> list = new ArrayList();
                         List<ArrayList<Vector3f>> verts = new ArrayList();
+                        ModelLoader ml = new ModelLoader();
 
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
                                     c.getModels().get(i).getName());
                             list.add(facialPoints);
+                            
+                            Model m = ml.loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
 
-                            verts.add(c.getPreregiteredModels().get(i).getVerts());
+                            verts.add(m.getVerts());
                         }
 
                         ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, c.isFpScaling());
@@ -1059,24 +1062,35 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         
                         tc.getProject().getSelectedBatchComparison().clearFacialPoints();
 
-                        List<File> results;
+                        List<File> results = new ArrayList<>(size);
+                        File tmpModuleFile = new File("" + System.currentTimeMillis());
 
-                        for (int i = 0; i < c.getPreregiteredModels().size(); i++) {
-                            c.addFacialPoints(c.getPreregiteredModels().get(i).getName(),
+                        FileUtils.instance().createTMPmoduleFolder(tmpModuleFile);
+
+                        for (int i = 0; i < size; i++) {
+                            c.addFacialPoints(c.getModel(i).getName(),
                                     procrustes.getGpa().getPA(i).getFacialPoints());
                             
-                            c.getPreregiteredModels().get(i).setVerts(procrustes.getGpa().getPA(i).getVertices());
-                            procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(c.getPreregiteredModels().get(i).getName()));
+                            Model m = ml.loadModel(c.getModel(i), false, Boolean.TRUE);
+                            m.setVerts(procrustes.getGpa().getPA(i).getVertices());
+                            procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()));                            
                             
                             
-                            
-                            if (c.getPreregiteredModels().get(i).getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
-                                tc.getViewerPanel_Batch().getListener().setModels(c.getPreregiteredModels().get(i));
+                            if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
+                                tc.getViewerPanel_Batch().getListener().setModels(m);
                                 tc.getViewerPanel_Batch().getListener().setFacialPoints(c.getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
                             }
+                            
+                            ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
 
+                            k.start();
+
+                            results.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.FALSE));
+                            k.finish();     
                         }
 
+                        c.setRegistrationResults(results);
+                        
                         if (c.isFpScaling()) {
                             //tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 7);
                             tc.getViewerPanel_Batch().getListener().setFacialPointRadius(c.getFpSize() / 30f);
@@ -1085,23 +1099,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
                        // tc.getViewerPanel_Batch().getListener().setFacialPointRadius(jSlider1.getValue());
                     }*/
-                        ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
-
-                        try {
-
-                            k.start();
-
-                            File tmpModuleFile = new File("compF");
-                            results = ProcessingFileUtils.instance().saveModelsToTMP(c.getPreregiteredModels(), tmpModuleFile, Boolean.FALSE);
-                            k.finish();
-
-                            c.setRegistrationResults(results);
-
-                        } catch (FileManipulationException ex) {
-                            //osefuj vynimku
-                            jButton1.setEnabled(true);
-                            k.finish();
-                        }
+                        
                         tc.getViewerPanel_Batch().getListener().setFacialPoints(
                                 c.getFacialPoints(
                                         tc.getViewerPanel_Batch().getListener().getModel().getName()
@@ -1191,12 +1189,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             c.addFacialPoints(
                     model.getModelName(), model.getFacialPoints());
         }
-
-        for (File f : models) {
-            loadedModels.add(ml.loadModel(f, false, true));
-        }
-
-       c.setPreregiteredModels((ArrayList<Model>) loadedModels);
 
         jButton1.setEnabled(areFPCalculated(tc));
         jButton7.setEnabled(areFPCalculated(tc));

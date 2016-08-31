@@ -381,16 +381,10 @@ public final class NavigatorTopComponent extends TopComponent {
                     listener.setFacialPoints(null);
                     
                     if(previousNodeText.equals(strings.getString("tree.node.comparedModels"))) {
-                        if(batchComparison.getPreregiteredModels() != null) {
-                            Model m = batchComparison.getPreregiteredModels().get(lastNodeIndex);
-                            listener.setModels(m);
-                            listener.setFacialPoints(batchComparison.getFacialPoints(m.getName()));
-                        } else {
-                            File file = batchComparison.getModel(lastNodeIndex);
-                            ModelLoader loader = new ModelLoader();
-                            Model model = loader.loadModel(file, true, true);
-                            listener.setModels(model);
-                        }
+                        File file = batchComparison.getModel(lastNodeIndex);
+                        ModelLoader loader = new ModelLoader();
+                        Model model = loader.loadModel(file, true, true);
+                        listener.setModels(model);
                     }
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = batchComparison.getRegistrationResults().get(lastNodeIndex);

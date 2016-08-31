@@ -43,7 +43,6 @@ public class BatchComparison {
     private File hdCSVresults;          //URL to directory where computed numerical results in csv format are stored in
     private ArrayList<ArrayList<Float>> hdVisualResults;    //visual results, num of inner array == num of models, num of outer arrays == num of vertices of avgFace
     private ArrayList<File> models = new ArrayList<>();     //URLs to models stored on disk
-    private ArrayList<Model> preRegiteredModels;            //loaded preregistered models, used for feature point computation
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
@@ -274,14 +273,6 @@ public class BatchComparison {
     public void setFirstCreated(boolean firstCreated) {
         this.firstCreated = firstCreated;
     }
-
-    public ArrayList<Model> getPreregiteredModels() {
-        return preRegiteredModels;
-    }
-
-    public void setPreregiteredModels(ArrayList<Model> regiteredModels) {
-        this.preRegiteredModels = regiteredModels;
-    }  
 
     public HDpaintingInfo getHDinfo() {
         return HDinfo;

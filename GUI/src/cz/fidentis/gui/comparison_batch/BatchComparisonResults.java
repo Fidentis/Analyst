@@ -1806,6 +1806,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final BatchComparison c = getContext();
         
+        if(c.getHDinfo() == null)
+            return;
+        
         if (vt == VisualizationType.COLORMAP) {
             colormapPanel.setVisible(true);
             slicesPanel.setVisible(false);
@@ -2251,7 +2254,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         BatchComparison bc = getContext();
         bc.setUsedColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
         
-        bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
+        if(bc.getHDP() != null)
+            bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
