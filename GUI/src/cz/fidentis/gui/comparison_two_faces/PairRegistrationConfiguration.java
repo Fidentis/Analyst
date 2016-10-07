@@ -582,7 +582,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         buttonGroup1.add(removePointButton);
         org.openide.awt.Mnemonics.setLocalizedText(removePointButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.removePointButton.text")); // NOI18N
-        removePointButton.setEnabled(false);
         removePointButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removePointButtonActionPerformed(evt);
@@ -812,7 +811,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -905,16 +904,14 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_calculatePointsButtonActionPerformed
 
     private void removePointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePointButtonActionPerformed
-        //make sure canvas takes info from Comparison2Faces, also wth batch does here? This doesn't seem to be doing what it's supposed to (button inactive at all times)
-        
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editPointButton.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
+        //make sure canvas takes info from Comparison2Faces
+ 
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setRemovePoints(removePointButton.isSelected());
     }//GEN-LAST:event_removePointButtonActionPerformed
 
     private void addPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPointButtonActionPerformed
-        //make sure canvas takes info from Comparison2Faces, also wth batch does here? This doesn't seem to be doing what it's supposed to (button inactive at all times)
+        //make sure canvas takes info from Comparison2Faces
         
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editPointButton.isSelected());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
     }//GEN-LAST:event_addPointButtonActionPerformed
 
@@ -930,9 +927,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void editPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPointButtonActionPerformed
-        //make sure canvas takes info from Comparison2Faces, also wth batch does here?
+        //make sure canvas takes info from Comparison2Faces
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editPointButton.isSelected());
     }//GEN-LAST:event_editPointButtonActionPerformed
 
     private void areaComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaComboboxActionPerformed

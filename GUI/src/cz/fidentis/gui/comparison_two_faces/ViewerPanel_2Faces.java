@@ -11,6 +11,7 @@ import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.model.Model;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.SwingUtilities;
@@ -31,6 +32,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private int indexOfSelectedPoint;
     private boolean showInfo = true;
     private boolean editablePoints = false;
+    private boolean removePoints = false;
     private boolean selection = false;
 
     /**
@@ -117,7 +119,15 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
     public void setEditablePoints(boolean b) {
         editablePoints = b;
+        removePoints = !b;
     }
+
+    public void setRemovePoints(boolean removePoints) {
+        this.removePoints = removePoints;
+        editablePoints = !removePoints;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -191,58 +201,44 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void canvas1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MousePressed
+       canvasClicked(evt, listener1, canvas1);
+       GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setMainFp(listener1.getFacialPoints());    //TODO
+    }//GEN-LAST:event_canvas1MousePressed
+
+    private void canvas2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MousePressed
+        canvasClicked(evt, listener2, canvas2);
+        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setSecondaryFp(listener2.getFacialPoints());  //TODO
+    }//GEN-LAST:event_canvas2MousePressed
+
+    private void canvasClicked(MouseEvent evt, ComparisonGLEventListener listener, Canvas canvas) {
         mouseDraggedX = evt.getX();
         mouseDraggedY = evt.getY();
 
-        manipulatePoint = listener1.selectPoint(evt.getX(), evt.getY());
+        manipulatePoint = listener.selectPoint(evt.getX(), evt.getY());
         if (manipulatePoint) {
-            nextIndexOfSelectedPoint = listener1.getIndexOfSelectedPoint();
-            if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
-                indexOfSelectedPoint = nextIndexOfSelectedPoint;
-            }
-            canvas1.setInfo(listener1.getFacialPoint(indexOfSelectedPoint));
-            if (showInfo) {
-                canvas1.setFeaturePointsPanelVisibility(true);
+            nextIndexOfSelectedPoint = listener.getIndexOfSelectedPoint();
+          
+            if (editablePoints) {
+                if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
+                    indexOfSelectedPoint = nextIndexOfSelectedPoint;
+                }
+                canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
+                if (showInfo) {
+                    canvas.setFeaturePointsPanelVisibility(true);
 
+                }
+            }else if(removePoints){
+                listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
+                listener.setIndexOfSelectedPoint(-1);
             }
-        } else if (listener1.getModel() != null && listener1.checkPointInMesh(evt.getX(), evt.getY()) == null) {
-            listener1.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
+            
+        } else if (listener.getModel() != null && listener.checkPointInMesh(evt.getX(), evt.getY()) == null) {        //pick point on the mesh
+            listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
             if (showInfo) {
                 canvas1.setFeaturePointsPanelVisibility(false);
             }
         }
-
-
-    }//GEN-LAST:event_canvas1MousePressed
-
-    private void canvas2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MousePressed
-        mouseDraggedX = evt.getX();
-        mouseDraggedY = evt.getY();
-        
-        
-        manipulatePoint = listener2.selectPoint(evt.getX(), evt.getY());
-        if (manipulatePoint) {
-            nextIndexOfSelectedPoint = listener2.getIndexOfSelectedPoint();
-            if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
-                indexOfSelectedPoint = nextIndexOfSelectedPoint;
-            }
-            canvas2.setInfo(listener2.getFacialPoint(indexOfSelectedPoint));
-            if (showInfo) {
-                canvas2.setFeaturePointsPanelVisibility(true);
-
-            }
-        } else if (listener2.getModel() != null && listener2.checkPointInMesh(evt.getX(), evt.getY()) == null && !selection) {
-            listener2.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
-            if (showInfo) {
-                canvas2.setFeaturePointsPanelVisibility(false);
-            }
-        } else if (selection && SwingUtilities.isLeftMouseButton(evt)) {
-            clearSelection();
-            listener2.setSelectionStart(evt.getPoint());
-        }
-        
-
-    }//GEN-LAST:event_canvas2MousePressed
+    }
 
     private void canvas1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseDragged
       
