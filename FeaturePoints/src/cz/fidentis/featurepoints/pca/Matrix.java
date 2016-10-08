@@ -395,12 +395,3 @@ class Matrix {
 		System.out.println("");
 	}
 }
-
-/**
- * Exception class thrown when invalid matrix calculations are attempted
- */
-class MatrixException extends RuntimeException {
-	MatrixException(String string) {
-		super(string);
-	}
-}

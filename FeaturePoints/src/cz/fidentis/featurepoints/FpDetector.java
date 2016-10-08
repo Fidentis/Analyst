@@ -1,20 +1,15 @@
 package cz.fidentis.featurepoints;
 
-import cz.fidentis.*;
 import cz.fidentis.model.Material;
 import cz.fidentis.model.Model;
 import cz.fidentis.featurepoints.symmetryplane.Midline;
 import cz.fidentis.featurepoints.texture.ImageAnalyzer;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Vector3f;
 import jv.object.PsDebug;
 import org.opencv.core.Mat;
 import org.opencv.LoadOpenCV;
-import sun.awt.windows.WToolkit;
 
 /**
  *

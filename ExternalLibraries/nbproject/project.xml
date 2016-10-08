@@ -173,7 +173,7 @@
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/ij.jar</runtime-relative-path>
-                <binary-origin>D:\Documents\SVN\Fidentis\ExternalLibraries\release\modules\ext\ij.jar</binary-origin>
+                <binary-origin>release/modules/ext/ij.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jogl-all-natives-linux-i586.jar</runtime-relative-path>

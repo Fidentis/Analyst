@@ -114,7 +114,7 @@ public static String WHITE_SPACE_SEP = "\\s+";
                 writer.println(fpModel.toCSVstring(SEP));
             }
 
-            writer.close();
+            writer.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             Logger.getLogger(CSVparser.class.getName()).log(Level.SEVERE, null, ex);
         }

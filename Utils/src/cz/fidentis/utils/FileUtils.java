@@ -287,7 +287,7 @@ public final class FileUtils {
                     resultsLine.add(f);
                 }
 
-                results.add(new ArrayList(resultsLine));
+                results.add(new ArrayList<>(resultsLine));
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);

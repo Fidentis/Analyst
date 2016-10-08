@@ -118,7 +118,7 @@ public class DTAparser {
                 writer.println(point);
             }
 
-            writer.close();
+            writer.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             Logger.getLogger(CSVparser.class.getName()).log(Level.SEVERE, null, ex);
         }
