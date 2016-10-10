@@ -937,12 +937,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(jToggleButton3.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(jToggleButton3.isSelected());
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(jToggleButton3.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(jToggleButton3.isSelected());
     }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -955,8 +953,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
-
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(jToggleButton3.isSelected());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(jToggleButton3.isSelected());
     }//GEN-LAST:event_jToggleButton3ActionPerformed
 

@@ -527,72 +527,72 @@ public final class ImportFromImage implements ActionListener {
         return pts;
     }
 
-    public static FacialPointType getFpTypeFromFido(int i) {
+    public static Integer getFpTypeFromFido(int i) {
         switch (i) {
             case 0:
-                return FacialPointType.EX_R;
+                return FacialPointType.EX_R.ordinal();
             case 1:
-                return FacialPointType.PUP_R;//pupila r
+                return FacialPointType.PUP_R.ordinal();//pupila r
             case 2:
-                return FacialPointType.EN_R;
+                return FacialPointType.EN_R.ordinal();
             case 3:
-                return FacialPointType.EN_L;
+                return FacialPointType.EN_L.ordinal();
             case 4:
-                return FacialPointType.PUP_L;//pupila l
+                return FacialPointType.PUP_L.ordinal();//pupila l
             case 5:
-                return FacialPointType.EX_L;
+                return FacialPointType.EX_L.ordinal();
             case 6:
-                return FacialPointType.N;
+                return FacialPointType.N.ordinal();
             case 7:
-                return FacialPointType.AL_R;
+                return FacialPointType.AL_R.ordinal();
             case 8:
-                return FacialPointType.AL_L;
+                return FacialPointType.AL_L.ordinal();
             case 9:
-                return FacialPointType.LS;
+                return FacialPointType.LS.ordinal();
             case 10:
-                return FacialPointType.STO;
+                return FacialPointType.STO.ordinal();
             case 11:
-                return FacialPointType.LI;
+                return FacialPointType.LI.ordinal();
             case 12:
-                return FacialPointType.CH_R;
+                return FacialPointType.CH_R.ordinal();
             case 13:
-                return FacialPointType.CH_L;
+                return FacialPointType.CH_L.ordinal();
             case 14:
-                return FacialPointType.ZY_R;
+                return FacialPointType.ZY_R.ordinal();
             case 15:
-                return FacialPointType.ZY_L;
+                return FacialPointType.ZY_L.ordinal();
             case 16:
-                return FacialPointType.GNA;//gnathion
+                return FacialPointType.GNA.ordinal();//gnathion
             case 17:
-                return FacialPointType.GO2_R;//gonion2 r
+                return FacialPointType.GO2_R.ordinal();//gonion2 r
             case 18:
-                return FacialPointType.GO2_L;//goinon2 l
+                return FacialPointType.GO2_L.ordinal();//goinon2 l
             case 19:
-                return FacialPointType.T_R;
+                return FacialPointType.T_R.ordinal();
             case 20:
-                return FacialPointType.T_L;
+                return FacialPointType.T_L.ordinal();
             case 21:
-                return FacialPointType.V;//vertex
+                return FacialPointType.V.ordinal();//vertex
             case 22:
-                return FacialPointType.O;//Ophryon
+                return FacialPointType.O.ordinal();//Ophryon
             case 23:
-                return FacialPointType.RN_R;//radix nasi r
+                return FacialPointType.RN_R.ordinal();//radix nasi r
             case 24:
-                return FacialPointType.RN_L;//radix nasi l
+                return FacialPointType.RN_L.ordinal();//radix nasi l
             case 25:
-                return FacialPointType.EU2_R;//Euryon II r
+                return FacialPointType.EU2_R.ordinal();//Euryon II r
             case 26:
-                return FacialPointType.EU2_L;//Euryon II l
+                return FacialPointType.EU2_L.ordinal();//Euryon II l
             case 27:
-                return FacialPointType.RM_R;//Ramus mandibulae r
+                return FacialPointType.RM_R.ordinal();//Ramus mandibulae r
             case 28:
-                return FacialPointType.RM_L;//Ramus mandibulae l
+                return FacialPointType.RM_L.ordinal();//Ramus mandibulae l
             case 29:
-                return FacialPointType.unspecified;//Lobulus auriculae r
+                return -1;//Lobulus auriculae r
             case 30:
-                return FacialPointType.unspecified;//Lobulus auriculae l
+                return -1;//Lobulus auriculae l
             default:
-                return FacialPointType.unspecified;
+                return -1;
         }
     }
     

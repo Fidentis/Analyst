@@ -265,7 +265,7 @@ public class ImageFpCanvas extends JPanel {
                         required.remove(p.getType());
                     }
                     for (FacialPointType typ : required) {
-                        final FacialPoint menuPoint = new FacialPoint(typ, pointCoords);
+                        final FacialPoint menuPoint = new FacialPoint(typ.ordinal(), pointCoords);
                         JMenuItem item = new JMenuItem(menuPoint.getName());
                         item.addActionListener(new ActionListener() {
                             @Override

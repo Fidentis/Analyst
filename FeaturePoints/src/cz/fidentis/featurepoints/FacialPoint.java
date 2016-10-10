@@ -22,7 +22,7 @@ import jv.vecmath.PdVector;
 @XmlRootElement(name = "facialPoint")
 public class FacialPoint implements Serializable {
     
-    private FacialPointType type;
+    private Integer type;
     private String name;
     private String info;
 
@@ -32,7 +32,7 @@ public class FacialPoint implements Serializable {
         this.pos = new Vector3f();
     }
     
-    public FacialPoint(FacialPointType type, PdVector coords) {        
+    public FacialPoint(Integer type, PdVector coords) {        
         this.pos = new Vector3f((float)coords.getEntry(0), (float)coords.getEntry(1), (float)coords.getEntry(2));
         
         this.type = type;
@@ -40,14 +40,14 @@ public class FacialPoint implements Serializable {
         this.info = FpTexter.getInstance().getFPinfo(type);
     }
     
-    public FacialPoint(FacialPointType type) {
+    public FacialPoint(Integer type) {
         this.type = type;
         this.name = FpTexter.getInstance().getFPname(type);
         this.info = FpTexter.getInstance().getFPinfo(type);
     }
 
     
-    public FacialPoint(FacialPointType type, Tuple3f coords) {        
+    public FacialPoint(Integer type, Tuple3f coords) {        
         this.pos = new Vector3f(coords);
         
         this.type = type;
@@ -55,7 +55,7 @@ public class FacialPoint implements Serializable {
         this.info = FpTexter.getInstance().getFPinfo(type);
     }
     
-    public FacialPoint(FacialPointType type, Tuple3d coords) {        
+    public FacialPoint(Integer type, Tuple3d coords) {        
         this.pos = new Vector3f(coords);
         
         this.type = type;
@@ -75,11 +75,11 @@ public class FacialPoint implements Serializable {
         return info;
     }
 
-    public FacialPointType getType() {
+    public Integer getType() {
         return type;
     }
     
-    public void setType(FacialPointType type) {
+    public void setType(Integer type) {
         this.type = type;
         this.name = FpTexter.getInstance().getFPname(type);
         this.info = FpTexter.getInstance().getFPinfo(type);

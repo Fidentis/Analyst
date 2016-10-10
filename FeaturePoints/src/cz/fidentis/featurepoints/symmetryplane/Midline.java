@@ -50,9 +50,9 @@ public class Midline {
     private List<FacialPoint> midlineFacialPoints;
     private FpModel modelFPs;
 
-    private List<FacialPointType> maximaFPorderList;
-    private List<FacialPointType> minimaFPorderList;
-    private List<FacialPointType> midlineFPorderList;
+    private List<Integer> maximaFPorderList;
+    private List<Integer> minimaFPorderList;
+    private List<Integer> midlineFPorderList;
 
     public Midline(Model model, List<Vector3f> centerPoints) {
         this.model = model;
@@ -143,32 +143,32 @@ public class Midline {
 
         // Vytvorime aj celkovy zoznam poradia, nezalezi na maxime, alebo minime
         midlineFPorderList = new ArrayList<>();
-        midlineFPorderList.add(FacialPointType.G); // Glabela
-        midlineFPorderList.add(FacialPointType.N); // Nasion
-        midlineFPorderList.add(FacialPointType.PRN); // Pronasale  
-        midlineFPorderList.add(FacialPointType.SN); // Subnasale (?) - nie som si isty, ci je to minimum
-        midlineFPorderList.add(FacialPointType.LS); // Labrale superius
-        midlineFPorderList.add(FacialPointType.STO); // Stomion
-        midlineFPorderList.add(FacialPointType.LI); // Labrale inferius
-        midlineFPorderList.add(FacialPointType.SL); // Sublabiale
-        midlineFPorderList.add(FacialPointType.PG); // Pogonion
+        midlineFPorderList.add(FacialPointType.G.ordinal()); // Glabela
+        midlineFPorderList.add(FacialPointType.N.ordinal()); // Nasion
+        midlineFPorderList.add(FacialPointType.PRN.ordinal()); // Pronasale  
+        midlineFPorderList.add(FacialPointType.SN.ordinal()); // Subnasale (?) - nie som si isty, ci je to minimum
+        midlineFPorderList.add(FacialPointType.LS.ordinal()); // Labrale superius
+        midlineFPorderList.add(FacialPointType.STO.ordinal()); // Stomion
+        midlineFPorderList.add(FacialPointType.LI.ordinal()); // Labrale inferius
+        midlineFPorderList.add(FacialPointType.SL.ordinal()); // Sublabiale
+        midlineFPorderList.add(FacialPointType.PG.ordinal()); // Pogonion
         // midlineFPorderList.add(FacialPointType.GN); // Gnathion (?) - nie som si isty, ci je to minimum
 
         // Lokalne maxima, od hora na dol, dolezite je poradie bodov
         maximaFPorderList = new ArrayList<>();
-        maximaFPorderList.add(FacialPointType.G); // Glabela
-        maximaFPorderList.add(FacialPointType.PRN); // Pronasale
-        maximaFPorderList.add(FacialPointType.LS); // Labrale superius
-        maximaFPorderList.add(FacialPointType.LI); // Labrale inferius
-        maximaFPorderList.add(FacialPointType.PG); // Pogonion
+        maximaFPorderList.add(FacialPointType.G.ordinal()); // Glabela
+        maximaFPorderList.add(FacialPointType.PRN.ordinal()); // Pronasale
+        maximaFPorderList.add(FacialPointType.LS.ordinal()); // Labrale superius
+        maximaFPorderList.add(FacialPointType.LI.ordinal()); // Labrale inferius
+        maximaFPorderList.add(FacialPointType.PG.ordinal()); // Pogonion
 
         // Lokalne Minima, od hora na dol, dolezite je poradie bodov
         minimaFPorderList = new ArrayList<>();
-        minimaFPorderList.add(FacialPointType.N); // Nasion
-        minimaFPorderList.add(FacialPointType.SN); // Subnasale (?) - nie som si isty, ci je to minimum
-        minimaFPorderList.add(FacialPointType.STO); // Stomion
-        minimaFPorderList.add(FacialPointType.SL); // Sublabiale
-        minimaFPorderList.add(FacialPointType.GN); // Gnathion (?) - nie som si isty, ci je to minimum
+        minimaFPorderList.add(FacialPointType.N.ordinal()); // Nasion
+        minimaFPorderList.add(FacialPointType.SN.ordinal()); // Subnasale (?) - nie som si isty, ci je to minimum
+        minimaFPorderList.add(FacialPointType.STO.ordinal()); // Stomion
+        minimaFPorderList.add(FacialPointType.SL.ordinal()); // Sublabiale
+        minimaFPorderList.add(FacialPointType.GN.ordinal()); // Gnathion (?) - nie som si isty, ci je to minimum
 
     }
 
@@ -215,70 +215,70 @@ public class Midline {
     private void pointDetection() {
         // bod pronasale urcime, ako najblizsi bod k uz najdenemu bodu pronasale
         // TODO nevytvarat novy, ale nahradit existujuci bod
-        Point3d modelPronasale = new Point3d(modelFPs.getFacialPoint(FacialPointType.PRN).getCoords());
+        Point3d modelPronasale = new Point3d(modelFPs.getFacialPoint(FacialPointType.PRN.ordinal()).getCoords());
         Point3d pronasale = findNearestPoint(modelPronasale, sortedMinDynamics);
         Integer pronasaleIdx = tmpIndex;
-        FacialPoint pronasaleFP = new FacialPoint(FacialPointType.PRN, pronasale);
+        FacialPoint pronasaleFP = new FacialPoint(FacialPointType.PRN.ordinal(), pronasale);
         midlineFacialPoints.add(pronasaleFP);
 
         // bod stomion urcime, ako najblizsi bod k uz najdenemu bodu stomion
         // TODO nevytvarat novy, ale nahradit existujuci bod
-        Point3d modelStomion = new Point3d(modelFPs.getFacialPoint(FacialPointType.STO).getCoords());
+        Point3d modelStomion = new Point3d(modelFPs.getFacialPoint(FacialPointType.STO.ordinal()).getCoords());
         Point3d stomion = findNearestPoint(modelStomion, sortedMinDynamics);
         Integer stomionIdx = tmpIndex;
-        FacialPoint stomionFP = new FacialPoint(FacialPointType.STO, stomion);
+        FacialPoint stomionFP = new FacialPoint(FacialPointType.STO.ordinal(), stomion);
         midlineFacialPoints.add(stomionFP);
 
         // bod nasion nebol vysetrovany, preto len priblizna interpolacia - 
         // - zaujima nas len y-ova suradnica
-        double modelNasionY = (modelFPs.getFacialPoint(FacialPointType.EN_L).getPosition().y
-                + modelFPs.getFacialPoint(FacialPointType.EN_R).getPosition().y) / 2;
+        double modelNasionY = (modelFPs.getFacialPoint(FacialPointType.EN_L.ordinal()).getPosition().y
+                + modelFPs.getFacialPoint(FacialPointType.EN_R.ordinal()).getPosition().y) / 2;
         // bod nasion urcime, ako najblizsi bod vzhladom na vnutorne kutiky oci
         Point3d nasion = findNearestPoint(modelNasionY, sortedMaxDynamics);
         Integer nasionIdx = tmpIndex;
-        FacialPoint nasionFP = new FacialPoint(FacialPointType.N, nasion);
+        FacialPoint nasionFP = new FacialPoint(FacialPointType.N.ordinal(), nasion);
         midlineFacialPoints.add(nasionFP);
 
         // bod glabela urcime ako prvy bod s vysokou dynamikou, ktory
         // je vyssie ako bod nasion
         Point3d glabela = findHigherPoint(nasionIdx, sortedMinDynamics);
         Integer glabelaIdx = tmpIndex;
-        FacialPoint glabelaFP = new FacialPoint(FacialPointType.G, glabela);
+        FacialPoint glabelaFP = new FacialPoint(FacialPointType.G.ordinal(), glabela);
         midlineFacialPoints.add(glabelaFP);
 
         // bod labrale superius urcime ako prvy bod s vysokou dynamikou, ktory
         // je vyssie ako bod stomion
         Point3d labraleSuperius = findHigherPoint(stomionIdx, sortedMinDynamics);
         Integer labraleSuperiusIdx = tmpIndex;
-        FacialPoint labraleSuperiusFP = new FacialPoint(FacialPointType.LS, labraleSuperius);
+        FacialPoint labraleSuperiusFP = new FacialPoint(FacialPointType.LS.ordinal(), labraleSuperius);
         midlineFacialPoints.add(labraleSuperiusFP);
 
         // bod labrale inferius urcime ako prvy bod s vysokou dynamikou, ktory
         // je nizsie ako bod stomion
         Point3d labraleInferius = findLowerPoint(stomionIdx, sortedMinDynamics);
         Integer labraleInferiusIdx = tmpIndex;
-        FacialPoint labraleInferiusFP = new FacialPoint(FacialPointType.LI, labraleInferius);
+        FacialPoint labraleInferiusFP = new FacialPoint(FacialPointType.LI.ordinal(), labraleInferius);
         midlineFacialPoints.add(labraleInferiusFP);
 
         // bod sublabiale urcime ako prvy bod s vysokou dynamikou, ktory
         // je nizsie ako bod labrale inferius
         Point3d sublabiale = findLowerPoint(labraleInferiusIdx, sortedMaxDynamics);
         Integer sublabialeIdx = tmpIndex;
-        FacialPoint sublabialeFP = new FacialPoint(FacialPointType.SL, sublabiale);
+        FacialPoint sublabialeFP = new FacialPoint(FacialPointType.SL.ordinal(), sublabiale);
         midlineFacialPoints.add(sublabialeFP);
 
         // bod pogonion urcime ako prvy bod s vysokou dynamikou, ktory
         // je nizsie ako bod sublabiale
         Point3d pogonion = findLowerPoint(sublabialeIdx, sortedMinDynamics);
         Integer pogonionIdx = tmpIndex;
-        FacialPoint pogonionFP = new FacialPoint(FacialPointType.PG, pogonion);
+        FacialPoint pogonionFP = new FacialPoint(FacialPointType.PG.ordinal(), pogonion);
         midlineFacialPoints.add(pogonionFP);
 
         // bod subnasale urcimee ako prvy bod s vysokou dynamikou, ktory
         // sa nachadza medzi bodmi pronasale a labrale superius
         Point3d subnasale = findPointBetween(pronasaleIdx, labraleSuperiusIdx, sortedMaxDynamics);
         Integer subnasaleIdx = tmpIndex;
-        FacialPoint subnasaleFP = new FacialPoint(FacialPointType.SN, subnasale);
+        FacialPoint subnasaleFP = new FacialPoint(FacialPointType.SN.ordinal(), subnasale);
         midlineFacialPoints.add(subnasaleFP);
 
         deleteNullFPs();
@@ -288,7 +288,7 @@ public class Midline {
         interpolateFPs(pointIndexes, midlineFPorderList);
     }
 
-    private void interpolateFPs(List<Integer> pointIndexes, List<FacialPointType> orderList) {
+    private void interpolateFPs(List<Integer> pointIndexes, List<Integer> orderList) {
         // Pre kazdu hodnotu dynamiky najdeme bod na symetrickom profile
         int index = 0;
         for (Integer idx : pointIndexes) {

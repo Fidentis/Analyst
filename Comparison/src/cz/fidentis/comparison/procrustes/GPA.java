@@ -4,7 +4,7 @@ import Jama.Matrix;
 import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
+//import cz.fidentis.featurepoints.FacialPointType;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -106,12 +106,12 @@ public class GPA implements Serializable {
             
         }*/
         
-        Map<FacialPointType, FacialPoint> mean = new HashMap<>();
-        Map<FacialPointType, Integer> timesAdded = new HashMap<>();
+        Map<Integer, FacialPoint> mean = new HashMap<>();
+        Map<Integer, Integer> timesAdded = new HashMap<>();
         
         for(ProcrustesAnalysis pa : configs){
-            for(FacialPointType ft : pa.getConfig().keySet()){
-                if(ft == FacialPointType.unspecified){
+            for(Integer ft : pa.getConfig().keySet()){
+                if(ft < 0){
                     continue;
                 }
                 
@@ -125,7 +125,7 @@ public class GPA implements Serializable {
             }
         }
         
-        for(FacialPointType ft : mean.keySet()){
+        for(Integer ft : mean.keySet()){
             Vector3f meanV = mean.get(ft).getPosition();
             int tAdded = timesAdded.get(ft);
             

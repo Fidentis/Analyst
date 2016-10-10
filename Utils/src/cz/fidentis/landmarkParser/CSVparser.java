@@ -42,7 +42,7 @@ public static String WHITE_SPACE_SEP = "\\s+";
 
         try {
             br = new BufferedReader(new FileReader(filePath));
-            List<FacialPointType> fpTypes = new ArrayList<>();
+            List<Integer> fpTypes = new ArrayList<>();
             while ((line = br.readLine()) != null) {
 
                 counter++;
@@ -81,7 +81,7 @@ public static String WHITE_SPACE_SEP = "\\s+";
 
                 fpModels.add(fpModel);
 
-                FacialPoint facialPoint = new FacialPoint();
+                //FacialPoint facialPoint = new FacialPoint();
             }
 
         } catch (FileNotFoundException e) {
@@ -122,7 +122,7 @@ public static String WHITE_SPACE_SEP = "\\s+";
 
     private static String buildHead() {
         String head = "Model name" + SEP;
-        for (int i = 0; i < FacialPointType.values().length - 1; i++) {
+        for (int i = 0; i < FacialPointType.values().length - 1; i++) {     //TODO: make sure it works with all the landmarks
             head = head + pointToHead(i);
         }
         // Vymaz poslednej ciarky
@@ -135,8 +135,8 @@ public static String WHITE_SPACE_SEP = "\\s+";
         return type + " x" + SEP + type + " y" + SEP + type + " z" + SEP;
     }
 
-    private static List<FacialPointType> parseHead(String line) {
-        List<FacialPointType> fpTypes = new ArrayList<>();
+    private static List<Integer> parseHead(String line) {
+        List<Integer> fpTypes = new ArrayList<>();
         String[] lineParts = line.split(SEP);
         for (int i = 1; i < lineParts.length; i = i + 3) {
 
@@ -145,10 +145,17 @@ public static String WHITE_SPACE_SEP = "\\s+";
         return fpTypes;
     }
 
-    private static FacialPointType getPointType(String headPart) {
+    private static Integer getPointType(String headPart) {
 //        TODO: dorobit aj kontrolu, ci ma bod spravne vyplnene suradnice x, y, z
         String[] part = headPart.split(" ");
-        return FacialPointType.valueOf(part[0]);
+        Integer result = -1;
+        try{
+          result = Integer.parseInt(part[0]);
+        }catch(NumberFormatException ex){
+            result = FacialPointType.valueOf(part[0]).ordinal();        //in case it was one of the defined landmarks
+        }
+        
+        return result;
     }
 
 }

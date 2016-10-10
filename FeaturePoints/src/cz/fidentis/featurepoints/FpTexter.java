@@ -24,7 +24,7 @@ public class FpTexter {
     private static String SEP = ";";
     private static String textName = "fp_text.csv";
     private static FpTexter instance  = new FpTexter();
-    private static Map<FacialPointType, List<String>> fpTexts = new HashMap<>();
+    private static Map<Integer, List<String>> fpTexts = new HashMap<>();
 
     private FpTexter() {}
 
@@ -65,7 +65,7 @@ public class FpTexter {
                 values.add(lineParts[1]);
                 values.add(lineParts[2]);
                 
-                fpTexts.put(FacialPointType.valueOf(lineParts[0]), values);
+                fpTexts.put(parseText(lineParts[0]), values);
                 
             }
 
@@ -81,24 +81,40 @@ public class FpTexter {
         }
     }
     
-    public String getFPname(FacialPointType type) {
+    private Integer parseText(String text){
+        int result;
+        try{
+            if(text.equals("unspecified")){
+                result = -1;
+            }else{
+                result = Integer.parseInt(text);
+            }
+                      
+        }catch(NumberFormatException ex){
+            result = FacialPointType.valueOf(text).ordinal();
+        }
+        
+        return result;        
+    }
+    
+    public String getFPname(Integer type) {
         return getFPvalue(type, 0);
     }
     
-    public String getFPinfo(FacialPointType type) {
+    public String getFPinfo(Integer type) {
         return getFPvalue(type, 1);
     }
     
-    private String getFPvalue(FacialPointType type, int index){
+    private String getFPvalue(Integer type, int index){
         if (fpTexts.isEmpty()) {
-            return "";
+            return type.toString();
         }
         
         List<String> values = fpTexts.get(type);
         if (values != null && !values.isEmpty()) {
             return values.get(index);
         } else {
-            return "";
+            return type.toString();
         }       
     }
 

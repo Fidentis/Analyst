@@ -79,8 +79,8 @@ public class Registrator {
         List<FacialPoint> transformedFacialPoints = new ArrayList<>();
         int index = 0;
         for (Vector3f vert : reversedVerts) {
-            FacialPointType originalType = facialPoints.get(index).getType();
-            transformedFacialPoints.add(new FacialPoint(originalType, vert));
+            //FacialPointType originalType = facialPoints.get(index).getType();
+            transformedFacialPoints.add(new FacialPoint(facialPoints.get(index).getType(), vert));
         }
 
         return transformedFacialPoints;

@@ -15,8 +15,6 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,7 +68,7 @@ public class DTAparser {
                 }
                 
                 FacialPoint fp = new FacialPoint();
-                fp.setType(FacialPointType.values()[index]);
+                fp.setType(index);
                 fp.getPosition().setX(Float.parseFloat(lineParts[0]));
                 fp.getPosition().setY(Float.parseFloat(lineParts[1]));
                 fp.getPosition().setZ(Float.parseFloat(lineParts[2]));
@@ -99,7 +97,9 @@ public class DTAparser {
         assert !path.isEmpty();
         
         String fileName = setExtension(fpModel.getModelName(), "dta");
-        String filePath = path + fileName;
+        int lastIndex = path.lastIndexOf('.');
+        String filePath = path.substring(0, lastIndex) + fileName;   
+    
         
         try (PrintWriter writer = new PrintWriter(filePath, "UTF-8")) {
 

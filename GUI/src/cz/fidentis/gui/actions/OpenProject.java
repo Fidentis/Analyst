@@ -307,6 +307,7 @@ public final class OpenProject implements ActionListener {
             p.setSelectedPart(4);
             if (!comparison.getModels().isEmpty()) {
                 ntc.getViewerPanel_Batch().getCanvas1().setImportLabelVisible(false);
+                //TODO nacitaj model do listenera
             }
             if (loadedFps != null) {
                 FPImportExport.instance().alignPointsToModels(loadedFps, comparison.getModels());

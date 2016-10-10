@@ -62,37 +62,37 @@ public class SymmetryPlane {
     }
      
     public void findMiddleEyeLFP(){
-        Point3f middleEyeLcandidate = findMiddlePoint(FacialPointType.EX_L, FacialPointType.EN_L, false); // mimo mediannej roviny     
+        Point3f middleEyeLcandidate = findMiddlePoint(FacialPointType.EX_L.ordinal(), FacialPointType.EN_L.ordinal(), false); // mimo mediannej roviny     
         middleEyeLcandidate.setZ(middleEyeLcandidate.z + 5.f);
-        middleEyeLFP = new FacialPoint(FacialPointType.unspecified, middleEyeLcandidate);
+        middleEyeLFP = new FacialPoint(-1, middleEyeLcandidate);
         facialPoints.add(middleEyeLFP);
     }
 
     public void findMiddleEyeRFP(){
-        Point3f middleEyeRcandidate = findMiddlePoint(FacialPointType.EX_R, FacialPointType.EN_R, false); // mimo mediannej roviny
+        Point3f middleEyeRcandidate = findMiddlePoint(FacialPointType.EX_R.ordinal(), FacialPointType.EN_R.ordinal(), false); // mimo mediannej roviny
         middleEyeRcandidate.setZ(middleEyeRcandidate.z + 5.f);
-        middleEyeRFP = new FacialPoint(FacialPointType.unspecified, middleEyeRcandidate);
+        middleEyeRFP = new FacialPoint(-1, middleEyeRcandidate);
         facialPoints.add(middleEyeRFP);
     }
     
     public void findPronasaleFP(){
-        Point3f pronasaleOld = getFPpoint(facialPoints, FacialPointType.PRN).getCoords();
+        Point3f pronasaleOld = getFPpoint(facialPoints, FacialPointType.PRN.ordinal()).getCoords();
         int newPronasaleIdx = findNearestPointOnSymmetryPlane(pronasaleOld, symmetryPlanePoints);
-        facialPoints.remove(getFPpoint(facialPoints, FacialPointType.PRN));
-        pronasaleFP = new FacialPoint(FacialPointType.PRN, symmetryPlanePoints.get(newPronasaleIdx));
+        facialPoints.remove(getFPpoint(facialPoints, FacialPointType.PRN.ordinal()));
+        pronasaleFP = new FacialPoint(FacialPointType.PRN.ordinal(), symmetryPlanePoints.get(newPronasaleIdx));
         facialPoints.add(pronasaleFP);
     }
     
     public void findStomionFP(){
-        Point3f stomionCandidate = findMiddlePoint(FacialPointType.CH_L, FacialPointType.CH_R, true); // na mediannej rovine
-        facialPoints.remove(getFPpoint(facialPoints, FacialPointType.STO));
-        stomionFP = new FacialPoint(FacialPointType.STO, stomionCandidate);
+        Point3f stomionCandidate = findMiddlePoint(FacialPointType.CH_L.ordinal(), FacialPointType.CH_R.ordinal(), true); // na mediannej rovine
+        facialPoints.remove(getFPpoint(facialPoints, FacialPointType.STO.ordinal()));
+        stomionFP = new FacialPoint(FacialPointType.STO.ordinal(), stomionCandidate);
         facialPoints.add(stomionFP);
     }
     
     public void findNasionFP(){
-        Point3f nasionCandidate = findMiddlePoint(FacialPointType.EN_L, FacialPointType.EN_R, true); // na mediannej rovine
-        nasionFP = new FacialPoint(FacialPointType.N, nasionCandidate);
+        Point3f nasionCandidate = findMiddlePoint(FacialPointType.EN_L.ordinal(), FacialPointType.EN_R.ordinal(), true); // na mediannej rovine
+        nasionFP = new FacialPoint(FacialPointType.N.ordinal(), nasionCandidate);
         facialPoints.add(nasionFP);
     }
     
@@ -111,7 +111,7 @@ public class SymmetryPlane {
             }
         }
         
-        glabelaFP = new FacialPoint(FacialPointType.G, glabelaCandidate);
+        glabelaFP = new FacialPoint(FacialPointType.G.ordinal(), glabelaCandidate);
         facialPoints.add(glabelaFP);
     }
     
@@ -135,8 +135,8 @@ public class SymmetryPlane {
             }
         }
         
-        labraleSuperiusFP = new FacialPoint(FacialPointType.LS, labraleSupCandidate);
-        labraleInferiusFP = new FacialPoint(FacialPointType.LI, labraleInfCandidate);
+        labraleSuperiusFP = new FacialPoint(FacialPointType.LS.ordinal(), labraleSupCandidate);
+        labraleInferiusFP = new FacialPoint(FacialPointType.LI.ordinal(), labraleInfCandidate);
         
         facialPoints.add(labraleSuperiusFP);
         facialPoints.add(labraleInferiusFP);
@@ -171,7 +171,7 @@ public class SymmetryPlane {
 //            }
 //        }
         
-        sublabialeFP = new FacialPoint(FacialPointType.SL, sublabialeCandidate);
+        sublabialeFP = new FacialPoint(FacialPointType.SL.ordinal(), sublabialeCandidate);
         facialPoints.add(sublabialeFP);
     }
     
@@ -204,12 +204,12 @@ public class SymmetryPlane {
 //            }
 //        }
         
-        pogonionFP = new FacialPoint(FacialPointType.PG, pogonionCandidate);
+        pogonionFP = new FacialPoint(FacialPointType.PG.ordinal(), pogonionCandidate);
         facialPoints.add(pogonionFP);
     }
     
     
-    private Point3f findMiddlePoint(FacialPointType type1, FacialPointType type2, boolean onSymmetryPlane){
+    private Point3f findMiddlePoint(Integer type1, Integer type2, boolean onSymmetryPlane){
         FacialPoint fp1 = getFPpoint(facialPoints, type1);
         FacialPoint fp2 = getFPpoint(facialPoints, type2);
         
@@ -227,7 +227,7 @@ public class SymmetryPlane {
         }
     }
     
-    public static FacialPoint getFPpoint(List<FacialPoint> facialPoints, FacialPointType type) {
+    public static FacialPoint getFPpoint(List<FacialPoint> facialPoints, Integer type) {
         for (FacialPoint fp : facialPoints) {
             if (fp.getType() == type)
                 return fp;
