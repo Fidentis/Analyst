@@ -29,6 +29,8 @@
         <file name="Tools_hidden"/>
         <file name="View_hidden"/>
         <file name="Window_hidden"/>
+        <folder name="Landmarks">
+        </folder>
         <folder name="Options">
         </folder>
     </folder>
