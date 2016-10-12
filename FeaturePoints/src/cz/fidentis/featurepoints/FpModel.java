@@ -142,7 +142,6 @@ public class FpModel {
         
         for(FacialPoint fp: facialPoints){
             FacialPoint copied = new FacialPoint(fp.getType(), new Vector3f(fp.getPosition()));
-            copied.setName(fp.getInfo());
             copy.add(copied);
         }
         

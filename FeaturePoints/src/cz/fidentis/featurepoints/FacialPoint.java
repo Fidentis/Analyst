@@ -23,8 +23,7 @@ import jv.vecmath.PdVector;
 public class FacialPoint implements Serializable {
     
     private Integer type;
-    private String name;
-    private String info;
+
 
     private Vector3f pos;
 
@@ -36,14 +35,10 @@ public class FacialPoint implements Serializable {
         this.pos = new Vector3f((float)coords.getEntry(0), (float)coords.getEntry(1), (float)coords.getEntry(2));
         
         this.type = type;
-        this.name = FpTexter.getInstance().getFPname(type);
-        this.info = FpTexter.getInstance().getFPinfo(type);
     }
     
     public FacialPoint(Integer type) {
         this.type = type;
-        this.name = FpTexter.getInstance().getFPname(type);
-        this.info = FpTexter.getInstance().getFPinfo(type);
     }
 
     
@@ -51,28 +46,20 @@ public class FacialPoint implements Serializable {
         this.pos = new Vector3f(coords);
         
         this.type = type;
-        this.name = FpTexter.getInstance().getFPname(type);
-        this.info = FpTexter.getInstance().getFPinfo(type);
     }
     
     public FacialPoint(Integer type, Tuple3d coords) {        
         this.pos = new Vector3f(coords);
         
         this.type = type;
-        this.name = FpTexter.getInstance().getFPname(type);
-        this.info = FpTexter.getInstance().getFPinfo(type);
     }    
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return FpTexter.getInstance().getFPname(type);
     }
     
     public String getInfo() {
-        return info;
+        return FpTexter.getInstance().getFPinfo(type);
     }
 
     public Integer getType() {
@@ -81,8 +68,6 @@ public class FacialPoint implements Serializable {
     
     public void setType(Integer type) {
         this.type = type;
-        this.name = FpTexter.getInstance().getFPname(type);
-        this.info = FpTexter.getInstance().getFPinfo(type);
     }
     
     public void setCoords(Tuple3f coords) {        
@@ -103,7 +88,7 @@ public class FacialPoint implements Serializable {
      
     @Override
     public String toString(){
-        return type + ", " + name + ", " + getInfo();
+        return type + ", " + getName() + ", " + getInfo();
     }
 
 

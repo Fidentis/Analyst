@@ -344,6 +344,10 @@ public class Comparison2Faces {
     public void setMainFp(List<FacialPoint> mainFp) {
         this.mainFp = mainFp;
     }
+    
+    public void addMainFp(FacialPoint fp){
+        this.mainFp.add(fp);
+    }
 
     public List<FacialPoint> getSecondaryFp() {
         return secondaryFp;
@@ -353,6 +357,9 @@ public class Comparison2Faces {
         this.secondaryFp = secondaryFp;
     }
     
+    public void addSecondaryFp(FacialPoint fp){
+        this.secondaryFp.add(fp);
+    }
     
     public boolean isCompareButtonEnabled() {
         return compareButtonEnabled;

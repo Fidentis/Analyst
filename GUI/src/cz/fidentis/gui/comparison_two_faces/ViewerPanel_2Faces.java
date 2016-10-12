@@ -4,10 +4,13 @@
  */
 package cz.fidentis.gui.comparison_two_faces;
 
+import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.actions.landmarks.AddEditLandmarkDialogue;
+import cz.fidentis.gui.actions.landmarks.EditLandmarkID;
 import cz.fidentis.model.Model;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import java.awt.Dimension;
@@ -15,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.SwingUtilities;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -33,6 +37,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private boolean showInfo = true;
     private boolean editablePoints = false;
     private boolean removePoints = false;
+    private boolean addPoints = false;
     private boolean selection = false;
 
     /**
@@ -119,12 +124,20 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
     public void setEditablePoints(boolean b) {
         editablePoints = b;
-        removePoints = !b;
+        removePoints = false;
+        addPoints = false;
     }
 
     public void setRemovePoints(boolean removePoints) {
         this.removePoints = removePoints;
-        editablePoints = !removePoints;
+        editablePoints = false;
+        addPoints = false;
+    }
+    
+    public void setAddPoints(boolean b){
+        this.addPoints = b;
+        editablePoints = false;
+        removePoints = false;
     }
     
     
@@ -201,13 +214,16 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void canvas1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MousePressed
+       
        canvasClicked(evt, listener1, canvas1);
-       GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setMainFp(listener1.getFacialPoints());    //TODO
+       if(removePoints || addPoints)        //set new FP list for data model
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setMainFp(listener1.getFacialPoints());    //TODO
     }//GEN-LAST:event_canvas1MousePressed
 
     private void canvas2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MousePressed
         canvasClicked(evt, listener2, canvas2);
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setSecondaryFp(listener2.getFacialPoints());  //TODO
+        if(removePoints || addPoints)
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setSecondaryFp(listener2.getFacialPoints());  //TODO
     }//GEN-LAST:event_canvas2MousePressed
 
     private void canvasClicked(MouseEvent evt, ComparisonGLEventListener listener, Canvas canvas) {
@@ -227,6 +243,11 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
                     canvas.setFeaturePointsPanelVisibility(true);
 
                 }
+                
+                if(evt.getButton() == MouseEvent.BUTTON3){   //edit window
+                    EditLandmarkID d = new EditLandmarkID(listener.getFacialPoint(indexOfSelectedPoint), listener.getInfo(), canvas);
+                    d.setVisible(true);
+                }
             }else if(removePoints){
                 listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
                 listener.setIndexOfSelectedPoint(-1);
@@ -237,6 +258,11 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
             if (showInfo) {
                 canvas1.setFeaturePointsPanelVisibility(false);
             }
+        }else if(addPoints && listener.getModel() != null){
+            Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
+            int id = listener.getInfo().getNextFreeFPID();        
+            FacialPoint fp = new FacialPoint(id, pos);
+            listener.getInfo().addFacialPoint(fp);
         }
     }
 

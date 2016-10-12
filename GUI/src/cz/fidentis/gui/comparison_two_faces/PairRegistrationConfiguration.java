@@ -572,7 +572,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         buttonGroup1.add(addPointButton);
         org.openide.awt.Mnemonics.setLocalizedText(addPointButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.addPointButton.text")); // NOI18N
-        addPointButton.setEnabled(false);
         addPointButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addPointButtonActionPerformed(evt);
@@ -907,12 +906,16 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         //make sure canvas takes info from Comparison2Faces
  
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setRemovePoints(removePointButton.isSelected());
+        addPointButton.setSelected(false);
+        editPointButton.setSelected(false);
     }//GEN-LAST:event_removePointButtonActionPerformed
 
     private void addPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPointButtonActionPerformed
         //make sure canvas takes info from Comparison2Faces
         
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setAddPoints(addPointButton.isSelected());
+        removePointButton.setSelected(false);
+        editPointButton.setSelected(false);
     }//GEN-LAST:event_addPointButtonActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -929,6 +932,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void editPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPointButtonActionPerformed
         //make sure canvas takes info from Comparison2Faces
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
+        removePointButton.setSelected(false);
+        addPointButton.setSelected(false);
     }//GEN-LAST:event_editPointButtonActionPerformed
 
     private void areaComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaComboboxActionPerformed

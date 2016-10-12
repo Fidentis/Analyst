@@ -140,6 +140,37 @@ public class ComparisonListenerInfo {
     public void setFacialPoints(List<FacialPoint> facialPoints) {
         this.facialPoints = facialPoints;
     }
+    
+    public boolean containsFP(int i){
+        for(FacialPoint fp : facialPoints){
+            if(fp.getType() == i)
+                return true;
+        }
+        
+        return false;
+    }
+    
+    public void addFacialPoint(FacialPoint fp){
+        this.facialPoints.add(fp);
+    }
+    
+    public void removeFacialPoint(int id){
+        for(int i = 0; i < facialPoints.size(); i++){
+            if(facialPoints.get(i).getType() == id){
+                facialPoints.remove(i);
+                break;
+            }  
+        }
+    }
+    
+    public int getNextFreeFPID(){
+        int i = 0;
+        while(containsFP(i)){
+            i++;
+        }
+        
+        return i;
+    }   
 
     public List<ICPTransformation> getTransformations() {
         return transformations;
