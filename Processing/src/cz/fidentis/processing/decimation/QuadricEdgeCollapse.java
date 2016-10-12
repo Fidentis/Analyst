@@ -6,6 +6,7 @@
 package cz.fidentis.processing.decimation;
 
 import Jama.Matrix;
+import cz.fidentis.model.Faces;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.corner_table.Corner;
 import cz.fidentis.model.corner_table.CornerTable;
@@ -25,20 +26,18 @@ public class QuadricEdgeCollapse {
     private final Model model;
     private float threshold = -1;
     
-    private CornerTable mesh;
+    private final HashMap<Integer, Matrix> quadrics = new HashMap<>();
     
-    private HashMap<Integer, Matrix> quadrics;
-    
-    private HashSet<Edge> pairs;
-    private HashMap<Edge, Vector3f> pairTargets;
-    private HashMap<Edge, Double> pairErrors;
+    private final HashSet<Edge> pairs = new HashSet<>();
+    private final HashMap<Edge, Vector3f> pairTargets = new HashMap<>();
+    private final HashMap<Edge, Double> pairErrors = new HashMap<>();
     
     private PriorityQueue<Edge> queue;
-    private HashSet<Integer> removedFaces;
-    private HashSet<Integer> removedVerts;
+    private final HashSet<Integer> removedFaces = new HashSet<>();
+    private final HashSet<Integer> removedVerts = new HashSet<>();
     
-    private HashMap<Integer, HashSet<Integer>> vertsToFaces;
-    private HashMap<Integer, Integer> indexReorientations;
+    private final HashMap<Integer, HashSet<Integer>> vertsToFaces = new HashMap<>();
+    private final HashMap<Integer, Integer> indexReorientations = new HashMap<>();
     
     public QuadricEdgeCollapse(Model model) {
         this.model = model;
@@ -51,24 +50,9 @@ public class QuadricEdgeCollapse {
     }
     
     public boolean decimateWhilePossible(int targetVertexCount) {
-        mesh = new CornerTable(model);
-        removedFaces = new HashSet<>();
-        removedVerts = new HashSet<>();
-        indexReorientations = new HashMap<>();
-        
-        // TEST
-        vertsToFaces = new HashMap<>();
-        for(int i=0;i<model.getVerts().size();i++) {
-            if(!vertsToFaces.containsKey(i)) {
-                vertsToFaces.put(i, new HashSet<Integer>());
-            }
-        }
-        for(int triangleIdx=0;triangleIdx<model.getFaces().getNumFaces();triangleIdx++) {
-            int[] triangle = model.getFaces().getFaceVertIdxs(triangleIdx);
-            for(Integer vertIdx : triangle) {
-                vertsToFaces.get(vertIdx-1).add(triangleIdx);
-            }
-        }
+        // initialize variables and data structures needed to keep track of
+        // computation
+        initializeVariables();
         
         // 1. determine quadrics for each vertex
         initializeVertexQuadrics();
@@ -103,11 +87,37 @@ public class QuadricEdgeCollapse {
     }
     
     /**
+     * Initializes basic variables and structures needed during computation.
+     * Especially, clears sets of removed vertices and faces, index reorientation
+     * map which keeps track of collapsed pairs and builds a data structure to
+     * quickly find all faces incident with a given vertex, which is needed later.
+     */
+    private void initializeVariables() {
+        removedFaces.clear();
+        removedVerts.clear();
+        indexReorientations.clear();
+        
+        // initialize faces so that we could find faces to vertices quickly
+        vertsToFaces.clear();
+        for(int i=0;i<model.getVerts().size();i++) {
+            if(!vertsToFaces.containsKey(i)) {
+                vertsToFaces.put(i, new HashSet<Integer>());
+            }
+        }
+        for(int triangleIdx=0;triangleIdx<model.getFaces().getNumFaces();triangleIdx++) {
+            int[] triangle = model.getFaces().getFaceVertIdxs(triangleIdx);
+            for(Integer vertIdx : triangle) {
+                vertsToFaces.get(vertIdx-1).add(triangleIdx);
+            }
+        }
+    }
+    
+    /**
      * First it is needed to initialize error quadric for each vertex by looking
      * at its incident triangles.
      */
     private void initializeVertexQuadrics() {
-        quadrics = new HashMap<>(model.getVerts().size());
+        quadrics.clear();
         
         for(int i=0;i<model.getVerts().size();i++) {
             quadrics.put(i, computeErrorQuadric(i));
@@ -120,7 +130,7 @@ public class QuadricEdgeCollapse {
      * to each other than current threshold;
      */
     private void initializePairs() {
-        pairs = new HashSet<>();
+        pairs.clear();
         
         // add a pair for each edge in model, make sure there are no duplicates
         for(int triangleIdx=0;triangleIdx<model.getFaces().getNumFaces();triangleIdx++) {
@@ -157,7 +167,7 @@ public class QuadricEdgeCollapse {
      * of contracted vertex.
      */
     private void initializeTargets() {
-        pairTargets = new HashMap<>(pairs.size());
+        pairTargets.clear();
         
         for(Edge e : pairs) {
             pairTargets.put(e, computeTargetV(e));
@@ -169,7 +179,7 @@ public class QuadricEdgeCollapse {
      * that the least errors would be produced.
      */
     private void initializeQueue() {
-        pairErrors = new HashMap<>(pairs.size());
+        pairErrors.clear();
         EdgeComparator c = new EdgeComparator(pairErrors);
         queue = new PriorityQueue<>(pairs.size(), c);
         
@@ -188,13 +198,40 @@ public class QuadricEdgeCollapse {
      * recompute normals.
      */
     private void cleanupModel() {
-        // TODO do this
-        ArrayList<Vector3f> newVerts = new ArrayList<>();
+        ArrayList<Vector3f> newVerts = new ArrayList<>(model.getVerts().size() - removedVerts.size());
+        HashMap<Integer, Integer> newMapping = new HashMap<>(model.getVerts().size() - removedVerts.size());
         
+        // copy only vertices that were not removed
         for(int i=0;i<model.getVerts().size();i++) {
             if(!removedVerts.contains(i)) {
+                newMapping.put(i, newVerts.size());
                 newVerts.add(model.getVerts().get(i));
             }
+        }
+        
+        // now copy faces
+        ArrayList<ArrayList<Integer>> newFaces = new ArrayList<>(model.getFaces().getNumFaces() - removedFaces.size());
+        for(int i=0;i<model.getFaces().getNumFaces();i++) {
+            if(!removedFaces.contains(i)) {
+                int[] triangle = model.getFaces().getFaceVertIdxs(i);
+                ArrayList<Integer> newFace = new ArrayList<>(triangle.length);
+                for(int j=0;j<triangle.length;j++) {
+                    // add vertex indices respecting the new mapping
+                    newFace.add(newMapping.get(triangle[j]-1)+1);
+                }
+                newFaces.add(newFace);
+            }
+        }
+        
+        // replace stuff in model accordingly
+        model.getVerts().clear();
+        model.getNormals().clear();
+        model.getTexCoords().clear();
+        model.getVerts().addAll(newVerts);
+        
+        model.getFaces().clearFaces();
+        for(int i=0;i<newFaces.size();i++) {
+            model.getFaces().addFace(newFaces.get(i));
         }
     }
     
@@ -422,12 +459,12 @@ public class QuadricEdgeCollapse {
      * @param vertIdx
      * @return 
      */
-    private Corner getCorner(int vertIdx) {
+    /*private Corner getCorner(int vertIdx) {
         for(Corner c : mesh.corners()) {
             if(c.vertex == vertIdx) {
                 return c;
             }
         }
         return null;
-    }
+    }*/
 }
