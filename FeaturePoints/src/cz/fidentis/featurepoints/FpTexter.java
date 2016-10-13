@@ -191,12 +191,20 @@ public class FpTexter {
      * @param desc - description (name, description) of the edited landmark
      * @return true if successful, false otherwise
      */
-    public boolean editLandmark(Component tc, int id, List<String> desc){
+    public boolean editLandmark(Component tc, int id, int oldId, List<String> desc){
+        int builtIn = FacialPointType.values().length;
+        
         if(id < 0){
             return false;
         }
         
-        if(!fpTexts.containsKey(id)){
+        if(oldId != id && id < builtIn){
+            JOptionPane.showMessageDialog(tc, "You are trying to rewrite build-in landmark definition. Operation will not be completed.", "Incorrect action.",
+                    JOptionPane.OK_OPTION);
+            return false;
+        }
+        
+        if(!fpTexts.containsKey(oldId)){
            JOptionPane.showMessageDialog(tc,
                             "The landmark wasn't found.", "Landmark not found",
                             JOptionPane.OK_OPTION);
@@ -204,6 +212,7 @@ public class FpTexter {
         }
         
         fpTexts.put(id, desc);
+        fpTexts.remove(oldId);
         return true;
     }
     

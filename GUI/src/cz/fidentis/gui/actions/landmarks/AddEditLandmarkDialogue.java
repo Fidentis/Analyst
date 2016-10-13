@@ -19,13 +19,15 @@ import javax.swing.SpinnerNumberModel;
 public class AddEditLandmarkDialogue extends javax.swing.JFrame {
 
     private boolean edit;
-    private LandmarkDescriptionDialogue dialog;    
+    private LandmarkDescriptionDialogue dialog;  
+    private int id;
     /**
      * Creates new form AddEditLandmarkDialogue
      */
     public AddEditLandmarkDialogue(int id, String name, String desc, boolean edit, LandmarkDescriptionDialogue dialog) {
         initComponents();
         setConfiguration(id, name, desc);
+        this.id = id;
         this.edit = edit;
         this.dialog = dialog;
     }
@@ -138,7 +140,7 @@ public class AddEditLandmarkDialogue extends javax.swing.JFrame {
        info.add(landmarkDescriptionField.getText());
        
        if(edit)
-         result = FpTexter.getInstance().editLandmark(this, ((Double)landmarkIDspinner.getValue()).intValue(), info);
+         result = FpTexter.getInstance().editLandmark(this, ((Double)landmarkIDspinner.getValue()).intValue(), id, info);
        else
          result = FpTexter.getInstance().addLandmarks(this, ((Double)landmarkIDspinner.getValue()).intValue(), info);
        
@@ -159,7 +161,7 @@ public class AddEditLandmarkDialogue extends javax.swing.JFrame {
         
         if(id < 0){  //next possible ID
             id = defaultFpNumber;
-        }else if(id <= defaultFpNumber){     //editing default landmarks, can't change ID
+        }else if(id < defaultFpNumber){     //editing default landmarks, can't change ID
             landmarkIDspinner.setEnabled(false);
         }
         
