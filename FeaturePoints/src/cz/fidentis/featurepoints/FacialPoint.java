@@ -23,7 +23,7 @@ import jv.vecmath.PdVector;
 public class FacialPoint implements Serializable {
     
     private Integer type;
-
+    private boolean active = true;
 
     private Vector3f pos;
 
@@ -53,6 +53,14 @@ public class FacialPoint implements Serializable {
         
         this.type = type;
     }    
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public String getName() {
         return FpTexter.getInstance().getFPname(type);

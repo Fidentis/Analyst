@@ -110,8 +110,10 @@ public class GPA implements Serializable {
         Map<Integer, Integer> timesAdded = new HashMap<>();
         
         for(ProcrustesAnalysis pa : configs){
-            for(Integer ft : pa.getConfig().keySet()){
-                if(ft < 0){
+            Map<Integer, FacialPoint> config = pa.getConfig();
+            
+            for(Integer ft : config.keySet()){
+                if(ft < 0 || !config.get(ft).isActive()){       //points can be set but algorithm doesn't need to work with them
                     continue;
                 }
                 

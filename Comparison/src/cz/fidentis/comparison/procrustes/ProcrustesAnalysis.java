@@ -164,10 +164,17 @@ public class ProcrustesAnalysis implements Serializable {
 
         return fp;
     }
-
     
     public boolean containsPoint(Integer ft){
         return config.containsKey(ft);
+    }
+    
+    //checks if configuration contains point, false if it doesn't, and then whether point is active
+    public boolean isPointActive(Integer ft){
+        if(containsPoint(ft))
+            return config.get(ft).isActive();
+        
+        return false;
     }
     
     public Vector3f getFPposition(Integer ft){
@@ -184,7 +191,10 @@ public class ProcrustesAnalysis implements Serializable {
         List<Integer> correspondence = new ArrayList<>();
         
         for(Integer ft : config.keySet()){
-            if(pa.containsPoint(ft)){
+            if(!config.get(ft).isActive())      //don't consider the point if not active
+                continue;
+            
+            if(pa.isPointActive(ft)){
                 correspondence.add(ft);
             }
         }
@@ -510,7 +520,7 @@ public class ProcrustesAnalysis implements Serializable {
      * @param scaling says if algorithm should set size to 1 or keep it
      */
     public void normalize(boolean scaling) {
-        if (scaling) {
+        if (scaling && config.keySet().size() >= 3) {
             Vector3f cs = this.findCentroid();
             float size = this.countSize(cs);
 
@@ -540,7 +550,7 @@ public class ProcrustesAnalysis implements Serializable {
         Matrix transU;
         List<Integer> cor = getFPtypeCorrespondence(pa2);
         
-        if(cor.isEmpty()){
+        if(cor.size() < 3){     //need at least 3 points to perform PA
             return null;
         }
 
@@ -656,7 +666,6 @@ public class ProcrustesAnalysis implements Serializable {
      * @return distance Procrustes distance
      */
     public List<ICPTransformation> doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
-        float distance;
         List<ICPTransformation> t = new LinkedList<>();
 
         ICPTransformation trans = this.superimpose(config2, scaling);
