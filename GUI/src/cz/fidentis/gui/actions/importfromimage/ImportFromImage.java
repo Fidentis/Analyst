@@ -407,15 +407,17 @@ public final class ImportFromImage implements ActionListener {
                         List<FacialPoint> gemPoints = loadFidoCsv(new File(gemDir + File.separator + "pts.csv"));
 
                         for (FacialPoint point : points) {
-                            FacialPoint g = null;
-                            for (FacialPoint gemPoint : gemPoints) {
-                                if (gemPoint.getType() == point.getType()) {
-                                    g = gemPoint;
+                            if (point.isActive()) {
+                                FacialPoint g = null;
+                                for (FacialPoint gemPoint : gemPoints) {
+                                    if (gemPoint.getType().intValue() == point.getType().intValue()) {
+                                        g = gemPoint;
+                                    }
                                 }
-                            }
 
-                            if (g != null) {
-                                gem.getVerts().add(g.getPosition());
+                                if (g != null) {
+                                    gem.getVerts().add(g.getPosition());
+                                }
                             }
                         }
                         gem.getNormals().addAll(gem.getVerts());
@@ -591,10 +593,12 @@ public final class ImportFromImage implements ActionListener {
 
     private void initializeModels(Model model, ArrayList<Model> gems, File imageFile, List<FacialPoint> points) {
         model.setName(imageFile.getName().substring(0, imageFile.getName().lastIndexOf(".")) + ".obj");
-        for(FacialPoint p : points) {
-            model.getVerts().add(p.getPosition());
-            model.getNormals().add(p.getPosition());
-            model.getTexCoords().add(p.getPosition());
+        for (FacialPoint p : points) {
+            if (p.isActive()) {
+                model.getVerts().add(p.getPosition());
+                model.getNormals().add(p.getPosition());
+                model.getTexCoords().add(p.getPosition());
+            }
         }
         
         // assign materials because of DCEL construction...
@@ -660,13 +664,15 @@ public final class ImportFromImage implements ActionListener {
         double sumX = 0;
         double sumY = 0;
         double sumZ = 0;
-        float maxY = model.getVerts().get(0).y;
-        float minY = maxY;
-        float maxX = points.get(0).getPosition().x;
-        float minX = maxX;
+        float maxY = Float.MIN_VALUE;
+        float minY = Float.MAX_VALUE;
+        float maxX = Float.MIN_VALUE;
+        float minX = Float.MAX_VALUE;
         for(FacialPoint p : points) {
-            maxX = Math.max(maxX, p.getPosition().x);
-            minX = Math.min(minX, p.getPosition().x);
+            if (p.isActive()) {
+                maxX = Math.max(maxX, p.getPosition().x);
+                minX = Math.min(minX, p.getPosition().x);
+            }
         }
         float factor = 1.5f * (maxX - minX);
         model.getTexCoords().clear();
@@ -715,14 +721,16 @@ public final class ImportFromImage implements ActionListener {
         double sumX = 0;
         double sumY = 0;
         double sumZ = 0;
-        float maxX = model.getVerts().get(0).x;
-        float minX = maxX;
-        float maxY = model.getVerts().get(0).y;
-        float minY = maxY;
+        float maxX = Float.MIN_VALUE;
+        float minX = Float.MAX_VALUE;
+        float maxY = Float.MIN_VALUE;
+        float minY = Float.MAX_VALUE;
         
-        for(FacialPoint p : points) {
-            maxX = Math.max(maxX, p.getPosition().x);
-            minX = Math.min(minX, p.getPosition().x);
+        for (FacialPoint p : points) {
+            if (p.isActive()) {
+                maxX = Math.max(maxX, p.getPosition().x);
+                minX = Math.min(minX, p.getPosition().x);
+            }
         }
         float factor = 1.5f * (maxX - minX);
         
