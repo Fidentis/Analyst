@@ -5,6 +5,7 @@
  */
 package cz.fidentis.gui.actions.importfromimage;
 
+import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.gui.GUIController;
@@ -77,7 +78,7 @@ public final class ImportFromImage implements ActionListener {
                 ProgressHandle p = ProgressHandle.createHandle("Creating face...");
                 p.start();
                 List<FacialPoint> points = dialog.getFeaturePoints();
-                Model imported = importFromImage(dialog.getImageFile(), dialog.getFeaturePoints(), dialog.getSubdivisionDepth());
+                Model imported = importFromImage(dialog.getImageFile(), dialog.getSelectedGender(), dialog.getSelectedAge(), points, dialog.getNumberOfVerts());
                 
                 ModelExporter exp = new ModelExporter(imported);
                 File modelSaveDir = new File(tc.getProject().getTempDirectory().getPath() + File.separator + imported.getName().substring(0, imported.getName().length()-4));
@@ -129,106 +130,22 @@ public final class ImportFromImage implements ActionListener {
         t.start();
     }
 
-    public Model importFromImage(File imageFile, List<FacialPoint> points, int depth) {
+    public Model importFromImage(File imageFile, Gender trgetGender, AgeCategories targetAge, List<FacialPoint> points, int numOfVerts) {
+        // 1. load suitable gem models
+        ArrayList<Model> gems = getSuitableGems(trgetGender, targetAge, points);
+        // 2. initialize models for computation
         Model model = new Model();
-        model.setName(imageFile.getName().substring(0, imageFile.getName().lastIndexOf(".")) + ".obj");
-        Model gem = new Model();
-        // fill models with loaded feature points
-        assignFeaturePoints(points, model, gem);
-
-        // triangulate face model
-        for (ArrayList<Integer> triangle : delaunay(model.getVerts())) {
-            model.getFaces().addFace(triangle, triangle);
-        }
-
-        // copy the same faces from model to gem model
-        ArrayList<Integer> faceIds = new ArrayList<>(3);
-        for (int i = 0; i < model.getFaces().getNumFaces(); i++) {
-            faceIds.clear();
-            int[] ids = model.getFaces().getFaceVertIdxs(i);
-            for (int j = 0; j < ids.length; j++) {
-                faceIds.add(ids[j]);
-            }
-            gem.getFaces().addFace(faceIds);
-        }
-        
-        // assign materials because of DCEL construction...
-        model.setMaterials(new Materials("materials.mtl", imageFile));
-        gem.setMaterials(new Materials("materials.mtl", imageFile));
-        Material mat = new Material("material0");
-        mat.setTextureFile(imageFile.getAbsolutePath());
-        model.getMatrials().getMatrials().add(mat);
-        Material gemMat = new Material("material0");
-        gemMat.setTextureFile(gem.getDirectoryPath() + File.separator + "depth.jpg");
-        gem.getMatrials().getMatrials().add(gemMat);
-
-        // subdivide both models the same way
-        for (int i = 0; i < depth; i++) {
-            //loopSubdivision(model);
-            //loopSubdivision(gem);
-            loop2(model);
-            loop2(gem);
-        }
-
-        // assign depth according to gem
-        File gemImgFile = new File(gem.getMatrials().getMatrials().get(0).getTextureFile());
-        BufferedImage gemImg = null;
-        BufferedImage texImg = null;
-        try {
-            gemImg = ImageIO.read(gemImgFile);
-            texImg = ImageIO.read(imageFile);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-
-        double sumX = 0;
-        double sumY = 0;
-        double sumZ = 0;
-        float maxY = model.getVerts().get(0).y;
-        float minY = maxY;
-        float maxX = points.get(0).getPosition().x;
-        float minX = maxX;
-        for(FacialPoint p : points) {
-            maxX = Math.max(maxX, p.getPosition().x);
-            minX = Math.min(minX, p.getPosition().x);
-        }
-        float factor = 1.5f * (maxX - minX);
-        model.getTexCoords().clear();
-        for (int i = 0; i < model.getVerts().size(); i++) {
-            Vector3f position = gem.getVerts().get(i);
-            Color color = new Color(gemImg.getRGB((int) position.getX(), (int) (gemImg.getHeight() - position.getY())));
-            model.getVerts().get(i).setZ(((float)color.getRed()/255) * factor);
-            // add texture coords
-            Vector3f texCoord = new Vector3f();
-            texCoord.x = model.getVerts().get(i).x / texImg.getWidth();
-            texCoord.y = 1 - (model.getVerts().get(i).y / texImg.getHeight());
-            texCoord.z = 0;
-            model.getTexCoords().add(texCoord);
-            
-            // get min and max
-            Vector3f v = model.getVerts().get(i);
-            v.y = texImg.getHeight() - v.y;
-            sumX += v.x;
-            sumY += v.y;
-            sumZ += v.z;
-            maxY = Math.max(maxY, v.y);
-            minY = Math.min(minY, v.y);
-        }
-        
-        // translate all points
-        double n = model.getVerts().size();
-        Vector3f centroid = new Vector3f((float)(sumX/n), (float)(sumY/n), (float)(sumZ/n));
-        float scale = 200/(maxY-minY);
-        for(Vector3f v : model.getVerts()) {
-            v.sub(centroid);
-            v.scale(scale);
-        }
-        
-        for(int i=0;i<model.getFaces().getNumFaces();i++) {
-            model.getFaces().addMaterialUse(i, model.getMatrials().getMatrials().get(0).getName());
-        }
-        
-        model.setNormals((ArrayList<Vector3f>) SurfaceComparisonProcessing.instance().recomputeVertexNormals(model));
+        initializeModels(model, gems, imageFile, points);
+        // 3. prepare delaunay meshes
+        initializeDelaunayMeshes(model, gems);
+        // 4. subdivide to reach desired detail
+        subdivideUntilSatisfied(model, gems, numOfVerts);
+        // 5. finally, assign depth to model using gems
+        assignDepth(model, gems, imageFile, points);
+        // 6. adjust model to some reasonable proportions
+        adjustProportions(model, points);
+        // 7. postprocess model to be ready to use in application
+        postprocessModel(model);
 
         return model;
     }
@@ -465,8 +382,56 @@ public final class ImportFromImage implements ActionListener {
             return new Vector3f(x.asFloatArray());
         }
     }
+    
+    private ArrayList<Model> getSuitableGems(Gender gender, AgeCategories age, List<FacialPoint> points) {
+        ArrayList<Model> gems = new ArrayList<>();
 
-    private void assignFeaturePoints(List<FacialPoint> points, Model model, Model gemModel) {
+        String pathBase = GUIController.getPath() + File.separator + "models" + File.separator + "resources" + File.separator + "depth_models" + File.separator;
+        try (BufferedReader reader = new BufferedReader(new FileReader(pathBase + "index.csv"));) {
+            // skip the header
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    Gender currentGender = Gender.valueOf(parts[0]);
+                    AgeCategories currentAge = AgeCategories.valueOf(parts[1]);
+                    if (currentGender == gender && (age == AgeCategories.ALL || currentAge == age)) {
+                        // include this model to GEM computation
+                        System.out.println("Gender " + currentGender + " Age " + currentAge);
+                        Model gem = new Model();
+                        String gemDir = pathBase + parts[2];
+                        gem.setDirectoryPath(gemDir);
+
+                        // load its points
+                        List<FacialPoint> gemPoints = loadFidoCsv(new File(gemDir + File.separator + "pts.csv"));
+
+                        for (FacialPoint point : points) {
+                            FacialPoint g = null;
+                            for (FacialPoint gemPoint : gemPoints) {
+                                if (gemPoint.getType() == point.getType()) {
+                                    g = gemPoint;
+                                }
+                            }
+
+                            if (g != null) {
+                                gem.getVerts().add(g.getPosition());
+                            }
+                        }
+                        gem.getNormals().addAll(gem.getVerts());
+                        gem.getTexCoords().addAll(gem.getVerts());
+                        gems.add(gem);
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            return null;
+        }
+
+        return gems;
+    }
+
+    /*private void assignFeaturePoints(List<FacialPoint> points, Model model, Model gemModel) {
         String path = GUIController.getPath() + File.separator + "models" + File.separator + "resources" + File.separator + "depth_models" + File.separator;
         File csvFile = new File(path + "pts.csv");
         gemModel.setDirectoryPath(path);
@@ -486,18 +451,12 @@ public final class ImportFromImage implements ActionListener {
                 gemModel.getVerts().add(g.getPosition());
             }
         }
-        /*for(FacialPoint point : points) {
-            model.getVerts().add(new Vector3f(point.getPosition()));
-        }
-        for(FacialPoint point : gemPoints) {
-            gemModel.getVerts().add(new Vector3f(point.getPosition()));
-        }*/
         
         model.getNormals().addAll(model.getVerts());
         model.getTexCoords().addAll(model.getVerts());
         gemModel.getNormals().addAll(gemModel.getVerts());
         gemModel.getTexCoords().addAll(gemModel.getVerts());
-    }
+    }*/
 
     public static ArrayList<FacialPoint> loadFidoCsv(File csvFile) {
         ArrayList<FacialPoint> pts = new ArrayList<>();
@@ -628,6 +587,174 @@ public final class ImportFromImage implements ActionListener {
         set.add(FacialPointType.RM_R);//Ramus mandibulae r
         set.add(FacialPointType.RM_L);//Ramus mandibulae l
         return set;
+    }
+
+    private void initializeModels(Model model, ArrayList<Model> gems, File imageFile, List<FacialPoint> points) {
+        model.setName(imageFile.getName().substring(0, imageFile.getName().lastIndexOf(".")) + ".obj");
+        for(FacialPoint p : points) {
+            model.getVerts().add(p.getPosition());
+            model.getNormals().add(p.getPosition());
+            model.getTexCoords().add(p.getPosition());
+        }
+        
+        // assign materials because of DCEL construction...
+        model.setMaterials(new Materials("materials.mtl", imageFile));
+        Material mat = new Material("material0");
+        mat.setTextureFile(imageFile.getAbsolutePath());
+        model.getMatrials().getMatrials().add(mat);
+        for(Model gem : gems) {
+            Material gemMat = new Material("material0");
+            gemMat.setTextureFile(gem.getDirectoryPath() + File.separator + "depth.png");
+            gem.setMaterials(new Materials("materials.mtl", imageFile));
+            gem.getMatrials().getMatrials().add(gemMat);
+        }
+    }
+
+    private void initializeDelaunayMeshes(Model model, ArrayList<Model> gems) {
+        // triangulate face model
+        ArrayList<ArrayList<Integer>> triangulation = delaunay(model.getVerts());
+        for (ArrayList<Integer> triangle : triangulation) {
+            // add face to model
+            model.getFaces().addFace(triangle, triangle);
+            
+            // add face to gem models
+            for(Model gem : gems) {
+                gem.getFaces().addFace(triangle, triangle);
+            }
+        }
+    }
+
+    private void subdivideUntilSatisfied(Model model, ArrayList<Model> gems, int numOfVerts) {
+        // subdivide both models the same way until we have enough verts
+        while(model.getVerts().size() < numOfVerts) {
+            //loopSubdivision(model);
+            //loopSubdivision(gem);
+            loop2(model);
+            for(Model gem : gems) {
+                loop2(gem);
+            }
+        }
+    }
+
+    private void assignDepth(Model model, ArrayList<Model> gems, File imageFile, List<FacialPoint> points) {
+        ArrayList<BufferedImage> gemImgs = new ArrayList<>(gems.size());
+        for(Model gem : gems) {
+            File gemImgFile = new File(gem.getMatrials().getMatrials().get(0).getTextureFile());
+            BufferedImage gemImg = null;
+            try {
+                gemImg = ImageIO.read(gemImgFile);
+                gemImgs.add(gemImg);
+            } catch (IOException ex) {
+                System.err.println("Could not load depth image from " + gemImgFile.getAbsolutePath());
+            }
+        }
+        
+        BufferedImage texImg = null;
+        try {
+            texImg = ImageIO.read(imageFile);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+            return;
+        }
+        
+        double sumX = 0;
+        double sumY = 0;
+        double sumZ = 0;
+        float maxY = model.getVerts().get(0).y;
+        float minY = maxY;
+        float maxX = points.get(0).getPosition().x;
+        float minX = maxX;
+        for(FacialPoint p : points) {
+            maxX = Math.max(maxX, p.getPosition().x);
+            minX = Math.min(minX, p.getPosition().x);
+        }
+        float factor = 1.5f * (maxX - minX);
+        model.getTexCoords().clear();
+        for (int i = 0; i < model.getVerts().size(); i++) {
+            // compute and assign depth of point
+            int summedDepth = 0;
+            for(int j=0;j<gems.size();j++) {
+                BufferedImage gemImg = gemImgs.get(j);
+                Model gem = gems.get(j);
+                
+                Vector3f position = gem.getVerts().get(i);
+                Color color = new Color(gemImg.getRGB((int) position.getX(), (int) (gemImg.getHeight() - position.getY())));
+                summedDepth += color.getRed();
+            }
+            float averageDepth = ((float)summedDepth)/gems.size();
+            model.getVerts().get(i).setZ((averageDepth / 255) * factor);
+            
+            // compute and assign texture coordinate of point
+            Vector3f texCoord = new Vector3f();
+            texCoord.x = model.getVerts().get(i).x / texImg.getWidth();
+            texCoord.y = 1 - (model.getVerts().get(i).y / texImg.getHeight());
+            texCoord.z = 0;
+            model.getTexCoords().add(texCoord);
+            
+            // get min and max
+            Vector3f v = model.getVerts().get(i);
+            v.y = texImg.getHeight() - v.y;
+            sumX += v.x;
+            sumY += v.y;
+            sumZ += v.z;
+            maxY = Math.max(maxY, v.y);
+            minY = Math.min(minY, v.y);
+        }
+        
+        // translate all points and scale
+        double n = model.getVerts().size();
+        Vector3f centroid = new Vector3f((float)(sumX/n), (float)(sumY/n), (float)(sumZ/n));
+        float scale = 200/(maxY-minY);
+        for(Vector3f v : model.getVerts()) {
+            v.sub(centroid);
+            v.scale(scale);
+        }
+    }
+
+    private void adjustProportions(Model model, List<FacialPoint> points) {
+        double sumX = 0;
+        double sumY = 0;
+        double sumZ = 0;
+        float maxX = model.getVerts().get(0).x;
+        float minX = maxX;
+        float maxY = model.getVerts().get(0).y;
+        float minY = maxY;
+        
+        for(FacialPoint p : points) {
+            maxX = Math.max(maxX, p.getPosition().x);
+            minX = Math.min(minX, p.getPosition().x);
+        }
+        float factor = 1.5f * (maxX - minX);
+        
+        for(int i=0;i<model.getVerts().size();i++) {
+            Vector3f v = model.getVerts().get(i);
+            maxX = Math.max(maxX, v.x);
+            minX = Math.min(minX, v.x);
+            maxY = Math.max(maxY, v.y);
+            minY = Math.min(minY, v.y);
+            sumX += v.x;
+            sumY += v.y;
+            sumZ += v.z;
+        }
+        
+        // translate all points and scale
+        double n = model.getVerts().size();
+        Vector3f centroid = new Vector3f((float)(sumX/n), (float)(sumY/n), (float)(sumZ/n));
+        float scale = 200/(maxY-minY);
+        for(Vector3f v : model.getVerts()) {
+            v.sub(centroid);
+            v.scale(scale);
+        }
+    }
+
+    private void postprocessModel(Model model) {
+        // use material appropriately
+        for(int i=0;i<model.getFaces().getNumFaces();i++) {
+            model.getFaces().addMaterialUse(i, model.getMatrials().getMatrials().get(0).getName());
+        }
+        
+        // recompute normals of the whole model
+        model.setNormals((ArrayList<Vector3f>) SurfaceComparisonProcessing.instance().recomputeVertexNormals(model));
     }
 
     private class IncidentEdgeIterator implements Iterator<HalfEdge> {
