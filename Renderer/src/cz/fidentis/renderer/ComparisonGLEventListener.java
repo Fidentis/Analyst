@@ -1848,8 +1848,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         for (int i = 0; i < facialPoints.size(); i++) {
             if (info.getIndexOfSelectedPoint() != -1 && i == info.getIndexOfSelectedPoint()) {
                 color = new float[]{0f, 1f, 0f, 1.0f};
-            } else {
+            } else if (facialPoints.get(i).isActive()) {
                 color = info.getColorOfPoint();
+            } else {
+                color = info.getColorOfInactivePoint();
             }
             gl.glDisable(i);
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);

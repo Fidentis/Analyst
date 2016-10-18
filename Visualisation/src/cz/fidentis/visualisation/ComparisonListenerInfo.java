@@ -35,6 +35,7 @@ public class ComparisonListenerInfo {
     private int indexOfSelectedPoint = -1;
     private float facialPointRadius = 2;
     private float[] colorOfPoint = new float[]{1f, 0f, 0f, 1.0f};
+    private float[] colorOfInactivePoint = new float[]{0.5f, 0.5f, 0.5f, 1.0f};
     private float[] colorOfCut = new float[]{1f, 1f, 1f, 1.0f};
     private float cutThickness = 1;
     private PApainting paPainting;
@@ -262,6 +263,14 @@ public class ComparisonListenerInfo {
 
     public void setColorOfPoint(float[] colorOfPoint) {
         this.colorOfPoint = colorOfPoint;
+    }
+    
+    public float[] getColorOfInactivePoint() {
+        return colorOfInactivePoint;
+    }
+    
+    public void setColorOfInactivePoint(float[] colorOfInactivePoint) {
+        this.colorOfInactivePoint = colorOfInactivePoint;
     }
 
     public PApainting getPaPainting() {
