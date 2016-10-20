@@ -20,6 +20,7 @@ public class EditLandmarkID extends javax.swing.JFrame {
     private FacialPoint fp;
     private ComparisonListenerInfo info;
     private Canvas canvas;
+    private boolean active;
     
     /**
      * Creates new form EditLandmarkID
@@ -30,6 +31,7 @@ public class EditLandmarkID extends javax.swing.JFrame {
         this.fp = fp;
         this.info = info;
         this.canvas = canvas;
+        this.active = fp.isActive();
         
         setConfiguration();
     }
@@ -50,6 +52,8 @@ public class EditLandmarkID extends javax.swing.JFrame {
         landmarkInfoTextArea = new javax.swing.JTextArea();
         cancelButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
+        toggleActiveButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,6 +91,13 @@ public class EditLandmarkID extends javax.swing.JFrame {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(toggleActiveButton, org.openide.util.NbBundle.getMessage(EditLandmarkID.class, "EditLandmarkID.toggleActiveButton.text")); // NOI18N
+        toggleActiveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleActiveButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -104,10 +115,14 @@ public class EditLandmarkID extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cancelButton)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cancelButton))
+                            .addComponent(toggleActiveButton, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,19 +131,18 @@ public class EditLandmarkID extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(landmarkIDSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                        .addGap(79, 79, 79))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancelButton)
-                            .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toggleActiveButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton)
+                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -144,9 +158,9 @@ public class EditLandmarkID extends javax.swing.JFrame {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
        int id = (Integer)landmarkIDSpinner.getValue();
-        boolean contains = info.containsFP(id);
+       boolean contains = info.containsFP(id);
        
-       if(contains){
+       if(id != fp.getType() && contains){
            int result = JOptionPane.showConfirmDialog(this, "Landmark with this ID already exists. Do you want to rewrite it?", "Landmark exists", JOptionPane.YES_NO_OPTION);
            
            if(result == JOptionPane.YES_OPTION){
@@ -155,13 +169,20 @@ public class EditLandmarkID extends javax.swing.JFrame {
                this.dispose();
            }
        }else{
-            setFPInfo(id);
+           setFPInfo(id);
            this.dispose();
        }         
     }//GEN-LAST:event_okButtonActionPerformed
 
+    private void toggleActiveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleActiveButtonActionPerformed
+        //only change state locally, fp state will change if user clicks OK button
+        this.active = !this.active;
+        landmarkDesc(fp.getType());
+    }//GEN-LAST:event_toggleActiveButtonActionPerformed
+
     private void setFPInfo(int id) {
         fp.setType(id);
+        fp.setActive(active);
         info.addFacialPoint(fp);
         canvas.setInfo(fp);
     }
@@ -177,7 +198,8 @@ public class EditLandmarkID extends javax.swing.JFrame {
         String landmarkName = FpTexter.getInstance().getFPname(id);
         String landmarkDesc = FpTexter.getInstance().getFPinfo(id);
         
-        landmarkInfoTextArea.setText("Landmark Name: " + landmarkName + System.lineSeparator() + System.lineSeparator() +
+        landmarkInfoTextArea.setText("Landmark Name: " + landmarkName + System.lineSeparator() + "Active: " + this.active + 
+                System.lineSeparator() + System.lineSeparator() +
                 landmarkDesc);
     }
 
@@ -186,8 +208,10 @@ public class EditLandmarkID extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner landmarkIDSpinner;
     private javax.swing.JTextArea landmarkInfoTextArea;
     private javax.swing.JButton okButton;
+    private javax.swing.JButton toggleActiveButton;
     // End of variables declaration//GEN-END:variables
 }
