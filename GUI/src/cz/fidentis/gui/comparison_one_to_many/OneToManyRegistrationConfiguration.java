@@ -20,6 +20,8 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.OneToManyGUISetup;
+import cz.fidentis.gui.observer.ExportFPButtonObserver;
+import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -559,7 +561,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
         buttonGroup1.add(addFPButton);
         org.openide.awt.Mnemonics.setLocalizedText(addFPButton, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.addFPButton.text")); // NOI18N
-        addFPButton.setEnabled(false);
         addFPButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFPButtonActionPerformed(evt);
@@ -569,7 +570,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
         buttonGroup1.add(removeFPButton);
         org.openide.awt.Mnemonics.setLocalizedText(removeFPButton, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.removeFPButton.text")); // NOI18N
-        removeFPButton.setEnabled(false);
         removeFPButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFPButtonActionPerformed(evt);
@@ -893,19 +893,24 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_calculateFPButtonActionPerformed
 
     private void removeFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFPButtonActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editFPButton.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editFPButton.isSelected());
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setRemovePoints(removeFPButton.isSelected());
+        addFPButton.setSelected(false);
+        editFPButton.setSelected(false);
     }//GEN-LAST:event_removeFPButtonActionPerformed
 
     private void addFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFPButtonActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editFPButton.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editFPButton.isSelected());
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setAddPoints(addFPButton.isSelected());
+        
+        editFPButton.setSelected(false);
+        removeFPButton.setSelected(false);
     }//GEN-LAST:event_addFPButtonActionPerformed
 
     private void editFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editFPButtonActionPerformed
 
-        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setEditablePoints(editFPButton.isSelected());
+    GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setEditablePoints(editFPButton.isSelected());
 
+      removeFPButton.setSelected(false);
+      addFPButton.setSelected(false);
     }//GEN-LAST:event_editFPButtonActionPerformed
 
     private void icpAreaComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpAreaComboBoxActionPerformed
@@ -1342,7 +1347,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             exportFPButton.setEnabled(true);
         }
  
-
+        //to check whether FPs can be exported once they are added, removed
+        ObservableMaster o = new ObservableMaster();
+        ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton, 
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1(),
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2());
+        o.addObserver(export);
+        
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setFpExportEnable(o);
     }
     
     private OneToManyComparison getContext(){

@@ -904,7 +904,6 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyRegistrationConfiguration.addFPButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
-                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addFPButtonActionPerformed"/>
@@ -918,7 +917,6 @@
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                           <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyRegistrationConfiguration.removeFPButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
-                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeFPButtonActionPerformed"/>

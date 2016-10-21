@@ -11,6 +11,7 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.landmarks.AddEditLandmarkDialogue;
 import cz.fidentis.gui.actions.landmarks.EditLandmarkID;
+import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.model.Model;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import java.awt.Dimension;
@@ -39,6 +40,8 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private boolean removePoints = false;
     private boolean addPoints = false;
     private boolean selection = false;
+    
+    private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
 
     /**
      * Creates new form ViewerPanel
@@ -81,6 +84,12 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     public void addModel2(Model model) {
         listener2.addModel(model);
     }
+
+    public void setFpExportEnable(ObservableMaster fpExportEnable) {
+        this.fpExportEnable = fpExportEnable;
+    }
+    
+    
     /*
      public void setViewerData(Viewer viewerData) {
      listener1.setModels(viewerData.getModel1());
@@ -256,13 +265,18 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
         } else if (listener.getModel() != null && listener.checkPointInMesh(evt.getX(), evt.getY()) == null) {        //pick point on the mesh
             listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
             if (showInfo) {
-                canvas1.setFeaturePointsPanelVisibility(false);
+                canvas.setFeaturePointsPanelVisibility(false);
             }
         }else if(addPoints && listener.getModel() != null){
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
             int id = listener.getInfo().getNextFreeFPID();        
             FacialPoint fp = new FacialPoint(id, pos);
             listener.getInfo().addFacialPoint(fp);
+        }
+        
+        //update fp export button
+        if(removePoints || addPoints){
+            fpExportEnable.updateObservers();
         }
     }
 

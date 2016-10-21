@@ -21,6 +21,8 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
+import cz.fidentis.gui.observer.ExportFPButtonObserver;
+import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1355,6 +1357,15 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             jButton1.setEnabled(true);
             exportPointsButton.setEnabled(true);
         }
+        
+        //to check whether FPs can be exported once they are added, removed
+        ObservableMaster o = new ObservableMaster();
+        ExportFPButtonObserver export = new ExportFPButtonObserver(exportPointsButton, 
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1(),
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2());
+        o.addObserver(export);
+        
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setFpExportEnable(o);
 
     }
     

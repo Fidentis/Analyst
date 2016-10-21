@@ -12,10 +12,10 @@ import java.util.List;
  *
  * @author xferkova
  */
-public class ProgressHandleMaster {
+public class ObservableMaster {
     List<Observable> observers;
 
-    public ProgressHandleMaster() {
+    public ObservableMaster() {
         observers = new LinkedList<>();
     }
     
