@@ -25,9 +25,10 @@ public class ExportFPButtonObserver implements Observable{
     
     
     @Override
-    public void update() {
+    public void update() {        
         //refactor GUI and change this
-        boolean exportFP = !listener1.getFacialPoints().isEmpty() && !listener2.getFacialPoints().isEmpty();
+        //sometimes listener2 can be null (batch), in that case second statment should be considered true and check whether FP are in first listener only instead
+        boolean exportFP = listener1 != null && !listener1.getFacialPoints().isEmpty() && (listener2 == null || !listener2.getFacialPoints().isEmpty());
         exportFpButton.setEnabled(exportFP);
     } 
 }
