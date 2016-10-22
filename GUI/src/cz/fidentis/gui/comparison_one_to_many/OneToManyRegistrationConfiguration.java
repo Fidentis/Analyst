@@ -22,6 +22,7 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
+import cz.fidentis.gui.observer.RegisterFPButtonObserver;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1352,7 +1353,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton, 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1(),
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2());
+        RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());  
+        
         o.addObserver(export);
+        o.addObserver(register);
         
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setFpExportEnable(o);
     }

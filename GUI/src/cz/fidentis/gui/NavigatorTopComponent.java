@@ -391,8 +391,6 @@ public final class NavigatorTopComponent extends TopComponent {
                         listener.setModels(model);
                         if(batchComparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
                             List<FacialPoint> l = batchComparison.getFacialPoints(model.getName());
-                            if(l == null)
-                                l = new LinkedList<>();     //create empty list to avoid working with null when FPs are added
                             listener.setFacialPoints(l);
                         }
                     }
@@ -437,9 +435,7 @@ public final class NavigatorTopComponent extends TopComponent {
                         }
                         
                         if(comparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
-                            List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());
-                            if(l == null)
-                                l = new LinkedList<>();     //create empty list to avoid working with null when FPs are added
+                            List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());   //there will always be at least empty list
                             listenerSecondary.setFacialPoints(l);
                         }
                     }

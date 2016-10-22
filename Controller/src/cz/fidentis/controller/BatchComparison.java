@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.vecmath.Vector3f;
@@ -597,6 +598,7 @@ public class BatchComparison {
 
     public void addModel(File model){
         models.add(model);
+        facialPoints.put(model.getName(), new LinkedList<FacialPoint>());       //make sure there is a list ready for FPs
         if(node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }

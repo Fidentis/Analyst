@@ -20,6 +20,7 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.BatchGUIsetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
+import cz.fidentis.gui.observer.RegisterFPButtonObserver;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -123,7 +124,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         symModelsCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        registerButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         fpPointInfoCheckBox = new javax.swing.JCheckBox();
         fpColorPanel = new javax.swing.JPanel();
@@ -543,11 +544,11 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel12.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jButton1.text")); // NOI18N
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(registerButton, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.registerButton.text")); // NOI18N
+        registerButton.setEnabled(false);
+        registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                registerButtonActionPerformed(evt);
             }
         });
 
@@ -798,7 +799,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jSeparator2)
                     .addComponent(continueComparisonCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel12)
@@ -826,7 +827,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(continueComparisonCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -840,7 +841,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1075, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -873,16 +874,16 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         if (regMeth == RegistrationMethod.PROCRUSTES) {
             jPanel1.setVisible(true);
             jPanel3.setVisible(false);
-            jButton1.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
+            registerButton.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
             exportFpButton.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
         } else if (regMeth == RegistrationMethod.HAUSDORFF) {
             jPanel1.setVisible(false);
             jPanel3.setVisible(true);
-            jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+            registerButton.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
         } else {
             jPanel1.setVisible(false);
             jPanel3.setVisible(false);
-            jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+            registerButton.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
         }
         
         getContext().setRegistrationMethod(regMeth);
@@ -926,7 +927,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                     tc.getViewerPanel_Batch().getListener().getModel().getName()
                             ));
 
-                    jButton1.setEnabled(areFPCalculated(tc));
+                    registerButton.setEnabled(areFPCalculated(tc));
                     exportFpButton.setEnabled(areFPCalculated(tc));
                 }
             };
@@ -965,10 +966,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         removeFpButton.setSelected(false);
     }//GEN-LAST:event_editFpButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final BatchComparison c = getContext();
-        jButton1.setEnabled(false);
+        registerButton.setEnabled(false);
         c.setRegisterButtonEnabled(false);
         
         
@@ -1038,7 +1039,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             c.setModelsAdded(true);     //new avg face has to be computed since it's being overriden 
                        } catch (FileManipulationException ex) {
                             //osefuj vynimku
-                            jButton1.setEnabled(true);
+                            registerButton.setEnabled(true);
                         }
 
                     } else if (c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES) {
@@ -1115,7 +1116,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     }
 
                     //pre istotu
-                    jButton1.setEnabled(true);
+                    registerButton.setEnabled(true);
                     c.setRegisterButtonEnabled(true);
 
                     //set up default comparison configuration data
@@ -1135,7 +1136,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     GUIController.updateNavigator();
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
-                    jButton1.setEnabled(true);
+                    registerButton.setEnabled(true);
                 }finally{
                     p.finish();
                 }
@@ -1146,7 +1147,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         t.start();
 
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_registerButtonActionPerformed
 
     private int getUndersampleValue(Methods m, Type t) {       
         
@@ -1195,7 +1196,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     model.getModelName(), model.getFacialPoints());
         }
 
-        jButton1.setEnabled(areFPCalculated(tc));
+        registerButton.setEnabled(areFPCalculated(tc));
         exportFpButton.setEnabled(areFPCalculated(tc));
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -1386,10 +1387,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         undersamplingComboBoxActionPerformed(null);
      
         if ((registrationMethodComboBox.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
-            jButton1.setEnabled(false);
+            registerButton.setEnabled(false);
             exportFpButton.setEnabled(false);
         } else {
-            jButton1.setEnabled(true);
+            registerButton.setEnabled(true);
             exportFpButton.setEnabled(true);
         }
         
@@ -1406,7 +1407,9 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         ExportFPButtonObserver export = new ExportFPButtonObserver(exportFpButton, 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener(),
         null);
+        RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
         o.addObserver(export);
+        o.addObserver(register);
         
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setFpExportEnable(o);
     }
@@ -1435,10 +1438,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         BatchComparison c = getContext();
         
         if ((c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
-            jButton1.setEnabled(false);
+            registerButton.setEnabled(false);
             exportFpButton.setEnabled(false);
         } else {
-            jButton1.setEnabled(true);
+            registerButton.setEnabled(true);
             exportFpButton.setEnabled(true);
         }
     }
@@ -1465,7 +1468,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox<cz.fidentis.comparison.ICPmetric> icpMetricComboBox;
     private javax.swing.JLabel icpMetricLabel;
     private javax.swing.JCheckBox icpScaleCheckBox;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1513,6 +1515,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JSlider radiusSlider;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JButton registerButton;
     private javax.swing.JComboBox registrationMethodComboBox;
     private javax.swing.JToggleButton removeFpButton;
     private javax.swing.JCheckBox symModelsCheckbox;
