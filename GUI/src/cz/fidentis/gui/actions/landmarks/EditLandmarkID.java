@@ -165,7 +165,7 @@ public class EditLandmarkID extends javax.swing.JFrame {
            
            if(result == JOptionPane.YES_OPTION){
                info.removeFacialPoint(id);
-                setFPInfo(id);
+               setFPInfo(id);
                this.dispose();
            }
        }else{
@@ -183,7 +183,6 @@ public class EditLandmarkID extends javax.swing.JFrame {
     private void setFPInfo(int id) {
         fp.setType(id);
         fp.setActive(active);
-        info.addFacialPoint(fp);
         canvas.setInfo(fp);
     }
 

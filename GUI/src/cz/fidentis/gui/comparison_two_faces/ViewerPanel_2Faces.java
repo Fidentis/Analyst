@@ -274,7 +274,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
             listener.getInfo().addFacialPoint(fp);
         }
         
-        //update fp export button
+        //update fp export and register button
         if(removePoints || addPoints){
             fpExportEnable.updateObservers();
         }

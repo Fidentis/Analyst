@@ -361,13 +361,6 @@ public final class SaveProject implements ActionListener {
             appendModelElement(comparison.getPrimaryModel(), primaryE, "primaryModel");
         }
 
-        if (comparison.getPreregiteredModels() != null) {
-            Element preregE = doc.createElement("pre-registered-models");
-            comparisonE.appendChild(preregE);
-            for (Model m : comparison.getPreregiteredModels()) {
-                appendModelElement(m, preregE, "preregistered");
-            }
-        }
 
         if (comparison.getFacialPoints() != null && comparison.getFacialPoints().size() > 0) {
             Element fpE = doc.createElement("facial-points");

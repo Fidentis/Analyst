@@ -742,23 +742,6 @@ public final class OpenProject implements ActionListener {
             }
         }
 
-        if (preregE != null) {
-            NodeList ch = preregE.getChildNodes();
-            ArrayList<Model> models = new ArrayList<>();
-            for (int i = 0; i < ch.getLength(); i++) {
-                Node n = ch.item(i);
-                if (n.getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-                Element modelE = (Element) n;
-                ModelLoader loader = new ModelLoader();
-                File modelFile = new File(tempFile.getAbsolutePath() + File.separator + modelE.getAttribute("name"));
-                Model m = loader.loadModel(modelFile, true, true);
-                models.add(m);
-            }
-            comparison.setPreregiteredModels(models);
-        }
-
         if (fpE != null) {
             String fileName = tempFile.getAbsolutePath() + File.separator + fpE.getAttribute("file");
             loadedFps = CSVparser.load(fileName);

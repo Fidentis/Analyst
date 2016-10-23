@@ -39,6 +39,7 @@ import java.util.Hashtable;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -1019,10 +1020,26 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     }
                 } else if (c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES) {
                     try {
-                        Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(), mainFace.getVerts(),
-                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), compareFace.getVerts(), c.isFpScaling());
+                        
+                        
+                        Procrustes2Models procrustes = new Procrustes2Models(c.getMainFp(), mainFace.getVerts(),
+                                c.getSecondaryFp(), compareFace.getVerts(), c.isFpScaling());
 
                         List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
+                        
+                        if(trans == null){
+                            int res = JOptionPane.showConfirmDialog(tc, "There wasn't enough corresponding landmarks to register models. Do you wish to continue?", "Not enough landmarks", JOptionPane.YES_NO_OPTION);
+                            if(res == JOptionPane.NO_OPTION){
+                               registerButton.setEnabled(true);
+                               return; 
+                            }else if(res == JOptionPane.YES_OPTION){
+                                noRegistration();
+                                finalizeRegistration();
+                                return;
+                            }
+                                
+                        }
+                                                  
                         c.getModel1().setVerts(procrustes.getPa().getVertices());
                         c.getModel2().setVerts(procrustes.getPa2().getVertices());
 
@@ -1042,8 +1059,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             tc.getViewerPanel_2Faces().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
                         }
 
-                        procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
-                        procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
+                        procrustes.getPa().updateFacialPoints(c.getMainFp());
+                        procrustes.getPa2().updateFacialPoints(c.getSecondaryFp());
 
                         c.setCompFTransformations(trans);
 
@@ -1069,28 +1086,34 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 } else {
 
-                    ModelLoader l = new ModelLoader();
-                    Model model = l.loadModel(c.getModel2().getFile(), false, true);
-                    tc.getViewerPanel_2Faces().getListener1().addModel(model);
-
-                    c.setState(2);
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
-
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
-
-                   
+                    noRegistration();                  
                 }
 
+                finalizeRegistration();
+            }
+
+            private void finalizeRegistration() {
                 TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(c);
                 
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
-                     GUIController.getConfigurationTopComponent().addComparisonComponent();
+                    GUIController.getConfigurationTopComponent().addComparisonComponent();
                 }
                 
                 if (c.isContinueComparison()) {
-                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-                    }
+                    GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
+                }
+            }
+
+            private void noRegistration() {
+                ModelLoader l = new ModelLoader();
+                Model model = l.loadModel(c.getModel2().getFile(), false, true);
+                tc.getViewerPanel_2Faces().getListener1().addModel(model);
+                
+                c.setState(2);
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
+                
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
             }
 
         };

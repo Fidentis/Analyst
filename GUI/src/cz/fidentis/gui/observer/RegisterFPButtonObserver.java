@@ -27,7 +27,7 @@ public class RegisterFPButtonObserver implements Observable{
     @Override
     public void update() {
         boolean enable = true;
-        if (info.keySet().size() < 2) {
+        if (info.keySet().size() < 2) {     //less than 2 faces loaded
             enable = false;
         } else {
             for (List<FacialPoint> fp : info.values()) {

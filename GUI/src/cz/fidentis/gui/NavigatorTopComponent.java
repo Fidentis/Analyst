@@ -424,16 +424,13 @@ public final class NavigatorTopComponent extends TopComponent {
                     ComparisonGLEventListener listenerSecondary = tc.getOneToManyViewerPanel().getListener2();
                     
                     if(previousNodeText.equals(strings.getString("tree.node.comparedModels"))) {
-                        if(comparison.getPreregiteredModels() != null) {
-                            Model m = comparison.getPreregiteredModels().get(lastNodeIndex);
-                            listenerSecondary.setModels(m);
-                        } else {
-                            File file = comparison.getModel(lastNodeIndex);
-                            ModelLoader loader = new ModelLoader();
-                            Model m = loader.loadModel(file, true, true);
-                            listenerSecondary.setModels(m);
-                        }
-                        
+                      
+                        File file = comparison.getModel(lastNodeIndex);
+                        ModelLoader loader = new ModelLoader();
+                        Model m = loader.loadModel(file, true, true);
+                        listenerSecondary.setModels(m);
+
+
                         if(comparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
                             List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());   //there will always be at least empty list
                             listenerSecondary.setFacialPoints(l);

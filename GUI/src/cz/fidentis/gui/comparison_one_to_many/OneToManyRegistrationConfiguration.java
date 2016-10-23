@@ -37,9 +37,11 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -873,7 +875,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     tc.getOneToManyViewerPanel().getListener1().getModel());
             
                     c.setFacialPoints(res.getFacialPoints());
-                    c.setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
+                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
                     tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
                     
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
@@ -989,6 +991,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                     List<List<FacialPoint>> list = new ArrayList();
                     List<ArrayList<Vector3f>> verts = new ArrayList();
+                    ModelLoader ml = new ModelLoader();
 
                     int size = c.getModels().size();
                     for (int i = 0; i < size; i++) {
@@ -996,61 +999,65 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                                 c.getModels().get(i).getName());
                         list.add(facialPoints);
 
-                        verts.add(c.getPreregiteredModels().get(i).getVerts());
+                        Model m = ml.loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
+                        verts.add(m.getVerts());
                     }
 
-                    Procrustes1ToMany procrustes = new Procrustes1ToMany(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel().getVerts(),
+                    Model mainFace = tc.getOneToManyViewerPanel().getListener1().getModel();
+                    Procrustes1ToMany procrustes = new Procrustes1ToMany(c.getFacialPoints(mainFace.getName()), mainFace.getVerts(),
                             list, verts, c.isFpScaling());
 
 
                     List<List<ICPTransformation>> trans = procrustes.align1withN();
+                    for(List<ICPTransformation> t : trans){
+                        if(t == null){
+                            int res = JOptionPane.showConfirmDialog(tc, "There wasn't enough corresponding landmarks in one or more of the models to register models. Do you wish to continue?", "Not enough landmarks", JOptionPane.YES_NO_OPTION);
+                            if(res == JOptionPane.NO_OPTION){
+                               registerButton.setEnabled(true);
+                               return; 
+                            }else if(res == JOptionPane.YES_OPTION){
+                                noRegistration(); //if user wish to continue don't ask them to continue again
+                                finalizeRegistration();
+                                return;
+                            }
+                        }
+                    }
                     c.setTrans(trans);
 
                     c.getPrimaryModel().setVerts(procrustes.getPa().getVertices());
-                    procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints());
+                    //procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints()); WHAT DOES THIS DO?
 
                     //clear all current Feature Points in listener
                     c.clearFacialPoints();
+                    List<File> r = new LinkedList<>();      //registered models saved to disk
+                    File tmpModuleFile = new File("" + System.currentTimeMillis());
 
-                    for (int i = 0; i < c.getPreregiteredModels().size(); i++) {
-     
-                        c.getPreregiteredModels().get(i).setVerts(procrustes.getPa2().get(i).getVertices());
-                        //add new rotated facial points
+                    for (int i = 0; i < size; i++) {
                         List<FacialPoint> values = new ArrayList<>();
                         values.addAll(procrustes.getPa2().get(i).getConfig().values());
+                        c.addFacialPoints(c.getModel(i).getName(), values);
+                            
+                            Model m = ml.loadModel(c.getModel(i), false, Boolean.TRUE);
+                            m.setVerts(procrustes.getPa2(i).getVertices());
+                            procrustes.getPa2(i).updateFacialPoints(c.getFacialPoints(m.getName()));  
+                            
+                            if(tc.getOneToManyViewerPanel().getListener2().getModel().getName().equals(m.getName())){
+                                tc.getOneToManyViewerPanel().getListener2().setModels(m);
+                            }
+                            ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
 
-                        c.addFacialPoints(c.getPreregiteredModels().get(i).getName(),
-                                values);
-                      
+                            k.start();
 
-                        if (c.getPreregiteredModels().get(i).getName().equals(tc.getOneToManyViewerPanel().getListener2().getModel().getName())) {
-                            tc.getOneToManyViewerPanel().getListener2().setModels(c.getPreregiteredModels().get(i));
-                        }
-
+                            r.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.FALSE));
+                            k.finish();     
                     }
+                    
+                    c.setRegisteredModels(r);
 
                     if (c.isFpScaling()) {
                         tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(c.getFpSize() / 30f);
 
                         tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(c.getFpSize() / 30f);
-                    }
-
-                    ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
-
-                    try {
-                        List<File> results;
-
-                        k.start();
-
-                        File tmpModuleFile = new File("compF");
-                        results = ProcessingFileUtils.instance().saveModelsToTMP(c.getPreregiteredModels(), tmpModuleFile, Boolean.FALSE);
-                        k.finish();
-
-                        c.setRegisteredModels(results);
-                    } catch (FileManipulationException ex) {
-                        //osefuj vynimku
-                        registerButton.setEnabled(true);
-                        k.finish();
                     }
 
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
@@ -1059,10 +1066,18 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             ));
 
                 }else{
-                    //no registration, consider original models as registered
-                    c.setRegisteredModels(c.getModels());
+                    noRegistration();
                 }
                 
+                finalizeRegistration();
+            }
+
+            private void noRegistration() {
+                //no registration, consider original models as registered
+                c.setRegisteredModels(c.getModels());
+            }
+
+            private void finalizeRegistration() {
                 //set up default values for comparison configuration
                 OneToManyGUISetup.defaultValuesComparisonConfiguration(c);
 
@@ -1143,10 +1158,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         
         for(File f : c.getModels()){
             loadedModels.add(ml.loadModel(f, false, true));
-        }
-        
-        c.setPreregiteredModels((ArrayList<Model>) loadedModels);
-        
+        }        
         
         registerButton.setEnabled(areFPCalculated(tc));
         exportFPButton.setEnabled(areFPCalculated(tc));
