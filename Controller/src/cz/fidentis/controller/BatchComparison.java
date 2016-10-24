@@ -431,7 +431,8 @@ public class BatchComparison {
     }
 
     public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
-        this.facialPoints = facialPoints;
+        this.facialPoints.clear();
+        this.facialPoints.putAll(facialPoints);
     }
 
     public boolean isShowPointInfo() {

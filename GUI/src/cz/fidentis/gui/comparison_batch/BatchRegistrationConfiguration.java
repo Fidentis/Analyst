@@ -37,9 +37,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -612,7 +614,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.GridLayout(2, 0));
 
-        buttonGroup1.add(addFpButton);
         org.openide.awt.Mnemonics.setLocalizedText(addFpButton, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.addFpButton.text")); // NOI18N
         addFpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -621,7 +622,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         });
         jPanel2.add(addFpButton);
 
-        buttonGroup1.add(removeFpButton);
         org.openide.awt.Mnemonics.setLocalizedText(removeFpButton, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.removeFpButton.text")); // NOI18N
         removeFpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -919,6 +919,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     
                     FpResultsBatch res = FpProcessing.instance().calculatePointsBatch(cancelTask,
                             c.getModels());
+                    
 
                     //move to GUI manipulation eventually
                     c.setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
@@ -1064,6 +1065,22 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                         //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
                         List<List<ICPTransformation>> trans = procrustes.alignBatch(c.getFpTreshold() / 100f);
+                        
+                        
+                        if(trans == null){
+                            int res = JOptionPane.showConfirmDialog(tc, "There wasn't enough corresponding landmarks in one or more of the models to register models. Do you wish to continue?", "Not enough landmarks", JOptionPane.YES_NO_OPTION);
+                            if(res == JOptionPane.NO_OPTION){
+                               registerButton.setEnabled(true);
+                               return; 
+                            }else if(res == JOptionPane.YES_OPTION){
+                                noRegistration(); //if user wish to continue don't ask them to continue again
+                                finalizeRegistration(p);
+                                return;
+                            }
+                        }
+                    
+                    c.setTrans(trans);
+                        
                         tc.getProject().getSelectedBatchComparison().setTrans(trans);
                         
                         tc.getProject().getSelectedBatchComparison().clearFacialPoints();
@@ -1106,40 +1123,43 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                        // tc.getViewerPanel_Batch().getListener().setFacialPointRadius(jSlider1.getValue());
                     }*/
                         
-                        tc.getViewerPanel_Batch().getListener().setFacialPoints(
-                                c.getFacialPoints(
-                                        tc.getViewerPanel_Batch().getListener().getModel().getName()
-                                ));
-
                     }else{
-                        c.setRegistrationResults(c.getModels());
+                        noRegistration();
                     }
 
-                    //pre istotu
-                    registerButton.setEnabled(true);
-                    c.setRegisterButtonEnabled(true);
-
-                    //set up default comparison configuration data
-                    BatchGUIsetup.setUpDefaultComparisonConfigurationData(c);
-                    
-                    if (GUIController.getSelectedProjectTopComponent() == tc) {
-                        GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
-                    }
-                    
-                    c.setState(2);
-
-                    if (c.isContinueComparison()) {
-                        GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().computeComparison(tc);
-                    }
-                    
-                    p.finish();
-                    GUIController.updateNavigator();
+                    finalizeRegistration(p);
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
                     registerButton.setEnabled(true);
                 }finally{
                     p.finish();
                 }
+            }
+
+            private void finalizeRegistration(ProgressHandle p) {
+                //pre istotu
+                registerButton.setEnabled(true);
+                c.setRegisterButtonEnabled(true);
+                
+                //set up default comparison configuration data
+                BatchGUIsetup.setUpDefaultComparisonConfigurationData(c);
+                
+                if (GUIController.getSelectedProjectTopComponent() == tc) {
+                    GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
+                }
+                
+                c.setState(2);
+                
+                if (c.isContinueComparison()) {
+                    GUIController.getConfigurationTopComponent().getBatchComparisonConfiguration().computeComparison(tc);
+                }
+                
+                p.finish();
+                GUIController.updateNavigator();
+            }
+
+            private void noRegistration() {
+                c.setRegistrationResults(c.getModels());
             }
         };
 

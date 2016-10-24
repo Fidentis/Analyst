@@ -178,6 +178,10 @@ public class GPA implements Serializable {
         
         for(int i = 0; i < configs.size(); i++){
             ICPTransformation tran = configs.get(i).rotate(oldMean);  
+            
+            if(tran == null)
+                return null;        //couldn't rotate
+            
             List<ICPTransformation> t = new ArrayList<>();
             t.add(tran);
             

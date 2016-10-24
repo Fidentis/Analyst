@@ -574,7 +574,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.GridLayout(2, 0));
 
-        buttonGroup1.add(addPointButton);
         org.openide.awt.Mnemonics.setLocalizedText(addPointButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.addPointButton.text")); // NOI18N
         addPointButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -583,7 +582,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         });
         jPanel2.add(addPointButton);
 
-        buttonGroup1.add(removePointButton);
         org.openide.awt.Mnemonics.setLocalizedText(removePointButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.removePointButton.text")); // NOI18N
         removePointButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
