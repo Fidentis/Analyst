@@ -1169,11 +1169,13 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             if (tc.getViewerPanel_2Faces().getListener1().getModel() != null
                     && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener1().initFpUniverse(model.getFacialPoints());
+                getContext().setMainFp(model.getFacialPoints());
             }
 
             if (tc.getViewerPanel_2Faces().getListener2().getModel() != null
                     && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener2().initFpUniverse(model.getFacialPoints());
+                getContext().setSecondaryFp(model.getFacialPoints());
             }
         }
 

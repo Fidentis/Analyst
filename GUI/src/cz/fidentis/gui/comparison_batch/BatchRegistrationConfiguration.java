@@ -143,7 +143,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         editFpButton = new javax.swing.JToggleButton();
         jButton9 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton6 = new javax.swing.JButton();
+        loadFPButton = new javax.swing.JButton();
         exportFpButton = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         fpThresholdSlider = new javax.swing.JSlider();
@@ -648,10 +648,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         });
         jPanel2.add(jButton9);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton6, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jButton6.text")); // NOI18N
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(loadFPButton, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.loadFPButton.text")); // NOI18N
+        loadFPButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                loadFPButtonActionPerformed(evt);
             }
         });
 
@@ -712,7 +712,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(loadFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -742,7 +742,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(loadFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1098,11 +1098,11 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             m.setVerts(procrustes.getGpa().getPA(i).getVertices());
                             procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()));                            
                             
-                            
-                            if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
+                            //Update canvas with registered model
+                            /*if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
                                 tc.getViewerPanel_Batch().getListener().setModels(m);
                                 tc.getViewerPanel_Batch().getListener().setFacialPoints(c.getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
-                            }
+                            }*/
                             
                             ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
 
@@ -1187,7 +1187,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         return -1;
     }
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void loadFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFPButtonActionPerformed
 
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         BatchComparison c = getContext();
@@ -1201,8 +1201,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         c.clearFacialPoints();
 
         List<File> models = new ArrayList<>();
-        List<Model> loadedModels = new ArrayList<>();
-        ModelLoader ml = new ModelLoader();
 
         models.addAll(c.getModels());
         FPImportExport.instance().alignPointsToModels(loaded, models);
@@ -1218,7 +1216,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         registerButton.setEnabled(areFPCalculated(tc));
         exportFpButton.setEnabled(areFPCalculated(tc));
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_loadFPButtonActionPerformed
 
     public Boolean validate(ImportPanel p) {
         String path = p.getFileName();
@@ -1492,7 +1490,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JCheckBox jCheckBox2;
@@ -1529,6 +1526,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton loadFPButton;
     private javax.swing.JRadioButton numberRadioButton;
     private javax.swing.JSpinner numberSpinner;
     private javax.swing.JRadioButton percentageRadioButton;

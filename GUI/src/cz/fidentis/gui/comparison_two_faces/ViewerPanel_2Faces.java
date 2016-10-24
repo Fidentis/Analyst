@@ -225,14 +225,21 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private void canvas1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MousePressed
        
        canvasClicked(evt, listener1, canvas1);
-       if(removePoints || addPoints)        //set new FP list for data model
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setMainFp(listener1.getFacialPoints());    //TODO
+       if(removePoints || addPoints) { //set new FP list for data model
+           GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setMainFp(listener1.getFacialPoints());    //TODO
+           fpExportEnable.updateObservers();
+       }
+            
     }//GEN-LAST:event_canvas1MousePressed
 
     private void canvas2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MousePressed
         canvasClicked(evt, listener2, canvas2);
-        if(removePoints || addPoints)
+        if(removePoints || addPoints){
             GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces().setSecondaryFp(listener2.getFacialPoints());  //TODO
+            fpExportEnable.updateObservers();
+        }
+            
+            
     }//GEN-LAST:event_canvas2MousePressed
 
     private void canvasClicked(MouseEvent evt, ComparisonGLEventListener listener, Canvas canvas) {
@@ -272,11 +279,6 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
             int id = listener.getInfo().getNextFreeFPID();        
             FacialPoint fp = new FacialPoint(id, pos);
             listener.getInfo().addFacialPoint(fp);
-        }
-        
-        //update fp export and register button
-        if(removePoints || addPoints){
-            fpExportEnable.updateObservers();
         }
     }
 
