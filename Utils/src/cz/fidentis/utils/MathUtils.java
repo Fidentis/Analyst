@@ -38,9 +38,26 @@ public class MathUtils {
      * @return distance between point1 and point2
      */
     public double distancePoints(Vector3f point1, Vector3f point2) {
-        return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2)
-                + Math.pow(point1.getY() - point2.getY(), 2)
-                + Math.pow(point1.getZ() - point2.getZ(), 2));
+        float x = point1.x - point2.x;
+        float y = point1.y - point2.y;
+        float z = point1.z - point2.z;
+        
+        return Math.sqrt(x*x + y*y + z*z);
+    }
+    
+    /**
+     * Computes distance between points without taking root
+     * 
+     * @param point1
+     * @param point2
+     * @return squared distance between two points
+     */
+    public double distancePointsSqrt(Vector3f point1, Vector3f point2){
+        float x = point1.x - point2.x;
+        float y = point1.y - point2.y;
+        float z = point1.z - point2.z;
+        
+        return x*x + y*y + z*z;
     }
 
     /**

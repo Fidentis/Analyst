@@ -329,9 +329,11 @@ public class KdTreeIndexed implements KdTree {
        
        //first search from root to leaf
        while(searched != null){
-           if(MathUtils.instance().distancePoints(p, searched.getId()) < minDistance){
+           
+           double dist = MathUtils.instance().distancePointsSqrt(p, searched.getId());
+           if(dist < minDistance){
                near = searched;
-               minDistance = MathUtils.instance().distancePoints(p, searched.getId());
+               minDistance = dist;
            }
            
            if(comparePointsOnLevel(p, searched.getId(), searched.getDepth())){
@@ -354,15 +356,16 @@ public class KdTreeIndexed implements KdTree {
            }
             
             searched = queue.poll();
-
-            if (MathUtils.instance().distancePoints(p, searched.getId()) < minDistance) {
+            double dist = MathUtils.instance().distancePointsSqrt(p, searched.getId());
+            
+            if (dist < minDistance) {
                 near = searched;
-                minDistance = MathUtils.instance().distancePoints(p, searched.getId());
+                minDistance = dist;
             }
 
             distOnAxis = minDistanceIntersection(searched.getId(), p, searched.getDepth());
 
-             if (distOnAxis > minDistance) {
+             if (distOnAxis * distOnAxis> minDistance) {
                 if (comparePointsOnLevel(p, searched.getId(), searched.getDepth())) {
                     if (searched.getLesser() != null) {
                         queue.add(searched.getLesser());
