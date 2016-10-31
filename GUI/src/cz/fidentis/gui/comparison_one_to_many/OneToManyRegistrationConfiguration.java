@@ -53,6 +53,8 @@ import org.openide.util.Exceptions;
  */
 public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     
+    private boolean observerCreated;
+    
     /**
      * Creates new form RegistrationConfiguration
      */
@@ -1307,9 +1309,22 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         OneToManyComparison c = getContext();
-        
-        if(c.isFirstCreated())
-            OneToManyGUISetup.setUpDefaultRegistrationData(c);
+          
+        //set up data when first created
+        if(c.isFirstCreated()){
+            //to check whether FPs can be exported once they are added, removed
+            ObservableMaster o = new ObservableMaster();
+            ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton,
+                    GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1(),
+                    GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2());
+            RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
+
+            o.addObserver(export);
+            o.addObserver(register);
+
+            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setFpExportEnable(o);
+            OneToManyGUISetup.setUpDefaultRegistrationData(c);      //this method will set up firstCreated to false
+        }
        
        regMethodComboBox.setSelectedItem(c.getRegistrationMethod());
        
@@ -1363,19 +1378,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             registerButton.setEnabled(true);
             exportFPButton.setEnabled(true);
         }
- 
-        //to check whether FPs can be exported once they are added, removed
-        ObservableMaster o = new ObservableMaster();
-        ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton, 
-        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1(),
-        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2());
-        RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());  
-        
-        o.addObserver(export);
-        o.addObserver(register);
-        
-        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setFpExportEnable(o);
-    }
+     }
     
     private OneToManyComparison getContext(){
         return GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();

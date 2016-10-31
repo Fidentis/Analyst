@@ -1351,9 +1351,21 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         BatchComparison c = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+        
+        //set up data when project is first created
+        if (c.isFirstCreated()) {
+            //to check whether FPs can be exported once they are added, removed
+            ObservableMaster o = new ObservableMaster();
+            ExportFPButtonObserver export = new ExportFPButtonObserver(exportFpButton,
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener(),
+                    null);
+            RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
+            o.addObserver(export);
+            o.addObserver(register);
 
-        if(c.isFirstCreated()){
-            BatchGUIsetup.setUpDefaultRegistrationData(c);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setFpExportEnable(o);
+
+            BatchGUIsetup.setUpDefaultRegistrationData(c);  //this method will set firstCreated to false
             populateFacesComboBox();
         }
             
@@ -1420,16 +1432,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             facesComboBox.setSelectedIndex(c.getTemplateIndex() + 3);
        */
        
-       //to check whether FPs can be exported once they are added, removed
-        ObservableMaster o = new ObservableMaster();
-        ExportFPButtonObserver export = new ExportFPButtonObserver(exportFpButton, 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener(),
-        null);
-        RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
-        o.addObserver(export);
-        o.addObserver(register);
-        
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setFpExportEnable(o);
     }
     
     private BatchComparison getContext(){

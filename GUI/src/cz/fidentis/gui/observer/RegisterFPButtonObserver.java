@@ -6,6 +6,7 @@
 package cz.fidentis.gui.observer;
 
 import cz.fidentis.featurepoints.FacialPoint;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
@@ -20,6 +21,15 @@ public class RegisterFPButtonObserver implements Observable{
     private final  Map<String, List<FacialPoint>> info;
 
     public RegisterFPButtonObserver(JButton registerFpButton, Map<String, List<FacialPoint>> info) {
+        this.registerFpButton = registerFpButton;
+        this.info = info;
+    }
+    
+    public RegisterFPButtonObserver(JButton registerFpButton, List<FacialPoint> mainFp, String mainName, List<FacialPoint> secondaryFp, String secondaryName){
+        Map<String, List<FacialPoint>> info = new HashMap<>();
+        info.put(mainName, mainFp);
+        info.put(secondaryName, secondaryFp);
+        
         this.registerFpButton = registerFpButton;
         this.info = info;
     }

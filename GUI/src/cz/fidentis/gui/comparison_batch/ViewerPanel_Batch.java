@@ -402,12 +402,10 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         manipulatePoint = listener.selectPoint(evt.getX(), evt.getY());
         
         if (manipulatePoint) {
-            nextIndexOfSelectedPoint = listener.getIndexOfSelectedPoint();
+            //update selected point
+            setPointInfo(canvas, listener);
           
             if (editablePoints) {
-                if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
-                    indexOfSelectedPoint = nextIndexOfSelectedPoint;
-                }
                 canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(true);
@@ -421,23 +419,39 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
             }else if(removePoints){
                 listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
                 listener.setIndexOfSelectedPoint(-1);
+                
+                if (showInfo) {        //no point is selected
+                    canvas.setFeaturePointsPanelVisibility(false);
+
+                }
             }
             
-        } else if (listener.getModel() != null && listener.checkPointInMesh(evt.getX(), evt.getY()) == null) {        //pick point on the mesh
-            listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
-            if (showInfo) {
-                canvas.setFeaturePointsPanelVisibility(false);
-            }
-        }else if(addPoints && listener.getModel() != null){
+        } else if (listener.getModel() != null) {        //pick point on the mesh
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
-            int id = listener.getInfo().getNextFreeFPID();        
-            FacialPoint fp = new FacialPoint(id, pos);
-            listener.getInfo().addFacialPoint(fp);
-        }else if (selection && SwingUtilities.isLeftMouseButton(evt)) {
+
+            if (pos == null) {  //not on mesh, deselect
+                listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
+                if (showInfo) {
+                    canvas.setFeaturePointsPanelVisibility(false);
+                }
+            } else if (addPoints) { //on mesh plus adding points is turned on
+                int id = listener.getInfo().getNextFreeFPID();
+                FacialPoint fp = new FacialPoint(id, pos);
+                listener.getInfo().addFacialPoint(fp);
+                listener.setIndexOfSelectedPoint(listener.getInfo().getFacialPoints().size() - 1);
+
+                if (showInfo) {
+                    canvas.setFeaturePointsPanelVisibility(true);
+                }
+
+                setPointInfo(canvas, listener);
+            }
+
+        } else if (selection && SwingUtilities.isLeftMouseButton(evt)) {
             clearSelection();
             listener.setSelectionStart(evt.getPoint());
         }
-        
+
         //update points in data model
         if(removePoints || addPoints){
             String modelName = listener.getModel().getName();    
@@ -445,6 +459,16 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
             fpExportEnable.updateObservers();
         }
         
+    }
+    
+    private void setPointInfo(Canvas canvas, ComparisonGLEventListener listener) {
+        nextIndexOfSelectedPoint = listener.getIndexOfSelectedPoint();
+        
+        //update selected point
+        if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
+            indexOfSelectedPoint = nextIndexOfSelectedPoint;
+        }
+        canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
     }
     
     private void canvas1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseReleased

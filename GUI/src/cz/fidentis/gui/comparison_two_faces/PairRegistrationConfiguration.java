@@ -23,7 +23,7 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
-import cz.fidentis.gui.observer.RegisterFPButton2FacesObserver;
+import cz.fidentis.gui.observer.RegisterFPButtonObserver;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -1317,8 +1317,23 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     public void setConfiguration() {
         Comparison2Faces c = getContext();
         
-        if(c.isFirstCreated())
-            TwoFacesGUISetup.setUpDefaultRegistrationData(c);
+        if (c.isFirstCreated()) {
+            //to check whether FPs can be exported once they are added, removed
+            ObservableMaster o = new ObservableMaster();
+            ExportFPButtonObserver export = new ExportFPButtonObserver(exportPointsButton,
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1(),
+                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2());
+            
+            //main and secondary are dummy names, only created for observer, this needs to be done since when project is created
+            //there are no models loaded so the actual name would need to be added later
+            RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getMainFp(), "main",
+            c.getSecondaryFp(), "secondary");       
+            o.addObserver(export);
+            o.addObserver(register);
+
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setFpExportEnable(o);
+            TwoFacesGUISetup.setUpDefaultRegistrationData(c);   //this method will set firstCreated to false
+        }
         
         
         methodCombobox.setSelectedItem(c.getRegistrationMethod());
@@ -1382,16 +1397,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             exportPointsButton.setEnabled(true);
         }
         
-        //to check whether FPs can be exported once they are added, removed
-        ObservableMaster o = new ObservableMaster();
-        ExportFPButtonObserver export = new ExportFPButtonObserver(exportPointsButton, 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1(),
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2());
-        RegisterFPButton2FacesObserver register = new RegisterFPButton2FacesObserver(registerButton, c);
-        o.addObserver(export);
-        o.addObserver(register);
         
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setFpExportEnable(o);
+        
 
     }
     

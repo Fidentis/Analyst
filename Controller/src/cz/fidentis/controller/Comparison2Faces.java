@@ -86,6 +86,7 @@ public class Comparison2Faces {
     
     private boolean firstCreated = true;
     
+    
     //comparison results
     private VisualizationType visualization;
     

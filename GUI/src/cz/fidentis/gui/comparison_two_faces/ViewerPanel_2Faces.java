@@ -247,39 +247,62 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
         mouseDraggedY = evt.getY();
 
         manipulatePoint = listener.selectPoint(evt.getX(), evt.getY());
-        if (manipulatePoint) {
-            nextIndexOfSelectedPoint = listener.getIndexOfSelectedPoint();
+        if (manipulatePoint) {            
+            //update selected point                     
+            setPointInfo(canvas, listener);
           
             if (editablePoints) {
-                if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
-                    indexOfSelectedPoint = nextIndexOfSelectedPoint;
-                }
-                canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(true);
-
                 }
                 
                 if(evt.getButton() == MouseEvent.BUTTON3){   //edit window
                     EditLandmarkID d = new EditLandmarkID(listener.getFacialPoint(indexOfSelectedPoint), listener.getInfo(), canvas);
                     d.setVisible(true);
                 }
-            }else if(removePoints){
+            } else if (removePoints) {
                 listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
                 listener.setIndexOfSelectedPoint(-1);
+
+                if (showInfo) {        //no point is selected
+                    canvas.setFeaturePointsPanelVisibility(false);
+
+                }
             }
-            
-        } else if (listener.getModel() != null && listener.checkPointInMesh(evt.getX(), evt.getY()) == null) {        //pick point on the mesh
-            listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
-            if (showInfo) {
-                canvas.setFeaturePointsPanelVisibility(false);
-            }
-        }else if(addPoints && listener.getModel() != null){
+
+        } else if (listener.getModel() != null) {        //pick point on the mesh
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
-            int id = listener.getInfo().getNextFreeFPID();        
-            FacialPoint fp = new FacialPoint(id, pos);
-            listener.getInfo().addFacialPoint(fp);
+
+            if (pos == null) {      //not on mesh, deselect
+                listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
+                if (showInfo) {
+                    canvas.setFeaturePointsPanelVisibility(false);
+                }
+            }else
+            if (addPoints) { //on mesh plus add point
+
+                int id = listener.getInfo().getNextFreeFPID();
+                FacialPoint fp = new FacialPoint(id, pos);
+                listener.getInfo().addFacialPoint(fp);
+                listener.setIndexOfSelectedPoint(listener.getInfo().getFacialPoints().size() - 1);
+
+                if (showInfo) {
+                    canvas.setFeaturePointsPanelVisibility(true);
+                }
+
+                setPointInfo(canvas, listener);
+            }
         }
+    }
+
+    private void setPointInfo(Canvas canvas, ComparisonGLEventListener listener) {
+        nextIndexOfSelectedPoint = listener.getIndexOfSelectedPoint();
+        
+        //update selected point
+        if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
+            indexOfSelectedPoint = nextIndexOfSelectedPoint;
+        }
+        canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
     }
 
     private void canvas1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseDragged
