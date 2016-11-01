@@ -5,7 +5,10 @@
  */
 package cz.fidentis.gui.observer;
 
-import cz.fidentis.renderer.ComparisonGLEventListener;
+import cz.fidentis.featurepoints.FacialPoint;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JButton;
 
 /**
@@ -14,21 +17,36 @@ import javax.swing.JButton;
  */
 public class ExportFPButtonObserver implements Observable{
     private final JButton exportFpButton;
-    private final ComparisonGLEventListener listener2;
-    private final ComparisonGLEventListener listener1;
+    private final Map<String, List<FacialPoint>> fps;
 
-    public ExportFPButtonObserver(JButton exportFpButton, ComparisonGLEventListener listener2, ComparisonGLEventListener listener1) {
+    public ExportFPButtonObserver(JButton exportFpButton, Map<String, List<FacialPoint>> fps) {
         this.exportFpButton = exportFpButton;
-        this.listener2 = listener2;
-        this.listener1 = listener1;
+        this.fps = fps;
     }
     
+    public ExportFPButtonObserver(JButton exportFpButton, List<FacialPoint> mainFp, String mainName,
+            List<FacialPoint> secondaryFp, String secondaryName) {
+        this.exportFpButton = exportFpButton;
+        
+        Map<String, List<FacialPoint>> fp = new HashMap<>();
+        fp.put(mainName, mainFp);
+        fp.put(secondaryName, secondaryFp);
+        
+        this.fps = fp;
+    }    
     
     @Override
     public void update() {        
-        //refactor GUI and change this
-        //sometimes listener2 can be null (batch), in that case second statment should be considered true and check whether FP are in first listener only instead
-        boolean exportFP = listener1 != null && !listener1.getFacialPoints().isEmpty() && (listener2 == null || !listener2.getFacialPoints().isEmpty());
+        //there has to be at least one point on single face loaded
+        boolean exportFP = false;
+        
+        for(List<FacialPoint> fp : fps.values()){
+            if(fp != null && !fp.isEmpty()){
+                exportFP = true;
+                break;
+            }
+        }
+        
         exportFpButton.setEnabled(exportFP);
     } 
 }

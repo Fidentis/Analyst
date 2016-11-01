@@ -5,7 +5,6 @@
  */
 package cz.fidentis.gui.comparison_two_faces;
 
-import Jama.Matrix;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
@@ -40,7 +39,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
@@ -1204,11 +1202,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     private void exportPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPointsButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        Comparison2Faces c = getContext();
         FPImportExport.instance().exportTwoFaces(tc,
-                tc.getViewerPanel_2Faces().getListener1().getFacialPoints(),
-                tc.getViewerPanel_2Faces().getListener1().getModel(),
-                tc.getViewerPanel_2Faces().getListener2().getFacialPoints(),
-                tc.getViewerPanel_2Faces().getListener2().getModel());
+                c.getMainFp(),
+                c.getModel1(),
+                c.getSecondaryFp(),
+                c.getModel2());
 
     }//GEN-LAST:event_exportPointsButtonActionPerformed
 
@@ -1321,8 +1320,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             //to check whether FPs can be exported once they are added, removed
             ObservableMaster o = new ObservableMaster();
             ExportFPButtonObserver export = new ExportFPButtonObserver(exportPointsButton,
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1(),
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2());
+                    c.getMainFp(), "main", c.getSecondaryFp(), "secondary");        //main and secondary as dummy names same as below
             
             //main and secondary are dummy names, only created for observer, this needs to be done since when project is created
             //there are no models loaded so the actual name would need to be added later

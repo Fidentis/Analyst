@@ -53,8 +53,6 @@ import org.openide.util.Exceptions;
  */
 public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     
-    private boolean observerCreated;
-    
     /**
      * Creates new form RegistrationConfiguration
      */
@@ -1315,8 +1313,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             //to check whether FPs can be exported once they are added, removed
             ObservableMaster o = new ObservableMaster();
             ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton,
-                    GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1(),
-                    GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2());
+                    c.getFacialPoints());
             RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
 
             o.addObserver(export);

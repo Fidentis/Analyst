@@ -238,6 +238,10 @@ public class FPImportExport {
 
     //creates FpModel and decentralize FPs to model they were computed on
     private FpModel prepareFPforExport(List<FacialPoint> fp, Model m) {
+        if(fp == null || fp.isEmpty() || m == null){
+            return null;        //don't export fps if there are none
+        }
+        
         FpModel model = FPImportExport.instance().getFpModelFromFP(fp, m.getName());
 
         if (model != null) {
@@ -287,6 +291,9 @@ public class FPImportExport {
                         File f = models.get(i);
                         String modelName = f.getName();
                         List<FacialPoint> fp = data.getFacialPoints(modelName);
+                        
+                        if(fp == null || fp.isEmpty())
+                            continue;       //don't export fps if there are none
 
                         FpModel model = prepareFPforExport(fp, f);
 
@@ -341,14 +348,15 @@ public class FPImportExport {
                         File f = models.get(i);
                         String modelName = f.getName();
                         List<FacialPoint> fp = data.getFacialPoints(modelName);
+                        
+                        if(fp == null || fp.isEmpty())
+                            continue;       //don't export fps if they are not there
 
                         FpModel model = prepareFPforExport(fp, f);
 
                         if (model != null) {
                             points.add(model);
                         }
-
-                        points.add(model);
                     }
 
                     FPImportExport.instance().exportPoints(tc, points);

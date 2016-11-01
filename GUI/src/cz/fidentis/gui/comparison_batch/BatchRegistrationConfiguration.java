@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -1357,8 +1356,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             //to check whether FPs can be exported once they are added, removed
             ObservableMaster o = new ObservableMaster();
             ExportFPButtonObserver export = new ExportFPButtonObserver(exportFpButton,
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener(),
-                    null);
+                    c.getFacialPoints());
             RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
             o.addObserver(export);
             o.addObserver(register);
