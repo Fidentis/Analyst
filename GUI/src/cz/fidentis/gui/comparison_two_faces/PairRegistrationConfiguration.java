@@ -5,7 +5,6 @@
  */
 package cz.fidentis.gui.comparison_two_faces;
 
-import Jama.Matrix;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
@@ -21,6 +20,9 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
+import cz.fidentis.gui.observer.ExportFPButtonObserver;
+import cz.fidentis.gui.observer.ObservableMaster;
+import cz.fidentis.gui.observer.RegisterFPButtonObserver;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -36,7 +38,7 @@ import java.util.Hashtable;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
-import javax.vecmath.Vector3f;
+import javax.swing.JOptionPane;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
@@ -115,7 +117,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         symModCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        registerButton = new javax.swing.JButton();
         procrustesPanel = new javax.swing.JPanel();
         showFpInfoCheckbox = new javax.swing.JCheckBox();
         fpColorPanel = new javax.swing.JPanel();
@@ -502,11 +504,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel12.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jButton1.text")); // NOI18N
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(registerButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.registerButton.text")); // NOI18N
+        registerButton.setEnabled(false);
+        registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                registerButtonActionPerformed(evt);
             }
         });
 
@@ -570,7 +572,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.GridLayout(2, 0));
 
-        buttonGroup1.add(addPointButton);
         org.openide.awt.Mnemonics.setLocalizedText(addPointButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.addPointButton.text")); // NOI18N
         addPointButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -579,7 +580,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         });
         jPanel2.add(addPointButton);
 
-        buttonGroup1.add(removePointButton);
         org.openide.awt.Mnemonics.setLocalizedText(removePointButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.removePointButton.text")); // NOI18N
         removePointButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -766,7 +766,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(continueComparisonCheckbox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(registerButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(icpPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 16, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -796,7 +796,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addGap(5, 5, 5)
                 .addComponent(continueComparisonCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
@@ -838,18 +838,18 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             case PROCRUSTES:
                 procrustesPanel.setVisible(true);
                 icpPanel.setVisible(false);
-                jButton1.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
+                registerButton.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
                 exportPointsButton.setEnabled(areFPCalculated(GUIController.getSelectedProjectTopComponent()));
                 break;
             case HAUSDORFF:
                 procrustesPanel.setVisible(false);
                 icpPanel.setVisible(true);
-                jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+                registerButton.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
                 break;
             default:
                 procrustesPanel.setVisible(false);
                 icpPanel.setVisible(false);
-                jButton1.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
+                registerButton.setEnabled(areModelsLoaded(GUIController.getSelectedProjectTopComponent()));
                 break;
         }
         getContext().setRegistrationMethod((RegistrationMethod) methodCombobox.getSelectedItem());
@@ -886,7 +886,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     
                     calculatePointsButton.setEnabled(false);
                     FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
-                            jButton1, exportPointsButton, calculatePointsButton);
+                            registerButton, exportPointsButton, calculatePointsButton);
 
                     tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
                     tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
@@ -945,13 +945,13 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_areaComboboxActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final Model mainFace = tc.getViewerPanel_2Faces().getListener1().getModel(); //hlavny model v lavom panele
         final Model compareFace = tc.getViewerPanel_2Faces().getListener2().getModel(); //vedlajsi model v pravom panele
         final Comparison2Faces c = getContext(); //data model
 
-        jButton1.setEnabled(false);
+        registerButton.setEnabled(false);
         Runnable run = new Runnable() {
             @Override
             public void run() {
@@ -1000,7 +1000,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                         tc.getViewerPanel_2Faces().getListener1().addModel(cFace);
 
-                        jButton1.setEnabled(true);
+                        registerButton.setEnabled(true);
                         c.setState(2);
                         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
 
@@ -1010,16 +1010,32 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                       
                     } catch (Exception ex) {
                         Exceptions.printStackTrace(ex);
-                        jButton1.setEnabled(true);
+                        registerButton.setEnabled(true);
                     } finally {
                         p.finish();
                     }
                 } else if (c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES) {
                     try {
-                        Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(), mainFace.getVerts(),
-                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), compareFace.getVerts(), c.isFpScaling());
+                        
+                        
+                        Procrustes2Models procrustes = new Procrustes2Models(c.getMainFp(), mainFace.getVerts(),
+                                c.getSecondaryFp(), compareFace.getVerts(), c.isFpScaling());
 
                         List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
+                        
+                        if(trans == null){
+                            int res = JOptionPane.showConfirmDialog(tc, "There wasn't enough corresponding landmarks to register models. Do you wish to continue?", "Not enough landmarks", JOptionPane.YES_NO_OPTION);
+                            if(res == JOptionPane.NO_OPTION){
+                               registerButton.setEnabled(true);
+                               return; 
+                            }else if(res == JOptionPane.YES_OPTION){
+                                noRegistration();
+                                finalizeRegistration();
+                                return;
+                            }
+                                
+                        }
+                                                  
                         c.getModel1().setVerts(procrustes.getPa().getVertices());
                         c.getModel2().setVerts(procrustes.getPa2().getVertices());
 
@@ -1039,8 +1055,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             tc.getViewerPanel_2Faces().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
                         }
 
-                        procrustes.getPa().updateFacialPoints(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints());
-                        procrustes.getPa2().updateFacialPoints(tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints());
+                        procrustes.getPa().updateFacialPoints(c.getMainFp());
+                        procrustes.getPa2().updateFacialPoints(c.getSecondaryFp());
 
                         c.setCompFTransformations(trans);
 
@@ -1066,28 +1082,34 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 } else {
 
-                    ModelLoader l = new ModelLoader();
-                    Model model = l.loadModel(c.getModel2().getFile(), false, true);
-                    tc.getViewerPanel_2Faces().getListener1().addModel(model);
-
-                    c.setState(2);
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
-
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
-                    GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
-
-                   
+                    noRegistration();                  
                 }
 
+                finalizeRegistration();
+            }
+
+            private void finalizeRegistration() {
                 TwoFacesGUISetup.setUpDefaultComparisonConfigurationData(c);
                 
                 if (GUIController.getSelectedProjectTopComponent() == tc) {
-                     GUIController.getConfigurationTopComponent().addComparisonComponent();
+                    GUIController.getConfigurationTopComponent().addComparisonComponent();
                 }
                 
                 if (c.isContinueComparison()) {
-                        GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
-                    }
+                    GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().computeComparison(tc);
+                }
+            }
+
+            private void noRegistration() {
+                ModelLoader l = new ModelLoader();
+                Model model = l.loadModel(c.getModel2().getFile(), false, true);
+                tc.getViewerPanel_2Faces().getListener1().addModel(model);
+                
+                c.setState(2);
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
+                
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().createResultIcon();
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getCanvas1().showModelIcon();
             }
 
         };
@@ -1099,7 +1121,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         //keep this line in GUI
 
         GUIController.updateNavigator();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_registerButtonActionPerformed
 
     private int getUndersampleValue(Methods m, Type t) {
         if (m == Methods.Curvature || m == Methods.Random) {
@@ -1145,15 +1167,17 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             if (tc.getViewerPanel_2Faces().getListener1().getModel() != null
                     && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener1().initFpUniverse(model.getFacialPoints());
+                getContext().setMainFp(model.getFacialPoints());
             }
 
             if (tc.getViewerPanel_2Faces().getListener2().getModel() != null
                     && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener2().initFpUniverse(model.getFacialPoints());
+                getContext().setSecondaryFp(model.getFacialPoints());
             }
         }
 
-        jButton1.setEnabled(areFPCalculated(tc));
+        registerButton.setEnabled(areFPCalculated(tc));
         exportPointsButton.setEnabled(areFPCalculated(tc));
 
 
@@ -1178,11 +1202,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     private void exportPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPointsButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        Comparison2Faces c = getContext();
         FPImportExport.instance().exportTwoFaces(tc,
-                tc.getViewerPanel_2Faces().getListener1().getFacialPoints(),
-                tc.getViewerPanel_2Faces().getListener1().getModel(),
-                tc.getViewerPanel_2Faces().getListener2().getFacialPoints(),
-                tc.getViewerPanel_2Faces().getListener2().getModel());
+                c.getMainFp(),
+                c.getModel1(),
+                c.getSecondaryFp(),
+                c.getModel2());
 
     }//GEN-LAST:event_exportPointsButtonActionPerformed
 
@@ -1291,8 +1316,22 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     public void setConfiguration() {
         Comparison2Faces c = getContext();
         
-        if(c.isFirstCreated())
-            TwoFacesGUISetup.setUpDefaultRegistrationData(c);
+        if (c.isFirstCreated()) {
+            //to check whether FPs can be exported once they are added, removed
+            ObservableMaster o = new ObservableMaster();
+            ExportFPButtonObserver export = new ExportFPButtonObserver(exportPointsButton,
+                    c.getMainFp(), "main", c.getSecondaryFp(), "secondary");        //main and secondary as dummy names same as below
+            
+            //main and secondary are dummy names, only created for observer, this needs to be done since when project is created
+            //there are no models loaded so the actual name would need to be added later
+            RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getMainFp(), "main",
+            c.getSecondaryFp(), "secondary");       
+            o.addObserver(export);
+            o.addObserver(register);
+
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setFpExportEnable(o);
+            TwoFacesGUISetup.setUpDefaultRegistrationData(c);   //this method will set firstCreated to false
+        }
         
         
         methodCombobox.setSelectedItem(c.getRegistrationMethod());
@@ -1349,12 +1388,15 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         //icpScaleCheckbox.setSelected(c.getScaleEnabled());
         if ((methodCombobox.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
-            jButton1.setEnabled(false);
+            registerButton.setEnabled(false);
             exportPointsButton.setEnabled(false);
         } else {
-            jButton1.setEnabled(true);
+            registerButton.setEnabled(true);
             exportPointsButton.setEnabled(true);
         }
+        
+        
+        
 
     }
     
@@ -1364,10 +1406,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     public void updateRegisterButtonEnabled() {
         if ((methodCombobox.getSelectedIndex() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
-            jButton1.setEnabled(false);
+            registerButton.setEnabled(false);
             exportPointsButton.setEnabled(false);
         } else {
-            jButton1.setEnabled(true);
+            registerButton.setEnabled(true);
             exportPointsButton.setEnabled(true);
         }
     }
@@ -1398,7 +1440,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel icpMetricLabel;
     private javax.swing.JPanel icpPanel;
     private javax.swing.JCheckBox icpScaleCheckbox;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -1435,6 +1476,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel procrustesPanel;
     private javax.swing.JPanel randomPanel;
+    private javax.swing.JButton registerButton;
     private javax.swing.JToggleButton removePointButton;
     private javax.swing.JButton saveStencilButton;
     private javax.swing.JCheckBox showFpInfoCheckbox;

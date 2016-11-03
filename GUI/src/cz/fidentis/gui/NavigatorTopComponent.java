@@ -8,12 +8,14 @@
 package cz.fidentis.gui;
 
 import cz.fidentis.comparison.ComparisonMethod;
+import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.controller.Project;
 import cz.fidentis.controller.ProjectTree;
 import cz.fidentis.controller.ProjectTree.Node;
+import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.actions.ButtonHelper;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
@@ -24,6 +26,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -385,6 +389,10 @@ public final class NavigatorTopComponent extends TopComponent {
                         ModelLoader loader = new ModelLoader();
                         Model model = loader.loadModel(file, true, true);
                         listener.setModels(model);
+                        if(batchComparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
+                            List<FacialPoint> l = batchComparison.getFacialPoints(model.getName());
+                            listener.setFacialPoints(l);
+                        }
                     }
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = batchComparison.getRegistrationResults().get(lastNodeIndex);
@@ -416,15 +424,16 @@ public final class NavigatorTopComponent extends TopComponent {
                     ComparisonGLEventListener listenerSecondary = tc.getOneToManyViewerPanel().getListener2();
                     
                     if(previousNodeText.equals(strings.getString("tree.node.comparedModels"))) {
-                        if(comparison.getPreregiteredModels() != null) {
-                            Model m = comparison.getPreregiteredModels().get(lastNodeIndex);
-                            listenerSecondary.setModels(m);
-                            listenerSecondary.setFacialPoints(comparison.getFacialPoints(m.getName()));
-                        } else {
-                            File file = comparison.getModel(lastNodeIndex);
-                            ModelLoader loader = new ModelLoader();
-                            Model m = loader.loadModel(file, true, true);
-                            listenerSecondary.setModels(m);
+                      
+                        File file = comparison.getModel(lastNodeIndex);
+                        ModelLoader loader = new ModelLoader();
+                        Model m = loader.loadModel(file, true, true);
+                        listenerSecondary.setModels(m);
+
+
+                        if(comparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
+                            List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());   //there will always be at least empty list
+                            listenerSecondary.setFacialPoints(l);
                         }
                     }
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {

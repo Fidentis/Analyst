@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.vecmath.Vector3f;
@@ -44,7 +45,6 @@ public class OneToManyComparison {
     private List<File> registeredModels;            //models after registration, stored on the disk
     private Model primaryModel;                     //mainFace
     private Model avgFace;                          //avgFace
-    private ArrayList<Model> preRegiteredModels;            //only used in feature points calculation
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<String, List<FacialPoint>>();         //feature points associated with the model of given name
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private Node node;
@@ -236,15 +236,6 @@ public class OneToManyComparison {
         this.visualization = visualization;
     }
     
-    public ArrayList<Model> getPreregiteredModels() {
-        return preRegiteredModels;
-    }
-
-    public void setPreregiteredModels(ArrayList<Model> regiteredModels) {
-        this.preRegiteredModels = regiteredModels;
-    }  
-    
-    
     public String getNumericalResults() {
         return numericalResults;
     }
@@ -326,7 +317,8 @@ public class OneToManyComparison {
     }
 
     public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
-        this.facialPoints = facialPoints;
+        this.facialPoints.clear();   
+        this.facialPoints.putAll(facialPoints);
     }
 
     public boolean isShowPointInfo() {
@@ -574,6 +566,7 @@ public class OneToManyComparison {
 
     public void addModel(File model){
         models.add(model);
+        facialPoints.put(model.getName(), new LinkedList<FacialPoint>());      //make sure there's list to add FPs to
         if(node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }

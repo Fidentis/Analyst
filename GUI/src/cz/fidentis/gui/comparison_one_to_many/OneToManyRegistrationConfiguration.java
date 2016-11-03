@@ -20,6 +20,9 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.guisetup.OneToManyGUISetup;
+import cz.fidentis.gui.observer.ExportFPButtonObserver;
+import cz.fidentis.gui.observer.ObservableMaster;
+import cz.fidentis.gui.observer.RegisterFPButtonObserver;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -34,9 +37,11 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -557,9 +562,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.GridLayout(2, 0));
 
-        buttonGroup1.add(addFPButton);
         org.openide.awt.Mnemonics.setLocalizedText(addFPButton, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.addFPButton.text")); // NOI18N
-        addFPButton.setEnabled(false);
         addFPButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFPButtonActionPerformed(evt);
@@ -567,9 +570,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         });
         jPanel2.add(addFPButton);
 
-        buttonGroup1.add(removeFPButton);
         org.openide.awt.Mnemonics.setLocalizedText(removeFPButton, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.removeFPButton.text")); // NOI18N
-        removeFPButton.setEnabled(false);
         removeFPButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFPButtonActionPerformed(evt);
@@ -872,7 +873,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     tc.getOneToManyViewerPanel().getListener1().getModel());
             
                     c.setFacialPoints(res.getFacialPoints());
-                    c.setPreregiteredModels((ArrayList<Model>) res.getRegisteredModels());
+                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
                     tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
                     
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
@@ -893,19 +894,24 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_calculateFPButtonActionPerformed
 
     private void removeFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFPButtonActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editFPButton.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editFPButton.isSelected());
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setRemovePoints(removeFPButton.isSelected());
+        addFPButton.setSelected(false);
+        editFPButton.setSelected(false);
     }//GEN-LAST:event_removeFPButtonActionPerformed
 
     private void addFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFPButtonActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setEditablePoints(editFPButton.isSelected());
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editFPButton.isSelected());
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setAddPoints(addFPButton.isSelected());
+        
+        editFPButton.setSelected(false);
+        removeFPButton.setSelected(false);
     }//GEN-LAST:event_addFPButtonActionPerformed
 
     private void editFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editFPButtonActionPerformed
 
-        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setEditablePoints(editFPButton.isSelected());
+    GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setEditablePoints(editFPButton.isSelected());
 
+      removeFPButton.setSelected(false);
+      addFPButton.setSelected(false);
     }//GEN-LAST:event_editFPButtonActionPerformed
 
     private void icpAreaComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpAreaComboBoxActionPerformed
@@ -980,83 +986,102 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                 } else if (c.getRegistrationMethod() == RegistrationMethod.PROCRUSTES) {
                     //zarovnanie feature points
+                    try {
+                        List<List<FacialPoint>> list = new ArrayList();
+                        List<ArrayList<Vector3f>> verts = new ArrayList();
+                        ModelLoader ml = new ModelLoader();
 
-                    List<List<FacialPoint>> list = new ArrayList();
-                    List<ArrayList<Vector3f>> verts = new ArrayList();
+                        int size = c.getModels().size();
+                        for (int i = 0; i < size; i++) {
+                            List<FacialPoint> facialPoints = c.getFacialPoints(
+                                    c.getModels().get(i).getName());
+                            list.add(facialPoints);
 
-                    int size = c.getModels().size();
-                    for (int i = 0; i < size; i++) {
-                        List<FacialPoint> facialPoints = c.getFacialPoints(
-                                c.getModels().get(i).getName());
-                        list.add(facialPoints);
-
-                        verts.add(c.getPreregiteredModels().get(i).getVerts());
-                    }
-
-                    Procrustes1ToMany procrustes = new Procrustes1ToMany(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel().getVerts(),
-                            list, verts, c.isFpScaling());
-
-
-                    List<List<ICPTransformation>> trans = procrustes.align1withN();
-                    c.setTrans(trans);
-
-                    c.getPrimaryModel().setVerts(procrustes.getPa().getVertices());
-                    procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints());
-
-                    //clear all current Feature Points in listener
-                    c.clearFacialPoints();
-
-                    for (int i = 0; i < c.getPreregiteredModels().size(); i++) {
-     
-                        c.getPreregiteredModels().get(i).setVerts(procrustes.getPa2().get(i).getVertices());
-                        //add new rotated facial points
-                        List<FacialPoint> values = new ArrayList<>();
-                        values.addAll(procrustes.getPa2().get(i).getConfig().values());
-
-                        c.addFacialPoints(c.getPreregiteredModels().get(i).getName(),
-                                values);
-                      
-
-                        if (c.getPreregiteredModels().get(i).getName().equals(tc.getOneToManyViewerPanel().getListener2().getModel().getName())) {
-                            tc.getOneToManyViewerPanel().getListener2().setModels(c.getPreregiteredModels().get(i));
+                            Model m = ml.loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
+                            verts.add(m.getVerts());
                         }
 
-                    }
+                        Model mainFace = tc.getOneToManyViewerPanel().getListener1().getModel();
+                        Procrustes1ToMany procrustes = new Procrustes1ToMany(c.getFacialPoints(mainFace.getName()), mainFace.getVerts(),
+                                list, verts, c.isFpScaling());
 
-                    if (c.isFpScaling()) {
-                        tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(c.getFpSize() / 30f);
+                        List<List<ICPTransformation>> trans = procrustes.align1withN();
+                        for (List<ICPTransformation> t : trans) {
+                            if (t == null) {
+                                int res = JOptionPane.showConfirmDialog(tc, "There wasn't enough corresponding landmarks in one or more of the models to register models. Do you wish to continue?", "Not enough landmarks", JOptionPane.YES_NO_OPTION);
+                                if (res == JOptionPane.NO_OPTION) {
+                                    registerButton.setEnabled(true);
+                                    return;
+                                } else if (res == JOptionPane.YES_OPTION) {
+                                    noRegistration(); //if user wish to continue don't ask them to continue again
+                                    finalizeRegistration();
+                                    return;
+                                }
+                            }
+                        }
+                        c.setTrans(trans);
 
-                        tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(c.getFpSize() / 30f);
-                    }
+                        c.getPrimaryModel().setVerts(procrustes.getPa().getVertices());
+                        //procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints()); WHAT DOES THIS DO?
 
-                    ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
+                        //clear all current Feature Points in listener
+                        c.clearFacialPoints();
+                        List<File> r = new LinkedList<>();      //registered models saved to disk
+                        File tmpModuleFile = new File("" + System.currentTimeMillis());
 
-                    try {
-                        List<File> results;
+                        FileUtils.instance().createTMPmoduleFolder(tmpModuleFile);
 
-                        k.start();
+                        for (int i = 0; i < size; i++) {
+                            List<FacialPoint> values = new ArrayList<>();
+                            values.addAll(procrustes.getPa2().get(i).getConfig().values());
+                            c.addFacialPoints(c.getModel(i).getName(), values);
 
-                        File tmpModuleFile = new File("compF");
-                        results = ProcessingFileUtils.instance().saveModelsToTMP(c.getPreregiteredModels(), tmpModuleFile, Boolean.FALSE);
-                        k.finish();
+                            Model m = ml.loadModel(c.getModel(i), false, Boolean.TRUE);
+                            m.setVerts(procrustes.getPa2(i).getVertices());
+                            procrustes.getPa2(i).updateFacialPoints(c.getFacialPoints(m.getName()));
 
-                        c.setRegisteredModels(results);
-                    } catch (FileManipulationException ex) {
-                        //osefuj vynimku
+                            if (tc.getOneToManyViewerPanel().getListener2().getModel().getName().equals(m.getName())) {
+                                tc.getOneToManyViewerPanel().getListener2().setModels(m);
+                            }
+                            ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
+
+                            k.start();
+
+                            r.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.FALSE));
+                            k.finish();
+                        }
+
+                        c.setRegisteredModels(r);
+
+                        if (c.isFpScaling()) {
+                            tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(c.getFpSize() / 30f);
+
+                            tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(c.getFpSize() / 30f);
+                        }
+
+                        tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
+                                tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
+                                        tc.getOneToManyViewerPanel().getListener2().getModel().getName()
+                                ));
+
+                    } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
                         registerButton.setEnabled(true);
-                        k.finish();
                     }
-
-                    tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
-                            tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
-                                    tc.getOneToManyViewerPanel().getListener2().getModel().getName()
-                            ));
 
                 }else{
-                    //no registration, consider original models as registered
-                    c.setRegisteredModels(c.getModels());
+                    noRegistration();
                 }
                 
+                finalizeRegistration();
+            }
+
+            private void noRegistration() {
+                //no registration, consider original models as registered
+                c.setRegisteredModels(c.getModels());
+            }
+
+            private void finalizeRegistration() {
                 //set up default values for comparison configuration
                 OneToManyGUISetup.defaultValuesComparisonConfiguration(c);
 
@@ -1137,10 +1162,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         
         for(File f : c.getModels()){
             loadedModels.add(ml.loadModel(f, false, true));
-        }
-        
-        c.setPreregiteredModels((ArrayList<Model>) loadedModels);
-        
+        }        
         
         registerButton.setEnabled(areFPCalculated(tc));
         exportFPButton.setEnabled(areFPCalculated(tc));
@@ -1285,9 +1307,21 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
     public void setConfiguration() {
         OneToManyComparison c = getContext();
-        
-        if(c.isFirstCreated())
-            OneToManyGUISetup.setUpDefaultRegistrationData(c);
+          
+        //set up data when first created
+        if(c.isFirstCreated()){
+            //to check whether FPs can be exported once they are added, removed
+            ObservableMaster o = new ObservableMaster();
+            ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton,
+                    c.getFacialPoints());
+            RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
+
+            o.addObserver(export);
+            o.addObserver(register);
+
+            GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setFpExportEnable(o);
+            OneToManyGUISetup.setUpDefaultRegistrationData(c);      //this method will set up firstCreated to false
+        }
        
        regMethodComboBox.setSelectedItem(c.getRegistrationMethod());
        
@@ -1341,9 +1375,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             registerButton.setEnabled(true);
             exportFPButton.setEnabled(true);
         }
- 
-
-    }
+     }
     
     private OneToManyComparison getContext(){
         return GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison();

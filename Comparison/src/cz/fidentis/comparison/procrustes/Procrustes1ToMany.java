@@ -129,6 +129,10 @@ public class Procrustes1ToMany {
         return pa2;
     }
     
+    public ProcrustesAnalysis getPa2(int i) {
+        return pa2.get(i);
+    }
+    
     public ProcrustesAnalysis getPa() {
         return pa;
     }

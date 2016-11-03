@@ -306,9 +306,7 @@ public class FpProcessing {
             results = new FpResultsOneToMany(facialPoints, (HashMap<String, List<FacialPoint>>) allFPs, registeredModels);
 
             p.finish();
-            //move to GUI processing
-            /*exportPointsButton.setEnabled(areFPCalculated(allFPs, facialPoints, models));
-                registreButton.setEnabled(areFPCalculated(allFPs, facialPoints, models));*/
+            
 
         } catch (Exception ex) {
             p.finish();

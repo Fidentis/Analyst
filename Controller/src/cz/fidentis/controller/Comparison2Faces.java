@@ -50,8 +50,8 @@ public class Comparison2Faces {
     private List<ICPTransformation> compFTransformations;
     
     private ArrayList<List<FacialPoint>> databaseFacialPoints = new ArrayList<List<FacialPoint>>();         //database of FPs is currently not used within the application
-    private List<FacialPoint> mainFp;
-    private List<FacialPoint> secondaryFp;
+    private List<FacialPoint> mainFp = new ArrayList<>();
+    private List<FacialPoint> secondaryFp = new ArrayList<>();
     private boolean editPoints;         //DON'T need to save in project
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private boolean continueComparison = false;
@@ -85,6 +85,7 @@ public class Comparison2Faces {
     private float value;          //undersampling value
     
     private boolean firstCreated = true;
+    
     
     //comparison results
     private VisualizationType visualization;
@@ -342,7 +343,8 @@ public class Comparison2Faces {
     }
 
     public void setMainFp(List<FacialPoint> mainFp) {
-        this.mainFp = mainFp;
+        this.mainFp.clear();
+        this.mainFp.addAll(mainFp);
     }
     
     public void addMainFp(FacialPoint fp){
@@ -354,7 +356,8 @@ public class Comparison2Faces {
     }
 
     public void setSecondaryFp(List<FacialPoint> secondaryFp) {
-        this.secondaryFp = secondaryFp;
+        this.secondaryFp.clear();
+        this.secondaryFp.addAll(secondaryFp);
     }
     
     public void addSecondaryFp(FacialPoint fp){

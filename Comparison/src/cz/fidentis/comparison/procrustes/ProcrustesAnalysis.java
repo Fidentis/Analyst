@@ -519,7 +519,7 @@ public class ProcrustesAnalysis implements Serializable {
      * To be able to visually analyse the results within the software, results are scaled to 100 instead of 1
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    public void normalize(boolean scaling) {
+    public void normalize(boolean scaling) {        
         if (scaling && config.keySet().size() >= 3) {
             Vector3f cs = this.findCentroid();
             float size = this.countSize(cs);
@@ -669,6 +669,8 @@ public class ProcrustesAnalysis implements Serializable {
         List<ICPTransformation> t = new LinkedList<>();
 
         ICPTransformation trans = this.superimpose(config2, scaling);
+        if(trans == null)       //no transformation performed
+            return null;
         setVisMatrix();
         config2.setVisMatrix();
         //distance = this.countDistance(config2);
