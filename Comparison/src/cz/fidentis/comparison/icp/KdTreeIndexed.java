@@ -6,12 +6,19 @@
 
 package cz.fidentis.comparison.icp;
 
+import cz.fidentis.utils.CompareUtils;
 import cz.fidentis.utils.MathUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.vecmath.Vector3f;
 /**
  * Class which will built KdTree, K = 3
@@ -28,6 +35,8 @@ public class KdTreeIndexed implements KdTree {
     private final static int X_AXIS = 0;
     private final static int Y_AXIS = 1;
     private final static int Z_AXIS = 2;
+    private final static int USED_THREADS = 3;      //fixed is good enough here
+    private final static int NUMBER_OF_AXIS = 3;
     
     /**
      * Constructor of KdTree class, sorts points based on each axis (x,y,z) and builds balanced tree.
@@ -51,12 +60,29 @@ public class KdTreeIndexed implements KdTree {
         
        
         pointsCopy = deleteDuplicates(pointsCopy, points);
-
         
-        List<Integer> sortedByX = sortPoints(pointsCopy, X_AXIS, points);
-        List<Integer> sortedByY = sortPoints(pointsCopy, Y_AXIS, points);
-        List<Integer> sortedByZ = sortPoints(pointsCopy, Z_AXIS, points);
-
+        ExecutorService executor = Executors.newFixedThreadPool(USED_THREADS);
+        List<Future<List<Integer>>> sortedP = new LinkedList<>();
+        
+        for(int i = 0; i < NUMBER_OF_AXIS; i++){
+            Future<List<Integer>> res = executor.submit(new SortPointsAxisCallable(points, i, pointsCopy));
+            sortedP.add(res);
+        }
+        
+        executor.shutdown();
+        
+        List<Integer> sortedByX = null;
+        List<Integer> sortedByY = null;
+        List<Integer> sortedByZ = null;
+ 
+        try {
+            sortedByX = sortedP.get(X_AXIS).get();
+            sortedByY = sortedP.get(Y_AXIS).get();
+            sortedByZ = sortedP.get(Z_AXIS).get();
+            
+        } catch (InterruptedException | ExecutionException ex) {
+            Logger.getLogger(KdTreeIndexed.class.getName()).log(Level.SEVERE, null, ex);
+        }    
         
         root = buildTree(null, sortedByX, sortedByY, sortedByZ, 0, points);
     }
@@ -78,6 +104,9 @@ public class KdTreeIndexed implements KdTree {
      * @return - KdNode created to be set as child of the parent
      */
     private KdNode buildTree(KdNode parent, List<Integer> byX, List<Integer> byY, List<Integer> byZ, int level, List<Vector3f> points){
+        if(byX == null || byY == null || byZ == null)
+            return null;
+        
         KdNode node = null;
         int mid;
         int midIndex;
@@ -164,106 +193,7 @@ public class KdTreeIndexed implements KdTree {
                 }
     }
     
-    /**
-     * Sort points based on their axis values.
-     * 
-     * @param points - list of the points to be sorted
-     * @param level - axis based on which short will be performed
-     * @return - list of sorted points
-     */
-    private List<Integer> sortPoints(List<Integer> points, int level, List<Vector3f> p){
-        List<Integer> sortedList = new ArrayList<>(points.size());
-        
-        sortedList.addAll(points);
-        
-        sortedList = mergeSort(sortedList,level, p);
-        
-        return sortedList;
-        
-    }
-    
-    /**
-     * Performing Merge Sort algorithm recursively, based on the axis given.
-     * 
-     * @param points - points to be sorted
-     * @param level - axis based on which sort will be performed
-     * @return - list of sorted points
-     */
-    private List<Integer> mergeSort(List<Integer> points, int level, List<Vector3f> p){        
-        if(points.size() <= 1){
-            return points;
-        }
-        
-        List<Integer> left;
-        List<Integer> right;
-        
-        int mid = (points.size()/2);      
-        
-        left = points.subList(0, mid);
-        right = points.subList(mid, points.size());
-      
-        
-        left = mergeSort(left, level, p);
-        right = mergeSort(right, level, p);
-        
-        return merge(left, right, level, p);
-    }
-    
-    /**
-     * Merging split list as defined by Merge Sort alogrithm
-     * 
-     * @param left - left list
-     * @param right - right list
-     * @param level - axis based on which merging will be performed
-     * @return 
-     */
-    private List<Integer> merge(List<Integer> left, List<Integer> right, int level, List<Vector3f> points){
-        List<Integer> mergedList = new ArrayList<>(left.size() + right.size());
-        
-        int fromLeft = 0;
-        int fromRight = 0;
-      
-        while(fromLeft < left.size() || fromRight < right.size()){
-           if(fromLeft < left.size() && fromRight < right.size()){
-               if(comparePointsOnLevel(points.get(left.get(fromLeft)), points.get(right.get(fromRight)), level)){
-                   mergedList.add(left.get(fromLeft));
-                   fromLeft++;
-               }else{
-                   mergedList.add(right.get(fromRight));
-                   fromRight++;
-               }
-           }else if(fromLeft < left.size()){
-               mergedList.add(left.get(fromLeft));
-               fromLeft++;
-           }else if(fromRight < right.size()){
-               mergedList.add(right.get(fromRight));
-               fromRight++;
-           }
-        }
-        
-        return mergedList;
-    }
-    
-    /**
-     * Compare two points based on the level of their nodes.
-     * 
-     * @param p1 - first point to compare
-     * @param p2 - second point to compare
-     * @param level - axis based on which comparison will be performed
-     * @return - true if p1 value of axis level is smaller or equal to that of p2, false otherwise
-     */
-    private boolean comparePointsOnLevel(Vector3f p1, Vector3f p2, int level){
-        if(level % 3 == 0){
-            return p1.getX() <= p2.getX();
-        }else if(level % 3 == 1){
-            return p1.getY() <= p2.getY();
-        }else if(level % 3 == 2){
-            return p1.getZ() <= p2.getZ();
-        }
-        
-        return false;
-    } 
-
+   
     /**
      * Defines distance between currently searched node and point to which we want to find nearest neighbor in the tree,
      * based on the axis given by level.
@@ -336,7 +266,7 @@ public class KdTreeIndexed implements KdTree {
                minDistance = dist;
            }
            
-           if(comparePointsOnLevel(p, searched.getId(), searched.getDepth())){
+           if(CompareUtils.instance().comparePointsOnLevel(p, searched.getId(), searched.getDepth())){
                searched = searched.getLesser();
            }else{
               searched = searched.getGreater(); 
@@ -366,7 +296,7 @@ public class KdTreeIndexed implements KdTree {
             distOnAxis = minDistanceIntersection(searched.getId(), p, searched.getDepth());
 
              if (distOnAxis * distOnAxis> minDistance) {
-                if (comparePointsOnLevel(p, searched.getId(), searched.getDepth())) {
+                if (CompareUtils.instance().comparePointsOnLevel(p, searched.getId(), searched.getDepth())) {
                     if (searched.getLesser() != null) {
                         queue.add(searched.getLesser());
                     }

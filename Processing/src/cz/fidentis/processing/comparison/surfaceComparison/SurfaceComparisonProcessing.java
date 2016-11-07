@@ -331,7 +331,8 @@ public class SurfaceComparisonProcessing {
 
         //start computing algorithm
         for (int i = 0; i < numberOfBatchIterations; i++) {
-            executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());        //gets pool of threads based on number of available processors
+            //executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());        //gets pool of threads based on number of available processors
+            executor = Executors.newFixedThreadPool(1);  
             trans.clear();
             list.clear();
 

@@ -34,7 +34,7 @@ public class Icp {
    // private static int maxIteration = 50;
     private static Icp unique;
     private ProgressHandle p;
-    private static int USED_THREADS = 1;
+    private static int USED_THREADS = Runtime.getRuntime().availableProcessors();
    // private boolean scale = false;
 
 
@@ -208,6 +208,7 @@ public class Icp {
             near.add(nn);       //create corespondence between nearest neighbor and points in compF
             comp2.add(compF1);*/
         }
+        executor.shutdown();
         
         for(int i = 0; i < compF.size();i++){
             try {
@@ -225,8 +226,7 @@ public class Icp {
                 Logger.getLogger(Icp.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        executor.shutdown();
+                
 
         meanX /= compF.size();
         meanY /= compF.size();
