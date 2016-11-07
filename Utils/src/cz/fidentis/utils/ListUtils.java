@@ -62,4 +62,12 @@ public class ListUtils {
         return reversed;
     }
     
+    public List<Vector3f> populateVectorList(int size){
+        List<Vector3f> populatedList = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            populatedList.add(new Vector3f());
+        }
+        return populatedList;
+    }
+    
 }

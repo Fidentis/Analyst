@@ -29,6 +29,7 @@ import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
 import cz.fidentis.undersampling.Undersampling;
 import cz.fidentis.utils.FileUtils;
+import cz.fidentis.utils.ListUtils;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import cz.fidentis.utilsException.FileManipulationException;
@@ -290,20 +291,15 @@ public class SurfaceComparisonProcessing {
     public List<File> processManyToMany(Model template, List<File> compFs, int numberOfBatchIterations, int numberOfICPiteration, boolean scale, float error,
             Methods m, Type t, float value, ICPmetric metric, BatchComparison data) throws FileManipulationException {
 
-        List<File> results = new ArrayList<File>(compFs.size());
         List<Vector3f> trans = new ArrayList<Vector3f>(template.getVerts().size());
         List<Future<List<Vector3f>>> list = new ArrayList<Future<List<Vector3f>>>(compFs.size());
         List<Future<File>> list2 = new ArrayList<Future<File>>(compFs.size());
-
-        //kd-tree for template
-        KdTree templateTree;
-        if (metric == ICPmetric.VERTEX_TO_VERTEX) {
-            templateTree = new KdTreeIndexed(template.getVerts());
-        } else {
-            templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
-        }
-
         ModelLoader ml = new ModelLoader();
+        String currentTMP = "";
+        int templateSize = template.getVerts().size();
+        
+        //create temple tree based on metric
+        KdTree templateTree = createTempleTree(metric, template);        
 
         //progress bar message
         ProgressHandle k = ProgressHandleFactory.createHandle("Creating local files.");
@@ -311,12 +307,113 @@ public class SurfaceComparisonProcessing {
 
         //temporary folder on disk where temporary files (like aligned faces) will be stored until application is closed
         String projectId = "" + System.currentTimeMillis();
-        String tmpLoc = projectId + File.separator + tmpModuleFile.getName() + File.separator + tmpModuleFile.getName();
-        String currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator + tmpLoc + "_0_";
-        File tmpLocFile = new File(projectId + File.separator + tmpModuleFile.getName());
+        File tmpLocFile = new File(projectId + File.separator + tmpModuleFile.getName());   
+        String tmpLoc = tmpLocFile.getPath() + File.separator + tmpModuleFile.getName();
 
-        int templateSize = template.getVerts().size();
+        //copy all loaded models to tmp and work with copied version of models
+        copyModelToTMP(compFs, projectId, k);
 
+        //start computing algorithm
+        for (int i = 0; i < numberOfBatchIterations; i++) {  
+            //change to directory of current iteration
+            currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator +  tmpLoc + "_" + i + "_";  
+            trans.clear();
+            list.clear();
+
+            //get list with empty vectors of size of template to add translations to
+            trans = ListUtils.instance().populateVectorList(template.getVerts().size());  
+            
+            alignBatchIteration(compFs, ml, currentTMP, i, m, t, value, template, templateTree, error, numberOfICPiteration, scale, tmpLocFile, metric, data, list, trans);
+
+            templateTree = createNewAvgFace(template, trans, templateSize, compFs, templateTree);    
+        }
+
+        //last iteration to last avg model
+        List<File> alignedModels = lastBatchAlignment(compFs, ml, currentTMP, numberOfBatchIterations, templateTree, error, numberOfICPiteration, scale, tmpLocFile, list2,
+                m, t, value);
+        return alignedModels;
+    }
+
+    //creates new avg face from computed translations
+    private KdTree createNewAvgFace(Model template, List<Vector3f> trans, int templateSize, List<File> compFs, KdTree templateTree) {
+        ProgressHandle k;
+        k = ProgressHandleFactory.createHandle("Computing Average Face.");
+        k.start();
+        try {
+            //average translation vector for each vertex by number of faces aligned to template and apply it, creating new average face
+            computeMeanTranslationToModel(template, trans, templateSize, compFs.size());
+            
+            //creates new kd-tree for just created average face
+            templateTree = new KdTreeIndexed(template.getVerts());
+            k.finish();
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+            System.err.print(ex);
+        }finally{
+            k.finish();
+        }
+        return templateTree;
+    }
+
+    //perform batch iteration of alignment -- aligns all faces to template and computes translation required for new avg face
+    private void alignBatchIteration(List<File> compFs, ModelLoader ml, String currentTMP, int i, Methods m, Type t, float value, Model template, KdTree templateTree, float error, int numberOfICPiteration, boolean scale, File tmpLocFile, ICPmetric metric, BatchComparison data, List<Future<List<Vector3f>>> list, List<Vector3f> trans) {
+        ExecutorService executor;
+        executor = Executors.newFixedThreadPool(1);
+        
+        //aligns all faces performed parallely based on size of execturo pool
+        for (int j = 0; j < compFs.size(); j++) {
+            Future<List<Vector3f>> future = batchAlign2Faces(ml, currentTMP, j, i, m, t, value, executor, template, templateTree, error, numberOfICPiteration, scale, tmpLocFile, metric, data, list);
+            list.add(future);
+        }
+        
+        executor.shutdown();
+        
+        //computes translation vector for each vertex of template face
+        for (Future<List<Vector3f>> list1 : list) {
+            addTranslationToModel(trans, list1);
+        }
+    }
+
+    //performs last 
+    private List<File> lastBatchAlignment(List<File> compFs, ModelLoader ml, String currentTMP, int numberOfBatchIterations, KdTree templateTree, float error, int numberOfICPiteration, boolean scale, File tmpLocFile, List<Future<File>> list2,
+            Methods m, Type t, float value) {
+        List<File> results = new ArrayList<File>(compFs.size()); 
+        
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        //last registration to last batch
+        for (int i = 0; i < compFs.size(); i++) {
+            Model currentModel = ml.loadModel(new File(currentTMP + i + File.separator + tmpModuleFile.getName() + "_" + numberOfBatchIterations + "_" + i + ".obj"), Boolean.FALSE, false);
+            List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);            
+            
+            Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, samples, error, numberOfICPiteration, scale, tmpLocFile, numberOfBatchIterations + 1, i));
+            list2.add(f);
+        }
+        //get resulting list containing adresses (to file on disk) of final aligned faces
+        for (Future<File> fut : list2) {
+            try {
+                results.add(fut.get());
+            } catch (InterruptedException | ExecutionException ex) {
+                Logger.getLogger(SurfaceComparisonProcessing.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        executor.shutdown();
+        
+        return results;
+    }
+
+    //either create indexed or faces KdTree based on metric
+    private KdTree createTempleTree(ICPmetric metric, Model template) {
+        //kd-tree for template
+        KdTree templateTree;
+        if (metric == ICPmetric.VERTEX_TO_VERTEX) {
+            templateTree = new KdTreeIndexed(template.getVerts());
+        } else {
+            templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
+        }
+        return templateTree;
+    }
+
+    private void copyModelToTMP(List<File> compFs, String projectId, ProgressHandle k) {
         try {
             ProcessingFileUtils.instance().copyModelsToTMP(compFs, new File(projectId + File.separator + tmpModuleFile.getName()), Boolean.FALSE);       //copy all models in 'compFs' to temporary folder, so that origianl files can still be edited without causing problem with computation
             k.finish();
@@ -326,77 +423,16 @@ public class SurfaceComparisonProcessing {
         }finally{
             k.finish();
         }
+    }
 
-        ExecutorService executor;
-
-        //start computing algorithm
-        for (int i = 0; i < numberOfBatchIterations; i++) {
-            //executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());        //gets pool of threads based on number of available processors
-            executor = Executors.newFixedThreadPool(1);  
-            trans.clear();
-            list.clear();
-
-            for (Vector3f o : template.getVerts()) {
-                trans.add(new Vector3f());
-            }
-
-            //aligns all faces performed parallely based on size of execturo pool
-            for (int j = 0; j < compFs.size(); j++) {
-                Model currentModel = ml.loadModel(new File(currentTMP + j + File.separator + tmpModuleFile.getName() + "_" + i + "_" + j + ".obj"), Boolean.FALSE, false);
-                List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);
-
-                Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(currentModel, samples, template, templateTree,
-                        error, numberOfICPiteration, scale, tmpLocFile, j, i, Boolean.TRUE, metric, data));
-                list.add(future);
-            }
-
-            currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator +  tmpLoc + "_" + (i + 1) + "_";
-
-            //computes translation vector for each vertex of template face
-            for (Future<List<Vector3f>> list1 : list) {
-                addTranslationToModel(trans, list1);
-            }
-
-            k = ProgressHandleFactory.createHandle("Computing Average Face.");
-            k.start();
-
-            try {
-                //average translation vector for each vertex by number of faces aligned to template and apply it, creating new average face
-                computeMeanTranslationToModel(template, trans, templateSize, compFs.size());
-
-                //creates new kd-tree for just created average face
-                templateTree = new KdTreeIndexed(template.getVerts());
-                k.finish();
-            } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
-                System.err.print(ex);
-            }finally{
-                k.finish();
-            }
-            executor.shutdown();
-        }
-
-        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-        //last registration to last batch
-        for (int i = 0; i < compFs.size(); i++) {
-            Model currentModel = ml.loadModel(new File(currentTMP + i + File.separator + tmpModuleFile.getName() + "_" + numberOfBatchIterations + "_" + i + ".obj"), Boolean.FALSE, false);
-
-            Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, error, numberOfICPiteration, scale, tmpLocFile, numberOfBatchIterations + 1, i));
-            list2.add(f);
-        }
-
-        //get resulting list containing adresses (to file on disk) of final aligned faces
-        for (Future<File> fut : list2) {
-            try {
-                results.add(fut.get());
-            } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(SurfaceComparisonProcessing.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        executor.shutdown();
-        return results;
+    //loads model from disk to align it to template, 
+    private Future<List<Vector3f>> batchAlign2Faces(ModelLoader ml, String currentTMP, int j, int i, Methods m, Type t, float value, ExecutorService executor, Model template, KdTree templateTree, float error, int numberOfICPiteration, boolean scale, File tmpLocFile, ICPmetric metric, BatchComparison data, List<Future<List<Vector3f>>> list) {
+        Model currentModel = ml.loadModel(new File(currentTMP + j + File.separator + tmpModuleFile.getName() + "_" + i + "_" + j + ".obj"), Boolean.FALSE, false);
+        List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);
+        
+        Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(currentModel, samples, template, templateTree,
+                error, numberOfICPiteration, scale, tmpLocFile, j, i, Boolean.TRUE, metric, data));
+        return future;
     }
 
     /**
@@ -572,11 +608,10 @@ public class SurfaceComparisonProcessing {
             computedVariance.add(new ArrayList<Float>(models.size()));
         }
 
-        ExecutorService executor;
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());        //creates thread pool of size of number of available processors
 
         //computing numerical results
         for (int i = 0; i < models.size(); i++) {
-            executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());        //creates thread pool of size of number of available processors
             ArrayList<ArrayList<Float>> uncomputedCollumn = new ArrayList<ArrayList<Float>>(models.size());     //list to store raw comparison results
 
             list.clear();
@@ -595,19 +630,15 @@ public class SurfaceComparisonProcessing {
 
             batchRawResultsToSingle(models, i, ml, executor, mainFace, mainCurv, useRelative, upperTreshold, lowerTreshold, list, method);
             
-            executor.shutdown();
+            
             
             batchVariance(list, uncomputedCollumn, computedVariance, varianceMethod, useRelative);
 
             //saves temporary results to disk to save up memory usage
             FileUtils.instance().saveCollumn(uncomputedCollumn, i, saveTo);
-            uncomputedCollumn = null;
-            current = null;
-            mainFace = null;
-            executor = null;
-
-            //executor.shutdown();
         }
+        
+        executor.shutdown();
 
         //save path where csvs are to use to recompute numerical results fasters
         if (auxiliaryResultsFile != null) {
