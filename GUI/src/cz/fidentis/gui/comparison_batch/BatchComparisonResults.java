@@ -1593,8 +1593,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(getContext().getAverageFace());
 
         } else {
-            ModelLoader ml = new ModelLoader();
-            Model m = ml.loadModel(getContext().getModel(0), false, true);
+            Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
                     getContext().getFacialPoints(m.getName())
@@ -1849,12 +1848,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
-                    ModelLoader l = new ModelLoader();
                     ArrayList<Model> models = new ArrayList<>();
                     models.add(c.getAverageFace());
                     List<File> md = c.getRegistrationResults().size() > 0 ? c.getRegistrationResults() : c.getModels();
                     for (int i = 0; i < md.size(); i++) {
-                        Model m = l.loadModel(md.get(i), false, false);
+                        Model m = ModelLoader.instance().loadModel(md.get(i), false, false);
                         models.add(m);
                     }
                     tc.getViewerPanel_Batch().getListener2().setModels(models);
@@ -2184,7 +2182,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     String model2 = bc.getModels().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName();
                     String model1 = jComboBox1.getSelectedIndex() == 0 ? "Average" : bc.getModels().get(jComboBox1.getSelectedIndex() - 1).getName();
                     pairFrame.setTitle(model1 + " vs. " + model2);
-                    ModelLoader ml = new ModelLoader();
                     pairComparisonPanel.getListener().removeModel();
                     List<File> models;
                     if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
@@ -2198,11 +2195,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         primary = bc.getAverageFace();
                         values = bc.getHdVisualResults().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex());
                     } else {
-                        primary = ml.loadModel(models.get(jComboBox1.getSelectedIndex() - 1), false, false);
+                        primary = ModelLoader.instance().loadModel(models.get(jComboBox1.getSelectedIndex() - 1), false, false);
                         values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, plotsDrawingPanelAuxiliary2.getSelectedModelIndex(), true);
                     }
                     pairComparisonPanel.getListener().addModel(primary);
-                    pairComparisonPanel.getListener().addModel(ml.loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
+                    pairComparisonPanel.getListener().addModel(ModelLoader.instance().loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
 
                     HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
                     HDpainting hdp = new HDpainting(info);

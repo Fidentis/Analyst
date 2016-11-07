@@ -62,7 +62,7 @@ public class FpProcessing {
         }
         if (!genericFacePath.equals("")) {
             genericFacePath = genericFacePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "average_face.obj";
-            Model genericFace = new ModelLoader().loadModel(new File(genericFacePath), false, true);
+            Model genericFace = ModelLoader.instance().loadModel(new File(genericFacePath), false, true);
             mainF = new KdTreeIndexed(genericFace.getVerts());
         }
     }
@@ -282,7 +282,6 @@ public class FpProcessing {
 
             p.setDisplayName("Computing Feature Points...");
 
-            ModelLoader loader = new ModelLoader();
             Model model;
             List<FacialPoint> facialPoints;
             //List<ICPTransformation> transformations;
@@ -292,7 +291,7 @@ public class FpProcessing {
             ArrayList<Model> registeredModels = new ArrayList<Model>();
 
             for (int i = 0; i < size; i++) {
-                model = loader.loadModel(models.get(i), false, true);
+                model = ModelLoader.instance().loadModel(models.get(i), false, true);
 
                 facialPoints = computePointsForSingleFace(p, model);
                 registeredModels.add(model);            //needed?
@@ -355,13 +354,11 @@ public class FpProcessing {
      */
     public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models) {
         int size = models.size();
-        float unit = 100f / size;
 
         ProgressHandle p;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...", cancelTask);
         p.start();
 
-        ModelLoader loader = new ModelLoader();
         Model model;
         List<FacialPoint> facialPoints;
         List<Model> registeredModels = new ArrayList<>();
@@ -373,7 +370,7 @@ public class FpProcessing {
                 p.finish();
                 return res;
             }
-            model = loader.loadModel(models.get(i), false, true);
+            model = ModelLoader.instance().loadModel(models.get(i), false, true);
 
             facialPoints = computePointsForSingleFace(p, model);
             registeredModels.add(model);            //needed?

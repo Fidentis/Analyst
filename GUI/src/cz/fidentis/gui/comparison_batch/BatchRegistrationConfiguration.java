@@ -989,7 +989,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                         List<File> models = c.getModels();
                         c.setTransSize(models.size());
-                        ModelLoader ml = new ModelLoader();
 
                         int selectedModelTemplate = c.getTemplateIndex();
 
@@ -1012,7 +1011,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                                 break;
                         }
 
-                        Model template = ml.loadModel(models.get(selectedModelTemplate), Boolean.FALSE, true);
+                        Model template = ModelLoader.instance().loadModel(models.get(selectedModelTemplate), Boolean.FALSE, true);
                         c.setTemplateIndex(selectedModelTemplate);
                         
                         if(c.isUseSymmetry()){
@@ -1048,14 +1047,13 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             
                         List<List<FacialPoint>> list = new ArrayList();
                         List<ArrayList<Vector3f>> verts = new ArrayList();
-                        ModelLoader ml = new ModelLoader();
 
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
                                     c.getModels().get(i).getName());
                             list.add(facialPoints);
                             
-                            Model m = ml.loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
+                            Model m = ModelLoader.instance().loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
 
                             verts.add(m.getVerts());
                         }
@@ -1093,7 +1091,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             c.addFacialPoints(c.getModel(i).getName(),
                                     procrustes.getGpa().getPA(i).getFacialPoints());
                             
-                            Model m = ml.loadModel(c.getModel(i), false, Boolean.TRUE);
+                            Model m = ModelLoader.instance().loadModel(c.getModel(i), false, Boolean.TRUE);
                             m.setVerts(procrustes.getGpa().getPA(i).getVertices());
                             procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()));                            
                             

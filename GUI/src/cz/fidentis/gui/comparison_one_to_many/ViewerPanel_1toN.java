@@ -49,7 +49,6 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     private Point startGizmoCenter2D;
     private Vector3f startGizmoCenter3D;
     private Vector3f startPlanePoint;
-    private Object loader;
     private boolean selection;
     
     private boolean removePoints = false;
@@ -74,8 +73,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
 
         String path = GUIController.getPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar;
 
-        ModelLoader loader = new ModelLoader();
-        Model model = loader.loadModel(new File(path + "xShift.obj"), false, false);
+        Model model = ModelLoader.instance().loadModel(new File(path + "xShift.obj"), false, false);
         listener1.setGizmo(model);
 
     }

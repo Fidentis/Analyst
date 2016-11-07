@@ -27,8 +27,7 @@ public class KdTreeIndexedTest {
     private static Model loadedModel;
     
     public KdTreeIndexedTest(){
-        ModelLoader ml = new ModelLoader();
-        loadedModel = ml.loadModel(new File(modelPath), false, Boolean.TRUE);
+        loadedModel = ModelLoader.instance().loadModel(new File(modelPath), false, Boolean.TRUE);
     }
     
     

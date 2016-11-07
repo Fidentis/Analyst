@@ -68,8 +68,7 @@ public class Comparison {
      */
     public void setModelPath(String modelPath) {
         this.modelPath = modelPath;
-        ModelLoader loader = new ModelLoader();
-        model = loader.loadModel(new File(modelPath),true,true);
+        model = ModelLoader.instance().loadModel(new File(modelPath),true,true);
        // model.centralize();
     }
     

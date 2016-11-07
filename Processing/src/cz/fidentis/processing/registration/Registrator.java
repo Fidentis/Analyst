@@ -88,7 +88,7 @@ public class Registrator {
 
     private Model getAverageFace() {
         try {
-            return new ModelLoader().loadModel(new File(AVERAGE_FACE_PATH).getCanonicalFile(), false, true);
+            return ModelLoader.instance().loadModel(new File(AVERAGE_FACE_PATH).getCanonicalFile(), false, true);
         } catch (IOException ex) {
             System.out.println("Can't load average face!");
             return null;

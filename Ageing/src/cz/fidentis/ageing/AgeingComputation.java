@@ -69,9 +69,8 @@ public class AgeingComputation {
         model.setVerts(proc.getPa2().get(0).getVertices());
         
         targetPoints = getMeanModel(gender, targetAge).getFacialPoints();
-        
-        ModelLoader l = new ModelLoader();
-        targetModel = l.loadModel(model.getFile(), false, false);
+
+        targetModel = ModelLoader.instance().loadModel(model.getFile(), false, false);
         targetModel.setVerts(new ArrayList<>(model.getVerts()));
         transform(targetModel, modelPoints, targetPoints);
     }

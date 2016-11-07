@@ -1066,8 +1066,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                     }
 
-                    ModelLoader l = new ModelLoader();
-
                     //nacitaj prvy model otoceny!!  ??
                     //   Model model = l.loadModel(tc.getProject().getSelectedComparison2Faces().getModel1().getFile(), false, true);
                     Model model = tc.getViewerPanel_2Faces().getListener2().getModel();
@@ -1101,8 +1099,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
 
             private void noRegistration() {
-                ModelLoader l = new ModelLoader();
-                Model model = l.loadModel(c.getModel2().getFile(), false, true);
+                Model model = ModelLoader.instance().loadModel(c.getModel2().getFile(), false, true);
                 tc.getViewerPanel_2Faces().getListener1().addModel(model);
                 
                 c.setState(2);

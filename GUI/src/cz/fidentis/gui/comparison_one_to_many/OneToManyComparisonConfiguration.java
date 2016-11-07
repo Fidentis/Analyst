@@ -331,16 +331,15 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         }
 
                         Model mainF = tc.getOneToManyViewerPanel().getListener1().getModel();
-                        ModelLoader ml = new ModelLoader();
                         if (c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
-                            mainF = ml.loadModel(c.getPrimaryModel().getFile(), false, false);
+                            mainF = ModelLoader.instance().loadModel(c.getPrimaryModel().getFile(), false, false);
                         }
 
                         boolean createAvg = c.isCreateAvgFace();
                         c.setCreateAvgFace(createAvg);                        
                         
                         //TODO: pick which model is template?
-                        Model template = ml.loadModel(models.get(0), Boolean.FALSE, false);
+                        Model template = ModelLoader.instance().loadModel(models.get(0), Boolean.FALSE, false);
 
                         tc.getOneToManyViewerPanel().getListener2().removeModel();
                         tc.getOneToManyViewerPanel().getListener2().setModels(template);
@@ -495,13 +494,12 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_compMethodComboBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-   
-        ModelLoader ml = new ModelLoader();
-        Model model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getModel().getFile(), false, true);
+  
+        Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getModel().getFile(), false, true);
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setModels(model);
 
-        model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getModel().getFile(), false, true);
+        model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getModel().getFile(), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setModels(model);
         getContext().setState(1);
         GUIController.getConfigurationTopComponent().addOneToManyRegistrationComponent();

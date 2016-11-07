@@ -97,31 +97,30 @@ public class CompositePanel extends javax.swing.JPanel {
         listener.setManipulator(manipulator);
         listener.setCameraPosition(0, 0, 300);
         compositeCanvas2.addGLEventListener(listener);
-        ModelLoader loader = new ModelLoader();
 
         Model model;
 
         String path = GUIController.getPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar;
 
-        model = loader.loadModel(new File(path + "xShift.obj"), false, true);
+        model = ModelLoader.instance().loadModel(new File(path + "xShift.obj"), false, true);
         listener.getManipulator().addModel(model);
-        model = loader.loadModel(new File(path + "YShift.obj"), false, true);
+        model = ModelLoader.instance().loadModel(new File(path + "YShift.obj"), false, true);
         listener.getManipulator().addModel(model);
-        model = loader.loadModel(new File(path + "zShift.obj"), false, true);
-        listener.getManipulator().addModel(model);
-
-        model = loader.loadModel(new File(path + "xRotation.obj"), false, true);
-        listener.getManipulator().addModel(model);
-        model = loader.loadModel(new File(path + "yRotation.obj"), false, true);
-        listener.getManipulator().addModel(model);
-        model = loader.loadModel(new File(path + "zRotation.obj"), false, true);
+        model = ModelLoader.instance().loadModel(new File(path + "zShift.obj"), false, true);
         listener.getManipulator().addModel(model);
 
-        model = loader.loadModel(new File(path + "xScale.obj"), false, true);
+        model = ModelLoader.instance().loadModel(new File(path + "xRotation.obj"), false, true);
         listener.getManipulator().addModel(model);
-        model = loader.loadModel(new File(path + "yScale.obj"), false, true);
+        model = ModelLoader.instance().loadModel(new File(path + "yRotation.obj"), false, true);
         listener.getManipulator().addModel(model);
-        model = loader.loadModel(new File(path + "zScale.obj"), false, true);
+        model = ModelLoader.instance().loadModel(new File(path + "zRotation.obj"), false, true);
+        listener.getManipulator().addModel(model);
+
+        model = ModelLoader.instance().loadModel(new File(path + "xScale.obj"), false, true);
+        listener.getManipulator().addModel(model);
+        model = ModelLoader.instance().loadModel(new File(path + "yScale.obj"), false, true);
+        listener.getManipulator().addModel(model);
+        model = ModelLoader.instance().loadModel(new File(path + "zScale.obj"), false, true);
         listener.getManipulator().addModel(model);
     }
 

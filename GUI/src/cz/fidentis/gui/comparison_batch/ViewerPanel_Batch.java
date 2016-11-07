@@ -76,8 +76,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         listener.setCameraPosition(0, 0, 300);
         String path = GUIController.getPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar;
 
-        ModelLoader loader = new ModelLoader();
-        Model model = loader.loadModel(new File(path + "xShift.obj"), false, false);
+        Model model = ModelLoader.instance().loadModel(new File(path + "xShift.obj"), false, false);
         listener.setGizmo(model);
 
         canvas1.setImportLabelVisible(true);

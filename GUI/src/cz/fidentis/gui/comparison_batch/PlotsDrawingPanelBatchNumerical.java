@@ -250,7 +250,6 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                         String model1 = modelNames[(int) values[lastSelection.y][size - 1]];
                         pairFrame.setTitle(model1 + " vs. " + model2);
                         BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
-                        ModelLoader ml = new ModelLoader();
                         pairComparisonPanel.getListener().removeModel();
                         List<File> models;
                         if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
@@ -259,9 +258,9 @@ public class PlotsDrawingPanelBatchNumerical extends javax.swing.JPanel {
                             models = bc.getRegistrationResults();
                         }
 
-                        Model primary = ml.loadModel(models.get(lastSelection.y), false, false);
+                        Model primary = ModelLoader.instance().loadModel(models.get(lastSelection.y), false, false);
                         pairComparisonPanel.getListener().addModel(primary);
-                        pairComparisonPanel.getListener().addModel(ml.loadModel(models.get(lastSelection.x), false, false));
+                        pairComparisonPanel.getListener().addModel(ModelLoader.instance().loadModel(models.get(lastSelection.x), false, false));
                         List<Float> values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), lastSelection.y, lastSelection.x, true);
                         HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
                         HDpainting hdp = new HDpainting(info);
