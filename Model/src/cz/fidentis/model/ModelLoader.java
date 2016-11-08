@@ -27,7 +27,7 @@ import javax.vecmath.Vector3f;
  */
 public class ModelLoader {
     private static ModelLoader instance;
-
+    
     private Model model;
     private static final float DUMMY_Z_TC = -5.0f;
 
@@ -39,7 +39,7 @@ public class ModelLoader {
             instance = new ModelLoader();
         
         return instance;
-    }
+    }    
 
     public Model loadModel(File modelFile, Boolean createDcel, Boolean centralize) {
         model = new Model();

@@ -816,6 +816,7 @@ public class Canvas extends javax.swing.JPanel {
                             projectTopComponent.getProject().getSelectedComparison2Faces().setModelIcon(i);
 
                         } else {
+                           
                             Model model = ModelLoader.instance().loadModel(new File(files[0].getPath()), true, true);
 
                             projectTopComponent.getProject().getSelectedComparison2Faces().setModel2(model);
@@ -840,6 +841,7 @@ public class Canvas extends javax.swing.JPanel {
         } else if (projectTopComponent.getProject().getSelectedPart() == 3) {
 
             if (isPrimary) {
+                
                 Model model = ModelLoader.instance().loadModel(new File(files[0].getPath()), true, true);
 
                 projectTopComponent.getProject().getSelectedOneToManyComparison().setPrimaryModel(model);
@@ -852,6 +854,7 @@ public class Canvas extends javax.swing.JPanel {
 
                 }
                 File file = projectTopComponent.getProject().getSelectedOneToManyComparison().getModel(0);
+                
                 Model model = ModelLoader.instance().loadModel(file, true, true);
 
                 projectTopComponent.getOneToManyViewerPanel().getListener2().setModels(model);
@@ -864,12 +867,13 @@ public class Canvas extends javax.swing.JPanel {
 
             }
             File file = projectTopComponent.getProject().getSelectedBatchComparison().getModel(0);
+            
             Model model = ModelLoader.instance().loadModel(file, true, true);
             projectTopComponent.getViewerPanel_Batch().getListener().setModels(model);
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().updateRegisterButtonEnabled();
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().populateFacesComboBox();
         } else if (projectTopComponent.getProject().getSelectedPart() == 6) {
-
+            
             Model m = ModelLoader.instance().loadModel(files[0], true, true);
             
             projectTopComponent.getProject().getSelectedAgeing().setOriginModel(m);

@@ -331,6 +331,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         }
 
                         Model mainF = tc.getOneToManyViewerPanel().getListener1().getModel();
+                        
                         if (c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
                             mainF = ModelLoader.instance().loadModel(c.getPrimaryModel().getFile(), false, false);
                         }
@@ -494,7 +495,8 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_compMethodComboBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-  
+   
+        
         Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getModel().getFile(), false, true);
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setModels(model);

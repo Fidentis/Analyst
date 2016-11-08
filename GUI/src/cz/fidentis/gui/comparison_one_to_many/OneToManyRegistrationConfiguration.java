@@ -989,7 +989,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     try {
                         List<List<FacialPoint>> list = new ArrayList();
                         List<ArrayList<Vector3f>> verts = new ArrayList();
-
+                        
                         int size = c.getModels().size();
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
@@ -1156,7 +1156,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             
             c.addFacialPoints(model.getModelName(), model.getFacialPoints());
         }
-         
+        
+        
         registerButton.setEnabled(areFPCalculated(tc));
         exportFPButton.setEnabled(areFPCalculated(tc));
              

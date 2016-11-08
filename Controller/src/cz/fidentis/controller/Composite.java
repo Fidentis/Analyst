@@ -36,6 +36,7 @@ public class Composite {
     private ArrayList<CompositeModel> faceParts = new ArrayList<CompositeModel>();
     private ArrayList<String> history = new ArrayList<String>();
     int historyIndex = 0;
+    private ModelLoader loader = ModelLoader.instance();
     private FacePartType currentPart;
     private String name = new String();
     private Object selectedHead;
@@ -350,7 +351,7 @@ public class Composite {
      * .inf file of head currently used).
      */
     public void addModel(File file, FacePartType type, Vector3f position, Vector3f shift) {
-        Model model = ModelLoader.instance().loadModel(file, true, true);
+        Model model = loader.loadModel(file, true, true);
         CompositeModel part = new CompositeModel();
         part.setModel(model);
         part.setPart(type);

@@ -1593,6 +1593,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(getContext().getAverageFace());
 
         } else {
+           
             Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
@@ -1848,6 +1849,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
+                   
                     ArrayList<Model> models = new ArrayList<>();
                     models.add(c.getAverageFace());
                     List<File> md = c.getRegistrationResults().size() > 0 ? c.getRegistrationResults() : c.getModels();
@@ -2182,6 +2184,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     String model2 = bc.getModels().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName();
                     String model1 = jComboBox1.getSelectedIndex() == 0 ? "Average" : bc.getModels().get(jComboBox1.getSelectedIndex() - 1).getName();
                     pairFrame.setTitle(model1 + " vs. " + model2);
+                    
                     pairComparisonPanel.getListener().removeModel();
                     List<File> models;
                     if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {

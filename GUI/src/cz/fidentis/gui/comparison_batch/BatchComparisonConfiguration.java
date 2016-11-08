@@ -314,6 +314,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         
                         //only compute new avg face if models were added
                         if(c.isModelsAdded()){
+                           
                             template = ModelLoader.instance().loadModel(models.get(c.getTemplateIndex()), false, false);
                         }else{
                             template = c.getAverageFace();
@@ -468,7 +469,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         
         c.setState(1);
         GUIController.getConfigurationTopComponent().addBatchRegistrationComponent();
-
+       
         Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -57,6 +57,7 @@ public class ProcessingFileUtils {
     public void copyModelsToTMP(List<File> models, File moduleTMPfile, boolean texture) throws FileManipulationException {
         FileUtils.instance().createTMPmoduleFolder(moduleTMPfile);
 
+        
         Model currentModel;
 
         for (int i = 0; i < models.size(); i++) {

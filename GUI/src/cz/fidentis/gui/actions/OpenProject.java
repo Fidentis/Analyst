@@ -513,6 +513,7 @@ public final class OpenProject implements ActionListener {
         if (primaryE != null) {
             Element modelE = (Element) primaryE.getElementsByTagName("model").item(0);
             File modelFile = new File(tempFile.getAbsolutePath() + File.separator + modelE.getAttribute("name"));
+            
             Model model = ModelLoader.instance().loadModel(modelFile, true, true);
             comparison.setModel1(model);
             comparison.setMainFace(new KdTreeIndexed(model.getVerts()));
@@ -521,6 +522,7 @@ public final class OpenProject implements ActionListener {
         if (secondaryE != null) {
             Element modelE = (Element) secondaryE.getElementsByTagName("model").item(0);
             File modelFile = new File(tempFile.getAbsolutePath() + File.separator + modelE.getAttribute("name"));
+            
             Model model = ModelLoader.instance().loadModel(modelFile, true, true);
             comparison.setModel2(model);
         }
@@ -728,6 +730,7 @@ public final class OpenProject implements ActionListener {
 
         if (primaryE != null) {
             Element modelE = (Element) primaryE.getElementsByTagName("model").item(0);
+            
             File modelFile = new File(tempFile.getAbsolutePath() + File.separator + modelE.getAttribute("name"));
             comparison.setPrimaryModel(ModelLoader.instance().loadModel(modelFile, true, true));
         }
@@ -1026,6 +1029,7 @@ public final class OpenProject implements ActionListener {
 
         if (averageE != null) {
             Element modelE = (Element) averageE.getElementsByTagName("model").item(0);
+            
             File modelFile = new File(tempFile.getAbsolutePath() + File.separator + modelE.getAttribute("name"));
             Model m = ModelLoader.instance().loadModel(modelFile, true, true);
             comparison.setAverageFace(m);

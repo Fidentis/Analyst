@@ -1389,7 +1389,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     pairFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     OneToManyComparison bc = getContext();
-
+                  
                     // pairComparisonPanel1.clear();
                     pairComparisonPanel1.getListener().removeModel();
                     List<File> models;
@@ -1429,7 +1429,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         getContext().setState(2);
         GUIController.getConfigurationTopComponent().addOneToManyComparisonComponent();
-
+        
         Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().drawHD(false);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setProcrustes(false);
@@ -1696,6 +1696,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
                         info.setvType(VisualizationType.COLORMAP);
                         tc.getOneToManyViewerPanel().getListener2().removeModel();
+                        
                         Model modelShown = c.getAvgFace();
 
                         if (modelShown == null) {
@@ -1736,6 +1737,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
                         tc.getOneToManyViewerPanel().getListener1().setPlanePoint(c.getPlanePosition());
+                        
                         ArrayList<Model> models = new ArrayList<>();
                         models.add(c.getPrimaryModel());
                         
@@ -1901,6 +1903,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             Runnable run = new Runnable() {
                 @Override
                 public void run() {
+                    
                     pairComparisonPanel1.getListener().removeModel();
                     List<File> models;
                     if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {

@@ -386,6 +386,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     
                     if(previousNodeText.equals(strings.getString("tree.node.comparedModels"))) {
                         File file = batchComparison.getModel(lastNodeIndex);
+                        
                         Model model = ModelLoader.instance().loadModel(file, true, true);
                         listener.setModels(model);
                         if(batchComparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
@@ -395,6 +396,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     }
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = batchComparison.getRegistrationResults().get(lastNodeIndex);
+                        
                         Model model = ModelLoader.instance().loadModel(file, true, true);
                         listener.setModels(model);
                         listener.setFacialPoints(batchComparison.getFacialPoints(model.getName()));
@@ -424,6 +426,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     if(previousNodeText.equals(strings.getString("tree.node.comparedModels"))) {
                       
                         File file = comparison.getModel(lastNodeIndex);
+                        
                         Model m = ModelLoader.instance().loadModel(file, true, true);
                         listenerSecondary.setModels(m);
 
@@ -435,6 +438,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     }
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = comparison.getRegisteredModels().get(lastNodeIndex);
+                        
                         Model model = ModelLoader.instance().loadModel(file, true, true);
                         listenerSecondary.setModels(model);
                         listenerSecondary.setFacialPoints(comparison.getFacialPoints(model.getName()));

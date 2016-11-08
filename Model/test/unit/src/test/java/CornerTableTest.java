@@ -29,6 +29,7 @@ public class CornerTableTest {
     private final CornerTable cornerTable;
 
     public CornerTableTest() {
+        
         loadedModel = ModelLoader.instance().loadModel(new File(MODEL_PATH), false, true);
         cornerTable = loadedModel.getCornerTable();
     }
