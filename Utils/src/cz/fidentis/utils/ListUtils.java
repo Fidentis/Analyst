@@ -70,4 +70,14 @@ public class ListUtils {
         return populatedList;
     }
     
+    public ArrayList<ArrayList<Float>> populateListList(int size){
+        ArrayList<ArrayList<Float>> res = new ArrayList<>(size);
+        
+        for(int i = 0; i < size; i++){
+            res.add(new ArrayList<Float>(size));
+        }
+        
+        return res;
+    }
+    
 }
