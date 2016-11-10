@@ -164,17 +164,20 @@ public class Model {
 
         gl.glPushMatrix();
         gl.glPushAttrib(GL2.GL_LIGHTING_BIT);
+        
+        gl.glDisable(GL2.GL_TEXTURE_2D);
+        gl.glEnable(GL2.GL_LIGHTING);
+        
+        gl.glBegin(GL2.GL_TRIANGLES);
+        
         for (int i = 0; i < faces.getNumFaces(); i++) {
-
-            gl.glDisable(GL2.GL_TEXTURE_2D);
-            gl.glEnable(GL2.GL_LIGHTING);
-
             faces.renderFace(i, flipTexCoords, gl);
-
-            gl.glEnable(GL2.GL_TEXTURE_2D);
-            gl.glDisable(GL2.GL_LIGHTING);
-
         }
+        
+        
+        gl.glEnd();
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glDisable(GL2.GL_LIGHTING);
         gl.glPopAttrib();
         gl.glPopMatrix();
 

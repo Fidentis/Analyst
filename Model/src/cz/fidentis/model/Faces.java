@@ -285,8 +285,8 @@ public class Faces {
         } else {
             polytype = GL2.GL_POLYGON;
         }
-
-        gl.glBegin(polytype);
+        
+        //gl.Begin(polytype);
 
         // get the normal and tex coords indicies for face i
         int[] normIdxs = facesNormIdxs.get(i);
@@ -315,21 +315,16 @@ public class Faces {
                 } else {
                     gl.glTexCoord3d(texCoord.getX(), yTC, texCoord.getZ());
                 }
-                /*
-                 System.out.print("Tex index: " + (texIdxs[f]) + ": ");
-                 System.out.println("Tex coord: " + df.format(texCoord.getX()) + ", " +
-                 df.format( yTC ) + ", " +
-                 df.format( texCoord.getZ() ));
-                 */
             }
+            
+            //TODO make sure you only draw triangle, if there is something else than triangle, triangulate
 
             vert = verts.get(vertIdxs[f] - 1);  // render the vertices
-            //     System.out.println(vertIdxs[f] - 1 + " " + verts.get(vertIdxs[f] - 1).length());
             gl.glVertex3d(vert.getX(), vert.getY(), vert.getZ());
 
         }
 
-        gl.glEnd();
+        //gl.glEnd();
     } // end of renderFace()
 
     /**
