@@ -366,35 +366,17 @@ public class SurfaceComparisonProcessing {
     private List<Vector3f> alignBatchIteration(List<File> compFs, int currentBatchIteration, Methods m, Type t, float value, Model template, 
             KdTree templateTree, float error, int numberOfICPiteration, boolean scale, File tmpLocFile, ICPmetric metric, BatchComparison data) {
         
-        //List<Future<List<Vector3f>>> translations = new ArrayList<>(compFs.size());
-        
         //change to directory of current iteration
         String currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator +  tmpLocFile.getPath() + File.separator + 
                  tmpModuleFile.getName() + "_" + currentBatchIteration + "_";
         
         //get list with empty vectors of size of template to add translations to
         List<Vector3f> trans = ListUtils.instance().populateVectorList(template.getVerts().size());  
-        
-        /*ExecutorService executor;
-        executor = Executors.newFixedThreadPool(1);
-        
-        //aligns all faces performed parallely based on size of execturo pool
-        for (int j = 0; j < compFs.size(); j++) {
-            Future<List<Vector3f>> future = batchAlign2Faces(currentTMP, j, currentBatchIteration, m, t, value, executor, template, templateTree, 
-                    error, numberOfICPiteration, scale, tmpLocFile, metric, data);
-            translations.add(future);
-        }
-        
-        executor.shutdown();
-        
-        //computes translation vector for each vertex of template face
-        for (Future<List<Vector3f>> list1 : translations) {
-            addTranslationToModel(trans, list1);
-        }*/
-        
+
         for(int j = 0; j < compFs.size(); j++){
-            List<Vector3f> translations = batchAlign2Faces(currentTMP, j, currentBatchIteration, m, t, value/*, executor*/, template, templateTree, 
+            List<Vector3f> translations = batchAlign2Faces(currentTMP, j, currentBatchIteration, m, t, value, template, templateTree, 
                     error, numberOfICPiteration, scale, tmpLocFile, metric, data);
+            addTranslationToModel(trans, translations);
         }
         
         return trans;
@@ -420,30 +402,20 @@ public class SurfaceComparisonProcessing {
             Methods m, Type t, float value) {
         
         List<File> results = new ArrayList<>(compFsize); 
-        List<Future<File>> future = new ArrayList<>(compFsize);
         
         //change to directory of current iteration
          String currentTMP = FileUtils.instance().getTempDirectoryPath() + File.separator +  tmpLocFile.getPath() + File.separator + 
                  tmpModuleFile.getName() + "_" + numberOfBatchIterations + "_"; 
         
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        //ExecutorService executor = Executors.newFixedThreadPool(1);
         //last registration to last batch
         for (int i = 0; i < compFsize; i++) {
             Model currentModel = ModelLoader.instance().loadModel(new File(currentTMP + i + File.separator + tmpModuleFile.getName() + "_" + numberOfBatchIterations + "_" + i + ".obj"), Boolean.FALSE, false);
             List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);            
             
-            Future<File> f = executor.submit(new BatchRegistrationLastCallable(templateTree, currentModel, samples, error, numberOfICPiteration, scale, tmpLocFile, numberOfBatchIterations + 1, i));
-            future.add(f);
+            File f = new BatchRegistrationLastCallable(templateTree, currentModel, samples, error, numberOfICPiteration, scale, tmpLocFile, numberOfBatchIterations + 1, i).call();
+            results.add(f);
         }
-        //get resulting list containing adresses (to file on disk) of final aligned faces
-        for (Future<File> fut : future) {
-            try {
-                results.add(fut.get());
-            } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(SurfaceComparisonProcessing.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        executor.shutdown();
         
         return results;
     }
@@ -515,10 +487,7 @@ public class SurfaceComparisonProcessing {
             float error, int numberOfICPiteration, boolean scale, File tmpLocFile, ICPmetric metric, BatchComparison data) {
         Model currentModel = ModelLoader.instance().loadModel(new File(currentTMP + modelNumber + File.separator + tmpModuleFile.getName() + "_" + batchIteration + "_" + modelNumber + ".obj"), Boolean.FALSE, false);
         List<Vector3f> samples = getUndersampledMesh(m, t, value, currentModel);
-        
-       /* Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(currentModel, samples, template, templateTree,
-                error, numberOfICPiteration, scale, tmpLocFile, modelNumber, batchIteration, Boolean.TRUE, metric, data));*/
-       
+      
        List<Vector3f> future = new BatchProcessingCallable(currentModel, samples, template, templateTree,
                 error, numberOfICPiteration, scale, tmpLocFile, modelNumber, batchIteration, Boolean.TRUE, metric, data).call();
        
