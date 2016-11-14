@@ -989,15 +989,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     try {
                         List<List<FacialPoint>> list = new ArrayList();
                         List<ArrayList<Vector3f>> verts = new ArrayList();
-                        ModelLoader ml = new ModelLoader();
-
+                        
                         int size = c.getModels().size();
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
                                     c.getModels().get(i).getName());
                             list.add(facialPoints);
 
-                            Model m = ml.loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
+                            Model m = ModelLoader.instance().loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
                             verts.add(m.getVerts());
                         }
 
@@ -1036,7 +1035,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             values.addAll(procrustes.getPa2().get(i).getConfig().values());
                             c.addFacialPoints(c.getModel(i).getName(), values);
 
-                            Model m = ml.loadModel(c.getModel(i), false, Boolean.TRUE);
+                            Model m = ModelLoader.instance().loadModel(c.getModel(i), false, Boolean.TRUE);
                             m.setVerts(procrustes.getPa2(i).getVertices());
                             procrustes.getPa2(i).updateFacialPoints(c.getFacialPoints(m.getName()));
 
@@ -1134,8 +1133,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         
         
         List<File> models = new ArrayList<>();
-        List<Model> loadedModels = new ArrayList<>();
-        ModelLoader ml = new ModelLoader();
         
         models.addAll(c.getModels());
         if(c.getPrimaryModel() != null){
@@ -1160,9 +1157,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             c.addFacialPoints(model.getModelName(), model.getFacialPoints());
         }
         
-        for(File f : c.getModels()){
-            loadedModels.add(ml.loadModel(f, false, true));
-        }        
         
         registerButton.setEnabled(areFPCalculated(tc));
         exportFPButton.setEnabled(areFPCalculated(tc));

@@ -89,7 +89,7 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
      * @throws Exception
      */
     @Override
-    public List<Vector3f> call() throws Exception {
+    public List<Vector3f> call() {
         ProgressHandle p = null;
 
         KdTree computeMorph;

@@ -22,7 +22,7 @@ import javax.vecmath.Vector3f;
 public class HausdorffDistance {
 
     private static HausdorffDistance unique;
-    private static final int USED_THREADS = 1;
+    private static final int USED_THREADS = Runtime.getRuntime().availableProcessors();
 
     public static HausdorffDistance instance() {
         if (unique == null) {
@@ -74,6 +74,8 @@ public class HausdorffDistance {
             distance.add(new Float(sign * MathUtils.instance().distancePoints(comparedF.get(i), neighbour)));*/
         }
         
+         executor.shutdown();
+        
         for(Future<Float> f : computeDist){
             try {
                 distance.add(f.get());
@@ -82,7 +84,7 @@ public class HausdorffDistance {
             }
         }
         
-        executor.shutdown();
+       
 
         return distance;
     }

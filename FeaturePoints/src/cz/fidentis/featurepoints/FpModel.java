@@ -119,8 +119,7 @@ public class FpModel {
     
     //load model, centralize it and decentralize points based on it
     public void decentralizeToFile(File f){
-        ModelLoader ml = new ModelLoader();
-        Model model = ml.loadModel(f, false, Boolean.TRUE);
+        Model model = ModelLoader.instance().loadModel(f, false, Boolean.TRUE);
         
         decentralizeToModel(model);
     }

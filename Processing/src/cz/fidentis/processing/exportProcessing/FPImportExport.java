@@ -114,10 +114,9 @@ public class FPImportExport {
      */
     public void alignPointsToModels(List<FpModel> points, List<File> models) {
         HashMap<String, Model> modelTree = new HashMap<>();     //to be able to pair model and FpModel faster
-        ModelLoader ml = new ModelLoader();
-
+        
         for (File f : models) {
-            Model m = ml.loadModel(f, Boolean.FALSE, Boolean.TRUE);
+            Model m = ModelLoader.instance().loadModel(f, Boolean.FALSE, Boolean.TRUE);
 
             modelTree.put(m.getName(), m);
         }

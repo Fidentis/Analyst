@@ -85,8 +85,8 @@ public final class ImportFromImage implements ActionListener {
                 File modelFile = new File(modelSaveDir.getPath() + File.separator + imported.getName());
                 exp.exportModelToObj(modelSaveDir, true);
                 
-                ModelLoader loader = new ModelLoader();
-                Model model = loader.loadModel(modelFile, true, true);
+                
+                Model model = ModelLoader.instance().loadModel(modelFile, true, true);
                 
                 switch (tc.getProject().getSelectedPart()) {
                     case 2:
