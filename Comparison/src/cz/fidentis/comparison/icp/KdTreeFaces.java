@@ -5,6 +5,7 @@
  */
 package cz.fidentis.comparison.icp;
 
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.model.Faces;
 import cz.fidentis.utils.IntersectionUtils;
 import cz.fidentis.utils.MathUtils;

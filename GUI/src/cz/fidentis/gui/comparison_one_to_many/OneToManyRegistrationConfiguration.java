@@ -9,9 +9,9 @@ import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.comparison.procrustes.Procrustes1ToMany;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -967,7 +967,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         KdTree mainF;
 
                         if (metric == ICPmetric.VERTEX_TO_VERTEX) {
-                            mainF = new KdTreeIndexed(template.getVerts());
+                            mainF = new KDTreeIndexed(template.getVerts());
                         } else {
                             mainF = new KdTreeFaces(template.getVerts(), template.getFaces());
                         }

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.comparison.icp;
+package cz.fidentis.comparison.kdTree;
 
+import cz.fidentis.comparison.icp.KdNode;
 import javax.vecmath.Vector3f;
 
 /**

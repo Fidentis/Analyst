@@ -1,13 +1,12 @@
 package cz.fidentis.processing.registration;
 
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class Registrator {
         long start = System.nanoTime();
         System.out.println("Model registration...");
 
-        KdTree mainF = new KdTreeIndexed(mainModel.getVerts());
+        KdTree mainF = new KDTreeIndexed(mainModel.getVerts());
 //      Icp.instance().icp(mainF, comparedModel.getVerts(), comparedModel.getVerts().size(), 0.f);
         transformations = Icp.instance().icp(mainF, comparedModel.getVerts(), comparedModel.getVerts(), error, iterations, scale);
 
