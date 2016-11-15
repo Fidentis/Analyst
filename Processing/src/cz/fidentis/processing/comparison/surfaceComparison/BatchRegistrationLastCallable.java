@@ -68,7 +68,7 @@ public class BatchRegistrationLastCallable implements Callable<File> {
      * @throws Exception
      */
     @Override
-    public File call() throws Exception {
+    public File call(){
         ProgressHandle p = ProgressHandleFactory.createHandle("Aligning face " + (currentModelNumber + 1) + " to last average face.");
         p.start();
 

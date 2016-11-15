@@ -61,10 +61,9 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
      * Computes numerical results for surface batch processing
      *
      * @return numerical results for a single face
-     * @throws Exception
      */
     @Override
-    public ArrayList<Float> call() throws Exception {
+    public ArrayList<Float> call(){
         List<Float> result;
         ProgressHandle p = ProgressHandleFactory.createHandle("Computing numerical results for faces " + (mainFaceNum + 1) + " and " + (compareFaceNum + 1) + ".");
         p.start();
