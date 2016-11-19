@@ -108,6 +108,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
         but_cancel = new javax.swing.JButton();
 
         setTitle(org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.title")); // NOI18N
+        setMinimumSize(new java.awt.Dimension(512, 260));
         setModal(true);
 
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
