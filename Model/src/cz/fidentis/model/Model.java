@@ -199,6 +199,8 @@ public class Model {
         }
         // render the model face-by-face
         String faceMat;
+        
+        gl.glBegin(GL2.GL_TRIANGLES);
 
         for (int i = 0; i < faces.getNumFaces(); i++) {
 
@@ -209,6 +211,8 @@ public class Model {
 
             faces.renderFace(i, flipTexCoords, gl);                  // draw face i
         }
+        
+        gl.glEnd();
 
         gl.glDisable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL2.GL_LIGHTING);
