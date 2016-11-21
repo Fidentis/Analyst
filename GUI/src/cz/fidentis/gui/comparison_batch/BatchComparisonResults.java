@@ -55,7 +55,6 @@ import org.openide.util.Exceptions;
 public class BatchComparisonResults extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
-    String result;
     Boolean maxTresholdValueChanged = false;
     Boolean minTresholdValueChanged = false;
     private boolean valuesModified;
@@ -112,10 +111,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         heatplotButton.setVisible(true);
         setupVisualizationControls(getContext().getVisualization());
 
-    }
-
-    public void setNumericalResult(String result) {
-        this.result = result;
     }
 
     /**
@@ -190,7 +185,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         sizeLabel = new javax.swing.JLabel();
         fpSizeSlider = new javax.swing.JSlider();
-        jButton6 = new javax.swing.JButton();
+        exportDatabaseButton = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
@@ -824,10 +819,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton6.text")); // NOI18N
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(exportDatabaseButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportDatabaseButton.text")); // NOI18N
+        exportDatabaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                exportDatabaseButtonActionPerformed(evt);
             }
         });
 
@@ -845,7 +840,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                             .addComponent(fpDistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(sizeLabel))
                 .addContainerGap())
-            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(exportDatabaseButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -859,7 +854,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(sizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fpSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6))
+                .addComponent(exportDatabaseButton))
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton7, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton7.text")); // NOI18N
@@ -1437,8 +1432,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (result != null) {
-            String[][] values = TableProcessing.instance().parseTable(result);
+        if (getContext().getNumericalResults() != null) {
+            String[][] values = TableProcessing.instance().parseTable(getContext().getNumericalResults());
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                     values,
@@ -1508,7 +1503,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportCSVnumeric(tc, result);
+        ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -1528,7 +1523,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
      * @param file database should be saved into the file
      * @throws FileNotFoundException
      */
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void exportDatabaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDatabaseButtonActionPerformed
         JFileChooser chooser = new JFileChooser() {
             @Override
             public void approveSelection() {
@@ -1569,7 +1564,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             try {
                 DatabaseWorker dfw = new DatabaseWorker();
                 try {
-                    dfw.convertTableToDatabase(result);
+                    dfw.convertTableToDatabase(getContext().getNumericalResults());
                 } catch (IllegalArgumentException e) {
                     JOptionPane.showMessageDialog(this, "Cannot be saved as database.");
                     return;
@@ -1580,7 +1575,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
 
         }
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_exportDatabaseButtonActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         getContext().setState(2);
@@ -1933,12 +1928,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_selectionButtonActionPerformed
 
     private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
-        if (result != null) {
+        if (getContext().getNumericalResults() != null) {
 
-            int n = result.split("\n").length;
+            int n = getContext().getNumericalResults().split("\n").length;
             String[][] valuesString = new String[n][n];
             for (int i = 0; i < n; i++) {
-                valuesString[i] = result.split("\n")[i].split(";");
+                valuesString[i] = getContext().getNumericalResults().split("\n")[i].split(";");
             }
             float values[][] = new float[n][n];
             for (int i = 1; i < n; i++) {
@@ -2452,8 +2447,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         } else {
             alignResButton.setVisible(false);
         }
-        
-        result = c.getNumericalResults();
     }
 
     public void setValuesModified(boolean valuesModified) {
@@ -2505,6 +2498,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel densLabel1;
     private javax.swing.JLabel densLabel2;
     private javax.swing.JSlider density;
+    private javax.swing.JButton exportDatabaseButton;
     private javax.swing.JButton exportDistToMeanButton;
     private javax.swing.JButton exportSymetricResults;
     private javax.swing.JSlider fpDistanceSlider;
@@ -2522,7 +2516,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;

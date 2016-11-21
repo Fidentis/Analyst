@@ -261,6 +261,23 @@ public class SurfaceComparisonProcessing {
 
         return res;
     }
+    
+    public String numericValuesOneToMany(List<Float> hdDistance, List<File> models, String mainFace, float upperThreshold, float lowerThreshold, int varianceMethod) {
+        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Upper: " + upperThreshold + 
+                "% Lower: " + lowerThreshold + "% treshold;");
+        
+        for(int i = 0; i < hdDistance.size(); i++){
+            strResults.append(models.get(i).getName()).append(';');
+        }
+        
+        strResults.append("\n").append(mainFace).append(";");
+        
+        for(Float f : hdDistance){
+            strResults.append(f).append(';');    
+        }
+        
+        return strResults.toString();
+    }
 
     /**
      * Given the template, method alignes all faces in 'compFs' to template and

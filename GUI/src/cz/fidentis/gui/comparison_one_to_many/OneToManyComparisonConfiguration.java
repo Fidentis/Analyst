@@ -391,7 +391,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         c.setSortedHdAbs(sortedResAbs);
                         c.setSortedHdRel(sortedResRes);
 
-                        String strRes = setValues(var, origModels, mainF.getName(), 0);
+                        String strRes = SurfaceComparisonProcessing.instance().numericValuesOneToMany(var, origModels, template.getName(), 100f, 0f, 0);
 
                         c.setNumResults(numResults);
                         c.setNumericalResults(strRes);
@@ -532,22 +532,6 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     public void setProcessComparisonEnabled(boolean en) {
         processComparisonButton.setEnabled(en);
         getContext().setCompareButtonEnabled(en);
-    }
-
-    private String setValues(List<Float> hdDistance, List<File> models, String mainFace, int varianceMethod) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Upper: 100% Lower: 0% treshold;");
-        
-        for(int i = 0; i < hdDistance.size(); i++){
-            strResults.append(models.get(i).getName()).append(';');
-        }
-        
-        strResults.append("\n" + mainFace + ";");
-        
-        for(Float f : hdDistance){
-            strResults.append(f).append(';');    
-        }
-        
-        return strResults.toString();
     }
     
     private OneToManyComparison getContext(){

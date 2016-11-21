@@ -48,7 +48,6 @@ import org.openide.util.Exceptions;
 public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
-    String result;
     private boolean maxTresholdValueChanged;
     private boolean minTresholdValueChanged;
     private ColorScheme heatplotColorScheme = ColorScheme.GREEN_BLUE;
@@ -114,10 +113,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             slicesPanel.setVisible(true);
         }
         this.revalidate();
-    }
-
-    public void setNumericalResult(String result) {
-        this.result = result;
     }
 
     /**
@@ -1322,7 +1317,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_exportOrderedResultsButtonActionPerformed
 
     private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
-        if (result != null) {
+        if (getContext().getNumericalResults() != null) {
             jPanel4.setVisible(true);
             pairComparisonPanel1.clear();
             setHeatPlotLabels();
@@ -1344,12 +1339,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     private void setHeatPlotLabels() {
         //    int m = result.split("\n").length;
-        int n = result.split("\n")[0].split(";").length;
+        int n = getContext().getNumericalResults().split("\n")[0].split(";").length;
         String[] valuesString = new String[n];
         String[] namesString = new String[n];
 
-        namesString = result.split("\n")[0].split(";");
-        valuesString = result.split("\n")[1].split(";");
+        namesString = getContext().getNumericalResults().split("\n")[0].split(";");
+        valuesString = getContext().getNumericalResults().split("\n")[1].split(";");
         float values[] = new float[n - 1];
         float maxValue = Float.MIN_VALUE;
         float minValue = Float.MAX_VALUE;
@@ -1480,12 +1475,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportCSVnumeric(tc, result);
+        ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (result != null) {
-            String[][] values = TableProcessing.instance().parseTable(result);
+        if (getContext().getNumericalResults() != null) {
+            String[][] values = TableProcessing.instance().parseTable(getContext().getNumericalResults());
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                     values,
@@ -1765,7 +1760,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, c.getHausdorfMaxTreshold() / 100f,
                             c.getHausdorfMinTreshold() / 100f, c.getMetricTypeIndex(), c.getValuesTypeIndex() == 0);
 
-                    String res = setValues(thresholdedValues, origModels, c.getMetricTypeIndex(), c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f);
+                    String res = SurfaceComparisonProcessing.instance().numericValuesOneToMany(thresholdedValues, origModels, c.getAvgFace().getName(), 
+                            c.getHausdorfMaxTreshold(), c.getHausdorfMinTreshold(), c.getMetricTypeIndex());
 
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
@@ -2109,23 +2105,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         minTresholdValueChanged = false;
     }
 
-    private String setValues(List<Float> hdDistance, List<File> models, int varianceMethod, float upperTreshold, float lowerTreshold) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Lower: " + 
-                (lowerTreshold * 100) +"% Upper: " + (upperTreshold * 100) + "% treshold;");
-
-        for (int i = 0; i < hdDistance.size(); i++) {
-            strResults.append(models.get(i).getName()).append(';');
-        }
-
-        strResults.append("\nMain Face;");
-
-        for (Float f : hdDistance) {
-            strResults.append(f).append(';');
-        }
-
-        return strResults.toString();
-    }
-
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);
         maxThresholdSlider.setVisible(false);
@@ -2206,8 +2185,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         } else {
             alignParametersButton.setVisible(false);
         }
-        
-        result = c.getNumericalResults();
 
         updateHistograms();
 
