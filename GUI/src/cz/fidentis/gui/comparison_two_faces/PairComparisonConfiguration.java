@@ -867,7 +867,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         c.setHDP(paintMain);
                         c.setHdPaintingInfo(info);
 
-                        c.setNumericalResults(setValues(hdDistance));
+                        c.setNumericalResults(SurfaceComparisonProcessing.instance().getNumericResults(hdDistance, true));
                         c.setLowerHDTreshold(0.0f);
                         c.setUpperHDTreshold(1f);
 
