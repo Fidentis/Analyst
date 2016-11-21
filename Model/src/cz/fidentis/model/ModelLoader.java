@@ -76,8 +76,8 @@ public class ModelLoader {
             model.centralize();
         }
 
-        // TODO - flag in constructor
-        model.setCornerTable(new CornerTable(model));
+        if(createDcel)
+            model.setCornerTable(new CornerTable(model));
 
         return model;
 

@@ -1423,6 +1423,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         //populateFacesComboBox();
         
         facesComboBox.setSelectedIndex(c.getTemplateIndex());
+        continueComparisonCheckBox.setSelected(c.isContinueComparison());
         
        /* if(c.getModels().size() > 0)
             facesComboBox.setSelectedIndex(c.getTemplateIndex() + 3);
