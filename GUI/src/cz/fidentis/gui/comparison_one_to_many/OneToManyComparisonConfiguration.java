@@ -391,7 +391,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         c.setSortedHdAbs(sortedResAbs);
                         c.setSortedHdRel(sortedResRes);
 
-                        String strRes = SurfaceComparisonProcessing.instance().numericValuesOneToMany(var, origModels, template.getName(), 100f, 0f, 0);
+                        String strRes = SurfaceComparisonProcessing.instance().formatedNumResOneToMany(var, origModels, template.getName(), 100f, 0f, 0);
 
                         c.setNumResults(numResults);
                         c.setNumericalResults(strRes);
