@@ -1760,7 +1760,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, c.getHausdorfMaxTreshold() / 100f,
                             c.getHausdorfMinTreshold() / 100f, c.getMetricTypeIndex(), c.getValuesTypeIndex() == 0);
 
-                    String res = SurfaceComparisonProcessing.instance().numericValuesOneToMany(thresholdedValues, origModels, c.getAvgFace().getName(), 
+                    String res = SurfaceComparisonProcessing.instance().numericValuesOneToMany(thresholdedValues, origModels, c.getPrimaryModel().getName(), 
                             c.getHausdorfMaxTreshold(), c.getHausdorfMinTreshold(), c.getMetricTypeIndex());
 
                     info.setDistance(hdDistance);
@@ -1817,7 +1817,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             slicesPanel.setVisible(true);
         }
         
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setVisualization((VisualizationType) VisualizationBox.getSelectedItem());
+        getContext().setVisualization((VisualizationType) VisualizationBox.getSelectedItem());
         updateHistograms();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
 
