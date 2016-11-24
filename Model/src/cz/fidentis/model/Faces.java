@@ -446,4 +446,8 @@ public class Faces {
         gl.glEnd();
     }
 
+    public void setFacesVertIdxs(int i, int[] indexes) {
+        this.facesVertIdxs.add(i, indexes);
+    }
+
 }  // end of Faces class

@@ -341,4 +341,19 @@ public class KDTreeIndexed implements KdTree{
         
         return found.equals(p);
     }
+    
+    protected int getMcount(){
+        return m_count;
+    }
+
+    protected int getM_K() {
+        return m_K;
+    }
+
+    public KDNode getM_root() {
+        return m_root;
+    }
+    
+       
+    
 }
