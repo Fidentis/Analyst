@@ -261,6 +261,36 @@ public class SurfaceComparisonProcessing {
 
         return res;
     }
+    
+    /**
+     * Creates String version of given numerical results, ready for JTable, given the results of measured Hausdorff distance.
+     * First line contains variance method used, along with lower and upper thresholds (in percentage), plus names of all secondary models
+     * Second line contains name of the main model and numerical results of comparison on regards to each of the secondary models
+     * 
+     * @param hdDistance - computed Hausdorff distances
+     * @param models - secondary models used
+     * @param mainFace - name of the main model
+     * @param upperThreshold - value of upper threshold used. This should be in percentage, in interval [0, 100]
+     * @param lowerThreshold - value of lower threshold used. This should be in percentage, in interval [0, 100]
+     * @param varianceMethod - variance method used to compute numerical results of comparison
+     * @return formated String, ready to be used for JTable, containing information about numerical results
+     */
+    public String formatedNumResOneToMany(List<Float> hdDistance, List<File> models, String mainFace, float upperThreshold, float lowerThreshold, int varianceMethod) {
+        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Upper: " + upperThreshold + 
+                "% Lower: " + lowerThreshold + "% treshold;");
+        
+        for(int i = 0; i < hdDistance.size(); i++){
+            strResults.append(models.get(i).getName()).append(';');
+        }
+        
+        strResults.append("\n").append(mainFace).append(";");
+        
+        for(Float f : hdDistance){
+            strResults.append(f).append(';');    
+        }
+        
+        return strResults.toString();
+    }
 
     /**
      * Given the template, method alignes all faces in 'compFs' to template and
