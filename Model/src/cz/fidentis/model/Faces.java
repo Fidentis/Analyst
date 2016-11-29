@@ -447,7 +447,14 @@ public class Faces {
     }
 
     public void setFacesVertIdxs(int i, int[] indexes) {
-        this.facesVertIdxs.add(i, indexes);
+        this.facesVertIdxs.set(i, indexes);
     }
+    public void setFacesNormIdxs(int i, int[] indexes) {
+        this.facesNormIdxs.set(i, indexes);
+    }
+    public void setFacesTexIdxs(int i, int[] indexes) {
+        this.facesTexIdxs.set(i, indexes);
+    }
+    
 
 }  // end of Faces class

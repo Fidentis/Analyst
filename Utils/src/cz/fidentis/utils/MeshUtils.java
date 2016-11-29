@@ -71,15 +71,17 @@ public class MeshUtils {
     }
     
     public Model removeDuplicateVertices(Model m){
-        removeDuplicateVertices(m.getFaces(), m.getVerts());
-        
-        return m;
-    }
-
-    private void removeDuplicateVertices(Faces faces, ArrayList<Vector3f> verts) {
         HashMap<Integer, Integer> dict = new HashMap<>();       //for each vertex index remember whether it was replaced or not, <index of point, index of point it was replaced by>
         HashMap<Vector3f, Integer> mainPoint = new HashMap<>(); //first occurance of given point <unique point, first index of occurance>
+        ArrayList<Vector3f> verts = m.getVerts();
+        ArrayList<Vector3f> norms = m.getNormals();
+        ArrayList<Vector3f> txts = m.getTexCoords();
+        ArrayList<Vector3f> newVerts;
+        ArrayList<Vector3f> newNorms;
+        ArrayList<Vector3f> newTxts;
+        Faces faces = m.getFaces();
 
+        //fill out dict and mainPoint to see which triangles should be deleted
         for (int i = 0; i < verts.size(); i++) {
             Vector3f v = verts.get(i);
             if (mainPoint.containsKey(v)) {
@@ -90,18 +92,58 @@ public class MeshUtils {
             }
         }
 
-        //TODO remove duplicate vertices from the list
-        for (int i = 0; i < faces.getNumFaces(); i++) {
-            int[] indexes = faces.getFaceVertIdxs(i);
-            for (int j = 0; j < indexes.length; j++) {
-                indexes[j] = dict.get(indexes[j] - 1) + 1;
-            }
-
-            faces.setFacesVertIdxs(i, indexes);
+        //remove duplicate vertices from the list
+        newVerts = new ArrayList<>(mainPoint.size());
+        newNorms = new ArrayList<>(mainPoint.size());
+        newTxts = new ArrayList<>(mainPoint.size());
+        //get new indices of from new lists
+        mainPoint = new HashMap<>();
+        
+        for(int i = 0; i < verts.size(); i++){
+            if(dict.get(i) != i)        //skip duplicates
+                continue;
+            
+            newVerts.add(verts.get(i));
+            mainPoint.put(verts.get(i), newVerts.size() - 1);
+            
+            newNorms.add(norms.get(i));
+            newTxts.add(txts.get(i));
+            
         }
+        
+        m.setVerts(verts);
+        m.setNormals(norms);
+        m.setTextures(txts);
+        
+        
+        for (int i = 0; i < faces.getNumFaces(); i++) {
+            //triangle position
+            int[] indexes = faces.getFaceVertIdxs(i);
+            swapToNewIndices(indexes, mainPoint, verts);
+            faces.setFacesVertIdxs(i, indexes);
+            
+            
+            //triangle normals
+            indexes = faces.getFaceNormalIdxs(i);
+            swapToNewIndices(indexes, mainPoint, verts);  
+            faces.setFacesNormIdxs(i, indexes);
+            
+            //TODO remove textures
+            //triangle textures
+            /*indexes = faces.getFaceTexIdxs(i);
+            swapToNewIndices(indexes, mainPoint, verts);     
+            faces.setFacesTexIdxs(i, indexes);*/
+        }
+        
+        return m;
+    }    
 
+    private void swapToNewIndices(int[] indexes, HashMap<Vector3f, Integer> mainPoint, ArrayList<Vector3f> verts) {
+        for (int j = 0; j < indexes.length; j++) {
+            //get vertex from original vertex array and it's new index
+            Vector3f v = verts.get(indexes[j] - 1);
+            int index = mainPoint.get(v) + 1;
+            indexes[j] = index;
+        }
     }
-
-
-    
 }
