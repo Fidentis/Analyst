@@ -291,7 +291,7 @@ public class FpProcessing {
             ArrayList<Model> registeredModels = new ArrayList<Model>();
 
             for (int i = 0; i < size; i++) {
-                model = ModelLoader.instance().loadModel(models.get(i), false, true);
+                model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
                 facialPoints = computePointsForSingleFace(p, model);
                 registeredModels.add(model);            //needed?
@@ -370,7 +370,7 @@ public class FpProcessing {
                 p.finish();
                 return res;
             }
-            model = ModelLoader.instance().loadModel(models.get(i), false, true);
+            model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
             facialPoints = computePointsForSingleFace(p, model);
             registeredModels.add(model);            //needed?
