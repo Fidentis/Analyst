@@ -42,7 +42,6 @@ import org.openide.util.Exceptions;
 public class PairComparisonResults extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
-    String result;
     private boolean maxTresholdValueChanged;
     private boolean minTresholdValueChanged;
 
@@ -78,10 +77,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jButton8.setVisible(true);
     }
 
-    public void setNumericalResult(String result) {
-        this.result = result;
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -109,7 +104,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        exportNumResButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         comparisonButton = new javax.swing.JButton();
@@ -285,12 +280,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jButton2.text")); // NOI18N
-        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jButton2.toolTipText")); // NOI18N
-        jButton2.setActionCommand(org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jButton2.actionCommand")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(exportNumResButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.exportNumResButton.text")); // NOI18N
+        exportNumResButton.setToolTipText(org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.exportNumResButton.toolTipText")); // NOI18N
+        exportNumResButton.setActionCommand(org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.exportNumResButton.actionCommand")); // NOI18N
+        exportNumResButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                exportNumResButtonActionPerformed(evt);
             }
         });
 
@@ -498,7 +493,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(transparencySlider, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(transparencySlider, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                             .addGroup(shadersPanelLayout.createSequentialGroup()
                                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -907,7 +902,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportNumResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -928,7 +923,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(exportNumResButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8)
                 .addGap(7, 7, 7)
@@ -957,8 +952,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (result != null) {
-            String[][] values = TableProcessing.instance().parseTableAddHeader(result, new String[]{
+        if (getContext().getNumericalResults() != null) {
+            String[][] values = TableProcessing.instance().parseTableAddHeader(getContext().getNumericalResults(), new String[]{
                 "Lower: " + getContext().getLowerHDTreshold() * 100 + "% Upper: " + 
                          getContext().getUpperHDTreshold() * 100 + "% treshold",
                 getContext().getModel2().getName()});
@@ -1078,10 +1073,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
      *
      * @param file results should be saved into this file
      */
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void exportNumResButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportNumResButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportCSVnumeric(tc, result);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
+    }//GEN-LAST:event_exportNumResButtonActionPerformed
 
     /**
      * This method saves current visualisation shown in the panel after pushing
@@ -1173,7 +1168,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
                     thresholdedValues = ComparisonMetrics.instance().thresholdValues(hdDistance, c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f, c.getValuesTypeIndex() == 0);
 
-                    String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);
+                    String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);                    
                     
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
@@ -1507,8 +1502,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         maxThresholdSlider.setVisible(false);
         jLabel5.setVisible(false);
         Comparison2Faces c = getContext();
-
-        result = c.getNumericalResults();
         
        VisualizationBox.setSelectedItem(c.getVisualization());
        valuesComboBox.setSelectedItem(c.getValuesTypeIndex());
@@ -1623,6 +1616,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel cylRadiusLabel;
     private javax.swing.JLabel densLabel;
     private javax.swing.JSlider density;
+    private javax.swing.JButton exportNumResButton;
     private javax.swing.JPanel fogColorPanel;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
@@ -1631,7 +1625,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JCheckBox innerSurfaceSolidCheckbox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
