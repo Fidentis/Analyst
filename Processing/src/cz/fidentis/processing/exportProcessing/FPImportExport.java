@@ -154,6 +154,11 @@ public class FPImportExport {
         }
 
         FileExtensions fe = FileUtils.instance().getFileExtension(filePath);
+        
+        if(fe == FileExtensions.NONE){      //if no extension was given, save as .fp
+            fe = FileExtensions.FP;
+            filePath += ".fp";
+        }
 
         if (fe == FileExtensions.CSV) {
             CSVparser.save(points, filePath);
@@ -173,7 +178,7 @@ public class FPImportExport {
             for (FpModel model : points) {
                 PTSparser.save(model, filePath);
             }
-        } else if (fe == FileExtensions.FP || fe == FileExtensions.NONE) {
+        } else if (fe == FileExtensions.FP) {
             for (FpModel model : points) {
                 try {
                     FPparser.save(model, filePath);
