@@ -95,7 +95,7 @@ public class MeshUtils {
         //remove duplicate vertices from the list
         newVerts = new ArrayList<>(mainPoint.size());
         newNorms = new ArrayList<>(mainPoint.size());
-        newTxts = new ArrayList<>(mainPoint.size());
+        //newTxts = new ArrayList<>(mainPoint.size());
         //get new indices of from new lists
         mainPoint = new HashMap<>();
         
@@ -107,13 +107,13 @@ public class MeshUtils {
             mainPoint.put(verts.get(i), newVerts.size() - 1);
             
             newNorms.add(norms.get(i));
-            newTxts.add(txts.get(i));
+            //newTxts.add(txts.get(i));
             
         }
         
         m.setVerts(verts);
         m.setNormals(norms);
-        m.setTextures(txts);
+       // m.setTextures(txts);
         
         
         for (int i = 0; i < faces.getNumFaces(); i++) {

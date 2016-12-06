@@ -107,8 +107,9 @@ public class SurfaceComparisonProcessing {
     public void processOneToOne(KdTree mainF, Model compF, int numberOfIterations, boolean scale, float error,
             Methods method, Type t, float value, Comparison2Faces data) {
         List<Vector3f> samples = getUndersampledMesh(method, t, value, compF);
-        
-        p.setDisplayName("Aligning faces.");
+       
+        if(p != null)
+            p.setDisplayName("Aligning faces.");
 
         List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
         

@@ -270,8 +270,7 @@ public class KDTreeIndexed implements KdTree{
         return info.getId() ;
     }
 
-    @Override
-    public KdNode nearestNeighborNode(Vector3f p) {
+    private KdNode nearestNeighborNode(Vector3f p) {
         double[] key = new double[]{p.x, p.y, p.z};
         return (KdNode) nearest(key);
     }

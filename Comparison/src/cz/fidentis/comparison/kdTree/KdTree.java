@@ -23,14 +23,6 @@ public interface KdTree {
     Vector3f nearestNeighbour(Vector3f p);
     
     /**
-     * Finds nearest KdNode of point p in KdTree given by root.
-     * 
-     * @param p - point of which we want to find nearest neighbor in the tree.
-     * @return KdNode representing nearest neighbor of point p
-     */
-    KdNode nearestNeighborNode(Vector3f p);
-    
-    /**
      * Computes distance to nearest neighbor. If useRelative is true, it will 
      * compute signed distance.
      * 
