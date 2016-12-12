@@ -8,7 +8,6 @@ package cz.fidentis.landmarkParser;
 
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -62,12 +61,12 @@ public class FPparser {
 
                     FacialPoint facialPoint = new FacialPoint();
                     Element pointEl = (Element) node;
-                    FacialPointType value;
+                    Integer value;
                     
                     try{
-                        value = FacialPointType.valueOf(pointEl.getAttribute("type"));
-                    }catch(IllegalArgumentException ex){
-                        value = FacialPointType.valueOf("unspecified");
+                        value = Integer.parseInt(pointEl.getAttribute("type"));
+                    }catch(NumberFormatException ex){
+                        value = -1;
                     }
                     
                     facialPoint.setType(value);
@@ -132,7 +131,9 @@ public class FPparser {
 //      tf.transform(source, new StreamResult(System.out));
      
         // Save
-        String filePath = path + setExtension(fpModel.getModelName(), "fp");
+        
+        int lastIndex = path.lastIndexOf('.');
+        String filePath = path.substring(0, lastIndex) + setExtension(fpModel.getModelName(), "fp");
         File file = new File(filePath);
         tf.transform(source, new StreamResult(file));
     }

@@ -35,6 +35,7 @@ public class ComparisonListenerInfo {
     private int indexOfSelectedPoint = -1;
     private float facialPointRadius = 2;
     private float[] colorOfPoint = new float[]{1f, 0f, 0f, 1.0f};
+    private float[] colorOfInactivePoint = new float[]{0.5f, 0.5f, 0.5f, 1.0f};
     private float[] colorOfCut = new float[]{1f, 1f, 1f, 1.0f};
     private float cutThickness = 1;
     private PApainting paPainting;
@@ -140,6 +141,37 @@ public class ComparisonListenerInfo {
     public void setFacialPoints(List<FacialPoint> facialPoints) {
         this.facialPoints = facialPoints;
     }
+    
+    public boolean containsFP(int i){
+        for(FacialPoint fp : facialPoints){
+            if(fp.getType() == i)
+                return true;
+        }
+        
+        return false;
+    }
+    
+    public void addFacialPoint(FacialPoint fp){
+        this.facialPoints.add(fp);
+    }
+    
+    public void removeFacialPoint(int id){
+        for(int i = 0; i < facialPoints.size(); i++){
+            if(facialPoints.get(i).getType() == id){
+                facialPoints.remove(i);
+                break;
+            }  
+        }
+    }
+    
+    public int getNextFreeFPID(){
+        int i = 0;
+        while(containsFP(i)){
+            i++;
+        }
+        
+        return i;
+    }   
 
     public List<ICPTransformation> getTransformations() {
         return transformations;
@@ -231,6 +263,14 @@ public class ComparisonListenerInfo {
 
     public void setColorOfPoint(float[] colorOfPoint) {
         this.colorOfPoint = colorOfPoint;
+    }
+    
+    public float[] getColorOfInactivePoint() {
+        return colorOfInactivePoint;
+    }
+    
+    public void setColorOfInactivePoint(float[] colorOfInactivePoint) {
+        this.colorOfInactivePoint = colorOfInactivePoint;
     }
 
     public PApainting getPaPainting() {

@@ -7,7 +7,6 @@ package cz.fidentis.landmarkParser;
 
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -86,12 +85,7 @@ public class PPparser {
 //                        intName--;
 //                    }
 
-                    // zatial, ak ma nejaky bod index vacsi ako 42, tak nastavit na 42 - viac typov nemame definovanych
-                    if (intName > 42) {
-                        intName = 42;
-                    }
-
-                    facialPoint.setType(FacialPointType.values()[intName]);
+                    facialPoint.setType(intName);
 
                     facialPoint.getPosition().setX(Float.parseFloat(pointEl.getAttribute("x")));
                     facialPoint.getPosition().setY(Float.parseFloat(pointEl.getAttribute("y")));
@@ -159,7 +153,7 @@ public class PPparser {
             pointElement.setAttribute("y", Float.toString(point.getPosition().getY()));
             pointElement.setAttribute("z", Float.toString(point.getPosition().getZ()));
             pointElement.setAttribute("active", "1");
-            pointElement.setAttribute("name", Integer.toString(point.getType().ordinal()));
+            pointElement.setAttribute("name", Integer.toString(point.getType()));
         }
 
         
@@ -174,7 +168,8 @@ public class PPparser {
 //      tf.transform(source, new StreamResult(System.out));
       
         // Save
-        String filePath = path + setExtension(fpModel.getModelName(), "pp");
+        int lastIndex = path.lastIndexOf('.');
+        String filePath = path.substring(0, lastIndex) + setExtension(fpModel.getModelName(), "pp");
         File file = new File(filePath);
         tf.transform(source, new StreamResult(file));
     }

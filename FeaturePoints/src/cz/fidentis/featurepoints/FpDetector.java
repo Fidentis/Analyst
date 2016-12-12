@@ -1,20 +1,16 @@
 package cz.fidentis.featurepoints;
 
-import cz.fidentis.*;
 import cz.fidentis.model.Material;
 import cz.fidentis.model.Model;
 import cz.fidentis.featurepoints.symmetryplane.Midline;
 import cz.fidentis.featurepoints.texture.ImageAnalyzer;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 import javax.vecmath.Vector3f;
 import jv.object.PsDebug;
 import org.opencv.core.Mat;
 import org.opencv.LoadOpenCV;
-import sun.awt.windows.WToolkit;
 
 /**
  *
@@ -236,40 +232,40 @@ public class FpDetector {
     private void filterFPs() {
         // body Ektokantion a Ektokantion pouzit z textury, ak sa nasli
         if (textureFPs != null) {
-            if (textureFPs.containsPoint(FacialPointType.EN_L)) {
-                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_L);
+            if (textureFPs.containsPoint(FacialPointType.EN_L.ordinal())) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_L.ordinal());
             }
-            if (textureFPs.containsPoint(FacialPointType.EN_R)) {
-                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_R);
+            if (textureFPs.containsPoint(FacialPointType.EN_R.ordinal())) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EN_R.ordinal());
             }
-            if (textureFPs.containsPoint(FacialPointType.EX_L)) {
-                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_L);
+            if (textureFPs.containsPoint(FacialPointType.EX_L.ordinal())) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_L.ordinal());
             }
-            if (textureFPs.containsPoint(FacialPointType.EX_R)) {
-                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_R);
+            if (textureFPs.containsPoint(FacialPointType.EX_R.ordinal())) {
+                modelFacialPoints = deleteFPs(modelFacialPoints, FacialPointType.EX_R.ordinal());
             }
         }
 
         // body Pronasale a Stomion pouzit zo zakrivenia, ak sa nasli
         if (modelFPs != null) {
-            if (modelFPs.containsPoint(FacialPointType.PRN)) {
-                midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.PRN);
+            if (modelFPs.containsPoint(FacialPointType.PRN.ordinal())) {
+                midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.PRN.ordinal());
             }
-            if (modelFPs.containsPoint(FacialPointType.STO)) {
-                midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.STO);
+            if (modelFPs.containsPoint(FacialPointType.STO.ordinal())) {
+                midlineFacialPoints = deleteFPs(midlineFacialPoints, FacialPointType.STO.ordinal());
             }
         }
 
     }
 
     // vymaze FP specifikovane v parametri
-    private List<FacialPoint> deleteFPs(List<FacialPoint> facialPoints, FacialPointType... types) {
+    private List<FacialPoint> deleteFPs(List<FacialPoint> facialPoints, Integer... types) {
         List<FacialPoint> newFPs = new ArrayList<>();
         for (FacialPoint fp : facialPoints) {
             boolean found = false;
 
-            for (FacialPointType type : types) {
-                if (fp.getType() == type) {
+            for (Integer type : types) {
+                if (Objects.equals(fp.getType(), type)) {
                     found = true;
                 }
             }

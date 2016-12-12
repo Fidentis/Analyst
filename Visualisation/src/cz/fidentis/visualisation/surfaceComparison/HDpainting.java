@@ -100,102 +100,7 @@ public class HDpainting {
         return hsb.getRGBColorComponents(info.getVector());
     }
 
-    /**
-     * A method to visualize Hausdorff Distance(HD) by painting the faces of the
-     * mesh accordingly. Uses class attribute 'minColor' to determine the color
-     * of the point with minimal HD. Uses class attribute 'maxColor' to
-     * determine the color of the point with maximum HD. * Color is computed for
-     * each point, based on the HD taken from the attribute 'distance',
-     * interpolation of the face is then performed by OpenGL.
-     *
-     * This method chooses colors from HSV color space.
-     *
-     * @param gl - GL object
-     */
-    public void paintDistanceFace(GL2 gl) {
-        Faces faces = info.getModel().getFaces();
-        List<Vector3f> mesh = info.getModel().getVerts();
-        List<Vector3f> normals = info.getModel().getNormals();
-
-        List<Float> distanceCopy = new ArrayList<Float>(info.getDistance().size()); /*= new ArrayList<Float>(distance);*/
-
-        for (Float f : info.getDistance()) {
-            if (!info.isUseRelative()) {
-                distanceCopy.add(Math.abs(f));
-            } else {
-                distanceCopy.add(f);
-            }
-        }
-        List<Float> sorted = SortUtils.instance().sortValues(distanceCopy);
-
-        if (info.getMaxThreshValue() == Float.POSITIVE_INFINITY) {
-            maxThresh = sorted.get(sorted.size() - 1);
-        } else {
-            maxThresh = info.getMaxThreshValue();
-        }
-        
-        if (info.getMinThreshValue() == Float.NEGATIVE_INFINITY) {
-            minThresh = sorted.get(0);
-        } else {
-            minThresh = info.getMinThreshValue();
-        }
-
-        float[] color = new float[3];
-        gl.glPushAttrib(GL2.GL_LIGHTING_BIT);
-        Vector3f normal;
-        gl.glDisable(GL2.GL_TEXTURE_2D);
-        gl.glEnable(GL2.GL_LIGHTING);
-        for (int i = 0; i < faces.getNumFaces(); i++) {
-
-            int[] facesInd = faces.getFaceVertIdxs(i);
-            int[] faceNormIndex = faces.getFaceNormalIdxs(i);
-
-            gl.glBegin(GL.GL_TRIANGLES);
-            for (int f = 0; f < facesInd.length; f++) {
-
-                //computing color for the point
-                if(info.getDistance().size() < facesInd[f] - 1){
-                    color[0] = 0.5f;
-                    color[1] = 0.5f;
-                    color[2] = 0.5f;
-                }
-                else if (info.getDistance().get(facesInd[f] - 1) <= maxThresh && maxThresh != Float.NEGATIVE_INFINITY
-                        && info.getDistance().get(facesInd[f] - 1) >= minThresh && minThresh != Float.POSITIVE_INFINITY) {
-                    color = chooseColorHSVMapping(info.getDistance().get(facesInd[f] - 1), maxThresh, sorted.get(0));
-                } else {
-                    color[0] = 0.5f;
-                    color[1] = 0.5f;
-                    color[2] = 0.5f;
-                }
-
-                if (Float.isNaN(color[0])
-                        || Float.isNaN(color[1])
-                        || Float.isNaN(color[2])) {
-                    color[0] = 0.5f;
-                    color[1] = 0.5f;
-                    color[2] = 0.5f;
-                }
-
-                if (faceNormIndex[f] != 0) {  // if there are normals, render them
-                    normal = normals.get(faceNormIndex[f] - 1);
-                    gl.glNormal3d(normal.getX(), normal.getY(), normal.getZ());
-                }
-
-                float[] ambient = {0.1f, 0.1f, 0.1f, 0.0f};
-                gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, ambient, 0);
-                gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0);
-                gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 10);
-                float[] colorKs = {0, 0, 0, 1.0f};
-                gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, colorKs, 0);
-                gl.glVertex3f(mesh.get(facesInd[f] - 1).getX(), mesh.get(facesInd[f] - 1).getY(), mesh.get(facesInd[f] - 1).getZ());
-            }
-            gl.glEnd();
-
-        }
-
-        gl.glPopAttrib();
-    }
-
+ 
     /**
      * @author Jakub Palenik recycled paintDistanceFace for rendering model of
      * base color. Added normal visualization with length based on HDDistance
@@ -295,7 +200,7 @@ public class HDpainting {
             vecE.add(vecN);*/
 
             vecN.normalize();
-            vecN.scale(sig * info.getCylLengthFactor());
+            vecN.scale(sig * info.getCylLengthFactor() * info.getCylLengthFactor());
             vecE.add(vecN);
             
             //scale radius to 5th of previous size

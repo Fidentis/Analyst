@@ -90,7 +90,8 @@ public class PTSparser {
         assert fpModel.containsPoints();
         assert !path.isEmpty();
 
-        String filePath = path + setExtension(fpModel.getModelName(), "pts");
+        int lastIndex = path.lastIndexOf('.');
+        String filePath = path.substring(0, lastIndex) + setExtension(fpModel.getModelName(), "pts");
 
         try (PrintWriter writer = new PrintWriter(filePath, "UTF-8")) {
 
@@ -105,7 +106,7 @@ public class PTSparser {
                 writer.println(point);
             }
 
-            writer.close();
+            writer.flush();
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             Logger.getLogger(CSVparser.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -116,15 +117,13 @@ public class PTSparser {
         return newFileName + newExtension;
     }
 
-    private static String getStringName(FacialPointType type) {
-        return "S" + String.format("%03d", type.ordinal());
+    private static String getStringName(Integer type) {
+        return "S" + String.format("%03d", type);
     }
 
-    private static FacialPointType getPointType(String stringName) {
+    private static Integer getPointType(String stringName) {
         int index = Integer.parseInt(stringName.replaceAll("\\D+", ""));
-        if (index > 42) {
-            index = 42;
-        }
-        return FacialPointType.values()[index];
+        
+        return index;
     }
 }

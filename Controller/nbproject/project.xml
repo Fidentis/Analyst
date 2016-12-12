@@ -74,6 +74,7 @@
             </test-dependencies>
             <public-packages>
                 <package>cz.fidentis.controller</package>
+                <package>cz.fidentis.controller.data</package>
             </public-packages>
         </data>
     </configuration>

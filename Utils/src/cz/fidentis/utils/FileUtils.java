@@ -228,7 +228,7 @@ public final class FileUtils {
     /**
      * Save a single column of results. This method is mainly used in batch processing, to store results on the disk, rather than keep them all in memory
      * @param collumn - single line of results to store (for single model compared to single model, similar to 1:1 comparison)
-     * @param mainF - number of main face for the coparison
+     * @param mainF - number of main face for the comparison
      * @param path - URL to save the results to
      */
     public void saveCollumn(ArrayList<ArrayList<Float>> collumn, int mainF, String path) {
@@ -287,7 +287,7 @@ public final class FileUtils {
                     resultsLine.add(f);
                 }
 
-                results.add(new ArrayList(resultsLine));
+                results.add(new ArrayList<>(resultsLine));
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);

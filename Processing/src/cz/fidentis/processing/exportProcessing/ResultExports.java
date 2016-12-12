@@ -5,6 +5,7 @@
  */
 package cz.fidentis.processing.exportProcessing;
 
+import com.jogamp.opengl.util.awt.Screenshot;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -354,8 +355,8 @@ public class ResultExports {
 
         picture.setSize(width, height);
         picture.repaint();
-        //g = bi.createGraphics();
-        //picture.paint(g);
+        g = bi.createGraphics();
+        picture.paint(g);
 
         try {
             ImageIO.write(bi, "png", new File(path));
@@ -384,9 +385,9 @@ public class ResultExports {
         picture.setSize(size[0], size[1]);
         picture.repaint();
 
-        bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_3BYTE_BGR);
+        bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_INT_RGB);
         g = bi.createGraphics();
-        picture.paintComponents(g);
+        picture.paint(g);
 
         try {
             ImageIO.write(bi, "png", new File(path));

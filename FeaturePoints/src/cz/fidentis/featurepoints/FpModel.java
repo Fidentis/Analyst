@@ -15,7 +15,7 @@ import javax.vecmath.Vector3f;
  */
 public class FpModel {
     private List<FacialPoint> facialPoints;
-    private Map<FacialPointType, Integer> typeIndexes;
+    private Map<Integer, Integer> typeIndexes;      //id of landmark, index in facialPoints
     private String modelName;
 
     public FpModel() {
@@ -55,10 +55,10 @@ public class FpModel {
         return facialPoints.size();
     }
     
-    public String toCSVstring(String sep) {
+    public String toCSVstring(String sep) {     //TODO: make sure it adds custom points
         String csvString = modelName;
         for (int i = 0; i < FacialPointType.values().length - 1; i++) {
-            FacialPoint fp = getFacialPoint(FacialPointType.values()[i]);
+            FacialPoint fp = getFacialPoint(i);
             if (fp != null ) {
                 csvString = csvString + sep + fp.toCSVstring(sep);
             } else {
@@ -68,7 +68,7 @@ public class FpModel {
         return csvString;
     }
 
-    public FacialPoint getFacialPoint(FacialPointType type) {
+    public FacialPoint getFacialPoint(Integer type) {
         if (getTypeIndex(type) == null) {
             return null;
         } else {
@@ -85,12 +85,12 @@ public class FpModel {
         }
     }
 
-    private void addTypeIndex(FacialPointType type) {
+    private void addTypeIndex(Integer type) {
         int lastIndex = facialPoints.size() - 1;
         typeIndexes.put(type, lastIndex);
     }
 
-    private Integer getTypeIndex(FacialPointType type) {
+    private Integer getTypeIndex(Integer type) {
         return typeIndexes.get(type);
     }
     
@@ -98,7 +98,7 @@ public class FpModel {
         return !facialPoints.isEmpty();
     }
     
-    public boolean containsPoint(FacialPointType type) {
+    public boolean containsPoint(Integer type) {
         return getFacialPoint(type) != null;
     }
     
@@ -119,8 +119,7 @@ public class FpModel {
     
     //load model, centralize it and decentralize points based on it
     public void decentralizeToFile(File f){
-        ModelLoader ml = new ModelLoader();
-        Model model = ml.loadModel(f, false, Boolean.TRUE);
+        Model model = ModelLoader.instance().loadModel(f, false, Boolean.TRUE);
         
         decentralizeToModel(model);
     }
@@ -142,7 +141,6 @@ public class FpModel {
         
         for(FacialPoint fp: facialPoints){
             FacialPoint copied = new FacialPoint(fp.getType(), new Vector3f(fp.getPosition()));
-            copied.setName(fp.getInfo());
             copy.add(copied);
         }
         

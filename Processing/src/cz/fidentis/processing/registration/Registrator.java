@@ -79,8 +79,8 @@ public class Registrator {
         List<FacialPoint> transformedFacialPoints = new ArrayList<>();
         int index = 0;
         for (Vector3f vert : reversedVerts) {
-            FacialPointType originalType = facialPoints.get(index).getType();
-            transformedFacialPoints.add(new FacialPoint(originalType, vert));
+            //FacialPointType originalType = facialPoints.get(index).getType();
+            transformedFacialPoints.add(new FacialPoint(facialPoints.get(index).getType(), vert));
         }
 
         return transformedFacialPoints;
@@ -88,7 +88,7 @@ public class Registrator {
 
     private Model getAverageFace() {
         try {
-            return new ModelLoader().loadModel(new File(AVERAGE_FACE_PATH).getCanonicalFile(), false, true);
+            return ModelLoader.instance().loadModel(new File(AVERAGE_FACE_PATH).getCanonicalFile(), false, true);
         } catch (IOException ex) {
             System.out.println("Can't load average face!");
             return null;

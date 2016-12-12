@@ -5,15 +5,12 @@
  */
 package cz.fidentis.utils;
 
-import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelLoader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;

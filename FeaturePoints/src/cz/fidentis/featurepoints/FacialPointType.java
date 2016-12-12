@@ -6,7 +6,6 @@ package cz.fidentis.featurepoints;
  * @author Galvi
  */
 public enum FacialPointType {
-
     EX_R,
     EX_L,
     EN_R,
@@ -65,6 +64,5 @@ public enum FacialPointType {
     RM_R,
     RM_L,
     P_L,
-    P_R,
-    unspecified
+    P_R
 }

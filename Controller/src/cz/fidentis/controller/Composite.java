@@ -36,7 +36,7 @@ public class Composite {
     private ArrayList<CompositeModel> faceParts = new ArrayList<CompositeModel>();
     private ArrayList<String> history = new ArrayList<String>();
     int historyIndex = 0;
-    private ModelLoader loader = new ModelLoader();
+    private ModelLoader loader = ModelLoader.instance();
     private FacePartType currentPart;
     private String name = new String();
     private Object selectedHead;

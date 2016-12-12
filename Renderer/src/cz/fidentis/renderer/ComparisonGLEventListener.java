@@ -13,7 +13,6 @@ import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.composite.ModelSelector;
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Graph2;
@@ -42,7 +41,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,7 +58,6 @@ import static javax.media.opengl.GL.GL_FLOAT;
 import static javax.media.opengl.GL.GL_FRAMEBUFFER;
 import static javax.media.opengl.GL.GL_FRAMEBUFFER_COMPLETE;
 import static javax.media.opengl.GL.GL_FRONT;
-import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
 import static javax.media.opengl.GL.GL_LESS;
 import static javax.media.opengl.GL.GL_LINES;
 import static javax.media.opengl.GL.GL_LINE_LOOP;
@@ -98,8 +95,6 @@ import static javax.media.opengl.GL2ES2.GL_VERTEX_SHADER;
 import static javax.media.opengl.GL2GL3.GL_ALL_BARRIER_BITS;
 import static javax.media.opengl.GL2GL3.GL_ATOMIC_COUNTER_BUFFER;
 import static javax.media.opengl.GL2GL3.GL_DYNAMIC_COPY;
-import static javax.media.opengl.GL2GL3.GL_FILL;
-import static javax.media.opengl.GL2GL3.GL_LINE;
 import static javax.media.opengl.GL2GL3.GL_PIXEL_UNPACK_BUFFER;
 import static javax.media.opengl.GL2GL3.GL_R32UI;
 import static javax.media.opengl.GL2GL3.GL_READ_WRITE;
@@ -1686,7 +1681,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                  p.add(newVertices.get(0));
                  }*/
 
-                for (FacialPointType fpt : mean.getConfig().keySet()) {
+                for (Integer fpt : mean.getConfig().keySet()) {
                     FacialPoint lpaFP = lpa.getConfig().get(fpt);
 
                     if (lpaFP == null) {
@@ -1853,8 +1848,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         for (int i = 0; i < facialPoints.size(); i++) {
             if (info.getIndexOfSelectedPoint() != -1 && i == info.getIndexOfSelectedPoint()) {
                 color = new float[]{0f, 1f, 0f, 1.0f};
-            } else {
+            } else if (facialPoints.get(i).isActive()) {
                 color = info.getColorOfPoint();
+            } else {
+                color = info.getColorOfInactivePoint();
             }
             gl.glDisable(i);
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);

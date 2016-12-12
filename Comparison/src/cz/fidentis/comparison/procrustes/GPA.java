@@ -4,7 +4,7 @@ import Jama.Matrix;
 import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
+//import cz.fidentis.featurepoints.FacialPointType;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -106,12 +106,14 @@ public class GPA implements Serializable {
             
         }*/
         
-        Map<FacialPointType, FacialPoint> mean = new HashMap<>();
-        Map<FacialPointType, Integer> timesAdded = new HashMap<>();
+        Map<Integer, FacialPoint> mean = new HashMap<>();
+        Map<Integer, Integer> timesAdded = new HashMap<>();
         
         for(ProcrustesAnalysis pa : configs){
-            for(FacialPointType ft : pa.getConfig().keySet()){
-                if(ft == FacialPointType.unspecified){
+            Map<Integer, FacialPoint> config = pa.getConfig();
+            
+            for(Integer ft : config.keySet()){
+                if(ft < 0 || !config.get(ft).isActive()){       //points can be set but algorithm doesn't need to work with them
                     continue;
                 }
                 
@@ -125,7 +127,7 @@ public class GPA implements Serializable {
             }
         }
         
-        for(FacialPointType ft : mean.keySet()){
+        for(Integer ft : mean.keySet()){
             Vector3f meanV = mean.get(ft).getPosition();
             int tAdded = timesAdded.get(ft);
             
@@ -176,6 +178,10 @@ public class GPA implements Serializable {
         
         for(int i = 0; i < configs.size(); i++){
             ICPTransformation tran = configs.get(i).rotate(oldMean);  
+            
+            if(tran == null)
+                return null;        //couldn't rotate
+            
             List<ICPTransformation> t = new ArrayList<>();
             t.add(tran);
             

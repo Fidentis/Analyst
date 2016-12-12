@@ -8,7 +8,7 @@ package cz.fidentis.gui;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.Project;
 import cz.fidentis.gui.actions.ButtonHelper;
-import cz.fidentis.gui.observer.ProgressHandleMaster;
+import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.gui.observer.ProgressHandleObserver;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
@@ -307,7 +307,7 @@ public class StartingPanel extends javax.swing.JPanel {
                 if(!triedDeleting){
                     triedDeleting = true;
                     
-                    ProgressHandleMaster master = new ProgressHandleMaster();
+                    ObservableMaster master = new ObservableMaster();
                     final ProgressHandleObserver obs = new ProgressHandleObserver("Deleting tmp files");
                     master.addObserver(obs);
                 

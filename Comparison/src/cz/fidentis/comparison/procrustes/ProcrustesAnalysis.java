@@ -2,11 +2,9 @@ package cz.fidentis.comparison.procrustes;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
-import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
-import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ import javax.vecmath.Vector3f;
 public class ProcrustesAnalysis implements Serializable {
 
     //private Matrix config;
-    private Map<FacialPointType, FacialPoint> config;
+    private Map<Integer, FacialPoint> config;
     private Matrix visMatrix;
     private Matrix vertices;        //to be able to register models with points -- change to list?
 
@@ -42,7 +40,7 @@ public class ProcrustesAnalysis implements Serializable {
     public ProcrustesAnalysis(List<FacialPoint> fps) {
         //config = new Matrix(fps.size(), 3);
         this();
-        FacialPointType type;
+        Integer type;
         FacialPoint fp;
         int j = 8;
 
@@ -50,7 +48,7 @@ public class ProcrustesAnalysis implements Serializable {
             type = fps.get(i).getType();
             fp = fps.get(i);
             
-            if(type == FacialPointType.unspecified){
+            if(type < 0){   
                 //don't include unspecified points into analysis
                 continue;
             }
@@ -111,7 +109,7 @@ public class ProcrustesAnalysis implements Serializable {
         }
         
         for(int i = fps.size() - 1; i >= 0 ; i--){
-            if(fps.get(i).getType() == FacialPointType.unspecified){
+            if(fps.get(i).getType() < 0){       //unspecified
                 fps.remove(i);
             }
         }
@@ -144,18 +142,18 @@ public class ProcrustesAnalysis implements Serializable {
         }
     }*/
      
-    public ProcrustesAnalysis(Map<FacialPointType, FacialPoint> config){
+    public ProcrustesAnalysis(Map<Integer, FacialPoint> config){
           this.config = config;
           setVisMatrix();
       }
 
     
-    private ProcrustesAnalysis(Map<FacialPointType, FacialPoint> fps, Matrix verts){
+    private ProcrustesAnalysis(Map<Integer, FacialPoint> fps, Matrix verts){
         this.config = fps;
         this.vertices = verts;
     }
 
-    public /*Matrix*/ Map<FacialPointType, FacialPoint> getConfig() {
+    public /*Matrix*/ Map<Integer, FacialPoint> getConfig() {
         return config;
     }
     
@@ -166,13 +164,20 @@ public class ProcrustesAnalysis implements Serializable {
 
         return fp;
     }
-
     
-    public boolean containsPoint(FacialPointType ft){
+    public boolean containsPoint(Integer ft){
         return config.containsKey(ft);
     }
     
-    public Vector3f getFPposition(FacialPointType ft){
+    //checks if configuration contains point, false if it doesn't, and then whether point is active
+    public boolean isPointActive(Integer ft){
+        if(containsPoint(ft))
+            return config.get(ft).isActive();
+        
+        return false;
+    }
+    
+    public Vector3f getFPposition(Integer ft){
         FacialPoint fp = config.get(ft);
         
         if(fp == null){
@@ -182,11 +187,14 @@ public class ProcrustesAnalysis implements Serializable {
         return config.get(ft).getPosition();
     }
     
-    private List<FacialPointType> getFPtypeCorrespondence(ProcrustesAnalysis pa){
-        List<FacialPointType> correspondence = new ArrayList<>();
+    private List<Integer> getFPtypeCorrespondence(ProcrustesAnalysis pa){
+        List<Integer> correspondence = new ArrayList<>();
         
-        for(FacialPointType ft : config.keySet()){
-            if(pa.containsPoint(ft)){
+        for(Integer ft : config.keySet()){
+            if(!config.get(ft).isActive())      //don't consider the point if not active
+                continue;
+            
+            if(pa.isPointActive(ft)){
                 correspondence.add(ft);
             }
         }
@@ -194,7 +202,7 @@ public class ProcrustesAnalysis implements Serializable {
         return correspondence;
     }
     
-    public Matrix createCorespondingMatrix(List<FacialPointType> cor){        
+    public Matrix createCorespondingMatrix(List<Integer> cor){        
         Matrix mat = new Matrix(cor.size(), 3);
         
         for(int i = 0; i < cor.size(); i++){
@@ -207,7 +215,7 @@ public class ProcrustesAnalysis implements Serializable {
         return mat;
     }
 
-    public void setConfig(/*Matrix*/Map<FacialPointType, FacialPoint>  config) {
+    public void setConfig(/*Matrix*/Map<Integer, FacialPoint>  config) {
         this.config = config;
     }
 
@@ -225,7 +233,7 @@ public class ProcrustesAnalysis implements Serializable {
         
         
         for (FacialPoint fp1 : fp) {
-            if(fp1.getType() == FacialPointType.unspecified){
+            if(fp1.getType() < 0){
                 continue;
             }
             
@@ -290,20 +298,20 @@ public class ProcrustesAnalysis implements Serializable {
     public void setVisMatrix(){
         Matrix visMat = new Matrix(14,3);
         
-        setVisMatPoint(visMat, 0, config.get(FacialPointType.EX_R));
-        setVisMatPoint(visMat, 1, config.get(FacialPointType.EX_L));
-        setVisMatPoint(visMat, 2, config.get(FacialPointType.EN_R));
-        setVisMatPoint(visMat, 3, config.get(FacialPointType.EN_L));
-        setVisMatPoint(visMat, 4, config.get(FacialPointType.PRN));
-        setVisMatPoint(visMat, 5, config.get(FacialPointType.STO));
-        setVisMatPoint(visMat, 6, config.get(FacialPointType.CH_R));
-        setVisMatPoint(visMat, 7, config.get(FacialPointType.CH_L));
-        setVisMatPoint(visMat, 8, config.get(FacialPointType.N));
-        setVisMatPoint(visMat, 9, config.get(FacialPointType.G));
-        setVisMatPoint(visMat, 10, config.get(FacialPointType.LS));
-        setVisMatPoint(visMat, 11, config.get(FacialPointType.LI));
-        setVisMatPoint(visMat, 12, config.get(FacialPointType.SL));
-        setVisMatPoint(visMat, 13, config.get(FacialPointType.PG));
+        setVisMatPoint(visMat, 0, config.get(FacialPointType.EX_R.ordinal()));
+        setVisMatPoint(visMat, 1, config.get(FacialPointType.EX_L.ordinal()));
+        setVisMatPoint(visMat, 2, config.get(FacialPointType.EN_R.ordinal()));
+        setVisMatPoint(visMat, 3, config.get(FacialPointType.EN_L.ordinal()));
+        setVisMatPoint(visMat, 4, config.get(FacialPointType.PRN.ordinal()));
+        setVisMatPoint(visMat, 5, config.get(FacialPointType.STO.ordinal()));
+        setVisMatPoint(visMat, 6, config.get(FacialPointType.CH_R.ordinal()));
+        setVisMatPoint(visMat, 7, config.get(FacialPointType.CH_L.ordinal()));
+        setVisMatPoint(visMat, 8, config.get(FacialPointType.N.ordinal()));
+        setVisMatPoint(visMat, 9, config.get(FacialPointType.G.ordinal()));
+        setVisMatPoint(visMat, 10, config.get(FacialPointType.LS.ordinal()));
+        setVisMatPoint(visMat, 11, config.get(FacialPointType.LI.ordinal()));
+        setVisMatPoint(visMat, 12, config.get(FacialPointType.SL.ordinal()));
+        setVisMatPoint(visMat, 13, config.get(FacialPointType.PG.ordinal()));
 
         
         this.visMatrix = visMat;
@@ -348,7 +356,7 @@ public class ProcrustesAnalysis implements Serializable {
         
         StringBuilder sb = new StringBuilder("");
         
-        for(FacialPointType ft : config.keySet()){
+        for(Integer ft : config.keySet()){
             Vector3f pos = config.get(ft).getPosition();
             sb.append(ft).append(pos).append(" ");
         }
@@ -511,8 +519,8 @@ public class ProcrustesAnalysis implements Serializable {
      * To be able to visually analyse the results within the software, results are scaled to 100 instead of 1
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    public void normalize(boolean scaling) {
-        if (scaling) {
+    public void normalize(boolean scaling) {        
+        if (scaling && config.keySet().size() >= 3) {
             Vector3f cs = this.findCentroid();
             float size = this.countSize(cs);
 
@@ -540,9 +548,9 @@ public class ProcrustesAnalysis implements Serializable {
         Matrix v;
         Matrix r;
         Matrix transU;
-        List<FacialPointType> cor = getFPtypeCorrespondence(pa2);
+        List<Integer> cor = getFPtypeCorrespondence(pa2);
         
-        if(cor.isEmpty()){
+        if(cor.size() < 3){     //need at least 3 points to perform PA
             return null;
         }
 
@@ -611,7 +619,7 @@ public class ProcrustesAnalysis implements Serializable {
                     * (config.get(i, 2) - config2.getConfig().get(i, 2));
         }*/
         
-        for(FacialPointType ft: config.keySet()){
+        for(Integer ft: config.keySet()){
             Vector3f conf2Pos = config2.getFPposition(ft);
             Vector3f conf1Pos = config.get(ft).getPosition();
             
@@ -658,10 +666,11 @@ public class ProcrustesAnalysis implements Serializable {
      * @return distance Procrustes distance
      */
     public List<ICPTransformation> doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
-        float distance;
         List<ICPTransformation> t = new LinkedList<>();
 
         ICPTransformation trans = this.superimpose(config2, scaling);
+        if(trans == null)       //no transformation performed
+            return null;
         setVisMatrix();
         config2.setVisMatrix();
         //distance = this.countDistance(config2);
@@ -676,9 +685,9 @@ public class ProcrustesAnalysis implements Serializable {
     public ProcrustesAnalysis copy(){
         ProcrustesAnalysis copy;
         Matrix copyVerts = null;
-        Map<FacialPointType, FacialPoint> copyFps = new HashMap<>();
+        Map<Integer, FacialPoint> copyFps = new HashMap<>();
         
-        for(FacialPointType fpt: config.keySet()){
+        for(Integer fpt: config.keySet()){
             Vector3f pos = config.get(fpt).getPosition();
             FacialPoint newFp = new FacialPoint(fpt, new Vector3f(pos.x, pos.y, pos.z));
             

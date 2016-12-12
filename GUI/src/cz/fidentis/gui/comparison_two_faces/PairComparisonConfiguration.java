@@ -781,11 +781,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         }
 
         if (c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {//no registration
-            ModelLoader loader = new ModelLoader();
-            main = loader.loadModel(c.getModel1().getFile(), false, false);
-            compare = loader.loadModel(c.getModel2().getFile(), false, false);
+            main = ModelLoader.instance().loadModel(c.getModel1().getFile(), false, false);
+            compare = ModelLoader.instance().loadModel(c.getModel2().getFile(), false, false);
         }
-        final Model mainFace = compare;
+        
         final Model compareFace = main;
 
         Runnable run = new Runnable() {
@@ -859,17 +858,8 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         c.setSortedHdValuesRelative(sortedValuesRel);
 
                         HDpaintingInfo info = new HDpaintingInfo(hdDistance, c.getModel1(), true);
-                        float[] minColor = {0.298f, 0.0f, 0.898f};
-                        Color minCol = new Color(76, 0, 229);
-                        float[] maxColor = {0.898f, 0.1f, 0.133f};
-                        Color maxCol = new Color(229, 0, 34);
-                        info.setMinColor(minColor);
-                        info.setMaxColor(maxColor);
 
                         HDpainting paintMain = new HDpainting(info);
-
-                        c.setHdColor1(minCol);
-                        c.setHdColor2(maxCol);
 
                         tc.getViewerPanel_2Faces().getListener1().drawHD(true);
                         tc.getViewerPanel_2Faces().getListener1().setHdPaint(paintMain);
@@ -877,7 +867,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         c.setHDP(paintMain);
                         c.setHdPaintingInfo(info);
 
-                        c.setNumericalResults(setValues(hdDistance));
+                        c.setNumericalResults(SurfaceComparisonProcessing.instance().getNumericResults(hdDistance, true));
                         c.setLowerHDTreshold(0.0f);
                         c.setUpperHDTreshold(1f);
 
@@ -890,12 +880,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                             //creating database
                             p.setDisplayName("Processing database...");
                             File[] files = chooser.getSelectedFiles();
-                            ModelLoader loader = new ModelLoader();
+                            
                             Model model;
                             List<FacialPoint> facialPoints;
                             FeaturePointsUniverse fpUniverse;
                             for (File file : files) {
-                                model = loader.loadModel(file, false, true);
+                                model = ModelLoader.instance().loadModel(file, false, true);
 
                                 fpUniverse = new FeaturePointsUniverse(model);
                                 facialPoints = new ArrayList<FacialPoint>();
@@ -1027,8 +1017,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private void backRegistrationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backRegistrationButtonActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(false, 0);
         //if (GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getNumberOfModels() > 1) {
-            ModelLoader ml = new ModelLoader();
-            Model model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), false, true);
+            Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), false, true);
 
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setModels(model);
             
@@ -1038,7 +1027,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setProcrustes(false);
             
             
-            model = ml.loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), false, true);
+            model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setModels(model);
         //}
         getContext().setState(1);

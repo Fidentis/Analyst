@@ -48,7 +48,6 @@ import org.openide.util.Exceptions;
 public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
-    String result;
     private boolean maxTresholdValueChanged;
     private boolean minTresholdValueChanged;
     private ColorScheme heatplotColorScheme = ColorScheme.GREEN_BLUE;
@@ -114,10 +113,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             slicesPanel.setVisible(true);
         }
         this.revalidate();
-    }
-
-    public void setNumericalResult(String result) {
-        this.result = result;
     }
 
     /**
@@ -1322,7 +1317,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_exportOrderedResultsButtonActionPerformed
 
     private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
-        if (result != null) {
+        if (getContext().getNumericalResults() != null) {
             jPanel4.setVisible(true);
             pairComparisonPanel1.clear();
             setHeatPlotLabels();
@@ -1344,12 +1339,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     private void setHeatPlotLabels() {
         //    int m = result.split("\n").length;
-        int n = result.split("\n")[0].split(";").length;
+        int n = getContext().getNumericalResults().split("\n")[0].split(";").length;
         String[] valuesString = new String[n];
         String[] namesString = new String[n];
 
-        namesString = result.split("\n")[0].split(";");
-        valuesString = result.split("\n")[1].split(";");
+        namesString = getContext().getNumericalResults().split("\n")[0].split(";");
+        valuesString = getContext().getNumericalResults().split("\n")[1].split(";");
         float values[] = new float[n - 1];
         float maxValue = Float.MIN_VALUE;
         float minValue = Float.MAX_VALUE;
@@ -1389,7 +1384,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     pairFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     OneToManyComparison bc = getContext();
-                    ModelLoader ml = new ModelLoader();
+                  
                     // pairComparisonPanel1.clear();
                     pairComparisonPanel1.getListener().removeModel();
                     List<File> models;
@@ -1401,7 +1396,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
                     Model primary = bc.getPrimaryModel();
                     pairComparisonPanel1.getListener().addModel(primary);
-                    pairComparisonPanel1.getListener().addModel(ml.loadModel(models.get(j), false, false));
+                    pairComparisonPanel1.getListener().addModel(ModelLoader.instance().loadModel(models.get(j), false, false));
                     pairFrame.setTitle("Pairwise results - " + primary.getName() + " vs. " + models.get(j).getName());
 
                     List<Float> values = bc.getNumResults().get(j);
@@ -1429,8 +1424,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         getContext().setState(2);
         GUIController.getConfigurationTopComponent().addOneToManyComparisonComponent();
-        ModelLoader ml = new ModelLoader();
-        Model m = ml.loadModel(getContext().getModel(0), false, true);
+        
+        Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().drawHD(false);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setProcrustes(false);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setModel1(getContext().getPrimaryModel());
@@ -1480,12 +1475,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportCSVnumeric(tc, result);
+        ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (result != null) {
-            String[][] values = TableProcessing.instance().parseTable(result);
+        if (getContext().getNumericalResults() != null) {
+            String[][] values = TableProcessing.instance().parseTable(getContext().getNumericalResults());
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                     values,
@@ -1696,17 +1691,17 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
                         info.setvType(VisualizationType.COLORMAP);
                         tc.getOneToManyViewerPanel().getListener2().removeModel();
-                        ModelLoader l = new ModelLoader();
+                        
                         Model modelShown = c.getAvgFace();
 
                         if (modelShown == null) {
                             if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
 
                                 File m = c.getRegisteredModels().get(0);
-                                modelShown = l.loadModel(m, false, false);
+                                modelShown = ModelLoader.instance().loadModel(m, false, false);
                             } else {
                                 File f = c.getModels().get(0);
-                                modelShown = l.loadModel(f, false, true);
+                                modelShown = ModelLoader.instance().loadModel(f, false, true);
                             }
                         }
 
@@ -1716,8 +1711,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     if (c.getVisualization() == VisualizationType.VECTORS) {
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
                         info.setvType(VisualizationType.VECTORS);
-                        info.setLenghtFactor(3.0f);
-                        ModelLoader l = new ModelLoader();
 
                         Model modelShown = c.getAvgFace();
 
@@ -1725,10 +1718,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                             if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
 
                                 File m = c.getRegisteredModels().get(0);
-                                modelShown = l.loadModel(m, false, false);
+                                modelShown = ModelLoader.instance().loadModel(m, false, false);
                             } else {
                                 File f = c.getModels().get(0);
-                                modelShown = l.loadModel(f, false, true);
+                                modelShown = ModelLoader.instance().loadModel(f, false, true);
                             }
                         }
 
@@ -1739,13 +1732,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
                         tc.getOneToManyViewerPanel().getListener1().setPlanePoint(c.getPlanePosition());
-                        ModelLoader l = new ModelLoader();
+                        
                         ArrayList<Model> models = new ArrayList<>();
                         models.add(c.getPrimaryModel());
 
                         for (int i = 0; i < c.getRegisteredModels().size(); i++) {
                             //registered models will be null if ICP wasn't used
-                            Model m = l.loadModel(c.getRegisteredModels().get(i), false, false);
+                            Model m = ModelLoader.instance().loadModel(c.getRegisteredModels().get(i), false, false);
                             models.add(m);
                         }
                         tc.getOneToManyViewerPanel().getListener2().setModels(models);
@@ -1766,7 +1759,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, c.getHausdorfMaxTreshold() / 100f,
                             c.getHausdorfMinTreshold() / 100f, c.getMetricTypeIndex(), c.getValuesTypeIndex() == 0);
 
-                    String res = setValues(thresholdedValues, origModels, c.getMetricTypeIndex(), c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f);
+                    String res = SurfaceComparisonProcessing.instance().formatedNumResOneToMany(thresholdedValues, origModels, c.getPrimaryModel().getName(), 
+                            c.getHausdorfMaxTreshold(), c.getHausdorfMinTreshold(), c.getMetricTypeIndex());
 
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
@@ -1822,7 +1816,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             slicesPanel.setVisible(true);
         }
 
-        GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().setVisualization((VisualizationType) VisualizationBox.getSelectedItem());
+        getContext().setVisualization((VisualizationType) VisualizationBox.getSelectedItem());
         setupVisualizationControls();
         updateHistograms();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
@@ -1839,7 +1833,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             c.getHdPaintingInfo().setvType(VisualizationType.COLORMAP);
             tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
             tc.getOneToManyViewerPanel().getListener2().removeModel();
-            ModelLoader l = new ModelLoader();
+            ModelLoader l = ModelLoader.instance();
             Model modelShown = c.getAvgFace();
 
             if (modelShown == null) {
@@ -1872,8 +1866,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             c.getHdPaintingInfo().setvType(VisualizationType.VECTORS);
             tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
 
-            c.getHdPaintingInfo().setLenghtFactor(3.0f);
-            ModelLoader l = new ModelLoader();
+            ModelLoader l = ModelLoader.instance();
 
             Model modelShown = c.getAvgFace();
 
@@ -1901,7 +1894,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             tc.getOneToManyViewerPanel().getListener2().setHdInfo(c.getHdPaintingInfo());
             tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
             tc.getOneToManyViewerPanel().getListener1().setPlanePoint(c.getPlanePosition());
-            ModelLoader l = new ModelLoader();
+            ModelLoader l = ModelLoader.instance();
             ArrayList<Model> models = new ArrayList<>();
             models.add(c.getPrimaryModel());
 
@@ -1997,7 +1990,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             Runnable run = new Runnable() {
                 @Override
                 public void run() {
-                    ModelLoader ml = new ModelLoader();
+                    
                     pairComparisonPanel1.getListener().removeModel();
                     List<File> models;
                     if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
@@ -2008,7 +2001,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
                     Model primary = bc.getPrimaryModel();
                     pairComparisonPanel1.getListener().addModel(primary);
-                    pairComparisonPanel1.getListener().addModel(ml.loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
+                    pairComparisonPanel1.getListener().addModel(ModelLoader.instance().loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
                     List<Float> values = bc.getNumResults().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex());
                     HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
                     HDpainting hdp = new HDpainting(info);
@@ -2204,23 +2197,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         minTresholdValueChanged = false;
     }
 
-    private String setValues(List<Float> hdDistance, List<File> models, int varianceMethod, float upperTreshold, float lowerTreshold) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Lower: "
-                + (lowerTreshold * 100) + "% Upper: " + (upperTreshold * 100) + "% treshold;");
-
-        for (int i = 0; i < hdDistance.size(); i++) {
-            strResults.append(models.get(i).getName()).append(';');
-        }
-
-        strResults.append("\nMain Face;");
-
-        for (Float f : hdDistance) {
-            strResults.append(f).append(';');
-        }
-
-        return strResults.toString();
-    }
-
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);
         maxThresholdSlider.setVisible(false);
@@ -2301,8 +2277,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         } else {
             alignParametersButton.setVisible(false);
         }
-
-        result = c.getNumericalResults();
 
         updateHistograms();
 

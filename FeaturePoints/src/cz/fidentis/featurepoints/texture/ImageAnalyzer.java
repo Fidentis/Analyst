@@ -129,15 +129,15 @@ public class ImageAnalyzer {
         Rect leftEyeRegion = new Rect((int) pupilaLFP.x - (EYE_WIDTH / 2), (int) pupilaLFP.y - (EYE_HEIGHT / 2), EYE_WIDTH, EYE_HEIGHT);
         Point exL = getLeftPoint(imageTmp, leftEyeRegion);
         Point enL = getRightPoint(imageTmp, leftEyeRegion);
-        textureFPs.add(new TextureFP(FacialPointType.EX_L, exL));
-        textureFPs.add(new TextureFP(FacialPointType.EN_L, enL));
+        textureFPs.add(new TextureFP(FacialPointType.EX_L.ordinal(), exL));
+        textureFPs.add(new TextureFP(FacialPointType.EN_L.ordinal(), enL));
 
         // if (rightEye != null) {
         Rect rightEyeRegion = new Rect((int) pupilaRFP.x - (EYE_WIDTH / 2), (int) pupilaRFP.y - (EYE_HEIGHT / 2), EYE_WIDTH, EYE_HEIGHT);
         Point enR = getLeftPoint(imageTmp, rightEyeRegion);
         Point exR = getRightPoint(imageTmp, rightEyeRegion);
-        textureFPs.add(new TextureFP(FacialPointType.EN_R, enR));
-        textureFPs.add(new TextureFP(FacialPointType.EX_R, exR));
+        textureFPs.add(new TextureFP(FacialPointType.EN_R.ordinal(), enR));
+        textureFPs.add(new TextureFP(FacialPointType.EX_R.ordinal(), exR));
 
         // Region nosa
         // Pouzitie modelu docasne zakomentovane
@@ -157,8 +157,8 @@ public class ImageAnalyzer {
             // Body musia byt symetricke, preto y suradnicu vypocitat ako priemer bodov
             double y = (alL.y + alR.y) / 2;
 
-            textureFPs.add(new TextureFP(FacialPointType.AL_L, new Point(alL.x, y)));
-            textureFPs.add(new TextureFP(FacialPointType.AL_R, new Point(alR.x, y)));
+            textureFPs.add(new TextureFP(FacialPointType.AL_L.ordinal(), new Point(alL.x, y)));
+            textureFPs.add(new TextureFP(FacialPointType.AL_R.ordinal(), new Point(alR.x, y)));
           }
 
 //            OCVutils.drawRectangle(workingImage, nose, OCVutils.BLUE);
@@ -235,10 +235,10 @@ public class ImageAnalyzer {
 //            pupilaRFP = new TextureFP(FacialPointType.P_R, p2);
 //            pupilaLFP = new TextureFP(FacialPointType.P_L, p1);
 //        }
-        pupilaLFP = new TextureFP(FacialPointType.P_L, pupilaL);
+        pupilaLFP = new TextureFP(FacialPointType.P_L.ordinal(), pupilaL);
         textureFPs.add(pupilaLFP);
 
-        pupilaRFP = new TextureFP(FacialPointType.P_R, pupilaR);
+        pupilaRFP = new TextureFP(FacialPointType.P_R.ordinal(), pupilaR);
         textureFPs.add(pupilaRFP);
     }
 
@@ -280,7 +280,7 @@ public class ImageAnalyzer {
         this.objFPmodel = fpModel;
     }
 
-    private Point getTextureFPfromModel(FacialPointType type) {
+    private Point getTextureFPfromModel(Integer type) {
         if (objFPmodel == null) {
             return null;
         }

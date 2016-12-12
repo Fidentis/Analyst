@@ -20,6 +20,10 @@ import cz.fidentis.controller.Composite;
 import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.controller.BatchComparison;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
+import cz.fidentis.controller.data.TransparencyConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.enums.FileExtensions;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
@@ -216,18 +220,6 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("pointColor", String.valueOf(comparison.getPointColor().getRGB()));
 
-        comparisonE.setAttribute("hdColor1", String.valueOf(comparison.getHdColor1().getRGB()));
-
-        comparisonE.setAttribute("hdColor2", String.valueOf(comparison.getHdColor2().getRGB()));
-
-        comparisonE.setAttribute("primaryColor", String.valueOf(comparison.getPrimaryColor().getRGB()));
-
-        comparisonE.setAttribute("secondaryColor", String.valueOf(comparison.getSecondaryColor().getRGB()));
-
-        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
-        
-        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
-
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
         comparisonE.setAttribute("useDatabase", String.valueOf(comparison.getUseDatabase()));
@@ -274,23 +266,23 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
         comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
-        
-        //comparison configuration
-        comparisonE.setAttribute("primarySolid", String.valueOf(comparison.isIsPrimarySolid()));
-        comparisonE.setAttribute("secondarySolid", String.valueOf(comparison.isIsSecondarySolid()));
-        comparisonE.setAttribute("fogColor", String.valueOf(comparison.getFogColor().getRGB()));
-        comparisonE.setAttribute("overlayTransparency", String.valueOf(comparison.getOverlayTransparency()));
-        comparisonE.setAttribute("innerSurfaceSolid", String.valueOf(comparison.isInnerSurfaceSolid()));
-        comparisonE.setAttribute("useGlyphs", String.valueOf(comparison.isUseGlyphs()));
-        comparisonE.setAttribute("useContours", String.valueOf(comparison.isUseContours()));
-        comparisonE.setAttribute("fogVersion", String.valueOf(comparison.getFogVersion()));
-        
+
+        if (comparison.getTransparencyViz() != null) {
+            appendTransparencyData(comparison.getTransparencyViz(), comparisonE);
+        }
+
+        if (comparison.getVectorsViz() != null) {
+            appendVectorsData(comparison.getVectorsViz(), comparisonE);
+        }
+
+        if (comparison.getColormapViz() != null) {
+            appendColormapData(comparison.getColormapViz(), comparisonE);
+        }
+
         //comparison result
-        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
-        comparisonE.setAttribute("colorScheme", String.valueOf(comparison.getColorScheme()));
-        comparisonE.setAttribute("vectorDensity", String.valueOf(comparison.getVectorDensity()));
-        comparisonE.setAttribute("vectorLength", String.valueOf(comparison.getVectorLength()));
-        comparisonE.setAttribute("cylinderRadius", String.valueOf(comparison.getCylinderRadius()));
+        if (comparison.getVisualization() != null) {
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization().name()));
+        }
 
         zipDirectory(auxFile, null);
 
@@ -369,13 +361,6 @@ public final class SaveProject implements ActionListener {
             appendModelElement(comparison.getPrimaryModel(), primaryE, "primaryModel");
         }
 
-        if (comparison.getPreregiteredModels() != null) {
-            Element preregE = doc.createElement("pre-registered-models");
-            comparisonE.appendChild(preregE);
-            for (Model m : comparison.getPreregiteredModels()) {
-                appendModelElement(m, preregE, "preregistered");
-            }
-        }
 
         if (comparison.getFacialPoints() != null && comparison.getFacialPoints().size() > 0) {
             Element fpE = doc.createElement("facial-points");
@@ -400,14 +385,6 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("showPointInfo", String.valueOf(comparison.isShowPointInfo()));
 
         comparisonE.setAttribute("pointColor", String.valueOf(comparison.getPointColor().getRGB()));
-
-        comparisonE.setAttribute("hdColor1", String.valueOf(comparison.getHdColor1().getRGB()));
-
-        comparisonE.setAttribute("hdColor2", String.valueOf(comparison.getHdColor2().getRGB()));
-
-        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
-        
-        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -439,48 +416,26 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
-        
+
         comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
-        
+
         comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
-        
-        comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization()));
-        
-        comparisonE.setAttribute("crossCutPlaneIndex", String.valueOf(comparison.getCrossCutPlaneIndex()));
-        
-        comparisonE.setAttribute("arbitraryPlanePosX", String.valueOf(comparison.getArbitraryPlanePos().x));
-        
-        comparisonE.setAttribute("arbitraryPlanePosY", String.valueOf(comparison.getArbitraryPlanePos().y));
-        
-        comparisonE.setAttribute("arbitraryPlanePosZ", String.valueOf(comparison.getArbitraryPlanePos().z));
-        
-        comparisonE.setAttribute("planePosX", String.valueOf(comparison.getPlanePosition().x));
-        
-        comparisonE.setAttribute("planePosY", String.valueOf(comparison.getPlanePosition().y));
-        
-        comparisonE.setAttribute("planePosZ", String.valueOf(comparison.getPlanePosition().z));
-        
-        comparisonE.setAttribute("crosscutSize", String.valueOf(comparison.getCrosscutSize()));
-        
-        comparisonE.setAttribute("crosscutThickness", String.valueOf(comparison.getCrosscutThickness()));
-        
-        comparisonE.setAttribute("crosscutColor", String.valueOf(comparison.getCrosscutColor().getRGB()));
-        
-        comparisonE.setAttribute("highlightCuts", String.valueOf(comparison.isHighlightCuts()));
-        
-        comparisonE.setAttribute("showVectors", String.valueOf(comparison.isShowVectors()));
-        
-        comparisonE.setAttribute("allCuts", String.valueOf(comparison.isAllCuts()));
-        
-        comparisonE.setAttribute("samplingRays", String.valueOf(comparison.isSamplingRays()));
-        
-        comparisonE.setAttribute("vectorDensity", String.valueOf(comparison.getVectorDensity()));
-        
-        comparisonE.setAttribute("vectorLength", String.valueOf(comparison.getVectorLength()));
-        
-        comparisonE.setAttribute("cylinderRadius", String.valueOf(comparison.getCylinderRadius()));
-        
-        comparisonE.setAttribute("colorScheme", String.valueOf(comparison.getUsedColorScheme()));
+
+        if (comparison.getVisualization() != null) {
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization().name()));
+        }
+
+        if (comparison.getCrosscutViz() != null) {
+            appendCrosscutData(comparison.getCrosscutViz(), comparisonE);
+        }
+
+        if (comparison.getVectorsViz() != null) {
+            appendVectorsData(comparison.getVectorsViz(), comparisonE);
+        }
+
+        if (comparison.getColormapViz() != null) {
+            appendColormapData(comparison.getColormapViz(), comparisonE);
+        }
 
         zipDirectory(auxFile, null);
 
@@ -556,13 +511,7 @@ public final class SaveProject implements ActionListener {
         /*if (comparison.getFpModelsTransformations() != null) {
          appendModelTransformations(comparison.getFpModelsTransformations(), comparisonE);
          }*/
-        if (comparison.getPreregiteredModels() != null) {
-            Element preregE = doc.createElement("pre-registered-models");
-            comparisonE.appendChild(preregE);
-            for (Model m : comparison.getPreregiteredModels()) {
-                appendModelElement(m, preregE, "preregistered");
-            }
-        }
+        
 
         if (comparison.getFacialPoints() != null && comparison.getFacialPoints().size() > 0) {
             Element fpE = doc.createElement("facial-points");
@@ -588,17 +537,9 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("pointColor", String.valueOf(comparison.getPointColor().getRGB()));
 
-        comparisonE.setAttribute("hdColor1", String.valueOf(comparison.getHdColor1().getRGB()));
-
-        comparisonE.setAttribute("hdColor2", String.valueOf(comparison.getHdColor2().getRGB()));
-
         comparisonE.setAttribute("valuesTypeIndex", String.valueOf(comparison.getValuesTypeIndex()));
 
         comparisonE.setAttribute("metricTypeIndex", String.valueOf(comparison.getMetricTypeIndex()));
-
-        comparisonE.setAttribute("haussdorfMaxTreshold", String.valueOf(comparison.getHausdorfMaxTreshold()));
-        
-        comparisonE.setAttribute("haussdorfMinTreshold", String.valueOf(comparison.getHausdorfMinTreshold()));
 
         comparisonE.setAttribute("fpScaling", String.valueOf(comparison.isFpScaling()));
 
@@ -613,6 +554,26 @@ public final class SaveProject implements ActionListener {
         comparisonE.setAttribute("icpNumOfHeads", String.valueOf(comparison.getICPnumberOfHeads()));
 
         comparisonE.setAttribute("templateIndex", String.valueOf(comparison.getTemplateIndex()));
+
+        comparisonE.setAttribute("continueComparison", String.valueOf(comparison.isContinueComparison()));
+
+        comparisonE.setAttribute("firstCreated", String.valueOf(comparison.isFirstCreated()));
+
+        if (comparison.getVisualization() != null) {
+            comparisonE.setAttribute("visualization", String.valueOf(comparison.getVisualization().name()));
+        }
+
+        if (comparison.getCrosscutViz() != null) {
+            appendCrosscutData(comparison.getCrosscutViz(), comparisonE);
+        }
+
+        if (comparison.getVectorsViz() != null) {
+            appendVectorsData(comparison.getVectorsViz(), comparisonE);
+        }
+
+        if (comparison.getColormapViz() != null) {
+            appendColormapData(comparison.getColormapViz(), comparisonE);
+        }
 
         if (comparison.getRegistrationMethod() != null) {
             comparisonE.setAttribute("registrationMethod", comparison.getRegistrationMethod().name());
@@ -720,7 +681,6 @@ public final class SaveProject implements ActionListener {
         // min/max color - from comparison, vector computed automatically from them
         hdE.setAttribute("viz-type", info.getvType().name());
         hdE.setAttribute("selectionType", info.getsType().name());
-        hdE.setAttribute("lengthFactor", String.valueOf(info.getLenghtFactor()));
         hdE.setAttribute("density", String.valueOf(info.getDensity()));
         // indices for normals
         hdE.setAttribute("recompute", String.valueOf(info.getRecompute()));
@@ -743,6 +703,81 @@ public final class SaveProject implements ActionListener {
         infoE.setAttribute("selectedPoint", String.valueOf(info.getIndexOfSelectedPoint()));
         infoE.setAttribute("selectedConfig", String.valueOf(info.getIndexOfSelectedConfig()));
         infoE.setAttribute("pointRadius", String.valueOf(info.getFacialPointRadius()));
+    }
+
+    private void appendCrosscutData(CrosscutConfig data, Element parent) {
+        Element crossE = parent.getOwnerDocument().createElement("crosscutData");
+        parent.appendChild(crossE);
+
+        crossE.setAttribute("crossCutPlaneIndex", String.valueOf(data.getCrossCutPlaneIndex()));
+
+        if (data.getArbitraryPlanePos() != null) {
+            crossE.setAttribute("arbitraryPlanePosX", String.valueOf(data.getArbitraryPlanePos().x));
+            crossE.setAttribute("arbitraryPlanePosY", String.valueOf(data.getArbitraryPlanePos().y));
+            crossE.setAttribute("arbitraryPlanePosZ", String.valueOf(data.getArbitraryPlanePos().z));
+        }
+
+        if (data.getPlanePosition() != null) {
+            crossE.setAttribute("planePosX", String.valueOf(data.getPlanePosition().x));
+            crossE.setAttribute("planePosY", String.valueOf(data.getPlanePosition().y));
+            crossE.setAttribute("planePosZ", String.valueOf(data.getPlanePosition().z));
+        }
+
+        crossE.setAttribute("crosscutSize", String.valueOf(data.getCrosscutSize()));
+        crossE.setAttribute("crosscutThickness", String.valueOf(data.getCrosscutThickness()));
+
+        if (data.getCrosscutColor() != null) {
+            crossE.setAttribute("crosscutColor", String.valueOf(data.getCrosscutColor().getRGB()));
+        }
+
+        crossE.setAttribute("highlightCuts", String.valueOf(data.isHighlightCuts()));
+        crossE.setAttribute("showVectors", String.valueOf(data.isShowVector()));
+        crossE.setAttribute("allCuts", String.valueOf(data.isAllCuts()));
+        crossE.setAttribute("showPlane", String.valueOf(data.isShowPlane()));
+        crossE.setAttribute("samplingRays", String.valueOf(data.isSamplingRays()));
+    }
+
+    private void appendTransparencyData(TransparencyConfig data, Element parent) {
+        Element transE = parent.getOwnerDocument().createElement("transparencyData");
+        parent.appendChild(transE);
+
+        //comparison configuration
+        if (data.getPrimaryColor() != null) {
+            transE.setAttribute("primaryColor", String.valueOf(data.getPrimaryColor().getRGB()));
+        }
+        if (data.getSecondaryColor() != null) {
+            transE.setAttribute("secondaryColor", String.valueOf(data.getSecondaryColor().getRGB()));
+        }
+        transE.setAttribute("primarySolid", String.valueOf(data.isIsPrimarySolid()));
+        transE.setAttribute("secondarySolid", String.valueOf(data.isIsSecondarySolid()));
+        if (data.getFogColor() != null) {
+            transE.setAttribute("fogColor", String.valueOf(data.getFogColor().getRGB()));
+        }
+        transE.setAttribute("overlayTransparency", String.valueOf(data.getOverlayTransparency()));
+        transE.setAttribute("innerSurfaceSolid", String.valueOf(data.isInnerSurfaceSolid()));
+        transE.setAttribute("useGlyphs", String.valueOf(data.isUseGlyphs()));
+        transE.setAttribute("useContours", String.valueOf(data.isUseContours()));
+        transE.setAttribute("fogVersion", String.valueOf(data.getFogVersion()));
+    }
+
+    private void appendVectorsData(VectorsConfig data, Element parent) {
+        Element vectorsE = parent.getOwnerDocument().createElement("vectorsData");
+        parent.appendChild(vectorsE);
+
+        vectorsE.setAttribute("vectorDensity", String.valueOf(data.getVectorDensity()));
+        vectorsE.setAttribute("vectorLength", String.valueOf(data.getVectorLength()));
+        vectorsE.setAttribute("cylinderRadius", String.valueOf(data.getCylinderRadius()));
+    }
+
+    private void appendColormapData(ColormapConfig data, Element parent) {
+        Element colorE = parent.getOwnerDocument().createElement("colormapData");
+        parent.appendChild(colorE);
+
+        colorE.setAttribute("haussdorfMaxTreshold", String.valueOf(data.getHausdorfMaxTreshold()));
+        colorE.setAttribute("haussdorfMinTreshold", String.valueOf(data.getHausdorfMinTreshold()));
+        if (data.getUsedColorScheme() != null) {
+            colorE.setAttribute("colorScheme", String.valueOf(data.getUsedColorScheme().name()));
+        }
     }
 
     private void appendModelTransformations(List<ArrayList<ICPTransformation>> transformations, Element parent) {
@@ -822,7 +857,7 @@ public final class SaveProject implements ActionListener {
             tc.setDisplayName(outFile.getName());
             tc.getProject().setName(outFile.getName());
             GUIController.updateNavigator();
-            
+
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
@@ -849,6 +884,19 @@ public final class SaveProject implements ActionListener {
             };
             Thread t = new Thread(r);
             t.start();
+        }
+    }
+
+    //debug
+    public void closeZip() {
+        try {
+            if (zipStream != null) {
+                zipStream.closeEntry();
+                zipStream.close();
+                zipStream = null;
+            }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }
 }

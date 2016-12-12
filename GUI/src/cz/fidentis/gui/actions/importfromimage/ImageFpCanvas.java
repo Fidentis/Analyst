@@ -29,6 +29,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.util.TreeSet;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -119,8 +120,12 @@ public class ImageFpCanvas extends JPanel {
         }
         
         if(points != null) {
-            g.setColor(Color.red);
             for (FacialPoint p : points) {
+                if(p.isActive()) {
+                    g.setColor(Color.red);
+                } else {
+                    g.setColor(Color.GRAY);
+                }
                 Vector3f coords = pointToCoords(p.getPosition());
                 g.fillOval((int) coords.x - POINT_RADIUS, (int) coords.y - POINT_RADIUS, 2*POINT_RADIUS, 2*POINT_RADIUS);
             }
@@ -229,6 +234,11 @@ public class ImageFpCanvas extends JPanel {
         this.firePropertyChange("featurePoints", null, points);
     }
     
+    private void togglePointActive(int index) {
+        points.get(index).setActive(!points.get(index).isActive());
+        repaint();
+    }
+    
     private class CanvasMouseListener extends MouseAdapter
     {
         @Override
@@ -245,6 +255,7 @@ public class ImageFpCanvas extends JPanel {
 
                 final int pointIdx = hitPoint(me.getX(), me.getY());
                 if (pointIdx >= 0) {
+                    // remove action
                     JMenuItem remove = new JMenuItem("Remove point");
                     remove.addActionListener(new ActionListener() {
                         @Override
@@ -253,6 +264,17 @@ public class ImageFpCanvas extends JPanel {
                         }
                     });
                     popup.add(remove);
+                    
+                    // is active action
+                    JMenuItem item = new JCheckBoxMenuItem("Active");
+                    item.setSelected(points.get(pointIdx).isActive());
+                    item.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            togglePointActive(pointIdx);
+                        }
+                    });
+                    popup.add(item);
                 } else {
 
                     JMenuItem title = new JMenuItem("Add point...");
@@ -261,11 +283,12 @@ public class ImageFpCanvas extends JPanel {
                     popup.addSeparator();
 
                     TreeSet<FacialPointType> required = ImportFromImage.getUsedPoints();
+                    FacialPointType[] allTypes = FacialPointType.values();
                     for (FacialPoint p : points) {
-                        required.remove(p.getType());
+                        required.remove(allTypes[p.getType()]);
                     }
                     for (FacialPointType typ : required) {
-                        final FacialPoint menuPoint = new FacialPoint(typ, pointCoords);
+                        final FacialPoint menuPoint = new FacialPoint(typ.ordinal(), pointCoords);
                         JMenuItem item = new JMenuItem(menuPoint.getName());
                         item.addActionListener(new ActionListener() {
                             @Override

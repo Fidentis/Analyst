@@ -1,0 +1,5 @@
+Gender,Age Category,Directory
+MALE,CHILD,avg_boy
+MALE,ADULT,avg_man
+FEMALE,CHILD,avg_girl
+FEMALE,ADULT,avg_woman

@@ -6,16 +6,23 @@ import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.controller.ProjectTree.Node;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.model.Model;
+import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
+import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.vecmath.Vector3f;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -37,7 +44,6 @@ public class BatchComparison {
     private File hdCSVresults;          //URL to directory where computed numerical results in csv format are stored in
     private ArrayList<ArrayList<Float>> hdVisualResults;    //visual results, num of inner array == num of models, num of outer arrays == num of vertices of avgFace
     private ArrayList<File> models = new ArrayList<>();     //URLs to models stored on disk
-    private ArrayList<Model> preRegiteredModels;            //loaded preregistered models, used for feature point computation
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
@@ -45,12 +51,8 @@ public class BatchComparison {
     
     private boolean showPointInfo = true;   //whether to show description of the feature points
     private Color pointColor = Color.red;   //color of displayed feature points
-    private Color hdColor1 = Color.green;   //redundant? take color from HDinfo instead eventually?
-    private Color hdColor2 = Color.red;
     private int valuesTypeIndex = 0;        //relative, absolute
     private int metricTypeIndex = 0;        //RMS, min, max etc.
-    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
-    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
     private boolean fpScaling;          //whether feature points configuration were scaled
     private int fpTreshold = 30;        //threshold for feature points (still no clue what it's for)
     private int fpSize = 20;            //size of displayed feature points
@@ -83,14 +85,195 @@ public class BatchComparison {
     private Node node_average;
     private Node node_result;
     private final ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
+    
+    private boolean continueComparison = false;
+    private boolean firstCreated = true;
+    
+    private VisualizationType visualization;   
 
-    public ArrayList<Model> getPreregiteredModels() {
-        return preRegiteredModels;
+    private VectorsConfig vectorsViz = new VectorsConfig();
+    private CrosscutConfig crosscutViz = new CrosscutConfig();
+    private ColormapConfig colormapViz = new ColormapConfig();
+    
+    private boolean modelsAdded = false;
+    
+    public boolean isModelsAdded() {
+        return modelsAdded;
     }
 
-    public void setPreregiteredModels(ArrayList<Model> regiteredModels) {
-        this.preRegiteredModels = regiteredModels;
-    }  
+    public void setModelsAdded(boolean modelsAdded) {
+        this.modelsAdded = modelsAdded;
+    }
+    
+    public VectorsConfig getVectorsViz() {
+        return vectorsViz;
+    }
+
+    public void setVectorsViz(VectorsConfig vectorsViz) {
+        this.vectorsViz = vectorsViz;
+    }
+
+    public CrosscutConfig getCrosscutViz() {
+        return crosscutViz;
+    }
+
+    public void setCrosscutViz(CrosscutConfig crosscutViz) {
+        this.crosscutViz = crosscutViz;
+    }
+
+    public ColormapConfig getColormapViz() {
+        return colormapViz;
+    }
+
+    public void setColormapViz(ColormapConfig colormapViz) {
+        this.colormapViz = colormapViz;
+    }
+    
+
+    public boolean isShowPlane() {
+        return crosscutViz.isShowPlane();
+    }
+
+    public void setShowPlane(boolean showPlane) {
+        crosscutViz.setShowPlane(showPlane);
+    }
+    
+
+    public VisualizationType getVisualization() {
+        return visualization;
+    }
+
+    public void setVisualization(VisualizationType visualization) {
+        this.visualization = visualization;
+    }
+
+    public int getCrossCutPlaneIndex() {
+        return crosscutViz.getCrossCutPlaneIndex();
+    }
+
+    public void setCrossCutPlaneIndex(int crossCutPlaneIndex) {
+        crosscutViz.setCrossCutPlaneIndex(crossCutPlaneIndex);
+    }
+
+    public Vector3f getArbitraryPlanePos() {
+        return crosscutViz.getArbitraryPlanePos();
+    }
+
+    public void setArbitraryPlanePos(Vector3f arbitraryPlanePos) {
+        crosscutViz.setArbitraryPlanePos(arbitraryPlanePos);
+    }
+
+    public Vector3f getPlanePosition() {
+        return crosscutViz.getPlanePosition();
+    }
+
+    public void setPlanePosition(Vector3f planePosition) {
+        crosscutViz.setPlanePosition(planePosition);
+    }
+
+    public int getCrosscutSize() {
+        return crosscutViz.getCrosscutSize();
+    }
+
+    public void setCrosscutSize(int crosscutSize) {
+        crosscutViz.setCrosscutSize(crosscutSize);
+    }
+
+    public int getCrosscutThickness() {
+        return crosscutViz.getCrosscutThickness();
+    }
+
+    public void setCrosscutThickness(int crosscutThickness) {
+        crosscutViz.setCrosscutThickness(crosscutThickness);
+    }
+
+    public Color getCrosscutColor() {
+        return crosscutViz.getCrosscutColor();
+    }
+
+    public void setCrosscutColor(Color crosscutColor) {
+        crosscutViz.setCrosscutColor(crosscutColor);
+    }
+
+    public boolean isHighlightCuts() {
+        return crosscutViz.isHighlightCuts();
+    }
+
+    public void setHighlightCuts(boolean highlightCuts) {
+        crosscutViz.setHighlightCuts(highlightCuts);
+    }
+
+    public boolean isShowVectors() {
+        return crosscutViz.isShowVector();
+    }
+
+    public void setShowVectors(boolean showVectors) {
+        crosscutViz.setShowVector(showVectors);
+    }
+
+    public boolean isAllCuts() {
+        return crosscutViz.isAllCuts();
+    }
+
+    public void setAllCuts(boolean allCuts) {
+        crosscutViz.setAllCuts(allCuts);
+    }
+
+    public boolean isSamplingRays() {
+        return crosscutViz.isSamplingRays();
+    }
+
+    public void setSamplingRays(boolean samplingRays) {
+        crosscutViz.setSamplingRays(samplingRays);
+    }
+
+    public int getVectorDensity() {
+        return vectorsViz.getVectorDensity();
+    }
+
+    public void setVectorDensity(int vectorDensity) {
+        vectorsViz.setVectorDensity(vectorDensity);
+    }
+
+    public int getVectorLength() {
+        return vectorsViz.getVectorLength();
+    }
+
+    public void setVectorLength(int vectorLength) {
+        vectorsViz.setVectorLength(vectorLength);
+    }
+
+    public int getCylinderRadius() {
+        return vectorsViz.getCylinderRadius();
+    }
+
+    public void setCylinderRadius(int cylinderRadius) {
+        vectorsViz.setCylinderRadius(cylinderRadius);
+    }
+
+    public ColorScheme getUsedColorScheme() {
+        return colormapViz.getUsedColorScheme();
+    }
+
+    public void setUsedColorScheme(ColorScheme usedColorScheme) {
+        colormapViz.setUsedColorScheme(usedColorScheme);
+    }
+
+    public boolean isContinueComparison() {
+        return continueComparison;
+    }
+
+    public void setContinueComparison(boolean continueComparison) {
+        this.continueComparison = continueComparison;
+    }
+
+    public boolean isFirstCreated() {
+        return firstCreated;
+    }
+
+    public void setFirstCreated(boolean firstCreated) {
+        this.firstCreated = firstCreated;
+    }
 
     public HDpaintingInfo getHDinfo() {
         return HDinfo;
@@ -248,7 +431,8 @@ public class BatchComparison {
     }
 
     public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
-        this.facialPoints = facialPoints;
+        this.facialPoints.clear();
+        this.facialPoints.putAll(facialPoints);
     }
 
     public boolean isShowPointInfo() {
@@ -267,36 +451,20 @@ public class BatchComparison {
         this.pointColor = pointColor;
     }
 
-    public Color getHdColor1() {
-        return hdColor1;
-    }
-
-    public void setHdColor1(Color hdColor1) {
-        this.hdColor1 = hdColor1;
-    }
-
-    public Color getHdColor2() {
-        return hdColor2;
-    }
-
-    public void setHdColor2(Color hdColor2) {
-        this.hdColor2 = hdColor2;
-    }
-
     public int getHausdorfMaxTreshold() {
-        return hausdorfMaxTreshold;
+        return colormapViz.getHausdorfMaxTreshold();
     }
 
     public void setHausdorfMaxTreshold(int hausdorfMaxTreshold) {
-        this.hausdorfMaxTreshold = hausdorfMaxTreshold;
+        colormapViz.setHausdorfMaxTreshold(hausdorfMaxTreshold);
     }
 
     public int getHausdorfMinTreshold() {
-        return hausdorfMinTreshold;
+        return colormapViz.getHausdorfMinTreshold();
     }
 
     public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
-        this.hausdorfMinTreshold = hausdorfMinTreshold;
+        colormapViz.setHausdorfMinTreshold(hausdorfMinTreshold);
     }
     
     public boolean isFpScaling() {
@@ -431,10 +599,12 @@ public class BatchComparison {
 
     public void addModel(File model){
         models.add(model);
+        facialPoints.put(model.getName(), new LinkedList<FacialPoint>());       //make sure there is a list ready for FPs
         if(node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }
         node_models.addChild(model);
+        modelsAdded = true;
     }
     
     public void removeModel(int index) {
@@ -445,6 +615,7 @@ public class BatchComparison {
             node.removeChild(node.getChildren().indexOf(node_models));
             node_models = null;
         }
+        modelsAdded = true;
     }
     
     public void addFacialPoints(String model, List<FacialPoint> FP){

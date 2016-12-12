@@ -5,6 +5,9 @@ import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.controller.ProjectTree.Node;
+import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
+import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.model.Model;
 import cz.fidentis.visualisation.ColorScheme;
@@ -15,6 +18,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.vecmath.Vector3f;
@@ -41,7 +45,6 @@ public class OneToManyComparison {
     private List<File> registeredModels;            //models after registration, stored on the disk
     private Model primaryModel;                     //mainFace
     private Model avgFace;                          //avgFace
-    private ArrayList<Model> preRegiteredModels;            //only used in feature points calculation
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<String, List<FacialPoint>>();         //feature points associated with the model of given name
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private Node node;
@@ -55,10 +58,7 @@ public class OneToManyComparison {
       
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
-    private Color hdColor1 = Color.green;           //redundant? take color from HDinfo instead eventually?
-    private Color hdColor2 = Color.red;
-    private int hausdorfMaxTreshold = 100;     //max threshold value in % (HDPainting info contains actual computed distance threshold)
-    private int hausdorfMinTreshold = 00;     //min threshold value in % (HDPainting info contains actual computed distance threshold)
+ 
     private boolean createAvgFace = true;          //whether to create avg face during computatio of numerical results
     private boolean fpScaling;                     //whether feature points are scaled or not
     private int fpTreshold = 30;                   //threshold for feature points (still no clue what it is for)
@@ -83,139 +83,149 @@ public class OneToManyComparison {
     private boolean continueComparison = false;     //whether to continue comparison after registration
     private boolean firstCreated = true;
     
-    private VisualizationType visualization;   
-    private int crossCutPlaneIndex = 0;
-    private Vector3f arbitraryPlanePos = new Vector3f();
-    private Vector3f planePosition = new Vector3f(1,0,0);
-    private int crosscutSize;
-    private int crosscutThickness;
-    private Color crosscutColor;
-    private boolean highlightCuts;
-    private boolean showVectors;
-    private boolean allCuts;
-    private boolean samplingRays;
+    private VisualizationType visualization;  
     
-    private int vectorDensity;
-    private int vectorLength;
-    private int cylinderRadius;
-    
-    private ColorScheme usedColorScheme;
+    private CrosscutConfig crosscutViz = new CrosscutConfig();
+    private VectorsConfig vectorsViz = new VectorsConfig();
+    private ColormapConfig colormapViz = new ColormapConfig();
+            
+            
 
+    public CrosscutConfig getCrosscutViz() {
+        return crosscutViz;
+    }
+
+    public void setCrosscutViz(CrosscutConfig crosscutViz) {
+        this.crosscutViz = crosscutViz;
+    }
+
+    public VectorsConfig getVectorsViz() {
+        return vectorsViz;
+    }
+
+    public void setVectorsViz(VectorsConfig vectorsViz) {
+        this.vectorsViz = vectorsViz;
+    }
+
+    public ColormapConfig getColormapViz() {
+        return colormapViz;
+    }
+
+    public void setColormapViz(ColormapConfig colormapViz) {
+        this.colormapViz = colormapViz;
+    }
+    
     public ColorScheme getUsedColorScheme() {
-        return usedColorScheme;
+        return colormapViz.getUsedColorScheme();
     }
 
     public void setUsedColorScheme(ColorScheme usedColorScheme) {
-        this.usedColorScheme = usedColorScheme;
+        colormapViz.setUsedColorScheme(usedColorScheme);
     }
-    
     
 
     public int getVectorDensity() {
-        return vectorDensity;
+        return vectorsViz.getVectorDensity();
     }
 
     public void setVectorDensity(int vectorDensity) {
-        this.vectorDensity = vectorDensity;
+        vectorsViz.setVectorDensity(vectorDensity);
     }
 
     public int getVectorLength() {
-        return vectorLength;
+        return vectorsViz.getVectorLength();
     }
 
     public void setVectorLength(int vectorLength) {
-        this.vectorLength = vectorLength;
+        vectorsViz.setVectorLength(vectorLength);
     }
 
     public int getCylinderRadius() {
-        return cylinderRadius;
+        return vectorsViz.getCylinderRadius();
     }
 
     public void setCylinderRadius(int cylinderRadius) {
-        this.cylinderRadius = cylinderRadius;
+        vectorsViz.setCylinderRadius(cylinderRadius);
     }
 
     public boolean isHighlightCuts() {
-        return highlightCuts;
+        return crosscutViz.isHighlightCuts();
     }
 
     public void setHighlightCuts(boolean highlightCuts) {
-        this.highlightCuts = highlightCuts;
+        crosscutViz.setHighlightCuts(highlightCuts);
     }
 
     public boolean isShowVectors() {
-        return showVectors;
+        return crosscutViz.isShowVector();
     }
 
     public void setShowVectors(boolean showVectors) {
-        this.showVectors = showVectors;
+        crosscutViz.setShowVector(showVectors);
     }
 
     public boolean isAllCuts() {
-        return allCuts;
+        return crosscutViz.isAllCuts();
     }
 
     public void setAllCuts(boolean allCuts) {
-        this.allCuts = allCuts;
+        crosscutViz.setAllCuts(allCuts);
     }
 
     public boolean isSamplingRays() {
-        return samplingRays;
+        return crosscutViz.isSamplingRays();
     }
 
     public void setSamplingRays(boolean samplingRays) {
-        this.samplingRays = samplingRays;
+        crosscutViz.setSamplingRays(samplingRays);
     }
-    
-
+   
     public Color getCrosscutColor() {
-        return crosscutColor;
+        return crosscutViz.getCrosscutColor();
     }
 
     public void setCrosscutColor(Color crosscutColor) {
-        this.crosscutColor = crosscutColor;
+        crosscutViz.setCrosscutColor(crosscutColor);
     }
-    
-
+   
     public int getCrosscutThickness() {
-        return crosscutThickness;
+        return crosscutViz.getCrosscutThickness();
     }
 
     public void setCrosscutThickness(int crosscutThickness) {
-        this.crosscutThickness = crosscutThickness;
+        crosscutViz.setCrosscutThickness(crosscutThickness);
     }
 
     public int getCrosscutSize() {
-        return crosscutSize;
+        return crosscutViz.getCrosscutSize();
     }
 
     public void setCrosscutSize(int vectorSize) {
-        this.crosscutSize = vectorSize;
+        crosscutViz.setCrosscutSize(vectorSize);
     }
 
     public Vector3f getPlanePosition() {
-        return planePosition;
+        return crosscutViz.getPlanePosition();
     }
 
     public void setPlanePosition(Vector3f planePosition) {
-        this.planePosition = planePosition;
+        crosscutViz.setPlanePosition(planePosition);
     }
 
     public Vector3f getArbitraryPlanePos() {
-        return arbitraryPlanePos;
+        return crosscutViz.getArbitraryPlanePos();
     }
 
     public void setArbitraryPlanePos(Vector3f arbitraryPlanePos) {
-        this.arbitraryPlanePos = arbitraryPlanePos;
+        crosscutViz.setArbitraryPlanePos(arbitraryPlanePos);
     }
-    
 
     public int getCrossCutPlaneIndex() {
-        return crossCutPlaneIndex;
+        return crosscutViz.getCrossCutPlaneIndex();
     }
 
     public void setCrossCutPlaneIndex(int crossCutPlaneIndex) {
-        this.crossCutPlaneIndex = crossCutPlaneIndex;
+        crosscutViz.setCrossCutPlaneIndex(crossCutPlaneIndex);
     }
 
     public VisualizationType getVisualization() {
@@ -225,15 +235,6 @@ public class OneToManyComparison {
     public void setVisualization(VisualizationType visualization) {
         this.visualization = visualization;
     }
-    
-    public ArrayList<Model> getPreregiteredModels() {
-        return preRegiteredModels;
-    }
-
-    public void setPreregiteredModels(ArrayList<Model> regiteredModels) {
-        this.preRegiteredModels = regiteredModels;
-    }  
-    
     
     public String getNumericalResults() {
         return numericalResults;
@@ -316,7 +317,8 @@ public class OneToManyComparison {
     }
 
     public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
-        this.facialPoints = facialPoints;
+        this.facialPoints.clear();   
+        this.facialPoints.putAll(facialPoints);
     }
 
     public boolean isShowPointInfo() {
@@ -335,36 +337,20 @@ public class OneToManyComparison {
         this.pointColor = pointColor;
     }
 
-    public Color getHdColor1() {
-        return hdColor1;
-    }
-
-    public void setHdColor1(Color hdColor1) {
-        this.hdColor1 = hdColor1;
-    }
-
-    public Color getHdColor2() {
-        return hdColor2;
-    }
-
-    public void setHdColor2(Color hdColor2) {
-        this.hdColor2 = hdColor2;
-    }
-
     public int getHausdorfMaxTreshold() {
-        return hausdorfMaxTreshold;
+        return colormapViz.getHausdorfMaxTreshold();
     }
 
     public void setHausdorfMaxTreshold(int hausdorfTreshold) {
-        this.hausdorfMaxTreshold = hausdorfTreshold;
+        colormapViz.setHausdorfMaxTreshold(hausdorfTreshold);
     }
 
     public int getHausdorfMinTreshold() {
-        return hausdorfMinTreshold;
+        return colormapViz.getHausdorfMinTreshold();
     }
 
     public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
-        this.hausdorfMinTreshold = hausdorfMinTreshold;
+        colormapViz.setHausdorfMinTreshold(hausdorfMinTreshold);
     }   
     
 
@@ -580,6 +566,7 @@ public class OneToManyComparison {
 
     public void addModel(File model){
         models.add(model);
+        facialPoints.put(model.getName(), new LinkedList<FacialPoint>());      //make sure there's list to add FPs to
         if(node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }

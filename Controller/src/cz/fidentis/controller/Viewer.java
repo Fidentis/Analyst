@@ -5,8 +5,6 @@
 package cz.fidentis.controller;
 
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelLoader;
-import java.io.File;
 
 /**
  *
