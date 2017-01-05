@@ -193,6 +193,7 @@ public class Model {
 
         gl.glEnable(GL2.GL_LIGHTING);
         gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glBegin(GL2.GL_TRIANGLES);
 
         if (materials != null) {
             materials.clearUsedMaterials();
@@ -209,6 +210,8 @@ public class Model {
 
             faces.renderFace(i, flipTexCoords, gl);                  // draw face i
         }
+        
+        gl.glEnd();
 
         gl.glDisable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL2.GL_LIGHTING);
