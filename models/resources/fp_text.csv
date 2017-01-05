@@ -1,57 +1,60 @@
 Type;Name;Info
-EX_R;Exocanthion R;The point at the outer commissure of the eye where the outer margin of the upper eyelid meets the lower eyelid. If the precise spot cannot be found then the location is in the intersection of imaginary lines obtained by prolonging the eyelid margins. The point is bilateral.
-EX_L;Exocanthion L;The point at the outer commissure of the eye where the outer margin of the upper eyelid meets the lower eyelid. If the precise spot cannot be found then the location is in the intersection of imaginary lines obtained by prolonging the eyelid margins. The point is bilateral.
-EN_R;Endocanthion R;The point at the inner commissure of the eye where the inner margin of the upper eyelid meets the lower eyelid. It is the most medial point at the lacrimal caruncle. In case a skin fold is present (epicanthus, plica mongolica, plica marginalis fetis) and the point is not visible, by Kolar and Salter’s recommendations (1997) the landmark is defined as the point where the fold crosses the lower eyelid. In this case the points are not homologous. The point is bilateral.
-EN_L;Endocanthion L;The point at the inner commissure of the eye where the inner margin of the upper eyelid meets the lower eyelid. It is the most medial point at the lacrimal caruncle. In case a skin fold is present (epicanthus, plica mongolica, plica marginalis fetis) and the point is not visible, by Kolar and Salter’s recommendations (1997) the landmark is defined as the point where the fold crosses the lower eyelid. In this case the points are not homologous. The point is bilateral.
-PAS_R;Palpebra superior R;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the caudal (lower) margin of the upper eyelid. The eye center is defined as the half distance between exocanthion and endocanthion. Together with the palpebra inferior point the landmark determines the eye height. The point is bilateral.
-PAS_L;Palpebra superior L;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the caudal (lower) margin of the upper eyelid. The eye center is defined as the half distance between exocanthion and endocanthion. Together with the palpebra inferior point the landmark determines the eye height. The point is bilateral.
-PAI_R;Palpebra inferior R;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the upper margin of the lower eyelid. Together with the palpebra superior point the landmark determines the eye height. The point is bilateral.
-PAI_L;Palpebra inferior L;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the upper margin of the lower eyelid. Together with the palpebra superior point the landmark determines the eye height. The point is bilateral.
-G;Glabella;The outermost midline point between the eyebrows.
-SN;Subnasale;The lowest posterior midline point at the angle formed by the outline of nasal septum and upper lip.
-AL_R;Alare R;The most lateral anterior point of wing of the nose. The point is bilateral.
-AL_L;Alare L;The most lateral anterior point of wing of the nose. The point is bilateral.
-N;Nasion;The point in the midline on the nasal root, the deepest point of the nasal root.
-PRN;Pronasale;The most anterior midline point of the nasal tip with the head positioned in the Frankfurt horizontal plane. If the nasal tip is bifid the point is located in the mid-sagittal plane between the elevations.
-LS;Labrale superius;The midpoint of the upper vermilion line. From lateral view this point is mostly covered by other parts of the lips. In case of bow-shaped upper vermilion the point is located in the mid-distance between cheilion points. (by Farkas 1994, modified)
-STO;Stomion;The point located at the intersection of the closed mouth fissure and the midline. If the mouth is open the point is localized at the lower margin of the upper lip.
-LI;Labrale inferius;The most anterior midline point at the lower margin of lower vermilion. (by Fetter 1967, modified)
-CH_R;Cheilion R;The point located at the labial commissure. The point is bilateral.
-CH_L;Cheilion L;The point located at the labial commissure. The point is bilateral.
-CP_R;Crista philtri R;The point located at the place where the line, which is going through the highest margins of the upper vermilion, meets the lower margin of crista philtri. The point is bilateral.
-CP_L;Crista philtri L;The point located at the place where the line, which is going through the highest margins of the upper vermilion, meets the lower margin of crista philtri. The point is bilateral.
-SL;Sublabiale;The midpoint of the mentolabial sulcus (the ridge between the chin and the lower lip, not the vermilion). The point is located at the flexion point of the concavity.
-GN;Gnathion;The most anterior inferior point located in the midline at the lower margin of the mandible.
-GOL_R;Gonion I R;The lateral inferior point located at the mandibular angle. The point is bilateral. (Digitized on texture-less 3D models)
-GOL_L;Gonion I L;The lateral inferior point located at the mandibular angle. The point is bilateral. (Digitized on texture-less 3D models)
-ZY_R;Zygion II R;The most lateral point of the face located on line running through the two eye centers. From lateral view the point is located at the extension to the posterior eyebrow margin (alternatively, at the eyebrow margin). The eye centers are defined as intersection of line connecting exo/endocanthion and of palpebra superior/inferior. The point is bilateral.
-ZY_L;Zygion II L;The most lateral point of the face located on line running through the two eye centers. From lateral view the point is located at the extension to the posterior eyebrow margin (alternatively, at the eyebrow margin). The eye centers are defined as intersection of line connecting exo/endocanthion and of palpebra superior/inferior. The point is bilateral.
-PG;Pogonion;The most anterior midline point located at the chin with the head positioned in the Frankfurt horizontal plane.
-T_R;Tragion R;The point located at the upper margin of tragus in the little notch where the cartilage is attached with the head positioned in the Frankfurt horizontal place. The point is bilateral.
-T_L;Tragion L;The point located at the upper margin of tragus in the little notch where the cartilage is attached with the head positioned in the Frankfurt horizontal place. The point is bilateral.
-SA_R;Superaurale R;The most superior point located at the upper margin of the auricle with the head positioned in the Frankfurt horizontal plane. The point is bilateral.
-SA_L;Superaurale L;The most superior point located at the upper margin of the auricle with the head positioned in the Frankfurt horizontal plane. The point is bilateral.
-SBA_R;Subaurale R;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the “attached earlobe” appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
-SBA_L;Subaurale L;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the “attached earlobe” appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
-PA_R;Postaurale R;The most posterior point of the posterior margin of the auricle (when the head is positioned in the Frankfurt horizontal plane). The point is bilateral.
-PA_L;Postaurale L;The most posterior point of the posterior margin of the auricle (when the head is positioned in the Frankfurt horizontal plane). The point is bilateral.
-OBS_R;Otobasion superius R;The point where the upper margin of the auricle attaches to the head. The point is bilateral.
-OBS_L;Otobasion superius L;The point where the upper margin of the auricle attaches to the head. The point is bilateral.
-OBI_R;Otobasion inferius R;The point where the earlobe attaches to the cheek skin (lower attachment). The point is bilateral.
-OBI_L;Otobasion inferius L;The point where the earlobe attaches to the cheek skin (lower attachment). The point is bilateral.
-PRA_R;Praeaurale R;The point at the intersection of the line between Otobasion superius and Otobasion inferius points, at the level of the Postaurale point. The point is bilateral.
-PRA_L;Praeaurale L;The point at the intersection of the line between Otobasion superius and Otobasion inferius points, at the level of the Postaurale point. The point is bilateral.
-PUP_R;Pupila R;No information
-PUP_L;Pupila L;No information
-GNA;Gnathion;No information
-GO2_R;Gonion II R;No information
-GO2_L;Gonion II L;No information
-V;Vertex;No information
-O;Ophryon;No information
-RN_R;Radix nasi R;No information
-RN_L;Radix nasi L;No information
-EU2_R;Euryon II R;No information
-EU2_L;Euryon II L;No information
-RM_R;Ramus mandibulae R;No information
-RM_L;Ramus mandibulae L;No information
-unspecified;Unspecified point;No information
+1;Exocanthion R;The point at the outer commissure of the eye where the outer margin of the upper eyelid meets the lower eyelid. If the precise spot cannot be found then the location is in the intersection of imaginary lines obtained by prolonging the eyelid margins. The point is bilateral.
+2;Exocanthion L;The point at the outer commissure of the eye where the outer margin of the upper eyelid meets the lower eyelid. If the precise spot cannot be found then the location is in the intersection of imaginary lines obtained by prolonging the eyelid margins. The point is bilateral.
+3;Endocanthion R;The point at the inner commissure of the eye where the inner margin of the upper eyelid meets the lower eyelid. It is the most medial point at the lacrimal caruncle. In case a skin fold is present (epicanthus, plica mongolica, plica marginalis fetis) and the point is not visible, by Kolar and Salter’s recommendations (1997) the landmark is defined as the point where the fold crosses the lower eyelid. In this case the points are not homologous. The point is bilateral.
+4;Endocanthion L;The point at the inner commissure of the eye where the inner margin of the upper eyelid meets the lower eyelid. It is the most medial point at the lacrimal caruncle. In case a skin fold is present (epicanthus, plica mongolica, plica marginalis fetis) and the point is not visible, by Kolar and Salter’s recommendations (1997) the landmark is defined as the point where the fold crosses the lower eyelid. In this case the points are not homologous. The point is bilateral.
+5;Palpebra superior R;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the caudal (lower) margin of the upper eyelid. The eye center is defined as the half distance between exocanthion and endocanthion. Together with the palpebra inferior point the landmark determines the eye height. The point is bilateral.
+6;Palpebra superior L;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the caudal (lower) margin of the upper eyelid. The eye center is defined as the half distance between exocanthion and endocanthion. Together with the palpebra inferior point the landmark determines the eye height. The point is bilateral.
+7;Palpebra inferior R;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the upper margin of the lower eyelid. Together with the palpebra superior point the landmark determines the eye height. The point is bilateral.
+8;Palpebra inferior L;The point which is located at the intersection of a line going through the eye center (parallel to the mid-sagittal plane) and the upper margin of the lower eyelid. Together with the palpebra superior point the landmark determines the eye height. The point is bilateral.
+9;Glabella;The outermost midline point between the eyebrows.
+10;Subnasale;The lowest posterior midline point at the angle formed by the outline of nasal septum and upper lip.
+11;Alare R;The most lateral anterior point of wing of the nose. The point is bilateral.
+12;Alare L;The most lateral anterior point of wing of the nose. The point is bilateral.
+13;RAN_R;No information
+14;RAN_L;No information
+15;Nasion;The point in the midline on the nasal root, the deepest point of the nasal root.
+16;Pronasale;The most anterior midline point of the nasal tip with the head positioned in the Frankfurt horizontal plane. If the nasal tip is bifid the point is located in the mid-sagittal plane between the elevations.
+17;Labrale superius;The midpoint of the upper vermilion line. From lateral view this point is mostly covered by other parts of the lips. In case of bow-shaped upper vermilion the point is located in the mid-distance between cheilion points. (by Farkas 1994, modified)
+18;Stomion;The point located at the intersection of the closed mouth fissure and the midline. If the mouth is open the point is localized at the lower margin of the upper lip.
+19;Labrale inferius;The most anterior midline point at the lower margin of lower vermilion. (by Fetter 1967, modified)
+20;Cheilion R;The point located at the labial commissure. The point is bilateral.
+21;Cheilion L;The point located at the labial commissure. The point is bilateral.
+22;Crista philtri R;The point located at the place where the line, which is going through the highest margins of the upper vermilion, meets the lower margin of crista philtri. The point is bilateral.
+23;Crista philtri L;The point located at the place where the line, which is going through the highest margins of the upper vermilion, meets the lower margin of crista philtri. The point is bilateral.
+24;Sublabiale;The midpoint of the mentolabial sulcus (the ridge between the chin and the lower lip, not the vermilion). The point is located at the flexion point of the concavity.
+25;Gnathion;The most anterior inferior point located in the midline at the lower margin of the mandible.
+26;Gonion I R;The lateral inferior point located at the mandibular angle. The point is bilateral. (Digitized on texture-less 3D models)
+27;Gonion I L;The lateral inferior point located at the mandibular angle. The point is bilateral. (Digitized on texture-less 3D models)
+28;Zygion II R;The most lateral point of the face located on line running through the two eye centers. From lateral view the point is located at the extension to the posterior eyebrow margin (alternatively, at the eyebrow margin). The eye centers are defined as intersection of line connecting exo/endocanthion and of palpebra superior/inferior. The point is bilateral.
+29;Zygion II L;The most lateral point of the face located on line running through the two eye centers. From lateral view the point is located at the extension to the posterior eyebrow margin (alternatively, at the eyebrow margin). The eye centers are defined as intersection of line connecting exo/endocanthion and of palpebra superior/inferior. The point is bilateral.
+30;Pogonion;The most anterior midline point located at the chin with the head positioned in the Frankfurt horizontal plane.
+31;Tragion R;The point located at the upper margin of tragus in the little notch where the cartilage is attached with the head positioned in the Frankfurt horizontal place. The point is bilateral.
+32;Tragion L;The point located at the upper margin of tragus in the little notch where the cartilage is attached with the head positioned in the Frankfurt horizontal place. The point is bilateral.
+33;Superaurale R;The most superior point located at the upper margin of the auricle with the head positioned in the Frankfurt horizontal plane. The point is bilateral.
+34;Superaurale L;The most superior point located at the upper margin of the auricle with the head positioned in the Frankfurt horizontal plane. The point is bilateral.
+35;Subaurale R;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the “attached earlobe�? appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
+36;Subaurale L;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the “attached earlobe�? appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
+37;Postaurale R;The most posterior point of the posterior margin of the auricle (when the head is positioned in the Frankfurt horizontal plane). The point is bilateral.
+38;Postaurale L;The most posterior point of the posterior margin of the auricle (when the head is positioned in the Frankfurt horizontal plane). The point is bilateral.
+39;Otobasion superius R;The point where the upper margin of the auricle attaches to the head. The point is bilateral.
+40;Otobasion superius L;The point where the upper margin of the auricle attaches to the head. The point is bilateral.
+41;Otobasion inferius R;The point where the earlobe attaches to the cheek skin (lower attachment). The point is bilateral.
+42;Otobasion inferius L;The point where the earlobe attaches to the cheek skin (lower attachment). The point is bilateral.
+43;Praeaurale R;The point at the intersection of the line between Otobasion superius and Otobasion inferius points, at the level of the Postaurale point. The point is bilateral.
+44;Praeaurale L;The point at the intersection of the line between Otobasion superius and Otobasion inferius points, at the level of the Postaurale point. The point is bilateral.
+45;Pupila R;No information
+46;Pupila L;No information
+47;Gnathion;No information
+48;Gonion II R;No information
+49;Gonion II L;No information
+50;Vertex;No information
+51;Ophryon;No information
+52;Radix nasi R;No information
+53;Radix nasi L;No information
+54;Euryon II R;No information
+55;Euryon II L;No information
+56;Ramus mandibulae R;No information
+57;Ramus mandibulae L;No information
+58;P_L;No information
+59;P_R;No information
