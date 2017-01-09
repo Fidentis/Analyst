@@ -225,7 +225,7 @@ public class FpTexter {
      Set<Integer> ids = fpTexts.keySet();
      int landmarkNumber = fpTexts.size();       //acount for -1 which is unspecified, but not shown in GUI
      int counter = 0;
-     int buildinLandmarksNum = FacialPointType.values().length;
+     int buildinLandmarksNum = FacialPointType.values().length - 1;
      
      TableData td = new TableData();
      
