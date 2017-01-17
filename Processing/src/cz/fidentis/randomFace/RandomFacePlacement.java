@@ -7,7 +7,7 @@ package cz.fidentis.randomFace;
 
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.kdTree.KdTree;
+import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.composite.CompositeModel;
 import cz.fidentis.composite.FacePartType;
 import cz.fidentis.composite.ModelInfo;

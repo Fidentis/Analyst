@@ -5,7 +5,7 @@
  */
 package test.java;
 
-import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.utils.MathUtils;
@@ -23,7 +23,7 @@ import org.junit.Test;
  * @author xferkova
  */
 public class KdTreeIndexedTest {
-    private static String modelPath = "D:\\Documents\\SVN\\Analyst\\Comparison\\test\\unit\\src\\test\\resources\\test_face_01m.obj";
+    private static String modelPath = "..\\resources\\test_face_01m.obj";
     private static Model loadedModel;
     
     public KdTreeIndexedTest(){
@@ -37,16 +37,16 @@ public class KdTreeIndexedTest {
         
         List<Vector3f> points = new LinkedList<>();
         points.add(p);
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         assertTrue(tree.containPoint(p));
     }
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testPutNothing(){
         Vector3f p = new Vector3f(0.1f, 0.5f, 0.7f);
         List<Vector3f> points = new LinkedList<>();
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         assertTrue(!tree.containPoint(p));
     }
@@ -77,7 +77,7 @@ public class KdTreeIndexedTest {
             points.add(new Vector3f(0.1f * i, 0.5f * i, 0.7f * i));
         }
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         Random r = new Random();
         
         Vector3f p = points.get(r.nextInt(points.size()));
@@ -95,7 +95,7 @@ public class KdTreeIndexedTest {
             points.add(new Vector3f(0.1f * i, 0.5f * i, 0.7f * i));
         }
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         Vector3f p = new Vector3f(2.5f, 0.3f, 1.2f);
         Vector3f found = tree.nearestNeighbour(p);
@@ -110,7 +110,7 @@ public class KdTreeIndexedTest {
     public void testFindClosestModelAlreadyInTree(){
         List<Vector3f> points = loadedModel.getVerts();
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         Random r = new Random();
         
@@ -125,7 +125,7 @@ public class KdTreeIndexedTest {
     public void testFindClosestModelNotInTree(){
         List<Vector3f> points = loadedModel.getVerts();
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         Vector3f p = new Vector3f(2.5f, 0.3f, 1.2f);
         Vector3f found = tree.nearestNeighbour(p);
@@ -144,7 +144,7 @@ public class KdTreeIndexedTest {
             points.add(new Vector3f(0.1f * i, 0.5f * i, 0.7f * i));
         }
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         Random r = new Random();
         
         Vector3f p = points.get(r.nextInt(points.size()));
@@ -162,7 +162,7 @@ public class KdTreeIndexedTest {
             points.add(new Vector3f(0.1f * i, 0.5f * i, 0.7f * i));
         }
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         Vector3f p = new Vector3f(2.5f, 0.3f, 1.2f);
         int found = tree.nearestIndex(p);
@@ -178,7 +178,7 @@ public class KdTreeIndexedTest {
     public void testFindClosestIndexModelAlreadyInTree(){
         List<Vector3f> points = loadedModel.getVerts();
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         Random r = new Random();
         
@@ -193,7 +193,7 @@ public class KdTreeIndexedTest {
     public void testFindClosestIndexModelNotInTree(){
         List<Vector3f> points = loadedModel.getVerts();
         
-        KDTreeIndexed tree = new KDTreeIndexed(points);
+        KdTreeIndexed tree = new KdTreeIndexed(points);
         
         Vector3f p = new Vector3f(2.5f, 0.3f, 1.2f);
         int found = tree.nearestIndex(p);

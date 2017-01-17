@@ -9,8 +9,10 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.hausdorffDistance.ComparisonMetrics;
 import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
 import cz.fidentis.comparison.hausdorffDistance.NearestCurvature;
-import cz.fidentis.comparison.kdTree.KDTreeIndexed;
-import cz.fidentis.comparison.kdTree.KdTree;
+import cz.fidentis.comparison.icp.KdTree;
+import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.featurepoints.curvature.CurvatureType;
+import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.model.Model;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +81,7 @@ public class BatchComparisonNumericCallable implements Callable<ArrayList<Float>
 
                 result = HausdorffDistance.instance().hDistance(mainF, compMesh.getVerts(), normalsUsed, useRelative);
             } else {
-                result = NearestCurvature.instance().nearestCurvature((KDTreeIndexed) mainF, compMesh.getVerts(), mainCurv, compCurv);
+                result = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, compMesh.getVerts(), mainCurv, compCurv);
             }
             result = ComparisonMetrics.instance().thresholdValues(result, upperTreshold, lowerTreshold, useRelative);
             tmp.addAll(result);

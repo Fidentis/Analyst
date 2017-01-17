@@ -6,7 +6,7 @@
 package cz.fidentis.processing.comparison.surfaceComparison;
 
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.kdTree.KdTree;
+import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.model.Model;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import java.io.File;

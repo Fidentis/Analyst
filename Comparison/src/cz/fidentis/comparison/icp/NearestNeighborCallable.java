@@ -5,7 +5,6 @@
  */
 package cz.fidentis.comparison.icp;
 
-import cz.fidentis.comparison.kdTree.KdTree;
 import java.util.concurrent.Callable;
 import javax.vecmath.Vector3f;
 
