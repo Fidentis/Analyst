@@ -5,7 +5,7 @@
  */
 package cz.fidentis.comparison.hausdorffDistance;
 
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class NearestCurvature {
         return instance;
     }
     
-    public List<Float> nearestCurvature(KdTreeIndexed mainF, List<Vector3f> comparedF, double[] mainCurvature, double[] secondaryCurvature){
+    public List<Float> nearestCurvature(KDTreeIndexed mainF, List<Vector3f> comparedF, double[] mainCurvature, double[] secondaryCurvature){
         List<Future<Float>> computDist = new LinkedList<>();
         ExecutorService executor = Executors.newFixedThreadPool(USED_THREADS);
         List<Float> distance = new ArrayList<>(comparedF.size());

@@ -9,8 +9,8 @@ package cz.fidentis.processing.comparison.surfaceComparison;
 import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
 import cz.fidentis.comparison.hausdorffDistance.NearestCurvature;
-import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.model.Model;
@@ -58,7 +58,7 @@ public class BatchComparisonVisualCallable implements Callable<ArrayList<Float>>
         
             return (ArrayList<Float>) HausdorffDistance.instance().hDistance(computeMorph, template.getVerts(), normalsUsed, useRelative);
         }else{
-           return (ArrayList<Float>) NearestCurvature.instance().nearestCurvature((KdTreeIndexed) computeMorph, template.getVerts(), morphCurv.getCurvature(CurvatureType.Gaussian), templateCurv.getCurvature(CurvatureType.Gaussian));
+           return (ArrayList<Float>) NearestCurvature.instance().nearestCurvature((KDTreeIndexed) computeMorph, template.getVerts(), morphCurv.getCurvature(CurvatureType.Gaussian), templateCurv.getCurvature(CurvatureType.Gaussian));
         }
     }
     

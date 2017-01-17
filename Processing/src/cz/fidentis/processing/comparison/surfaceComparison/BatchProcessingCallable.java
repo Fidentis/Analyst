@@ -8,9 +8,9 @@ package cz.fidentis.processing.comparison.surfaceComparison;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.icp.KdTree;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.model.Model;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
@@ -115,7 +115,7 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
         }
 
         if (metric == ICPmetric.VERTEX_TO_VERTEX) {
-            computeMorph = new KdTreeIndexed(compF.getVerts());
+            computeMorph = new KDTreeIndexed(compF.getVerts());
         } else {
             computeMorph = new KdTreeFaces(compF.getVerts(), compF.getFaces());
         }

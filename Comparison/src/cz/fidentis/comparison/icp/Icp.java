@@ -6,6 +6,7 @@
 
 package cz.fidentis.comparison.icp;
 
+import cz.fidentis.comparison.kdTree.KdTree;
 import Jama.Matrix;
 import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.utils.MathUtils;
