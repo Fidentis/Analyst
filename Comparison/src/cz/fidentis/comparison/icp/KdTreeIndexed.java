@@ -6,6 +6,7 @@
 
 package cz.fidentis.comparison.icp;
 
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.utils.CompareUtils;
 import cz.fidentis.utils.MathUtils;
 import java.util.ArrayList;

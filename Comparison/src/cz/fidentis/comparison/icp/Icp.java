@@ -8,6 +8,7 @@ package cz.fidentis.comparison.icp;
 
 import Jama.Matrix;
 import com.jogamp.graph.math.Quaternion;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import java.util.ArrayList;

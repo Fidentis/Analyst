@@ -7,8 +7,8 @@ package cz.fidentis.processing.featurePoints;
 
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.FpDetector;
@@ -63,7 +63,7 @@ public class FpProcessing {
         if (!genericFacePath.equals("")) {
             genericFacePath = genericFacePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "average_face.obj";
             Model genericFace = ModelLoader.instance().loadModel(new File(genericFacePath), false, true);
-            mainF = new KdTreeIndexed(genericFace.getVerts());
+            mainF = new KDTreeIndexed(genericFace.getVerts());
         }
     }
 

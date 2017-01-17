@@ -12,18 +12,16 @@ import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
 import cz.fidentis.comparison.hausdorffDistance.NearestCurvature;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.model.Model;
-import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
-import cz.fidentis.processing.featurePoints.FpProcessing;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -196,7 +194,7 @@ public class SurfaceComparisonProcessing {
         } else {
             Curvature_jv curv = new Curvature_jv(avarage);
             double[] secondaryCurv = curv.getCurvature(CurvatureType.Gaussian);
-            results = NearestCurvature.instance().nearestCurvature((KdTreeIndexed) mainF, avarage.getVerts(), mainCurv, secondaryCurv);
+            results = NearestCurvature.instance().nearestCurvature((KDTreeIndexed) mainF, avarage.getVerts(), mainCurv, secondaryCurv);
         }
 
         return results;
@@ -225,14 +223,14 @@ public class SurfaceComparisonProcessing {
         
         for (File f : models) {
             current = ModelLoader.instance().loadModel(f, Boolean.FALSE, Boolean.FALSE);
-            currentTree = new KdTreeIndexed(current.getVerts());
+            currentTree = new KDTreeIndexed(current.getVerts());
 
             if (method == ComparisonMethod.HAUSDORFF_DIST) {
                 results.add((ArrayList<Float>) HausdorffDistance.instance().hDistance(currentTree, mainF.getVerts(), mainF.getNormals(), useRelative));
             } else {
                 Curvature_jv mainCurv = new Curvature_jv(current);
                 double[] mainCurvature = mainCurv.getCurvature(CurvatureType.Gaussian);
-                results.add((ArrayList<Float>) NearestCurvature.instance().nearestCurvature((KdTreeIndexed) currentTree, mainF.getVerts(), mainCurvature, secondaryCurvature));
+                results.add((ArrayList<Float>) NearestCurvature.instance().nearestCurvature((KDTreeIndexed) currentTree, mainF.getVerts(), mainCurvature, secondaryCurvature));
             }
 
         }
@@ -364,7 +362,7 @@ public class SurfaceComparisonProcessing {
             computeMeanTranslationToModel(template, trans, templateSize, compFsSize);
             
             //creates new kd-tree for just created average face
-            templateTree = new KdTreeIndexed(template.getVerts());
+            templateTree = new KDTreeIndexed(template.getVerts());
             k.finish();
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -461,7 +459,7 @@ public class SurfaceComparisonProcessing {
         //kd-tree for template
         KdTree templateTree;
         if (metric == ICPmetric.VERTEX_TO_VERTEX) {
-            templateTree = new KdTreeIndexed(template.getVerts());
+            templateTree = new KDTreeIndexed(template.getVerts());
         } else {
             templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
         }
@@ -663,7 +661,7 @@ public class SurfaceComparisonProcessing {
         if (method == ComparisonMethod.HAUSDORFF_DIST && metric == ICPmetric.VERTEX_TO_MESH) {
             computeMorph = new KdTreeFaces(currentModel.getVerts(), currentModel.getFaces());
         } else {
-            computeMorph = new KdTreeIndexed(currentModel.getVerts());
+            computeMorph = new KDTreeIndexed(currentModel.getVerts());
         }
         return computeMorph;
     }
@@ -1257,7 +1255,7 @@ public class SurfaceComparisonProcessing {
         
         Model mirror = MeshUtils.instance().getMirroredModel(m); 
        
-        Icp.instance().icp(new KdTreeIndexed(m.getVerts()), mirror.getVerts(), mirror.getVerts(), 0.05f, 20, false);
+        Icp.instance().icp(new KDTreeIndexed(m.getVerts()), mirror.getVerts(), mirror.getVerts(), 0.05f, 20, false);
         //List<ICPTransformation> trans = FpProcessing.instance().faceRegistration(m);           
         
         p.finish();
@@ -1332,7 +1330,7 @@ public class SurfaceComparisonProcessing {
             list.clear();
             Model current = ModelLoader.instance().loadModel(models.get(i), Boolean.FALSE, false);
 
-            KdTree mainFace = new KdTreeIndexed(current.getVerts());
+            KdTree mainFace = new KDTreeIndexed(current.getVerts());
 
             list.addAll(batchRawResultsToSingle(models, i, executor, mainFace, null, false, 1.0f, 0.0f, ComparisonMethod.HAUSDORFF_DIST));
             batchVariance(list, uncomputedCollumn, res, 0, false);
