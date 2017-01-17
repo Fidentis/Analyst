@@ -11,9 +11,9 @@ import cz.fidentis.comparison.hausdorffDistance.ComparisonMetrics;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.comparison.hausdorffDistance.HausdorffDistance;
 import cz.fidentis.comparison.hausdorffDistance.NearestCurvature;
+import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
-import cz.fidentis.comparison.kdTree.KDTreeIndexed;
-import cz.fidentis.comparison.kdTree.KdTree;
+import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.comparison.procrustes.Procrustes2Models;
 import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -812,7 +812,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                                 mainF = new KdTreeFaces(c.getModel2().getVerts(),
                                         c.getModel2().getFaces());
                             }else{
-                                mainF = new KDTreeIndexed(c.getModel2().getVerts());
+                                mainF = new KdTreeIndexed(c.getModel2().getVerts());
                             }
                             
                             List<Vector3f> usedNormals = compareFace.getNormals();
@@ -832,7 +832,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                             hdDistance = HausdorffDistance.instance().hDistance(mainF, compareFace.getVerts(), usedNormals, true);
                         } else {
                             //in case vertex-to-plane metric was used created new kd-tree to be able to get index of nearest neighbor
-                            KDTreeIndexed mainF = new KDTreeIndexed(c.getModel2().getVerts());
+                            KdTreeIndexed mainF = new KdTreeIndexed(c.getModel2().getVerts());
                             double[] mainCurvature = new Curvature_jv(c.getModel2()).getCurvature(CurvatureType.Gaussian);
                             double[] secondaryCurvature = new Curvature_jv(c.getModel1()).getCurvature(CurvatureType.Gaussian);
 

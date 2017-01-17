@@ -8,7 +8,7 @@ import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
-import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.comparison.procrustes.GPA;
 import cz.fidentis.composite.FacePartType;
 import cz.fidentis.composite.ModelInfo;
@@ -516,7 +516,7 @@ public final class OpenProject implements ActionListener {
             
             Model model = ModelLoader.instance().loadModel(modelFile, true, true);
             comparison.setModel1(model);
-            comparison.setMainFace(new KDTreeIndexed(model.getVerts()));
+            comparison.setMainFace(new KdTreeIndexed(model.getVerts()));
         }
 
         if (secondaryE != null) {

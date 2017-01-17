@@ -1,6 +1,6 @@
 package cz.fidentis.comparison.hausdorffDistance;
 
-import cz.fidentis.comparison.kdTree.KdTree;
+import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.SortUtils;
 import java.util.ArrayList;

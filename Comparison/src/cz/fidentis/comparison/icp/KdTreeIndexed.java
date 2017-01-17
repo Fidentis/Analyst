@@ -6,8 +6,6 @@
 
 package cz.fidentis.comparison.icp;
 
-import cz.fidentis.comparison.kdTree.KDTreeIndexed;
-import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.utils.CompareUtils;
 import cz.fidentis.utils.MathUtils;
 import java.util.ArrayList;
@@ -26,8 +24,6 @@ import javax.vecmath.Vector3f;
  * Class which will built KdTree, K = 3
  * Most of the methods in the class are private, hence only contructor, root getter and nearest neighbor search are available publicly
  * Class builds balanced KdTree from point cloud.
- * 
- * DEPRICATED
  * 
  * @author Zuzana Ferkova
  */
@@ -85,7 +81,7 @@ public class KdTreeIndexed implements KdTree {
             sortedByZ = sortedP.get(Z_AXIS).get();
             
         } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(KDTreeIndexed.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KdTreeIndexed.class.getName()).log(Level.SEVERE, null, ex);
         }    
         
         root = buildTree(null, sortedByX, sortedByY, sortedByZ, 0, points);

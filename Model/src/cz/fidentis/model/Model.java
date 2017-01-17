@@ -193,7 +193,6 @@ public class Model {
 
         gl.glEnable(GL2.GL_LIGHTING);
         gl.glEnable(GL2.GL_TEXTURE_2D);
-        gl.glBegin(GL2.GL_TRIANGLES);
 
         if (materials != null) {
             materials.clearUsedMaterials();
