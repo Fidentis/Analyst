@@ -13,6 +13,7 @@ import cz.fidentis.comparison.hausdorffDistance.NearestCurvature;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.icp.KdTreeFaces;
+import cz.fidentis.comparison.icp.NearestNeighborCallable;
 import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.controller.BatchComparison;
@@ -1030,13 +1031,12 @@ public class SurfaceComparisonProcessing {
      */
     public void computeAverage(Model template, List<File> compF, ICPmetric metric) {
         List<Vector3f> trans;     //list that will contain sum of translation vectors for each vertex of tempalte
-        List<Future<List<Vector3f>>> list = new ArrayList<>(compF.size());
         Model comp;
 
         trans = ListUtils.instance().populateVectorList(template.getVerts().size());
         int templateSize = template.getVerts().size();
         
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); //creates thread pool of size of number of available processors        
+               
 
         //parallel computation nearest neighbor search (same as ICP but without alignment)
         for (File f : compF) {
@@ -1044,44 +1044,53 @@ public class SurfaceComparisonProcessing {
                 p.setDisplayName("Creating default face from models.");
             comp = ModelLoader.instance().loadModel(f, Boolean.FALSE, false);
 
-            Future<List<Vector3f>> fut = runAvgFaceComputation(executor, comp, template, metric);
-            list.add(fut);
-        }
-        
-        executor.shutdown();
-        
-        
-
-        //sum up all translation vectors for each vertex
-        for (Future<List<Vector3f>> list1 : list) {
-            try {
-                List<Vector3f> translations = list1.get();
-                addTranslationToModel(trans, translations);
-                
-            } catch (InterruptedException | ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
+            List<Vector3f> displacment = runAvgFaceComputation(comp, template, metric);
+            addTranslationToModel(trans, displacment);
+        }      
 
         //compute average translation for each vertex and apply it to given vertex
         computeMeanTranslationToModel(template, trans, templateSize, compF.size());
     }
 
-    //computes parameters for avg face and adds it to list of future results
+
     /**
-     * Submits tasks for computation of average face to Executor instance.
+     * Computes displacement vectors between template face and nearest neighbors in comp
      * 
-     * @param executor - instance of Executor to which tasks will be submited
      * @param comp - Model to be compared to the main model
      * @param template - Main model
      * @param metric - ICPmetric for alignment
      */
-    private Future<List<Vector3f>> runAvgFaceComputation(ExecutorService executor, Model comp, Model template, ICPmetric metric) {        
-        Future<List<Vector3f>> future = executor.submit(new BatchProcessingCallable(comp, null, template, null,
-                0f, 0, Boolean.FALSE, null, -2, -2, Boolean.FALSE, metric, null));
+    private List<Vector3f> runAvgFaceComputation(Model comp, Model template, ICPmetric metric) {        
+        List<Vector3f> displacments = new ArrayList<>(template.getVerts().size());
+        List<Future<Vector3f>> nearestNeighbors = new ArrayList<>(template.getVerts().size());
+        KdTree compTree;
         
-        return future;
+        if (metric == ICPmetric.VERTEX_TO_VERTEX) {
+            compTree = new KDTreeIndexed(comp.getVerts());
+        } else {
+            compTree = new KdTreeFaces(comp.getVerts(), comp.getFaces());
+        }
+        
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); //creates thread pool of size of number of available processors 
+        
+        for(Vector3f v : template.getVerts()){
+           nearestNeighbors.add(executor.submit(new NearestNeighborCallable(compTree, v)));
+        }
+        
+        executor.shutdown();
+        
+        for(int i = 0; i < nearestNeighbors.size(); i++){
+            try {
+                displacments.add(MathUtils.instance().createVector(template.getVerts().get(i), nearestNeighbors.get(i).get()));
+            } catch (InterruptedException | ExecutionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+        
+        
+        return displacments;
     }
+
 
     /**
      * Compute average face based on 'tempalte' and aligned 'compF' faces
@@ -1093,29 +1102,20 @@ public class SurfaceComparisonProcessing {
      */
     public void computeAverage(Model template, Model[] compF, ICPmetric metric) {
         List<Vector3f> trans;     //list that will contain sum of translation vectors for each vertex of tempalte
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); //creates thread pool of size of number of available processors
-        List<Future<List<Vector3f>>> list = new ArrayList<>(compF.length);
 
         trans = ListUtils.instance().populateVectorList(template.getVerts().size());
         int templateSize = template.getVerts().size();
+        
+               
 
         //parallel computation nearest neighbor search (same as ICP but without alignment)
         for (Model m : compF) {
-            p.setDisplayName("Creating default face from models.");
-
-            Future<List<Vector3f>> fut = runAvgFaceComputation(executor, m, template, metric);
-            list.add(fut);
-        }
-
-        //sum up all translation vectors for each vertex
-        for (Future<List<Vector3f>> list1 : list) {
-            try {
-                List<Vector3f> translations = list1.get();
-                addTranslationToModel(trans, translations);
-            } catch (InterruptedException | ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
+            if(p != null)
+                p.setDisplayName("Creating default face from models.");
+           
+            List<Vector3f> displacment = runAvgFaceComputation(m, template, metric);
+            addTranslationToModel(trans, displacment);
+        }      
 
         //compute average translation for each vertex and apply it to given vertex
         computeMeanTranslationToModel(template, trans, templateSize, compF.length);
