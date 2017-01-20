@@ -446,7 +446,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                 setPointInfo(canvas, listener);
             }
 
-        } else if (selection && SwingUtilities.isLeftMouseButton(evt)) {
+        } 
+        if (selection && SwingUtilities.isLeftMouseButton(evt)) {
             clearSelection();
             listener.setSelectionStart(evt.getPoint());
         }

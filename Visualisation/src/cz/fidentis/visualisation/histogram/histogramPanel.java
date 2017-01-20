@@ -381,6 +381,14 @@ public class histogramPanel extends JComponent {
             float thresh = hdp.getMinThreshValue();
             slider2Tip.setLocation(5 + ((thresh - minValue) / (maxValue - minValue)) * (this.width - 10), slider2Tip.y);
         }
+        if(slider2Tip.x<5){
+            slider2Tip.x=5;            
+        }
+        if(slider1Tip.x>this.getWidth() - 5){
+            slider2Tip.x=this.getWidth() - 5;            
+        }
+        
+        
     }
 
 }
