@@ -8,8 +8,8 @@ package cz.fidentis.randomFace;
 
 import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.icp.ICPTransformation;
-import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.composite.CompositeModel;
 import cz.fidentis.composite.FacePartType;
 import cz.fidentis.composite.ModelInfo;
@@ -309,7 +309,7 @@ public class RandomFace {
             translatedHeadPoints.add(transformedCP);
         }
 
-        KdTree headTree = new KdTreeIndexed(translatedHeadPoints);
+        KdTree headTree = new KDTreeIndexed(translatedHeadPoints);
 
         return headTree;
     }

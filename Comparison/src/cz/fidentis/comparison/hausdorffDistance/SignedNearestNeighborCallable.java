@@ -5,7 +5,7 @@
  */
 package cz.fidentis.comparison.hausdorffDistance;
 
-import cz.fidentis.comparison.icp.KdTree;
+import cz.fidentis.comparison.kdTree.KdTree;
 import java.util.concurrent.Callable;
 import javax.vecmath.Vector3f;
 

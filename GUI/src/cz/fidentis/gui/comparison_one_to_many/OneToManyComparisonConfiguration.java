@@ -8,9 +8,9 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
-import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.comparison.procrustes.Procrustes1ToMany;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -360,14 +360,14 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         if (usedCM == ComparisonMethod.HAUSDORFF_DIST) {
 
                             if (metric == ICPmetric.VERTEX_TO_VERTEX) {
-                                templateTree = new KdTreeIndexed(template.getVerts());
+                                templateTree = new KDTreeIndexed(template.getVerts());
                             } else {
                                 templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
                             }
 
                             results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, usedCM);
                         } else {
-                            templateTree = new KdTreeIndexed(template.getVerts());
+                            templateTree = (KdTree) new KDTreeIndexed(template.getVerts());
                             c.setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
 
                             Curvature_jv mainCurv = new Curvature_jv(mainF);
