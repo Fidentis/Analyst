@@ -349,7 +349,9 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                 }                
             }
             
-        } else if (listener.getModel() != null) {        //pick point on the mesh
+        }else if(selection && SwingUtilities.isLeftMouseButton(evt)){
+            listener1.setSelectionStart(evt.getPoint());
+        }else if (listener.getModel() != null) {        //pick point on the mesh
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
 
             if (pos == null) {        //not on mesh, deselect
