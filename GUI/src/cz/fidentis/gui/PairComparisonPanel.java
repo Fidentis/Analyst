@@ -916,10 +916,10 @@ public class PairComparisonPanel extends javax.swing.JPanel {
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
         if (jComboBox4.getSelectedItem().equals(SelectionType.RECTANGLE.toString())) {
-                  hdp.getInfo().setsType(SelectionType.RECTANGLE);
+            hdp.getInfo().setsType(SelectionType.RECTANGLE);
         }
         if (jComboBox4.getSelectedItem().equals(SelectionType.ELLIPSE.toString())) {
-                 hdp.getInfo().setsType(SelectionType.ELLIPSE);
+            hdp.getInfo().setsType(SelectionType.ELLIPSE);
         }
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
@@ -934,7 +934,7 @@ public class PairComparisonPanel extends javax.swing.JPanel {
             maxTresholdValueChanged = true;
             jSpinner1.setValue((int) jSlider1.getValue());
             setMaxthreshValue();
-        }       
+        }
         updateHistograms();
     }//GEN-LAST:event_jSlider1StateChanged
 
@@ -945,7 +945,7 @@ public class PairComparisonPanel extends javax.swing.JPanel {
             jSlider1.setValue((int) jSpinner1.getValue());
             setMaxthreshValue();
         }
-        
+
         updateHistograms();
     }//GEN-LAST:event_jSpinner1StateChanged
 
@@ -962,17 +962,20 @@ public class PairComparisonPanel extends javax.swing.JPanel {
             }
 
         }
-        float percent = count / (float) l.size();
-        jSlider1.setValue((int) (percent * 100));
-
-        float percent2 = count2 / (float) l.size();
-        minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        if (histogram1.isMaxSliderSelected()) {
+            float percent = count / (float) l.size();
+            jSlider1.setValue((int) (percent * 100));
+        }
+        if (histogram1.isMinSliderSelected()) {
+            float percent2 = count2 / (float) l.size();
+            minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        }
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void minThreshSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSliderStateChanged
         if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
-            minThreshSpinner.setValue((int)minThreshSlider.getValue());
+            minThreshSpinner.setValue((int) minThreshSlider.getValue());
 
             setMinThreshValue();
         }
@@ -982,14 +985,13 @@ public class PairComparisonPanel extends javax.swing.JPanel {
     private void minThreshSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSpinnerStateChanged
         if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
-            minThreshSlider.setValue((int)minThreshSpinner.getValue());
+            minThreshSlider.setValue((int) minThreshSpinner.getValue());
 
             setMinThreshValue();
         }
         updateHistograms();
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
-    
     private void setMaxthreshValue() {
         float usedValues;
         List<Float> list;
@@ -1008,8 +1010,8 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         info.setMaxThreshValue(usedValues);
         maxTresholdValueChanged = false;
     }
-    
-     private void setMinThreshValue() {
+
+    private void setMinThreshValue() {
 
         List<Float> list;
 
@@ -1030,8 +1032,7 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         minTresholdValueChanged = false;
 
     }
-    
-    
+
     public void clear() {
 
         listener.removeModel();

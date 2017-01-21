@@ -391,4 +391,14 @@ public class histogramPanel extends JComponent {
         
     }
 
+    public boolean isMaxSliderSelected() {
+        return slider1Selected;
+    }
+
+    public boolean isMinSliderSelected() {
+        return slider2Selected;
+    }
+    
+    
+
 }

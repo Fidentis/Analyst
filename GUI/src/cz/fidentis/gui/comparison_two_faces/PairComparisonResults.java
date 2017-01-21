@@ -956,8 +956,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (getContext().getNumericalResults() != null) {
             String[][] values = TableProcessing.instance().parseTableAddHeader(getContext().getNumericalResults(), new String[]{
-                "Lower: " + getContext().getLowerHDTreshold() * 100 + "% Upper: " + 
-                         getContext().getUpperHDTreshold() * 100 + "% treshold",
+                "Lower: " + getContext().getLowerHDTreshold() * 100 + "% Upper: "
+                + getContext().getUpperHDTreshold() * 100 + "% treshold",
                 getContext().getModel2().getName()});
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -992,7 +992,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         getContext().getHdPaintingInfo().setMaxThreshValue(maxUsedValues);
 
         maxTresholdValueChanged = false;
-         minTresholdValueChanged = false;
+        minTresholdValueChanged = false;
 
     }
 
@@ -1054,7 +1054,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         colorDialog.setVisible(false);
         activeColorPanel.setBackground(jColorChooser1.getColor());
-        
+
         //???
         HDpaintingInfo hdp;
 
@@ -1088,10 +1088,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        
+
         //ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(), 1920, 1920);
         ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(),
-                 1920, 1920);
+                1920, 1920);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -1106,8 +1106,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().addModel(getContext().getModel2());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().rotationAndSizeRestart();
-        
-        
 
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -1132,11 +1130,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
             @Override
             public void run() {
                 ProgressHandle p;
-                
+
                 List<Float> hdDistance = c.getHd();
                 List<Float> thresholdedValues;
                 p = ProgressHandleFactory.createHandle("Recomputing comparison...");
-                
 
                 try {
 
@@ -1160,7 +1157,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     if (c.getVisualization() == VisualizationType.VECTORS) {
                         info.setvType(VisualizationType.VECTORS);
                     }
-                    
+
                     //Setting density param 
                     info.setDensity(density.getValue());
                     info.setCylLengthFactor(cylLength.getValue());
@@ -1170,8 +1167,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
                     thresholdedValues = ComparisonMetrics.instance().thresholdValues(hdDistance, c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f, c.getValuesTypeIndex() == 0);
 
-                    String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);                    
-                    
+                    String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);
+
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
                     c.setNumericalResults(res);
@@ -1210,14 +1207,15 @@ public class PairComparisonResults extends javax.swing.JPanel {
         /**
          * Visibility of density slider and label
          */
-        
+
         Comparison2Faces c = getContext();
-        
+
         //Procrustes
-        if(c.getHdPaintingInfo() == null)
+        if (c.getHdPaintingInfo() == null) {
             return;
-        
-        c.setVisualization((VisualizationType)VisualizationBox.getSelectedItem());
+        }
+
+        c.setVisualization((VisualizationType) VisualizationBox.getSelectedItem());
 
         //Colormap
         if (c.getVisualization() == VisualizationType.COLORMAP) {
@@ -1233,7 +1231,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
             updateHistograms();
 
         }
-        
+
         //transparency
         if (c.getVisualization() == VisualizationType.TRANSPARENCY) {
             densLabel.setVisible(false);
@@ -1269,11 +1267,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
             info.setCylLengthFactor(c.getVectorLength());
             info.setCylRadius(c.getCylinderRadius());
             info.setIndicesForNormals(info.getGraph().indicesFordDensityNormals(c.getVectorDensity()));
-            info.setRecompute(true);   
+            info.setRecompute(true);
         }
-        
-        
-        
+
         GUIController.getSelectedProjectTopComponent().revalidate();
         GUIController.getSelectedProjectTopComponent().repaint();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
@@ -1302,7 +1298,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     public void setColors() {
         ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
         Comparison2Faces c = getContext();
-        
+
         float[] color = new float[4];
         primaryColorPanel.getBackground().getRGBColorComponents(color);
         color[3] = secondarySolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
@@ -1416,23 +1412,27 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
 
         }
-        float percent = count / (float) l.size();
-        maxThresholdSlider.setValue((int) (percent * 100));
-        getContext().setHausdorfMaxTreshold((int) (percent * 100));
-
-        float percent2 = count2 / (float) l.size();
-        minThreshSlider.setValue(100 - (int) (percent2 * 100));
-        getContext().setHausdorfMinTreshold(100 - (int) (percent2 * 100));
+        if (histogram1.isMaxSliderSelected()) {
+            float percent = count / (float) l.size();
+            maxThresholdSlider.setValue((int) (percent * 100));
+            getContext().setHausdorfMaxTreshold((int) (percent * 100));
+        }
+        if (histogram1.isMinSliderSelected()) {
+            float percent2 = count2 / (float) l.size();
+            minThreshSlider.setValue(100 - (int) (percent2 * 100));
+            getContext().setHausdorfMinTreshold(100 - (int) (percent2 * 100));
+        }
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void colorSchemeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorSchemeComboBoxActionPerformed
         Comparison2Faces bc = getContext();
-        
+
         //Procrustes
-        if(bc.getHDP() == null)
+        if (bc.getHDP() == null) {
             return;
-        
-        bc.setColorScheme(((ColorScheme)colorSchemeComboBox.getSelectedItem()));
+        }
+
+        bc.setColorScheme(((ColorScheme) colorSchemeComboBox.getSelectedItem()));
         bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
@@ -1488,7 +1488,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }
 
     private void densityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_densityStateChanged
-       getContext().setVectorDensity(density.getValue());
+        getContext().setVectorDensity(density.getValue());
     }//GEN-LAST:event_densityStateChanged
 
     private void cylLengthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylLengthStateChanged
@@ -1504,24 +1504,24 @@ public class PairComparisonResults extends javax.swing.JPanel {
         maxThresholdSlider.setVisible(false);
         jLabel5.setVisible(false);
         Comparison2Faces c = getContext();
-        
-       VisualizationBox.setSelectedItem(c.getVisualization());
-       valuesComboBox.setSelectedItem(c.getValuesTypeIndex());
-       
-       maxThresholdSlider.setValue(c.getHausdorfMaxTreshold());
-       maxThresholdSpinner.setValue(c.getHausdorfMaxTreshold());
-       minThreshSlider.setValue(c.getHausdorfMinTreshold());
-       minThreshSpinner.setValue(c.getHausdorfMinTreshold());
-       
-       colorSchemeComboBox.setSelectedItem(c.getColorScheme());
-       density.setValue(c.getVectorDensity());
-       cylLength.setValue(c.getVectorLength());
-       cylRadius.setValue(c.getCylinderRadius());
-       
-       fpDistanceSlider.setValue(c.getFpDistance());
-       fpSizeSlider.setValue(c.getFpSize());
-       
-       //overlay
+
+        VisualizationBox.setSelectedItem(c.getVisualization());
+        valuesComboBox.setSelectedItem(c.getValuesTypeIndex());
+
+        maxThresholdSlider.setValue(c.getHausdorfMaxTreshold());
+        maxThresholdSpinner.setValue(c.getHausdorfMaxTreshold());
+        minThreshSlider.setValue(c.getHausdorfMinTreshold());
+        minThreshSpinner.setValue(c.getHausdorfMinTreshold());
+
+        colorSchemeComboBox.setSelectedItem(c.getColorScheme());
+        density.setValue(c.getVectorDensity());
+        cylLength.setValue(c.getVectorLength());
+        cylRadius.setValue(c.getCylinderRadius());
+
+        fpDistanceSlider.setValue(c.getFpDistance());
+        fpSizeSlider.setValue(c.getFpSize());
+
+        //overlay
         primaryColorPanel.setBackground(c.getPrimaryColor());
         primarySolidCheckbox.setSelected(c.isIsPrimarySolid());
         secondaryColorPanel.setBackground(c.getSecondaryColor());
@@ -1531,8 +1531,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
         innerSurfaceSolidCheckbox.setSelected(c.isInnerSurfaceSolid());
         useGlyphsCheckbox.setSelected(c.isUseGlyphs());
         useContoursCheckbox.setSelected(c.isUseContours());
-        
-        switch(c.getFogVersion()){
+
+        switch (c.getFogVersion()) {
             case 0:
                 noneRadioButton.setSelected(true);
                 break;
@@ -1550,7 +1550,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
 
         VisualizationBox.removeItem(VisualizationType.CROSSSECTION);
-
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
@@ -1571,7 +1570,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
         updateHistograms();
         setColors();
-        
+
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(c.isUseContours());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(c.isInnerSurfaceSolid());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(c.isUseGlyphs());
@@ -1581,7 +1580,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
     public histogramPanel getHistogram1() {
         return histogram1;
     }
-    
 
     public void updateHistograms() {
         HDpainting hdp = getContext().getHDP();

@@ -744,7 +744,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(slicesPanelLayout.createSequentialGroup()
                         .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(slicesPanelLayout.createSequentialGroup()
                                 .addGap(1, 1, 1)
@@ -962,8 +962,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addGroup(colorMapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(18, 18, 18)
-                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(colorSchemeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(colorMapPanelLayout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -975,10 +974,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorMapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                             .addComponent(minThreshSpinner)))))
@@ -1207,9 +1206,9 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addComponent(cylRadiusLabel)
                         .addGap(18, 18, 18)
                         .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(alignParametersButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(heatplotButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(exportOrderedResultsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                    .addComponent(alignParametersButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(heatplotButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(exportOrderedResultsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                     .addComponent(jLabel2)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1219,7 +1218,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                     .addComponent(comparisonButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(colorMapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(heatplotButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1231,7 +1230,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cylLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1293,7 +1292,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1471, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1384,7 +1383,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     pairFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     OneToManyComparison bc = getContext();
-                  
+
                     // pairComparisonPanel1.clear();
                     pairComparisonPanel1.getListener().removeModel();
                     List<File> models;
@@ -1424,7 +1423,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         getContext().setState(2);
         GUIController.getConfigurationTopComponent().addOneToManyComparisonComponent();
-        
+
         Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().drawHD(false);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setProcrustes(false);
@@ -1691,7 +1690,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
                         info.setvType(VisualizationType.COLORMAP);
                         tc.getOneToManyViewerPanel().getListener2().removeModel();
-                        
+
                         Model modelShown = c.getAvgFace();
 
                         if (modelShown == null) {
@@ -1732,7 +1731,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
                         tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
                         tc.getOneToManyViewerPanel().getListener1().setPlanePoint(c.getPlanePosition());
-                        
+
                         ArrayList<Model> models = new ArrayList<>();
                         models.add(c.getPrimaryModel());
 
@@ -1759,7 +1758,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     thresholdedValues = SurfaceComparisonProcessing.instance().compareOneToManyVariation(numResults, c.getHausdorfMaxTreshold() / 100f,
                             c.getHausdorfMinTreshold() / 100f, c.getMetricTypeIndex(), c.getValuesTypeIndex() == 0);
 
-                    String res = SurfaceComparisonProcessing.instance().formatedNumResOneToMany(thresholdedValues, origModels, c.getPrimaryModel().getName(), 
+                    String res = SurfaceComparisonProcessing.instance().formatedNumResOneToMany(thresholdedValues, origModels, c.getPrimaryModel().getName(),
                             c.getHausdorfMaxTreshold(), c.getHausdorfMinTreshold(), c.getMetricTypeIndex());
 
                     info.setDistance(hdDistance);
@@ -1860,7 +1859,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             c.getHdPaintingInfo().setCylRadius(c.getCylinderRadius());
             c.getHdPaintingInfo().setIndicesForNormals(c.getHdPaintingInfo().getGraph().indicesFordDensityNormals(c.getVectorDensity()));
 
-
             tc.getOneToManyViewerPanel().getListener2().setHdInfo(c.getHdPaintingInfo());
 
             c.getHdPaintingInfo().setvType(VisualizationType.VECTORS);
@@ -1930,13 +1928,17 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             }
 
         }
-        float percent = count / (float) l.size();
-        maxThresholdSlider.setValue((int) (percent * 100));
-        getContext().setHausdorfMaxTreshold((int) (percent * 100));
+        if (histogram1.isMaxSliderSelected()) {
+            float percent = count / (float) l.size();
+            maxThresholdSlider.setValue((int) (percent * 100));
+            getContext().setHausdorfMaxTreshold((int) (percent * 100));
+        }
 
-        float percent2 = count2 / (float) l.size();
-        minThreshSlider.setValue(100 - (int) (percent2 * 100));
-        getContext().setHausdorfMinTreshold(100 - (int) (percent2 * 100));
+        if (histogram1.isMinSliderSelected()) {
+            float percent2 = count2 / (float) l.size();
+            minThreshSlider.setValue(100 - (int) (percent2 * 100));
+            getContext().setHausdorfMinTreshold(100 - (int) (percent2 * 100));
+        }
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void heatplotButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButton1ActionPerformed
@@ -1990,7 +1992,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             Runnable run = new Runnable() {
                 @Override
                 public void run() {
-                    
+
                     pairComparisonPanel1.getListener().removeModel();
                     List<File> models;
                     if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {

@@ -175,11 +175,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         density = new javax.swing.JSlider();
         densLabel = new javax.swing.JLabel();
         cylLengthLabel = new javax.swing.JLabel();
-        cylLength = new javax.swing.JSlider();
         cylRadius = new javax.swing.JSlider();
         cylRadiusLabel = new javax.swing.JLabel();
         minThreshSlider = new javax.swing.JSlider();
         minThreshSpinner = new javax.swing.JSpinner();
+        cylLength = new javax.swing.JSlider();
         jPanel2 = new javax.swing.JPanel();
         fpDistanceSlider = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
@@ -660,20 +660,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(cylLengthLabel, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.cylLengthLabel.text")); // NOI18N
 
-        cylLength.setMajorTickSpacing(1);
-        cylLength.setMaximum(10);
-        cylLength.setMinimum(1);
-        cylLength.setPaintLabels(true);
-        cylLength.setPaintTicks(true);
-        cylLength.setSnapToTicks(true);
-        cylLength.setValue(1);
-        cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
-        cylLength.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                cylLengthStateChanged(evt);
-            }
-        });
-
         cylRadius.setMajorTickSpacing(1);
         cylRadius.setMaximum(10);
         cylRadius.setMinimum(1);
@@ -708,91 +694,90 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
+        cylLength.setMajorTickSpacing(1);
+        cylLength.setMaximum(10);
+        cylLength.setMinimum(1);
+        cylLength.setPaintLabels(true);
+        cylLength.setPaintTicks(true);
+        cylLength.setSnapToTicks(true);
+        cylLength.setValue(1);
+        cylLength.setVisible(false);  cylLengthLabel.setVisible(false);
+        cylLength.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cylLengthStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel14))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(250, 250, 250))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(metricComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(valuesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(densLabel)
+                    .addComponent(cylLengthLabel)
+                    .addComponent(cylRadiusLabel)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(valuesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(metricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(densLabel)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(minThreshSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(density, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cylLength, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cylRadius, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(VisualizationBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cylRadiusLabel)
-                            .addComponent(cylLengthLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                            .addComponent(cylLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(4, 4, 4)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(metricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(metricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(valuesComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(valuesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14)
-                    .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(VisualizationBox, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                        .addGap(18, 18, 18))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)))
+                    .addComponent(jLabel14))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(density, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(densLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(densLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cylLengthLabel)
-                    .addComponent(cylLength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cylLength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cylLengthLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cylRadius, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cylRadiusLabel))
-                .addContainerGap())
+                    .addComponent(cylRadiusLabel)
+                    .addComponent(cylRadius, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         fpDistanceSlider.setMajorTickSpacing(20);
@@ -839,9 +824,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(fpSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(fpDistanceSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(fpDistanceSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(sizeLabel))
                 .addContainerGap())
             .addComponent(exportDatabaseButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1106,47 +1091,62 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(slicesPanelLayout.createSequentialGroup()
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(slicesPanelLayout.createSequentialGroup()
-                                .addComponent(densLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(thickness, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(slicesPanelLayout.createSequentialGroup()
-                                .addComponent(densLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(slicesPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(highlightCutsCheckBox)
+                            .addComponent(showPlaneCheckBox))
+                        .addGap(23, 23, 23)
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(samplingRaysCheckBox)
                             .addGroup(slicesPanelLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(normalSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(normalSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(normalSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(slicesPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(positionSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(positionSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(positionSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(vectorsCheckBox)
+                                .addGap(41, 41, 41)
+                                .addComponent(allCutsCheckBox)))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(slicesPanelLayout.createSequentialGroup()
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, slicesPanelLayout.createSequentialGroup()
+                                            .addComponent(densLabel2)
+                                            .addGap(18, 18, 18))
+                                        .addGroup(slicesPanelLayout.createSequentialGroup()
+                                            .addComponent(densLabel1)
+                                            .addGap(33, 33, 33)))
+                                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)))
+                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(thickness, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                                    .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(slicesPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addGap(43, 43, 43)
+                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                                        .addComponent(jLabel18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(positionSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel17)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(positionSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(positionSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(normalSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(normalSpinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel15)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(normalSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(slicesPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
@@ -1157,20 +1157,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                                         .addGap(18, 18, 18)
                                         .addComponent(yzRadioButton)
                                         .addGap(18, 18, 18)
-                                        .addComponent(xzRadioButton))))
-                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(slicesPanelLayout.createSequentialGroup()
-                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(highlightCutsCheckBox)
-                                    .addComponent(showPlaneCheckBox))
-                                .addGap(23, 23, 23)
-                                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(samplingRaysCheckBox)
-                                    .addGroup(slicesPanelLayout.createSequentialGroup()
-                                        .addComponent(vectorsCheckBox)
-                                        .addGap(41, 41, 41)
-                                        .addComponent(allCutsCheckBox)))))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addComponent(xzRadioButton)))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         slicesPanelLayout.setVerticalGroup(
             slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1182,7 +1170,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(xzRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(arbitraryRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(normalSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
@@ -1190,7 +1178,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(jLabel12)
                     .addComponent(normalSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
-                .addGap(18, 18, 18)
+                .addGap(13, 13, 13)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
                     .addComponent(positionSpinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1199,27 +1187,30 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(jLabel17)
                     .addComponent(positionSpinnerZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel20)
-                .addGap(2, 2, 2)
-                .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(22, 22, 22)
                 .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(thickness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(densLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(densLabel2)
-                    .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(highlightCutsCheckBox)
-                    .addComponent(vectorsCheckBox)
-                    .addComponent(allCutsCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(samplingRaysCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showPlaneCheckBox)))
+                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                        .addComponent(crosscutSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(thickness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(densLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(densLabel2)
+                            .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(highlightCutsCheckBox)
+                            .addComponent(vectorsCheckBox)
+                            .addComponent(allCutsCheckBox))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(samplingRaysCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(showPlaneCheckBox)))
+                    .addGroup(slicesPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         Hashtable<Integer, JLabel> labels =
@@ -1306,8 +1297,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel21)
-                        .addGap(18, 18, 18)
-                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1315,7 +1306,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                     .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         colormapPanelLayout.setVerticalGroup(
@@ -1360,6 +1351,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
+                    .addComponent(alignResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1374,10 +1366,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(comparisonButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(slicesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(colormapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(alignResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 14, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1418,7 +1409,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addComponent(alignResButton)
                 .addGap(24, 24, 24)
                 .addComponent(jButton7)
-                .addGap(25, 25, 25))
+                .addContainerGap())
         );
 
         jScrollPane2.setViewportView(jPanel3);
@@ -1464,11 +1455,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void fpSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpSizeSliderStateChanged
         getContext().setFpSize(fpSizeSlider.getValue());
-        
+
         PApaintingInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo();
-        if(info != null)
+        if (info != null) {
             info.setPointSize(fpSizeSlider.getValue() * 3);
-        
+        }
+
     }//GEN-LAST:event_fpSizeSliderStateChanged
 
     private void fpDistanceSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpDistanceSliderStateChanged
@@ -1592,7 +1584,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(getContext().getAverageFace());
 
         } else {
-           
+
             Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
@@ -1610,7 +1602,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             @Override
             public void run() {
                 BatchComparison c = getContext();
-                
+
                 final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
                 ResultExports.instance().saveAuxBatch(tc, c.getModels(),
                         c.getHdVisualResults(),
@@ -1648,7 +1640,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void setMaxThreshValue() {
         float maxUsedValues;
         BatchComparison c = getContext();
-        
+
         List<Float> list = c.getSortedHd();
 
         int size = list.size();
@@ -1673,7 +1665,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         int size = list.size();
 
         float minUsedValues;
-         int index2 = (int) (size * (c.getHausdorfMinTreshold() / 100f));
+        int index2 = (int) (size * (c.getHausdorfMinTreshold() / 100f));
 
         if (index2 == 0) {
             minUsedValues = list.get(0);
@@ -1694,7 +1686,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             @Override
             public void run() {
-                                
+
                 ProgressHandle p;
                 List<Float> variance;
                 HDpaintingInfo info;
@@ -1727,11 +1719,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
 
                     numResults = (ArrayList<ArrayList<Float>>) SurfaceComparisonProcessing.instance().recomputeNumericResults(c.getHdCSVresults(),
-                            c.getMetricTypeIndex(), c.getModels().size(), c.getHausdorfMaxTreshold() / 100f, 
+                            c.getMetricTypeIndex(), c.getModels().size(), c.getHausdorfMaxTreshold() / 100f,
                             c.getHausdorfMinTreshold() / 100f, c.getValuesTypeIndex() == 0);
                     c.setNumericalResults(SurfaceComparisonProcessing.instance().
                             batchCompareNumericalResultsTable(numResults, c.getMetricTypeIndex(), originalModels, c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f));
- 
+
                     c.setSortedHd(sortedHd);
 
                     p.finish();
@@ -1764,7 +1756,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
         VisualizationType vt = (VisualizationType) VisualizationBox.getSelectedItem();
-        
+
         if (vt == VisualizationType.COLORMAP) {
             densLabel.setVisible(false);
             density.setVisible(false);
@@ -1793,7 +1785,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             cylRadius.setVisible(true);
             cylRadiusLabel.setVisible(true);
         }
-        
+
         getContext().setVisualization(vt);
 
         setupVisualizationControls(vt);
@@ -1803,10 +1795,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void setupVisualizationControls(VisualizationType vt) {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final BatchComparison c = getContext();
-        
-        if(c.getHDinfo() == null)
+
+        if (c.getHDinfo() == null) {
             return;
-        
+        }
+
         if (vt == VisualizationType.COLORMAP) {
             colormapPanel.setVisible(true);
             slicesPanel.setVisible(false);
@@ -1834,7 +1827,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             density.setVisible(false);
             colormapPanel.setVisible(false);
             slicesPanel.setVisible(true);
-            
+
             c.getHDinfo().setvType(VisualizationType.COLORMAP);
 
             tc.getViewerPanel_Batch().getListener2().removeModel();
@@ -1847,7 +1840,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
-                   
+
                     ArrayList<Model> models = new ArrayList<>();
                     models.add(c.getAverageFace());
                     List<File> md = c.getRegistrationResults().size() > 0 ? c.getRegistrationResults() : c.getModels();
@@ -2021,9 +2014,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void arbitraryRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arbitraryRadioButtonActionPerformed
         if (arbitraryRadioButton.isSelected()) {
             setNormalControlsEnabled(true);
-            
+
         }
-        
+
         BatchComparison c = getContext();
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(c.getArbitraryPlanePos(), true);
 
@@ -2126,7 +2119,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         String names[] = new String[bc.getModels().size()];
         int i = 0;
-        for (File f :bc.getModels()) {
+        for (File f : bc.getModels()) {
             names[i] = f.getName();
             i++;
         }
@@ -2182,7 +2175,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     String model2 = bc.getModels().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName();
                     String model1 = jComboBox1.getSelectedIndex() == 0 ? "Average" : bc.getModels().get(jComboBox1.getSelectedIndex() - 1).getName();
                     pairFrame.setTitle(model1 + " vs. " + model2);
-                    
+
                     pairComparisonPanel.getListener().removeModel();
                     List<File> models;
                     if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
@@ -2241,19 +2234,23 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
 
         }
-        float percent = count / (float) l.size();
-        maxThresholdSlider.setValue((int) (percent * 100));
-
-        float percent2 = count2 / (float) l.size();
-        minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        if (histogram1.isMaxSliderSelected()) {
+            float percent = count / (float) l.size();
+            maxThresholdSlider.setValue((int) (percent * 100));
+        }
+        if (histogram1.isMinSliderSelected()) {
+            float percent2 = count2 / (float) l.size();
+            minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        }
     }//GEN-LAST:event_histogram1MouseDragged
 
     private void colorSchemeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorSchemeComboBoxActionPerformed
         BatchComparison bc = getContext();
         bc.setUsedColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
-        
-        if(bc.getHDP() != null)
+
+        if (bc.getHDP() != null) {
             bc.getHDP().getInfo().setColorScheme((ColorScheme) colorSchemeComboBox.getSelectedItem());
+        }
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
@@ -2332,18 +2329,18 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_densityStateChanged
 
     private void cylLengthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylLengthStateChanged
-       getContext().setVectorLength(cylLength.getValue());
+        getContext().setVectorLength(cylLength.getValue());
     }//GEN-LAST:event_cylLengthStateChanged
 
     private void cylRadiusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylRadiusStateChanged
-       getContext().setCylinderRadius(cylRadius.getValue());
+        getContext().setCylinderRadius(cylRadius.getValue());
     }//GEN-LAST:event_cylRadiusStateChanged
 
     public histogramPanel getHistogram() {
         return histogram1;
     }
-    
-    private BatchComparison getContext(){
+
+    private BatchComparison getContext() {
         return GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
     }
 
@@ -2353,13 +2350,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel14.setVisible(false);
         BatchComparison c = getContext();
 
-        
         metricComboBox.setSelectedIndex(c.getMetricTypeIndex());
         VisualizationBox.setSelectedItem(c.getVisualization());
         valuesComboBox.setSelectedIndex(c.getValuesTypeIndex());
-        
+
         //crosscutPlane
-        switch(c.getCrossCutPlaneIndex()){
+        switch (c.getCrossCutPlaneIndex()) {
             case 0:
                 xyRadioButton.setSelected(true);
                 break;
@@ -2371,45 +2367,43 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 break;
             case 3:
                 arbitraryRadioButton.setSelected(true);
-                break;                
+                break;
         }
-        
+
         normalSpinnerX.setValue(c.getArbitraryPlanePos().x);
         normalSpinnerY.setValue(c.getArbitraryPlanePos().y);
         normalSpinnerZ.setValue(c.getArbitraryPlanePos().z);
-        
+
         positionSpinnerX.setValue(c.getPlanePosition().x);
         positionSpinnerY.setValue(c.getPlanePosition().y);
         positionSpinnerZ.setValue(c.getPlanePosition().z);
-        
+
         crosscutSizeSlider.setValue(c.getCrosscutSize());
         thickness.setValue(c.getCrosscutThickness());
         colorPanel.setBackground(c.getCrosscutColor());
-        
+
         highlightCutsCheckBox.setSelected(c.isHighlightCuts());
         vectorsCheckBox.setSelected(c.isShowVectors());
         allCutsCheckBox.setSelected(c.isAllCuts());
         samplingRaysCheckBox.setSelected(c.isSamplingRays());
         showPlaneCheckBox.setSelected(c.isShowPlane());
-        
+
         //vector visualization
         density.setValue(c.getVectorDensity());
         cylLength.setValue(c.getVectorLength());
         cylRadius.setValue(c.getCylinderRadius());
-        
+
         //colormaps
         maxThresholdSlider.setValue(c.getHausdorfMaxTreshold());
         maxThresholdSpinner.setValue(c.getHausdorfMaxTreshold());
         minThreshSpinner.setValue(c.getHausdorfMinTreshold());
         minThreshSlider.setValue(c.getHausdorfMinTreshold());
         colorSchemeComboBox.setSelectedItem(c.getUsedColorScheme());
-        
-        
-        
+
         //fp
         fpDistanceSlider.setValue(c.getFpDistance());
         fpSizeSlider.setValue(c.getFpSize());
-        
+
         VisualizationBox.removeItem(VisualizationType.TRANSPARENCY);
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
@@ -2432,8 +2426,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().sliceViewerVisible(false);
             showProcrustesControls();
         }
-        
-       /* if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
+
+        /* if (c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_CURV
                 || c.getComparisonMethod() == ComparisonMethod.HAUSDORFF_DIST) {
 
             showHausdorfControls();
@@ -2444,7 +2438,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
 
         }*/
-
         if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
             alignResButton.setVisible(true);
         } else {

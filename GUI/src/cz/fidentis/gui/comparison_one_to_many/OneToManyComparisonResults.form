@@ -443,7 +443,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane2" alignment="0" pref="1471" max="32767" attributes="0"/>
+          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -465,9 +465,9 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="cylRadius" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="alignParametersButton" alignment="1" pref="285" max="32767" attributes="0"/>
-                          <Component id="heatplotButton1" alignment="1" pref="285" max="32767" attributes="0"/>
-                          <Component id="exportOrderedResultsButton" alignment="1" pref="285" max="32767" attributes="0"/>
+                          <Component id="alignParametersButton" alignment="1" pref="302" max="32767" attributes="0"/>
+                          <Component id="heatplotButton1" alignment="1" pref="302" max="32767" attributes="0"/>
+                          <Component id="exportOrderedResultsButton" alignment="1" pref="302" max="32767" attributes="0"/>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel2" alignment="0" max="-2" attributes="0"/>
                           <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
@@ -477,7 +477,7 @@
                           <Component id="jButton6" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButton2" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jButton7" alignment="0" pref="285" max="32767" attributes="0"/>
+                          <Component id="jButton7" alignment="0" pref="302" max="32767" attributes="0"/>
                           <Component id="comparisonButton" alignment="0" max="32767" attributes="0"/>
                           <Component id="colorMapPanel" alignment="0" max="32767" attributes="0"/>
                           <Component id="heatplotButton" alignment="0" max="32767" attributes="0"/>
@@ -493,7 +493,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="33" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -708,7 +708,7 @@
                               <Component id="crosscutSizeSlider" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                                  <EmptySpace pref="27" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
@@ -1157,8 +1157,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="colorSchemeComboBox" min="-2" pref="151" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="colorSchemeComboBox" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
@@ -1172,11 +1171,11 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabel7" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="minThreshSlider" pref="0" max="32767" attributes="0"/>
-                                      <Component id="maxThresholdSlider" pref="150" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="maxThresholdSlider" min="-2" pref="164" max="-2" attributes="0"/>
+                                      <Component id="minThreshSlider" min="-2" pref="169" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="maxThresholdSpinner" pref="57" max="32767" attributes="0"/>
                                       <Component id="minThreshSpinner" max="32767" attributes="0"/>
