@@ -3,4 +3,4 @@
 **/nbproject/private/
 **/test
 /Logs/
-.log
+*.log

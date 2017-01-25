@@ -28,7 +28,7 @@ import org.openide.util.Exceptions;
  *
  * @author Zuzana Ferkova
  */
-public class BatchProcessingCallable implements Callable<List<Vector3f>> {
+public class BatchProcessingCallable {
 
     private final Model compF;
     private final List<Vector3f> samples;
@@ -88,7 +88,7 @@ public class BatchProcessingCallable implements Callable<List<Vector3f>> {
      * @return parameters for new average face
      * @throws Exception
      */
-    @Override
+ 
     public List<Vector3f> call() {
         ProgressHandle p = null;
 
