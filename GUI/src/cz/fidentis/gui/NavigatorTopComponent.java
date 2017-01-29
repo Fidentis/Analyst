@@ -390,7 +390,7 @@ public final class NavigatorTopComponent extends TopComponent {
                             
                             // reverse transformations made on facial points if needed
                             if(batchComparison.getTrans() != null) {
-                                l = applyReverseICPTrans(l, batchComparison.getTrans(lastNodeIndex));
+                                l = Icp.instance().reverseFacialPointsRegistration(l, batchComparison.getTrans(lastNodeIndex), batchComparison.isFpScaling());
                             }
                             
                             listener.setFacialPoints(l);
@@ -440,7 +440,7 @@ public final class NavigatorTopComponent extends TopComponent {
                             
                             // reverse transformations made on facial points if needed
                             if(comparison.getTrans() != null) {
-                                l = applyReverseICPTrans(l, comparison.getTrans(lastNodeIndex));
+                                l = Icp.instance().reverseFacialPointsRegistration(l, comparison.getTrans(lastNodeIndex), comparison.isFpScaling());
                             }
                             
                             listenerSecondary.setFacialPoints(l);
@@ -491,31 +491,5 @@ public final class NavigatorTopComponent extends TopComponent {
                 jTree1.clearSelection();
             }
         }
-    }
-
-    /**
-     * Creates a copy of given list of FacialPoints reversely transformed by given
-     * transformations. This is needed when displaying original FacialPoints after
-     * models were already registered by the transformations.
-     * @param points facial points of a model
-     * @param trans transformations used to the model
-     * @return copy of facial points reversely transformed by transformations.
-     */
-    private List<FacialPoint> applyReverseICPTrans(List<FacialPoint> points, List<ICPTransformation> trans) {
-        ArrayList<FacialPoint> result = new ArrayList<>(points.size());
-        ArrayList<Vector3f> positions = new ArrayList<>(points.size());
-        
-        // make a copy of points and also store their positions
-        for(int i=0;i<points.size();i++) {
-            FacialPoint point = new FacialPoint(points.get(i));
-            
-            result.add(point);
-            positions.add(point.getPosition());
-        }
-        
-        // apply reverse transformations to positions of points
-        Icp.instance().reverseAllTransformations(trans, positions, true);
-        
-        return result;
     }
 }
