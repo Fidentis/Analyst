@@ -22,7 +22,7 @@ import org.netbeans.api.progress.ProgressHandleFactory;
  *
  * @author Zuzana Ferkova
  */
-public class BatchRegistrationLastCallable implements Callable<File> {
+public class BatchRegistrationLastCallable{
 
     private final KdTree templateTree;
     private final Model compF;
@@ -67,7 +67,7 @@ public class BatchRegistrationLastCallable implements Callable<File> {
      * @return 0 when compF was aligned
      * @throws Exception
      */
-    @Override
+  
     public File call(){
         ProgressHandle p = ProgressHandleFactory.createHandle("Aligning face " + (currentModelNumber + 1) + " to last average face.");
         p.start();
