@@ -31,6 +31,16 @@ public class FacialPoint implements Serializable {
         this.pos = new Vector3f();
     }
     
+    /**
+     * Copy constructor. Creates an identical copy of given FP.
+     * @param other the facial point to be copied
+     */
+    public FacialPoint(FacialPoint other) {
+        this.pos = new Vector3f(other.pos.x, other.pos.y, other.pos.z);
+        this.active = other.active;
+        this.type = other.type;
+    }
+    
     public FacialPoint(Integer type, PdVector coords) {        
         this.pos = new Vector3f((float)coords.getEntry(0), (float)coords.getEntry(1), (float)coords.getEntry(2));
         
