@@ -1045,20 +1045,20 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         int size = c.getModels().size();
                         p.start(size);
             
-                        List<List<FacialPoint>> list = new ArrayList();
-                        List<ArrayList<Vector3f>> verts = new ArrayList();
+                        List<List<FacialPoint>> fpMatrix = new ArrayList();
+                        List<ArrayList<Vector3f>> verts = new ArrayList();      //TODO look into memory usage
 
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
                                     c.getModels().get(i).getName());
-                            list.add(facialPoints);
+                            fpMatrix.add(facialPoints);
                             
                             Model m = ModelLoader.instance().loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
 
                             verts.add(m.getVerts());
                         }
 
-                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(list, verts, c.isFpScaling());
+                        ProcrustesBatchProcessing procrustes = new ProcrustesBatchProcessing(fpMatrix, verts, c.isFpScaling());
 
                         //procrustes.doBatchProcessing(jSlider3.getValue() / 100f);
                         List<List<ICPTransformation>> trans = procrustes.alignBatch(c.getFpTreshold() / 100f);

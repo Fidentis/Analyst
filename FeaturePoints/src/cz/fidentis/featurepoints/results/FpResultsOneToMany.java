@@ -17,12 +17,10 @@ import java.util.List;
 public class FpResultsOneToMany {
     private final List<FacialPoint> mainFfps;
     private final HashMap<String ,List<FacialPoint>> facialPoints;
-    private final List<Model> registeredModels;
 
-    public FpResultsOneToMany(List<FacialPoint> mainFfps, HashMap<String, List<FacialPoint>> facialPoints, List<Model> registeredModels) {
+    public FpResultsOneToMany(List<FacialPoint> mainFfps, HashMap<String, List<FacialPoint>> facialPoints) {
         this.mainFfps = mainFfps;
         this.facialPoints = facialPoints;
-        this.registeredModels = registeredModels;
     }
 
     public List<FacialPoint> getMainFfps() {
@@ -32,9 +30,4 @@ public class FpResultsOneToMany {
     public HashMap<String, List<FacialPoint>> getFacialPoints() {
         return facialPoints;
     }
-
-    public List<Model> getRegisteredModels() {
-        return registeredModels;
-    }
-    
 }
