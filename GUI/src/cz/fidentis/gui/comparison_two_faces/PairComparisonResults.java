@@ -1031,7 +1031,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         Comparison2Faces c = getContext();
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-            if (GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().getScaleEnabled()) {
+            if (getContext().isFpScaling()) {
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getPaInfo().setPointSize(sizeSlider.getValue() / (float) (30));
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFpSize(sizeSlider.getValue() / (float) (30));
                 GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getPaInfo().setPointSize(fpSizeSlider.getValue() * 3);

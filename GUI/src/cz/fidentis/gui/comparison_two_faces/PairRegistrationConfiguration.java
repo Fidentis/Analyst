@@ -645,9 +645,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel8.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(fpScaleCheckBox, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.fpScaleCheckBox.text")); // NOI18N
-        fpScaleCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                fpScaleCheckBoxStateChanged(evt);
+        fpScaleCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fpScaleCheckBoxActionPerformed(evt);
             }
         });
 
@@ -1021,7 +1021,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         Procrustes2Models procrustes = new Procrustes2Models(c.getMainFp(), mainFace.getVerts(),
                                 c.getSecondaryFp(), compareFace.getVerts(), c.isFpScaling());
 
-                        List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), fpScaleCheckBox.isSelected());
+                        List<ICPTransformation> trans = procrustes.getPa().doProcrustesAnalysis(procrustes.getPa2(), c.isFpScaling());
                         
                         if(trans == null){
                             int res = JOptionPane.showConfirmDialog(tc, "There wasn't enough corresponding landmarks to register models. Do you wish to continue?", "Not enough landmarks", JOptionPane.YES_NO_OPTION);
@@ -1236,10 +1236,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         getContext().setFpTreshold(fpThresholdSlider.getValue());
     }//GEN-LAST:event_fpThresholdSliderStateChanged
 
-    private void fpScaleCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxStateChanged
-        getContext().setFpScaling(fpScaleCheckBox.isSelected());
-    }//GEN-LAST:event_fpScaleCheckBoxStateChanged
-
     private void percentageJRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percentageJRadioActionPerformed
         percentageSpinner.setEnabled(true);
         numberSpinner.setEnabled(false);
@@ -1297,6 +1293,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void continueComparisonCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueComparisonCheckboxActionPerformed
         getContext().setContinueComparison(continueComparisonCheckbox.isSelected());
     }//GEN-LAST:event_continueComparisonCheckboxActionPerformed
+
+    private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
+        getContext().setFpScaling(fpScaleCheckBox.isSelected());
+    }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));

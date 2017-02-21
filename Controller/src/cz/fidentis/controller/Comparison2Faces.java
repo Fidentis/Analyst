@@ -61,7 +61,7 @@ public class Comparison2Faces {
     
     private float lowerHDTreshold;
     private float upperHDTreshold;
-    private boolean fpScaling;          //whether feature points are scaled or not
+    private boolean fpScaling;          //whether feature points are scaled or not  
     private int useDatabase;        //0 - dont use, 1 - default, 2 - data file, 3 - create  -- database currently not used in software
     private ArrayList<File> databaseFiles;      //database of feature points stored on disk -- database currently not used in software 
     private int fpTreshold = 30;            //threshold for feature points (still no clue what it is for)

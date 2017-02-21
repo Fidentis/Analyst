@@ -28,7 +28,7 @@ public class ProcrustesAnalysis implements Serializable {
     private Matrix visMatrix;
     private Matrix vertices;        //to be able to register models with points -- change to list?
 
-    private static final float SIZE_SCALE = 200f;
+    public static final float SIZE_SCALE = 25.0f;
     
     public ProcrustesAnalysis() {
         //config = new Matrix(8, 3);
@@ -522,7 +522,7 @@ public class ProcrustesAnalysis implements Serializable {
         Vector3f cs = this.findCentroid();
         float size = this.countSize(cs);
 
-        this.centerConfigToOrigin(cs);      //not required?
+        this.centerConfigToOrigin(cs);     
         
         if (scaling && config.keySet().size() >= 3) {
         

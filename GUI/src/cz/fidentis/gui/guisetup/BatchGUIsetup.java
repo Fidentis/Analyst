@@ -103,7 +103,6 @@ public class BatchGUIsetup {
    //default comparison configuration data
    public static void setUpDefaultComparisonConfigurationData(BatchComparison data){
        data.setComparisonMethod(COMPARISON_METHOD);
-       data.setFpScaling(FP_SCALE);
        data.setFpTreshold(FP_THRESHOLD);
    }
    
