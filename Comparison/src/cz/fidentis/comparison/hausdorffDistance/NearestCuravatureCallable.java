@@ -5,10 +5,7 @@
  */
 package cz.fidentis.comparison.hausdorffDistance;
 
-import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
-import cz.fidentis.featurepoints.curvature.CurvatureType;
-import cz.fidentis.featurepoints.curvature.Curvature_jv;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import java.util.concurrent.Callable;
 import javax.vecmath.Vector3f;
 
@@ -18,11 +15,11 @@ import javax.vecmath.Vector3f;
  */
 public class NearestCuravatureCallable implements Callable<Float>{
     private double[] mainCurvature;
-    private KdTreeIndexed mainF;
+    private KDTreeIndexed mainF;
     private double secondaryCurvature;
     private Vector3f compareFpoint;
 
-    public NearestCuravatureCallable(double[] mainCurvature, KdTreeIndexed mainF, double secondaryCurvature, Vector3f compareFpoint) {
+    public NearestCuravatureCallable(double[] mainCurvature, KDTreeIndexed mainF, double secondaryCurvature, Vector3f compareFpoint) {
         this.mainCurvature = mainCurvature;
         this.mainF = mainF;
         this.secondaryCurvature = secondaryCurvature;

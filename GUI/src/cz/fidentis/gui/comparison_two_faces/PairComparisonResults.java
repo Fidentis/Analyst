@@ -42,7 +42,6 @@ import org.openide.util.Exceptions;
 public class PairComparisonResults extends javax.swing.JPanel {
 
     JPanel activeColorPanel;
-    String result;
     private boolean maxTresholdValueChanged;
     private boolean minTresholdValueChanged;
 
@@ -76,10 +75,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         maxThresholdSlider.setVisible(true);
         jLabel5.setVisible(true);
         jButton8.setVisible(true);
-    }
-
-    public void setNumericalResult(String result) {
-        this.result = result;
     }
 
     /**
@@ -957,8 +952,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (result != null) {
-            String[][] values = TableProcessing.instance().parseTableAddHeader(result, new String[]{
+        if (getContext().getNumericalResults() != null) {
+            String[][] values = TableProcessing.instance().parseTableAddHeader(getContext().getNumericalResults(), new String[]{
                 "Lower: " + getContext().getLowerHDTreshold() * 100 + "% Upper: " + 
                          getContext().getUpperHDTreshold() * 100 + "% treshold",
                 getContext().getModel2().getName()});
@@ -1080,7 +1075,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
      */
     private void exportNumResButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportNumResButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportCSVnumeric(tc, result);
+        ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
+
     }//GEN-LAST:event_exportNumResButtonActionPerformed
 
     /**
@@ -1173,7 +1169,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
                     thresholdedValues = ComparisonMetrics.instance().thresholdValues(hdDistance, c.getHausdorfMaxTreshold() / 100f, c.getHausdorfMinTreshold() / 100f, c.getValuesTypeIndex() == 0);
 
-                    String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);
+                    String res = SurfaceComparisonProcessing.instance().getNumericResults(thresholdedValues, c.getValuesTypeIndex() == 0);                    
                     
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
@@ -1507,8 +1503,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         maxThresholdSlider.setVisible(false);
         jLabel5.setVisible(false);
         Comparison2Faces c = getContext();
-
-        result = c.getNumericalResults();
         
        VisualizationBox.setSelectedItem(c.getVisualization());
        valuesComboBox.setSelectedItem(c.getValuesTypeIndex());

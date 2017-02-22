@@ -8,9 +8,9 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
-import cz.fidentis.comparison.icp.KdTree;
 import cz.fidentis.comparison.icp.KdTreeFaces;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.comparison.procrustes.Procrustes1ToMany;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -336,14 +336,14 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         if (usedCM == ComparisonMethod.HAUSDORFF_DIST) {
 
                             if (metric == ICPmetric.VERTEX_TO_VERTEX) {
-                                templateTree = new KdTreeIndexed(template.getVerts());
+                                templateTree = new KDTreeIndexed(template.getVerts());
                             } else {
                                 templateTree = new KdTreeFaces(template.getVerts(), template.getFaces());
                             }
 
                             results = SurfaceComparisonProcessing.instance().compareOneToMany(templateTree, mainF, true, null, usedCM);
                         } else {
-                            templateTree = new KdTreeIndexed(template.getVerts());
+                            templateTree = (KdTree) new KDTreeIndexed(template.getVerts());
                             c.setIcpMetric(ICPmetric.VERTEX_TO_VERTEX);
 
                             Curvature_jv mainCurv = new Curvature_jv(mainF);
@@ -367,7 +367,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         c.setSortedHdAbs(sortedResAbs);
                         c.setSortedHdRel(sortedResRes);
 
-                        String strRes = setValues(var, origModels, mainF.getName(), 0);
+                        String strRes = SurfaceComparisonProcessing.instance().formatedNumResOneToMany(var, origModels, template.getName(), 100f, 0f, 0);
 
                         c.setNumResults(numResults);
                         c.setNumericalResults(strRes);
@@ -508,22 +508,6 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     public void setProcessComparisonEnabled(boolean en) {
         processComparisonButton.setEnabled(en);
         getContext().setCompareButtonEnabled(en);
-    }
-
-    private String setValues(List<Float> hdDistance, List<File> models, String mainFace, int varianceMethod) {
-        StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Upper: 100% Lower: 0% treshold;");
-        
-        for(int i = 0; i < hdDistance.size(); i++){
-            strResults.append(models.get(i).getName()).append(';');
-        }
-        
-        strResults.append("\n" + mainFace + ";");
-        
-        for(Float f : hdDistance){
-            strResults.append(f).append(';');    
-        }
-        
-        return strResults.toString();
     }
     
     private OneToManyComparison getContext(){

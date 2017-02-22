@@ -19,8 +19,6 @@ public enum FacialPointType {
     SN,
     AL_R,
     AL_L,
-    RAN_R,
-    RAN_L,
     N,
     PRN,
     LS,

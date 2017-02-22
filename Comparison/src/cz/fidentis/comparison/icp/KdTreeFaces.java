@@ -5,6 +5,7 @@
  */
 package cz.fidentis.comparison.icp;
 
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.model.Faces;
 import cz.fidentis.utils.IntersectionUtils;
 import cz.fidentis.utils.MathUtils;
@@ -101,8 +102,8 @@ public class KdTreeFaces implements KdTree{
         return Math.signum(pointToNearest.dot(pointNormal));
     }
     
-    @Override
-    public KdNode nearestNeighborNode(Vector3f p) {
+    
+    private KdNode nearestNeighborNode(Vector3f p) {
        if(p == null || root == null){
             return null;
         }

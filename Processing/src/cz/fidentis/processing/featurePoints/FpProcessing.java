@@ -7,8 +7,8 @@ package cz.fidentis.processing.featurePoints;
 
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.icp.KdTree;
-import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.kdTree.KDTreeIndexed;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.FpDetector;
@@ -20,12 +20,14 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
+import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import java.io.File;
 import static java.io.File.separatorChar;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
@@ -63,7 +65,7 @@ public class FpProcessing {
         if (!genericFacePath.equals("")) {
             genericFacePath = genericFacePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "average_face.obj";
             Model genericFace = ModelLoader.instance().loadModel(new File(genericFacePath), false, true);
-            mainF = new KdTreeIndexed(genericFace.getVerts());
+            mainF = new KDTreeIndexed(genericFace.getVerts());
         }
     }
 
@@ -207,11 +209,7 @@ public class FpProcessing {
     }
 
     //computes all facial points that software is currently capable of computing and reverts ICP transformations performed during FP computation
-    private List<FacialPoint> computeAllFacialPoints(ArrayList<Vector3f> centerPoints, Model m, List<ICPTransformation> transformations) {
-        //computation moved to FpDetector class
-//        FeaturePointsUniverse fpUniverse = new FeaturePointsUniverse(m);
-//        setUpJavaViewConsole();
-//        facialPoints = computePointsFromFpUniverse(fpUniverse, centerPoints);        
+    private List<FacialPoint> computeAllFacialPoints(ArrayList<Vector3f> centerPoints, Model m, List<ICPTransformation> transformations) {    
 
         FpDetector fpDetector = new FpDetector(m);
         List<FacialPoint> facialPoints = fpDetector.computeAllFPs(centerPoints);
@@ -284,17 +282,13 @@ public class FpProcessing {
 
             Model model;
             List<FacialPoint> facialPoints;
-            //List<ICPTransformation> transformations;
-            //FeaturePointsUniverse fpUniverse;
             Map<String, List<FacialPoint>> allFPs = new HashMap<>();
             int size = models.size();
-            ArrayList<Model> registeredModels = new ArrayList<Model>();
 
             for (int i = 0; i < size; i++) {
                 model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
                 facialPoints = computePointsForSingleFace(p, model);
-                registeredModels.add(model);            //needed?
                 allFPs.put(model.getName(), facialPoints);
 
                 //p.progress(i * 100 / size);
@@ -302,7 +296,7 @@ public class FpProcessing {
 
             facialPoints = computePointsForSingleFace(p, mainF);
 
-            results = new FpResultsOneToMany(facialPoints, (HashMap<String, List<FacialPoint>>) allFPs, registeredModels);
+            results = new FpResultsOneToMany(facialPoints, (HashMap<String, List<FacialPoint>>) allFPs);
 
             p.finish();
             
@@ -361,7 +355,6 @@ public class FpProcessing {
 
         Model model;
         List<FacialPoint> facialPoints;
-        List<Model> registeredModels = new ArrayList<>();
         Map<String, List<FacialPoint>> allFPs = new HashMap<>();
         FpResultsBatch res = null;
 
@@ -373,15 +366,14 @@ public class FpProcessing {
             model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
             facialPoints = computePointsForSingleFace(p, model);
-            registeredModels.add(model);            //needed?
             allFPs.put(model.getName(), facialPoints);
 
             //p.progress((int) (unit * (i + 1)));
         }
 
-        res = new FpResultsBatch(allFPs, registeredModels);
+        res = new FpResultsBatch(allFPs);
         p.finish();
         return res;
     }
-
+   
 }

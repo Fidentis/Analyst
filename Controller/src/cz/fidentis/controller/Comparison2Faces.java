@@ -4,7 +4,7 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.ICPmetric;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
-import cz.fidentis.comparison.icp.KdTree;
+import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.controller.ProjectTree.Node;
 import cz.fidentis.controller.data.ColormapConfig;
 import cz.fidentis.controller.data.TransparencyConfig;
