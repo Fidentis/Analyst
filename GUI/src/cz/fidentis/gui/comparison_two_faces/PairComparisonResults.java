@@ -1026,7 +1026,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         Comparison2Faces c = getContext();
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-            if (GUIController.getConfigurationTopComponent().getPairComparisonConfiguration().getScaleEnabled()) {
+            if (getContext().isFpScaling()) {
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getPaInfo().setPointSize(sizeSlider.getValue() / (float) (30));
                 //GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFpSize(sizeSlider.getValue() / (float) (30));
                 GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getPaInfo().setPointSize(fpSizeSlider.getValue() * 3);
@@ -1076,6 +1076,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private void exportNumResButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportNumResButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
+
     }//GEN-LAST:event_exportNumResButtonActionPerformed
 
     /**

@@ -97,8 +97,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         useDatabaseCheckbox = new javax.swing.JCheckBox();
-        jLabel8 = new javax.swing.JLabel();
-        enableScaleCheckbox = new javax.swing.JCheckBox();
         deafultDatabaseRadioButton = new javax.swing.JRadioButton();
         chooseDatabaseRadioButton = new javax.swing.JRadioButton();
         createDatabaseRadioButton = new javax.swing.JRadioButton();
@@ -209,15 +207,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel8.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(enableScaleCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.enableScaleCheckbox.text")); // NOI18N
-        enableScaleCheckbox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                enableScaleCheckboxStateChanged(evt);
-            }
-        });
-
         deafultDatabaseRadioButton.setVisible(false);
         buttonGroup2.add(deafultDatabaseRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(deafultDatabaseRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.deafultDatabaseRadioButton.text")); // NOI18N
@@ -280,16 +269,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(fpThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(enableScaleCheckbox))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(useDatabaseCheckbox))))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(useDatabaseCheckbox))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,10 +288,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(enableScaleCheckbox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(useDatabaseCheckbox))
@@ -651,7 +630,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 .addComponent(exportLandmarksButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backRegistrationButton)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(jPanel3);
@@ -667,93 +646,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
-        getContext().setFpTreshold(fpThresholdSlider.getValue());
-    }//GEN-LAST:event_fpThresholdSliderStateChanged
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //currently unavailable
-        
-        if (chooseDatabaseRadioButton.isSelected()) {
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT files", "txt");
-            chooser.setFileFilter(filter);
-            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            chooser.setMultiSelectionEnabled(false);
-
-            int returnVal = chooser.showOpenDialog(GUIController.getSelectedProjectTopComponent());
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                jTextField1.setText(chooser.getSelectedFile().getPath());
-
-            }
-        } else if (this.createDatabaseRadioButton.isSelected()) {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "OBJ files", "obj");
-            chooser.setFileFilter(filter);
-            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            chooser.setMultiSelectionEnabled(true);
-
-            int returnVal = chooser.showOpenDialog(GUIController.getSelectedProjectTopComponent());
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                String names = "";
-                for (int i = 0; i < chooser.getSelectedFiles().length; i++) {
-                    names += chooser.getSelectedFiles()[i].getName() + ";";
-                }
-                jTextField1.setText(names);
-            }
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void createDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDatabaseRadioButtonActionPerformed
-        jTextField1.setVisible(true);
-        jButton1.setVisible(true);
-    }//GEN-LAST:event_createDatabaseRadioButtonActionPerformed
-
-    private void chooseDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseDatabaseRadioButtonActionPerformed
-        jTextField1.setVisible(true);
-        jButton1.setVisible(true);
-    }//GEN-LAST:event_chooseDatabaseRadioButtonActionPerformed
-
-    private void deafultDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deafultDatabaseRadioButtonActionPerformed
-        jTextField1.setVisible(false);
-        jButton1.setVisible(false);
-    }//GEN-LAST:event_deafultDatabaseRadioButtonActionPerformed
-
-    private void enableScaleCheckboxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_enableScaleCheckboxStateChanged
-        getContext().setFpScaling(enableScaleCheckbox.isSelected());
-    }//GEN-LAST:event_enableScaleCheckboxStateChanged
-
-    private void useDatabaseCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useDatabaseCheckboxActionPerformed
-        //currently unavailable
-        
-        if (useDatabaseCheckbox.isSelected()) {
-            deafultDatabaseRadioButton.setVisible(true);
-            chooseDatabaseRadioButton.setVisible(true);
-            createDatabaseRadioButton.setVisible(true);
-            if (chooseDatabaseRadioButton.isSelected() || createDatabaseRadioButton.isSelected()) {
-                jTextField1.setVisible(true);
-                jButton1.setVisible(true);
-                if (chooseDatabaseRadioButton.isSelected()) {
-                    getContext().setUseDatabase(2);
-                } else {
-                    getContext().setUseDatabase(3);
-                }
-            }
-            if (!chooseDatabaseRadioButton.isSelected() && !createDatabaseRadioButton.isSelected()) {
-                deafultDatabaseRadioButton.setSelected(true);
-                getContext().setUseDatabase(1);
-            }
-        } else {
-            deafultDatabaseRadioButton.setVisible(false);
-            chooseDatabaseRadioButton.setVisible(false);
-            createDatabaseRadioButton.setVisible(false);
-            jTextField1.setVisible(false);
-            jButton1.setVisible(false);
-            getContext().setUseDatabase(0);
-        }
-    }//GEN-LAST:event_useDatabaseCheckboxActionPerformed
 
     private void compMethodComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compMethodComboBoxActionPerformed
         if (((ComparisonMethod) compMethodComboBox.getSelectedItem()) == ComparisonMethod.PROCRUSTES) {
@@ -930,19 +822,19 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                             try {
                                 if (deafultDatabaseRadioButton.isSelected()) {
                                     procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), enableScaleCheckbox.isSelected());
+                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), c.isFpScaling());
 
                                 } else if (chooseDatabaseRadioButton.isSelected()) {
                                     if (!jTextField1.getText().endsWith(".txt")) {
                                         throw new IllegalArgumentException("Cannot be used as database.");
                                     } else {
                                         procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), enableScaleCheckbox.isSelected());
+                                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), c.isFpScaling());
                                     }
                                 } else {
                                     List<List<FacialPoint>> list = c.getDatabasePoints();
                                     procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, enableScaleCheckbox.isSelected());
+                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, c.isFpScaling());
                                 }
 
                                 String result = procrustes.compare2ModelsWithDatabase(fpThresholdSlider.getValue() / 100f);
@@ -1139,9 +1031,88 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 tc.getViewerPanel_2Faces().getListener2().getModel());
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
-    public boolean getScaleEnabled() {
-        return enableScaleCheckbox.isSelected();
-    }
+    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
+        getContext().setFpTreshold(fpThresholdSlider.getValue());
+    }//GEN-LAST:event_fpThresholdSliderStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //currently unavailable
+
+        if (chooseDatabaseRadioButton.isSelected()) {
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT files", "txt");
+            chooser.setFileFilter(filter);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setMultiSelectionEnabled(false);
+
+            int returnVal = chooser.showOpenDialog(GUIController.getSelectedProjectTopComponent());
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                jTextField1.setText(chooser.getSelectedFile().getPath());
+
+            }
+        } else if (this.createDatabaseRadioButton.isSelected()) {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "OBJ files", "obj");
+            chooser.setFileFilter(filter);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setMultiSelectionEnabled(true);
+
+            int returnVal = chooser.showOpenDialog(GUIController.getSelectedProjectTopComponent());
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                String names = "";
+                for (int i = 0; i < chooser.getSelectedFiles().length; i++) {
+                    names += chooser.getSelectedFiles()[i].getName() + ";";
+                }
+                jTextField1.setText(names);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void createDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDatabaseRadioButtonActionPerformed
+        jTextField1.setVisible(true);
+        jButton1.setVisible(true);
+    }//GEN-LAST:event_createDatabaseRadioButtonActionPerformed
+
+    private void chooseDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseDatabaseRadioButtonActionPerformed
+        jTextField1.setVisible(true);
+        jButton1.setVisible(true);
+    }//GEN-LAST:event_chooseDatabaseRadioButtonActionPerformed
+
+    private void deafultDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deafultDatabaseRadioButtonActionPerformed
+        jTextField1.setVisible(false);
+        jButton1.setVisible(false);
+    }//GEN-LAST:event_deafultDatabaseRadioButtonActionPerformed
+
+    private void useDatabaseCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useDatabaseCheckboxActionPerformed
+        //currently unavailable
+
+        if (useDatabaseCheckbox.isSelected()) {
+            deafultDatabaseRadioButton.setVisible(true);
+            chooseDatabaseRadioButton.setVisible(true);
+            createDatabaseRadioButton.setVisible(true);
+            if (chooseDatabaseRadioButton.isSelected() || createDatabaseRadioButton.isSelected()) {
+                jTextField1.setVisible(true);
+                jButton1.setVisible(true);
+                if (chooseDatabaseRadioButton.isSelected()) {
+                    getContext().setUseDatabase(2);
+                } else {
+                    getContext().setUseDatabase(3);
+                }
+            }
+            if (!chooseDatabaseRadioButton.isSelected() && !createDatabaseRadioButton.isSelected()) {
+                deafultDatabaseRadioButton.setSelected(true);
+                getContext().setUseDatabase(1);
+            }
+        } else {
+            deafultDatabaseRadioButton.setVisible(false);
+            chooseDatabaseRadioButton.setVisible(false);
+            createDatabaseRadioButton.setVisible(false);
+            jTextField1.setVisible(false);
+            jButton1.setVisible(false);
+            getContext().setUseDatabase(0);
+        }
+    }//GEN-LAST:event_useDatabaseCheckboxActionPerformed
 
     public void setProcessComparisonEnabled(boolean en) {
         processComparisonButton.setEnabled(en);
@@ -1175,7 +1146,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
        compMethodComboBox.setSelectedItem(c.getComparisonMethod());
        
        //FP
-       enableScaleCheckbox.setSelected(c.isFpScaling());
        useDatabaseCheckbox.setSelected(c.getUseDatabase() != 0);
        fpThresholdSlider.setValue(c.getFpTreshold());
        
@@ -1299,7 +1269,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox compMethodComboBox;
     private javax.swing.JRadioButton createDatabaseRadioButton;
     private javax.swing.JRadioButton deafultDatabaseRadioButton;
-    private javax.swing.JCheckBox enableScaleCheckbox;
     private javax.swing.JButton exportFacesButton;
     private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
@@ -1319,7 +1288,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;

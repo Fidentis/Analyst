@@ -28,7 +28,7 @@ public class ProcrustesAnalysis implements Serializable {
     private Matrix visMatrix;
     private Matrix vertices;        //to be able to register models with points -- change to list?
 
-    private static final float SIZE_SCALE = 200f;
+    public static final float SIZE_SCALE = 25.0f;
     
     public ProcrustesAnalysis() {
         //config = new Matrix(8, 3);
@@ -191,12 +191,10 @@ public class ProcrustesAnalysis implements Serializable {
         List<Integer> correspondence = new ArrayList<>();
         
         for(Integer ft : config.keySet()){
-            if(!config.get(ft).isActive())      //don't consider the point if not active
+            if(!config.get(ft).isActive() || !pa.isPointActive(ft))      //don't consider the point if not active
                 continue;
-            
-            if(pa.isPointActive(ft)){
-                correspondence.add(ft);
-            }
+
+            correspondence.add(ft);
         }
         
         return correspondence;
@@ -519,13 +517,14 @@ public class ProcrustesAnalysis implements Serializable {
      * To be able to visually analyse the results within the software, results are scaled to 100 instead of 1
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    public void normalize(boolean scaling) {        
+    public void normalize(boolean scaling) {    
+        
+        Vector3f cs = this.findCentroid();
+        float size = this.countSize(cs);
+
+        this.centerConfigToOrigin(cs);     
+        
         if (scaling && config.keySet().size() >= 3) {
-            Vector3f cs = this.findCentroid();
-            float size = this.countSize(cs);
-
-            //this.centerConfigToOrigin(cs);      //not required?
-
         
             this.setSizeTo1(size / SIZE_SCALE);
             //change scale to size / 100 to get proper size of model

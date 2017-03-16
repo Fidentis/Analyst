@@ -12,12 +12,6 @@ import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.vecmath.Vector3f;
 
 /**
@@ -108,7 +102,6 @@ public class OneToManyGUISetup {
      public static void defaultValuesComparisonConfiguration(OneToManyComparison data){  
          data.setComparisonMethod(COMPARISON_METHOD);
          data.setCreateAvgFace(CREATE_AVG_FACE);
-         data.setFpScaling(FP_SCALE);
          data.setFpTreshold(FP_THRESHOLD);
      }
      
