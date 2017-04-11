@@ -28,7 +28,7 @@ public class ProcrustesAnalysis implements Serializable {
     private Matrix visMatrix;
     private Matrix vertices;        //to be able to register models with points -- change to list?
 
-    public static final float SIZE_SCALE = 25.0f;
+    public static final float SIZE_SCALE = 200.0f;
     
     public ProcrustesAnalysis() {
         //config = new Matrix(8, 3);
