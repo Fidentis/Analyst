@@ -252,6 +252,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
             setPointInfo(canvas, listener);
           
             if (editablePoints) {
+                canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(true);
                 }
