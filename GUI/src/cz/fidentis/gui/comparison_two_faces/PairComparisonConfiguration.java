@@ -909,7 +909,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private void backRegistrationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backRegistrationButtonActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(false, 0);
         //if (GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getNumberOfModels() > 1) {
-            Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), false, true);
+            Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), true, true);
 
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setModels(model);
             
@@ -919,7 +919,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setProcrustes(false);
             
             
-            model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), false, true);
+            model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), true, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setModels(model);
         //}
         getContext().setState(1);

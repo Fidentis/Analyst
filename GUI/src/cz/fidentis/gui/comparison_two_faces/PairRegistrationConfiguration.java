@@ -1387,6 +1387,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             exportPointsButton.setEnabled(true);
         }
         
+        //set camera scheme and position to default
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setDefaultCameraScheme();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setDefaultCameraPosition();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setDefaultCameraPosition();
+        
         
         
 

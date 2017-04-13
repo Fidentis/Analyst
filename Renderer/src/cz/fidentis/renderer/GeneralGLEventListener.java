@@ -51,6 +51,7 @@ public class GeneralGLEventListener implements GLEventListener {
      */
     protected Vector3f defaultPosition = new Vector3f(0, 0, 300);
     protected Vector3f currentPosition = new Vector3f(0, 0, 300);
+    private boolean useDefaultCamera = true;
     /**
      *
      */
@@ -459,7 +460,11 @@ public class GeneralGLEventListener implements GLEventListener {
         yUpPosition = 1;
         zUpPosition = 0;
 
-        setNewCameraPosition(defaultPosition);
+        if(useDefaultCamera)
+            setDefaultCameraPosition();
+        else
+            setFpScalingCameraPosition();
+        
         xCenter = 0;
         yCenter = 0;
         zCenter = 0;
@@ -528,5 +533,15 @@ public class GeneralGLEventListener implements GLEventListener {
      */
     public void setDrawTextures(boolean drawTextures) {
         this.drawTextures = drawTextures;
+    }
+    
+    public void setFpScalingCameraPosition(){
+        setCameraPosition(0, 0, 6);
+        useDefaultCamera = false;
+    }
+    
+    public void setDefaultCameraPosition(){
+        setCameraPosition(0, 0, 300);
+        useDefaultCamera = true;
     }
 }
