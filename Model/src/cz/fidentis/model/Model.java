@@ -215,11 +215,6 @@ public class Model {
 
         for (int i = 0; i < faces.getNumFaces(); i++) {
 
-            faceMat = faces.findMaterial(i);      // get material used by face i
-            if (faceMat != null && materials != null) {
-                flipTexCoords = materials.renderWithMaterial(faceMat, gl);
-            }  // render using that material
-
             faces.renderFace(i, flipTexCoords, gl);                  // draw face i
         }
         
