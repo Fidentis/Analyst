@@ -251,7 +251,7 @@ public class GeneralGLEventListener implements GLEventListener {
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
 
-        glu.gluPerspective(65, width / (float) height, 5.0f, 1500.0f);
+        glu.gluPerspective(65, width / (float) height, 0.001f, 1500.0f);
         //  gl.glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 1500.0f);
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();

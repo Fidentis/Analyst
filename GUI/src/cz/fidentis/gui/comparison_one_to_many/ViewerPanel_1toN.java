@@ -65,8 +65,8 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
         listener1 = new ComparisonGLEventListener();
         canvas2.addGLEventListener(listener2);
         canvas1.addGLEventListener(listener1);
-        listener1.setCameraPosition(0, 0, 300);
-        listener2.setCameraPosition(0, 0, 300);
+        listener1.setDefaultCameraPosition();
+        listener2.setDefaultCameraPosition();
 
         canvas1.setImportLabelVisible(true);
         canvas2.setImportLabelVisible(true);

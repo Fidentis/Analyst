@@ -73,7 +73,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         listener = new ComparisonGLEventListener();
         listener2 = new ComparisonGLEventListener();
         canvas1.addGLEventListener(listener);
-        listener.setCameraPosition(0, 0, 300);
+        listener.setDefaultCameraPosition();
         String path = GUIController.getPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar;
 
         Model model = ModelLoader.instance().loadModel(new File(path + "xShift.obj"), false, false);
@@ -216,7 +216,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                 }
             });
             canvas3.addGLEventListener(listener2);
-            listener2.setCameraPosition(0, 0, 300);
+            listener2.setDefaultCameraPosition();
 
             //   jSplitPane2.setRightComponent(canvas4);
             jPanel1.add(jSplitPane2);

@@ -40,6 +40,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private boolean removePoints = false;
     private boolean addPoints = false;
     private boolean selection = false;
+    private float zoomSensitivity = 5;
     
     private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
 
@@ -53,8 +54,8 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
         listener1 = new ComparisonGLEventListener();
         canvas2.addGLEventListener(listener2);
         canvas1.addGLEventListener(listener1);
-        listener1.setCameraPosition(0, 0, 300);
-        listener2.setCameraPosition(0, 0, 300);
+        listener1.setDefaultCameraPosition();
+        listener2.setDefaultCameraPosition();
 
         canvas1.setImportLabelVisible(true);
         canvas2.setImportLabelVisible(true);
@@ -379,18 +380,18 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
     private void canvas1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_canvas1MouseWheelMoved
         if (evt.getWheelRotation() > 0) {
-            listener1.zoomIn(-5 * evt.getWheelRotation());
+            listener1.zoomIn(-zoomSensitivity * evt.getWheelRotation());
         } else {
-            listener1.zoomOut(5 * evt.getWheelRotation());
+            listener1.zoomOut(zoomSensitivity * evt.getWheelRotation());
 
         }
     }//GEN-LAST:event_canvas1MouseWheelMoved
 
     private void canvas2MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_canvas2MouseWheelMoved
         if (evt.getWheelRotation() > 0) {
-            listener2.zoomIn(-5 * evt.getWheelRotation());
+            listener2.zoomIn(-zoomSensitivity * evt.getWheelRotation());
         } else {
-            listener2.zoomOut(5 * evt.getWheelRotation());
+            listener2.zoomOut(zoomSensitivity * evt.getWheelRotation());
 
         }
     }//GEN-LAST:event_canvas2MouseWheelMoved
@@ -425,6 +426,14 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
     }//GEN-LAST:event_canvas1MouseReleased
 
+    public void setFpScalingCameraScheme(){
+        zoomSensitivity = 0.2f;
+    }
+    
+    public void setDefaultCameraScheme(){
+        zoomSensitivity = 5f;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private cz.fidentis.gui.Canvas canvas1;
     private cz.fidentis.gui.Canvas canvas2;

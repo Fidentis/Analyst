@@ -41,8 +41,8 @@ public class AgeingViewerPanel extends javax.swing.JPanel {
         listenerTarget = new ComparisonGLEventListener();
         originCanvas.addGLEventListener(listenerOrigin);
         targetCanvas.addGLEventListener(listenerTarget);
-        listenerOrigin.setCameraPosition(0, 0, 300);
-        listenerTarget.setCameraPosition(0, 0, 300);
+        listenerOrigin.setDefaultCameraPosition();
+        listenerTarget.setDefaultCameraPosition();
 
         originCanvas.setImportLabelVisible(true);
         targetCanvas.setImportLabelVisible(false);

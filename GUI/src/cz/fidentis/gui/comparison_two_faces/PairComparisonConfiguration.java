@@ -1227,6 +1227,19 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(c.isUseGlyphs());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(c.getFogVersion());
         
+        //set camera parameters for landmarking scaling mode
+        if(c.isFpScaling()){
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFpScalingCameraPosition();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFacialPointRadius(c.getFpSize() / 1000f);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setFpScalingCameraScheme();
+            
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFpScalingCameraPosition();
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFacialPointRadius(c.getFpSize() / 1000f);
+        }else{
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setDefaultCameraScheme();
+        }
+        
+        
         processComparisonButton.setEnabled(c.isCompareButtonEnabled());
 
     }

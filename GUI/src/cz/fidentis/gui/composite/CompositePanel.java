@@ -95,7 +95,7 @@ public class CompositePanel extends javax.swing.JPanel {
         listener = new CompositeGLEventListener();
         Manipulator manipulator = new Manipulator();
         listener.setManipulator(manipulator);
-        listener.setCameraPosition(0, 0, 300);
+        listener.setDefaultCameraPosition();
         compositeCanvas2.addGLEventListener(listener);
 
         Model model;

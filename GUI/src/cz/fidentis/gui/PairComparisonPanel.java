@@ -52,7 +52,7 @@ public class PairComparisonPanel extends javax.swing.JPanel {
 
         listener = new ComparisonGLEventListener();
         canvas1.addGLEventListener(listener);
-        listener.setCameraPosition(0, 0, 300);
+        listener.setDefaultCameraPosition();
     }
 
     public void setInfo(HDpainting p) {

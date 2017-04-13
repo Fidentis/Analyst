@@ -8,6 +8,7 @@ package cz.fidentis.utils;
 
 
 import cz.fidentis.model.Model;
+import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Vector3f;
 
@@ -65,6 +66,16 @@ public class MeshUtils {
         }
 
         return mirroredModel;
+    }
+    
+    public List<Vector3f> scaleDownModel(List<Vector3f> vertices, float size){
+        List<Vector3f> scaledDown = new ArrayList<Vector3f>(vertices.size());
+        
+        for(Vector3f v : vertices){
+            scaledDown.add(new Vector3f(v.x / size, v.y / size, v.z / size));
+        }
+        
+        return scaledDown;
     }
     
 }

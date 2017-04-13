@@ -2680,4 +2680,11 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         return gl;
     }
 
+    public void setFpScalingCameraPosition(){
+        setCameraPosition(0, 0, 6);
+    }
+    
+    public void setDefaultCameraPosition(){
+        setCameraPosition(0, 0, 300);
+    }
 }

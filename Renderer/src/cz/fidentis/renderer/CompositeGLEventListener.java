@@ -358,4 +358,8 @@ public class CompositeGLEventListener extends GeneralGLEventListener {
         manipulator.adjustModels((float) ((sqrt + distance) / sqrt));
 
     }
+    
+    public void setDefaultCameraPosition(){
+        setCameraPosition(0, 0, 300);
+    }
 }
