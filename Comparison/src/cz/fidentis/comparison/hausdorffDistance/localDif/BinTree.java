@@ -5,6 +5,8 @@
  */
 package cz.fidentis.comparison.hausdorffDistance.localDif;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rasto1
@@ -12,6 +14,13 @@ package cz.fidentis.comparison.hausdorffDistance.localDif;
 public class BinTree {
 
     Node root;
+    
+    public BinTree(ArrayList<Float> items) {
+
+           for (int i = 0; i < items.size(); i++) {
+               this.addNode(i, items.get(i));
+           }
+    }
 
     public void addNode(int key, float value) {
 

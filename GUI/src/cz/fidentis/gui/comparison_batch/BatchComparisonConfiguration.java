@@ -33,6 +33,8 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Exceptions;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -314,7 +316,17 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                            c.setAverageFace(template);
                            c.setModelsAdded(false);
 
-                            variance = SurfaceComparisonProcessing.instance().computeVariation(results, 0, true);
+                            //variance = SurfaceComparisonProcessing.instance().computeVariation(results, 0, true);
+                            variance = new ArrayList<>();
+                            String line;
+                            
+                            try(BufferedReader br = new BufferedReader(new FileReader(new File("D:\\Documents\\values2.txt")));) {
+                                
+                              while ((line = br.readLine()) != null) {
+                                  variance.add(new Float(line));
+                                  
+                              }
+                            }
 
                             c.setHd(variance);
 

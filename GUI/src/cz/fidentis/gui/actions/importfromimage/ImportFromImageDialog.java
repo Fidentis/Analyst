@@ -290,13 +290,14 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
         }*/
         JFileChooser chooser = new JFileChooser();
         String[] extensions = new String[2];
-        extensions[0] = "csv";
-        extensions[1] = "CSV";
-        ModelFileFilter filter = new ModelFileFilter(extensions, "*.csv");
+        extensions[0] = "pp";
+        extensions[1] = "PP";
+        //ModelFileFilter filter = new ModelFileFilter(extensions, "*.csv");
+        ModelFileFilter filter = new ModelFileFilter(extensions, "*.pp");
         chooser.setFileFilter(filter);
         int result = chooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
-            List<FacialPoint> newPoints = ImportFromImage.loadFidoCsv(chooser.getSelectedFile());
+            List<FacialPoint> newPoints = ImportFromImage.loadPPFile(chooser.getSelectedFile().getAbsolutePath());
             featurePoints.clear();
             for (int i = 0; i < newPoints.size(); i++) {
                 featurePoints.add(newPoints.get(i));

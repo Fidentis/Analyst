@@ -278,7 +278,9 @@ public class ThresholdArea {
         pronasale = new PdVector(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE);
         double maxArea = 0.0;
 
+        //edges of thresholded area
         Set<SimpleEdge> thresholdEdges = getThresholdEdges(thresholdFaces);
+        //vertices of thresholded area
         Set<Integer> thresholdVertices = getThresholdVertices(thresholdFaces);
         Corner actualCorner;
 

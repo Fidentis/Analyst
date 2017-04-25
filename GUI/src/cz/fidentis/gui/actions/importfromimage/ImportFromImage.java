@@ -8,8 +8,13 @@ package cz.fidentis.gui.actions.importfromimage;
 import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+
+import cz.fidentis.landmarkParser.PPparser;
+import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdge;
+
 import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdgeId;
 import cz.fidentis.model.Material;
 import cz.fidentis.model.Materials;
@@ -51,8 +56,9 @@ import org.openide.util.NbBundle.Messages;
 @ActionReference(path = "Menu/File", position = -100)
 @Messages("CTL_ImportFromImage=Import face from image...")
 public final class ImportFromImage implements ActionListener {
-    
+
     private final float HEIGHT_TO_FIT = 200; // imported models will be scaled to this height
+
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -407,6 +413,16 @@ public final class ImportFromImage implements ActionListener {
         return gems;
     }
 
+
+    public static ArrayList<FacialPoint> loadPPFile(String ppFile){
+        ArrayList<FacialPoint> pts = new ArrayList<>();
+        
+        FpModel fp = PPparser.load(ppFile);
+        pts.addAll(fp.getFacialPoints());
+        
+        return pts;
+    }
+
     public static ArrayList<FacialPoint> loadFidoCsv(File csvFile) {
         ArrayList<FacialPoint> pts = new ArrayList<>();
 
@@ -429,9 +445,9 @@ public final class ImportFromImage implements ActionListener {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            Exceptions.printStackTrace(e);
-        }
-
+            e.printStackTrace();
+        }       
+        
         return pts;
     }
 
@@ -633,7 +649,8 @@ public final class ImportFromImage implements ActionListener {
                 minX = Math.min(minX, p.getPosition().x);
             }
         }
-        float factor = 1.5f * (maxX - minX);
+        float factor = (maxX - minX);
+        //float factor = 40f * (MAX_DEPTH - MIN_DEPTH);
         model.getTexCoords().clear();
         for (int i = 0; i < model.getVerts().size(); i++) {
             Vector3f currentVertex = model.getVerts().get(i);
