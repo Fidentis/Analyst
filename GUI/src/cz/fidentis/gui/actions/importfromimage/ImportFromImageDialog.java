@@ -7,9 +7,11 @@ package cz.fidentis.gui.actions.importfromimage;
 
 import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -280,30 +282,14 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
     }//GEN-LAST:event_but_browseActionPerformed
 
     private void but_loadFpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_but_loadFpActionPerformed
-        /*List<FpModel> loaded = FPImportExport.instance().importPoints(tc, true);
-        if (loaded != null) {
-            List<FacialPoint> newPoints = loaded.get(0).getFacialPoints();
-            featurePoints.clear();
-            for (int i = 0; i < newPoints.size(); i++) {
-                featurePoints.add(newPoints.get(i));
-            }
-        }*/
-        JFileChooser chooser = new JFileChooser();
-        String[] extensions = new String[2];
-        extensions[0] = "csv";
-        extensions[1] = "CSV";
-        ModelFileFilter filter = new ModelFileFilter(extensions, "*.csv");
-        chooser.setFileFilter(filter);
-        int result = chooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            List<FacialPoint> newPoints = ImportFromImage.loadFidoCsv(chooser.getSelectedFile());
-            featurePoints.clear();
-            for (int i = 0; i < newPoints.size(); i++) {
-                featurePoints.add(newPoints.get(i));
-            }
-            canvas.setPoints(featurePoints);
-            but_ok.setEnabled(true);
-        }
+        //despite list this will always be just one file
+        List<FpModel> loadedFp = FPImportExport.instance().importPoints(tc, false);
+        if(loadedFp == null)
+            return;
+        featurePoints.addAll(loadedFp.get(0).getFacialPoints());
+        
+        canvas.setPoints(featurePoints);
+        but_ok.setEnabled(true);
     }//GEN-LAST:event_but_loadFpActionPerformed
 
     private void but_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_but_cancelActionPerformed
