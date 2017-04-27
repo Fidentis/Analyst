@@ -11,6 +11,7 @@ import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdgeId;
+import cz.fidentis.model.Faces;
 import cz.fidentis.model.Material;
 import cz.fidentis.model.Materials;
 import cz.fidentis.model.Model;
@@ -19,6 +20,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.model.corner_table.Corner;
 import cz.fidentis.model.corner_table.CornerTable;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.utils.MathUtils;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,15 +76,19 @@ public final class ImportFromImage implements ActionListener {
                 ProgressHandle p = ProgressHandle.createHandle("Creating face...");
                 p.start();
                 List<FacialPoint> points = dialog.getFeaturePoints();
-                Model imported = importFromImage(dialog.getImageFile(), dialog.getSelectedGender(), dialog.getSelectedAge(), points, dialog.getNumberOfVerts());
+                Model imported = importFromImage(dialog.getImageFile(), dialog.getSelectedGender(), dialog.getSelectedAge(), points, dialog.getNumberOfVerts());             
                 
                 ModelExporter exp = new ModelExporter(imported);
                 File modelSaveDir = new File(tc.getProject().getTempDirectory().getPath() + File.separator + imported.getName().substring(0, imported.getName().length()-4));
                 File modelFile = new File(modelSaveDir.getPath() + File.separator + imported.getName());
                 exp.exportModelToObj(modelSaveDir, true);
                 
-                
                 Model model = ModelLoader.instance().loadModel(modelFile, true, true);
+                
+                //project landmarks to centralized model
+                List<FacialPoint> landmarksIn3D = null;
+                if(dialog.projectLandmarks())
+                    landmarksIn3D = projectLandmarksTo3D(model, points, dialog.getImageFile());
                 
                 switch (tc.getProject().getSelectedPart()) {
                     case 2:
@@ -90,10 +96,22 @@ public final class ImportFromImage implements ActionListener {
                             tc.getViewerPanel_2Faces().getListener1().setModels(model);
                             tc.getViewerPanel_2Faces().getCanvas1().setImportLabelVisible(false);
                             tc.getProject().getSelectedComparison2Faces().setModel1(model);
+                            
+                            //set landmarks
+                            if(landmarksIn3D != null){
+                                tc.getViewerPanel_2Faces().getListener1().setFacialPoints(landmarksIn3D);
+                                tc.getProject().getSelectedComparison2Faces().setMainFp(landmarksIn3D);
+                            }
                         } else {
                             tc.getViewerPanel_2Faces().getListener2().setModels(model);
                             tc.getViewerPanel_2Faces().getCanvas2().setImportLabelVisible(false);
                             tc.getProject().getSelectedComparison2Faces().setModel2(model);
+                            
+                             //set landmarks
+                            if(landmarksIn3D != null){
+                                tc.getViewerPanel_2Faces().getListener2().setFacialPoints(landmarksIn3D);
+                                tc.getProject().getSelectedComparison2Faces().setSecondaryFp(landmarksIn3D);
+                            }
                         }
                         break;
                     case 3:
@@ -101,16 +119,35 @@ public final class ImportFromImage implements ActionListener {
                             tc.getOneToManyViewerPanel().getListener1().setModels(model);
                             tc.getOneToManyViewerPanel().getCanvas1().setImportLabelVisible(false);
                             tc.getProject().getSelectedOneToManyComparison().setPrimaryModel(model);
+                            
+                             //set landmarks
+                            if(landmarksIn3D != null){
+                                tc.getOneToManyViewerPanel().getListener1().setFacialPoints(landmarksIn3D);
+                            }
                         } else {
                             tc.getOneToManyViewerPanel().getListener2().setModels(model);
                             tc.getOneToManyViewerPanel().getCanvas2().setImportLabelVisible(false);
                             tc.getProject().getSelectedOneToManyComparison().addModel(modelFile);
+                            
+                            //set landmarks
+                            if(landmarksIn3D != null){
+                                tc.getOneToManyViewerPanel().getListener2().setFacialPoints(landmarksIn3D);
+                            }
                         }
+                        
+                        if(landmarksIn3D != null)
+                            tc.getProject().getSelectedOneToManyComparison().addFacialPoints(imported.getName(),landmarksIn3D);
+                        
                         break;
                     case 4:
                         tc.getViewerPanel_Batch().getListener().setModels(model);
                         tc.getViewerPanel_Batch().getCanvas1().setImportLabelVisible(false);
                         tc.getProject().getSelectedBatchComparison().addModel(modelFile);
+                        
+                        if(landmarksIn3D != null){
+                            tc.getViewerPanel_Batch().getListener().setFacialPoints(landmarksIn3D);
+                            tc.getProject().getSelectedBatchComparison().addFacialPoints(imported.getName(), landmarksIn3D);
+                        }
                         break;
                     /*case 5:
                         tc.getAgeingViewerPanel().getListenerOrigin().setModels(model);
@@ -633,7 +670,7 @@ public final class ImportFromImage implements ActionListener {
                 minX = Math.min(minX, p.getPosition().x);
             }
         }
-        float factor = 1.5f * (maxX - minX);
+        float factor = (maxX - minX);
         model.getTexCoords().clear();
         for (int i = 0; i < model.getVerts().size(); i++) {
             Vector3f currentVertex = model.getVerts().get(i);
@@ -717,5 +754,61 @@ public final class ImportFromImage implements ActionListener {
         
         // recompute normals of the whole model
         model.setNormals((ArrayList<Vector3f>) SurfaceComparisonProcessing.instance().recomputeVertexNormals(model));
+    }
+    
+    private List<FacialPoint> projectLandmarksTo3D(Model m, List<FacialPoint> landmarksIn2D, File imageFile) {
+        List<FacialPoint> projectedLandmarks = new ArrayList<>(landmarksIn2D.size());
+        HashMap<Integer, Integer> textureVertexCorrespondence = textureVertexCorrespondence(m.getFaces());
+
+        try {
+            BufferedImage img = ImageIO.read(imageFile);
+ 
+            for (FacialPoint fp : landmarksIn2D) {
+                Vector3f pos = findClosest3Dvertex(m.getVerts(), m.getTexCoords(), textureVertexCorrespondence, fp.getPosition(), img.getWidth(), img.getHeight());
+                projectedLandmarks.add(new FacialPoint(fp.getType(), pos));
+            }
+        } catch (IOException ex) {
+            System.err.println("Could not load depth image from " + imageFile.getAbsolutePath() + ": " + ex.getMessage());
+        }
+
+        return projectedLandmarks;
+    }
+    
+    private HashMap<Integer, Integer> textureVertexCorrespondence(Faces faces){
+        HashMap<Integer, Integer> corr = new HashMap<>();
+        int numOfFaces = faces.getNumFaces();
+        
+        for(int i = 0; i < numOfFaces; i++){
+            int[] textureIndices = faces.getFaceTexIdxs(i);
+            int[] vertexIndices = faces.getFaceVertIdxs(i);
+            
+            for(int j = 0; j < textureIndices.length; j++){
+                if(corr.containsKey(textureIndices[j] - 1))
+                    continue;
+                
+                corr.put(textureIndices[j] - 1, vertexIndices[j] - 1);
+            }
+        }
+        
+        return corr;
+    }
+    
+    private Vector3f findClosest3Dvertex(List<Vector3f> vertices, List<Vector3f> textures, HashMap<Integer, Integer> corr, Vector3f landmark, int imageWidth, int imageHeight){
+        int closestIndex = 0;
+        double closestDistance = Double.MAX_VALUE;
+        
+        // needs to flip Y axis due to opengl texture mapping process
+        Vector3f mapped = new Vector3f(landmark.x / imageWidth, (imageHeight - landmark.y) / imageHeight, landmark.z);
+        
+        //TODO: smarter look-up
+        for(int i = 0; i < textures.size(); i++){
+            double dist = MathUtils.instance().distancePoints(textures.get(i), mapped);
+            if(dist < closestDistance){
+                closestIndex = i;
+                closestDistance = dist;
+            }
+        }
+        
+        return vertices.get(corr.get(closestIndex));
     }
 }

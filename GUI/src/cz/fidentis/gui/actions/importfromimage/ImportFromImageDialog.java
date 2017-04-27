@@ -77,6 +77,10 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
     public boolean isCanceled() {
         return this.canceled;
     }
+    
+    public boolean projectLandmarks(){
+        return projectLandmarksCheckbox.isSelected();
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -110,6 +114,8 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
         but_ok = new javax.swing.JButton();
         but_cancel = new javax.swing.JButton();
         but_saveFp = new javax.swing.JButton();
+        projectLandmarksCheckbox = new javax.swing.JCheckBox();
+        projectLandmarksLabel = new javax.swing.JLabel();
 
         setTitle(org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(512, 300));
@@ -197,6 +203,10 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(projectLandmarksCheckbox, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.projectLandmarksCheckbox.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(projectLandmarksLabel, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.projectLandmarksLabel.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -220,10 +230,14 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(projectLandmarksLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(projectLandmarksCheckbox)
+                            .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,6 +261,10 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(projectLandmarksCheckbox)
+                    .addComponent(projectLandmarksLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(but_ok)
@@ -345,6 +363,8 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner numOfVertsSpinner;
     private javax.swing.JPanel panel_primarySecondary;
+    private javax.swing.JCheckBox projectLandmarksCheckbox;
+    private javax.swing.JLabel projectLandmarksLabel;
     private javax.swing.JRadioButton radio_primary;
     private javax.swing.JRadioButton radio_secondary;
     // End of variables declaration//GEN-END:variables
