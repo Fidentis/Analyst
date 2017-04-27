@@ -10,19 +10,14 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdge;
 import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdgeId;
-import cz.fidentis.merging.doubly_conected_edge_list.parts.TriangleFace;
-import cz.fidentis.merging.doubly_conected_edge_list.parts.TriangularDCEL;
-import cz.fidentis.merging.doubly_conected_edge_list.parts.Vertex;
-import cz.fidentis.merging.mesh.Coordinates;
-import cz.fidentis.merging.mesh.GraphicMesh;
-import cz.fidentis.merging.mesh.GraphicMeshBuilderFromModel;
 import cz.fidentis.model.Material;
 import cz.fidentis.model.Materials;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
+import cz.fidentis.model.corner_table.Corner;
+import cz.fidentis.model.corner_table.CornerTable;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -34,7 +29,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 import javax.imageio.ImageIO;
@@ -57,6 +51,8 @@ import org.openide.util.NbBundle.Messages;
 @ActionReference(path = "Menu/File", position = -100)
 @Messages("CTL_ImportFromImage=Import face from image...")
 public final class ImportFromImage implements ActionListener {
+    
+    private final float HEIGHT_TO_FIT = 200; // imported models will be scaled to this height
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -129,10 +125,19 @@ public final class ImportFromImage implements ActionListener {
         Thread t = new Thread(r);
         t.start();
     }
-
-    public Model importFromImage(File imageFile, Gender trgetGender, AgeCategories targetAge, List<FacialPoint> points, int numOfVerts) {
+    
+    /**
+     * 
+     * @param imageFile the image of a face to be imported
+     * @param targetGender the gender of a person whose face is to be imported
+     * @param targetAge the age category of a person whose face is to be imported
+     * @param points facial landmarks defined on the image in the XY plane
+     * @param numOfVerts number of vertices the imported face should consist of
+     * @return a mesh reconstructed from the given image
+     */
+    public Model importFromImage(File imageFile, Gender targetGender, AgeCategories targetAge, List<FacialPoint> points, int numOfVerts) {
         // 1. load suitable gem models
-        ArrayList<Model> gems = getSuitableGems(trgetGender, targetAge, points);
+        ArrayList<Model> gems = getSuitableGems(targetGender, targetAge, points);
         // 2. initialize models for computation
         Model model = new Model();
         initializeModels(model, gems, imageFile, points);
@@ -143,7 +148,7 @@ public final class ImportFromImage implements ActionListener {
         // 5. finally, assign depth to model using gems
         assignDepth(model, gems, imageFile, points);
         // 6. adjust model to some reasonable proportions
-        adjustProportions(model, points);
+        adjustProportions(model);
         // 7. postprocess model to be ready to use in application
         postprocessModel(model);
 
@@ -156,88 +161,49 @@ public final class ImportFromImage implements ActionListener {
         ArrayList<ArrayList<Integer>> result = new ArrayList<>(triangles.size());
         for(Delaunay.Triangle t : triangles) {
             ArrayList<Integer> indexList = new ArrayList<>(3);
-            //for(int i=2;i>=0;i--) {
             for(int i=0;i<3;i++) {
                 indexList.add(t.getVertex(i).index+1);
             }
             result.add(indexList);
         }
         return result;
-        /*ArrayList<ArrayList<Integer>> result = new ArrayList<>();
-        int[][] indices = new int[][]{
-            new int[]{1, 2, 26},
-            new int[]{23, 22, 26},
-            new int[]{23, 27, 22},
-            new int[]{2, 23, 26},
-            new int[]{15, 1, 26},
-            new int[]{23, 5, 27},
-            new int[]{5, 6, 27},
-            new int[]{6, 16, 27},
-            new int[]{20, 1, 15},
-            new int[]{20, 8, 1},
-            new int[]{1, 8, 2},
-            new int[]{2, 8, 3},
-            new int[]{2, 3, 23},
-            new int[]{3, 24, 23},
-            new int[]{24, 25, 23},
-            new int[]{25, 4, 23},
-            new int[]{4, 5, 23},
-            new int[]{5, 4, 9},
-            new int[]{6, 5, 9},
-            new int[]{6, 9, 21},
-            new int[]{21, 16, 6},
-            new int[]{24, 3, 8},
-            new int[]{8, 7, 24},
-            new int[]{7, 25, 24},
-            new int[]{7, 9, 25},
-            new int[]{9, 4, 25},
-            new int[]{18, 8, 20},
-            new int[]{18, 13, 8},
-            new int[]{28, 13, 18},
-            new int[]{28, 17, 13},
-            new int[]{17, 12, 13},
-            new int[]{19, 21, 9},
-            new int[]{14, 19, 9},
-            new int[]{14, 29, 19},
-            new int[]{17, 14, 12},
-            new int[]{17, 29, 14},
-            new int[]{13, 12, 11},
-            new int[]{12, 14, 11},
-            new int[]{11, 14, 10},
-            new int[]{13, 11, 10},
-            new int[]{13, 10, 8},
-            new int[]{10, 7, 8},
-            new int[]{10, 14, 9},
-            new int[]{10, 9, 7}
-        };
-        for (int[] indice : indices) {
-            ArrayList<Integer> t = new ArrayList<>(3);
-            for (int j = 0; j < indice.length; j++) {
-                t.add(indice[j]);
-            }
-            result.add(t);
-        }
-        return result;*/
     }
     
-    private void loop2(Model model) {
+    /**
+     * Performs a Loop Subdivision algorithm on given model by splitting each
+     * triangle of the model to four triangles by adding a new vertex on each
+     * edge.
+     * @param model model to subdivide by one level.
+     */
+    private void loopSubdiv(Model model) {
+        model.setCornerTable(new CornerTable(model));
         HashMap<HalfEdgeId, Integer> splitInfo = new HashMap<>();
+        ArrayList<Vector3f> newEvenPositions = new ArrayList<>(model.getVerts().size());
         ArrayList<Integer> midTriangle = null;
         ArrayList<Integer> currentTriangle = null;
         ArrayList<ArrayList<Integer>> newFaces = new ArrayList<>(model.getFaces().getNumFaces()*4);
         
+        // get updated positions of initial vertices but dont apply them yet
+        for(int i=0;i<model.getVerts().size(); i++){
+            newEvenPositions.add(getUpdatedPosition(i, model));
+        }
+        
+        // for each face of the model
         for(int i=0;i<model.getFaces().getNumFaces();i++) {
             int[] face = model.getFaces().getFaceVertIdxs(i);
+            // for each edge of the face
             for(int j=0;j<face.length;j++) {
+                // find out whether the edge was split already
                 HalfEdgeId id = new HalfEdgeId(face[j], face[(j+1)%face.length]);
                 if(!splitInfo.containsKey(id)) {
+                    // if the edge was not split yet, split it by adding a new vertex
                     int idx = model.getVerts().size();
-                    Vector3f splitPoint = new Vector3f(model.getVerts().get(id.getFromIndex()-1));
-                    splitPoint.add(model.getVerts().get(id.getToIndex()-1));
-                    splitPoint.scale(0.5f);
+                    Vector3f splitPoint = getSplitPosition(id.getFromIndex()-1, id.getToIndex()-1, i, model);
+                    // add the new vertex to the model
                     model.getVerts().add(splitPoint);
                     model.getNormals().add(splitPoint);
                     model.getTexCoords().add(splitPoint);
+                    // mark that this edge was already split
                     splitInfo.put(id, idx + 1);
                     splitInfo.put(id.getIdOfTwin(), idx + 1);
                 }
@@ -257,132 +223,140 @@ public final class ImportFromImage implements ActionListener {
             newFaces.add(midTriangle);
         }
         
+        // after new vertices and faces are added, update positions of existing
+        // vertices determined earlier and then correct model's list of faces
+        for(int i=0;i<newEvenPositions.size();i++) {
+            model.getVerts().set(i, newEvenPositions.get(i));
+        }
         model.getFaces().clearFaces();
         for(ArrayList<Integer> face : newFaces) {
             model.getFaces().addFace(face, face);
         }
     }
-
-    private void loopSubdivision(Model model) {
-        GraphicMeshBuilderFromModel builder = new GraphicMeshBuilderFromModel(model);
-        GraphicMesh graphicMesh = new GraphicMesh(builder);
-        TriangularDCEL dcel = TriangularDCEL.fromMesh(graphicMesh);
-
-        // update vertex positions for original vertices first
-        int i = 0;
-        for (Vertex v : dcel.getVertecies()) {
-            Vector3f newPos = updatePosition(v);
-            model.getVerts().set(i, newPos);
-            i++;
-        }
+    
+    /**
+     * Gets the position of a new vertex created by splitting an edge in Loop
+     * subdivision.
+     * @param index1 index of the first vertex of the edge to split
+     * @param index2 index of the second vertex of the edge to split
+     * @param triangleIdx index of the triangle that the split edge belongs to
+     * @param model model that is being subdivided
+     * @return a position of the new vertex on the edge that was split.
+     */
+    private Vector3f getSplitPosition(int index1, int index2, int triangleIdx, Model model) {
+        Vector3f v1 = model.getVerts().get(index1);
+        Vector3f v2 = model.getVerts().get(index2);
+        Vector3f v3;
+        Vector3f v4 = null;
         
-        model.getFaces().clearFaces();
-
-        HashMap<HalfEdgeId, Integer> splitInfo = new HashMap<>();
-        ArrayList<Integer> midTriangle = new ArrayList<>(3);
-        ArrayList<Integer> currentTriangle = new ArrayList<>(3);
-
-        for (TriangleFace face : dcel.getFaces()) {
-            for (HalfEdge edge : face.getIncidentHalfEdge().getLoop()) {
-                if (!splitInfo.containsKey(edge.getId())) {
-                    int idx = model.getVerts().size();
-                    Vector3f splitPoint = updatePosition(edge);
-                    model.getVerts().add(splitPoint);
-                    model.getNormals().add(splitPoint);
-                    model.getTexCoords().add(splitPoint);
-                    splitInfo.put(edge.getId(), idx);
-                    splitInfo.put(edge.getTwin().getId(), idx);
-                }
-            }
-
-            midTriangle.clear();
-            for (HalfEdge edge : face.getIncidentHalfEdge().getLoop()) {
-                midTriangle.add(splitInfo.get(edge.getId()) + 1);
-                currentTriangle.clear();
-                currentTriangle.add(splitInfo.get(edge.getId()) + 1);
-                currentTriangle.add(edge.getEnd().getIndex() + 1);
-                currentTriangle.add(splitInfo.get(edge.getNext().getId()) + 1);
-                model.getFaces().addFace(currentTriangle, currentTriangle);
-            }
-            model.getFaces().addFace(midTriangle, midTriangle);
-        }
-    }
-
-    private Vector3f updatePosition(Vertex v) {
-        Coordinates origin = v.position();
-        Vector3f result = new Vector3f();
-        ArrayList<Vertex> betas = new ArrayList<>(); // neighboring vertices
-        ArrayList<HalfEdge> boundEdges = new ArrayList<>(); // mesh bound edges
-        IncidentEdgeIterator it = new IncidentEdgeIterator(v);
-
-        // search neighborhood
-        while (it.hasNext()) {
-            HalfEdge e = it.next();
-            betas.add(e.getBegining());
-            if (e.isOuter() || e.getTwin().isOuter()) {
-                boundEdges.add(e);
+        // find the triangle in the corner table
+        CornerTable ct = model.getCornerTable();
+        Corner triangleCorner = ct.getCorner(triangleIdx);
+        // find the corner opposite to the edge in the triangle
+        Corner oppositeToEdge = null;
+        Corner[] n = triangleCorner.triangleCorners();
+        for(Corner c : n) {
+            if(c.vertex != index1 && c.vertex != index2) {
+                oppositeToEdge = c;
             }
         }
-
-        if (boundEdges.size() > 0) {
-            // if vertex is on mesh boundary
-            Coordinates v1 = boundEdges.get(0).getEndPosition();
-            Coordinates v2 = boundEdges.get(1).getEndPosition();
-
-            result.x = (float) ((origin.getX() * 6 + v1.getX() + v2.getX()) / 8);
-            result.y = (float) ((origin.getY() * 6 + v1.getY() + v2.getY()) / 8);
-            result.z = (float) ((origin.getZ() * 6 + v1.getZ() + v2.getZ()) / 8);
-        } else {
-            double beta;
-            if (betas.size() <= 3) {
-                beta = 3 / (double) 16;
-            } else {
-                beta = 3 / ((double) betas.size() * 8);
-            }
-
-            result.x = 0;
-            result.y = 0;
-            result.z = 0;
-            for (int i = 0; i < betas.size(); i++) {
-                Coordinates b = betas.get(i).position();
-                result.x += beta * b.getX();
-                result.y += beta * b.getY();
-                result.z += beta * b.getZ();
-            }
-
-            result.x += (1 - betas.size() * beta) * origin.getX();
-            result.y += (1 - betas.size() * beta) * origin.getY();
-            result.z += (1 - betas.size() * beta) * origin.getZ();
+        v3 = model.getVerts().get(oppositeToEdge.vertex);
+        // find the vertex opposite to the edge on the other side of the edge if possible
+        if(oppositeToEdge.opposite != null) {
+            v4 = model.getVerts().get(oppositeToEdge.opposite.vertex);
         }
 
-        return result;
-    }
-
-    private Vector3f updatePosition(HalfEdge edge) {
-        Vertex v1 = edge.getBegining();
-        Vertex v2 = edge.getEnd();
-        Vertex v3 = null;
-        Vertex v4 = null;
-
-        if (!edge.getIncidentFace().isOuterFace()) {
-            v3 = edge.getNext().getEnd();
-        } else if (!edge.getTwin().getIncidentFace().isOuterFace()) {
-            v3 = edge.getTwin().getNext().getEnd();
-        } else {
-            v3 = edge.getNext().getEnd();
-            v4 = edge.getTwin().getNext().getEnd();
-        }
-
+        Vector3f result;
         if (v4 == null) {
-            Coordinates mid = v1.position().getMiddlePoint(v2.position());
-            return new Vector3f(mid.asFloatArray());
+            // the edge is on boundary, just get the middle
+            result = new Vector3f(v1);
+            result.add(v2);
+            result.scale(0.5f);
+            return result;
         } else {
-            Coordinates x = new Coordinates();
-            x = x.add(v1.position().scaled(3)).add(v2.position().scaled(3)).add(v3.position()).add(v4.position()).scaled(0.125d);
-            return new Vector3f(x.asFloatArray());
+            // edge has two opposite vertices, use the formula to get position
+            Vector3f ab = new Vector3f(v1); ab.add(v2); ab.scale(3.0f/8.0f);
+            Vector3f cd = new Vector3f(v3); cd.add(v4); cd.scale(1.0f/8.0f);
+            ab.add(cd);
+            return ab;
         }
     }
     
+    /**
+     * Gets the updated position of an existing vertex of a model according to
+     * smoothing of vertices in Loop Subdivision.
+     * @param vertexIdx index of the vertex.
+     * @param model model being subdivided.
+     * @return position where to move the vertex to make subdivision smooth.
+     */
+    private Vector3f getUpdatedPosition(int vertexIdx, Model model) {
+        CornerTable ct = model.getCornerTable();
+        Corner vertexCorner = ct.getCornerByVertexId(vertexIdx);
+        TreeSet<Integer> neighbors = new TreeSet<>(); // neighboring vertices
+        ArrayList<Vector3f> boundNeighbors = new ArrayList<>(); // mesh bound edges
+        
+        // search neighborhood for neighboring vertices
+        for(Integer i : vertexCorner.adjacentTriangles()) {
+            Corner triangleCorner = ct.getCorner(i);
+            for(Corner c : triangleCorner.triangleCorners()) {
+                if(c.next.vertex == vertexIdx) {
+                    neighbors.add(c.vertex);
+                    if(c.opposite == null) {
+                        // if the neighbor has no opposite, it means the vertex is on boundary
+                        boundNeighbors.add(model.getVerts().get(c.next.next.vertex));
+                    }
+                } else if(c.prev.vertex == vertexIdx) {
+                    neighbors.add(c.vertex);
+                    if(c.opposite == null) {
+                        // if the neighbor has no opposite, it means the vertex is on boundary
+                        boundNeighbors.add(model.getVerts().get(c.prev.prev.vertex));
+                    }
+                }
+            }
+        }
+        
+        Vector3f result = new Vector3f(model.getVerts().get(vertexIdx));
+        if(boundNeighbors.size() > 0) {
+            // if vertex is on mesh boundary
+            Vector3f v1 = boundNeighbors.get(0);
+            Vector3f v2 = boundNeighbors.get(1);
+            
+            result.scale(6);
+            result.add(v1);
+            result.add(v2);
+            result.scale(1.0f/8.0f);
+        } else {
+            // if the vertex is not on boundary, perform weight averaging of neighbors
+            float beta;
+            if (neighbors.size() <= 3) {
+                beta = 3.0f / 16.0f;
+            } else {
+                beta = 3.0f / (neighbors.size() * 8.0f);
+            }
+            
+            Vector3f sum = new Vector3f(0, 0, 0);
+            for(Integer neighborIdx : neighbors) {
+                sum.add(model.getVerts().get(neighborIdx));
+            }
+            sum.scale(beta);
+            
+            result.scale(1 - (neighbors.size() * beta));
+            result.add(sum);
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Finds and loads available depth models that match given parameters of the
+     * face. Models to be used will have the same gender and age category as the
+     * input parameters.
+     * @param gender gender of a face to be imported
+     * @param age age of a face to be imported
+     * @param points feature points of the face to be imported
+     * @return list of depth models that match given parameters. Each model will
+     * have all vertices that correspond to given facial points
+     */
     private ArrayList<Model> getSuitableGems(Gender gender, AgeCategories age, List<FacialPoint> points) {
         ArrayList<Model> gems = new ArrayList<>();
 
@@ -433,33 +407,6 @@ public final class ImportFromImage implements ActionListener {
         return gems;
     }
 
-    /*private void assignFeaturePoints(List<FacialPoint> points, Model model, Model gemModel) {
-        String path = GUIController.getPath() + File.separator + "models" + File.separator + "resources" + File.separator + "depth_models" + File.separator;
-        File csvFile = new File(path + "pts.csv");
-        gemModel.setDirectoryPath(path);
-
-        List<FacialPoint> gemPoints = loadFidoCsv(csvFile);
-        
-        for (FacialPoint point : points) {
-            FacialPoint g = null;
-            for (FacialPoint gemPoint : gemPoints) {
-                if (gemPoint.getType() == point.getType()) {
-                    g = gemPoint;
-                }
-            }
-
-            if (g != null) {
-                model.getVerts().add(point.getPosition());
-                gemModel.getVerts().add(g.getPosition());
-            }
-        }
-        
-        model.getNormals().addAll(model.getVerts());
-        model.getTexCoords().addAll(model.getVerts());
-        gemModel.getNormals().addAll(gemModel.getVerts());
-        gemModel.getTexCoords().addAll(gemModel.getVerts());
-    }*/
-
     public static ArrayList<FacialPoint> loadFidoCsv(File csvFile) {
         ArrayList<FacialPoint> pts = new ArrayList<>();
 
@@ -482,7 +429,7 @@ public final class ImportFromImage implements ActionListener {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
+            Exceptions.printStackTrace(e);
         }
 
         return pts;
@@ -557,6 +504,13 @@ public final class ImportFromImage implements ActionListener {
         }
     }
     
+    /**
+     * Returns a set of facial points that are available on depth maps that are
+     * used to reconstruct face from image. Any subset of these points may be used
+     * as input to reconstruction.
+     * @return set of points that may be used as input to reconstruction of face
+     * from image
+     */
     public static TreeSet<FacialPointType> getUsedPoints() {
         TreeSet<FacialPointType> set = new TreeSet<>();
         set.add(FacialPointType.EX_R);
@@ -614,6 +568,15 @@ public final class ImportFromImage implements ActionListener {
         }
     }
 
+    /**
+     * The function will initialize meshes of given model and a list of depth models
+     * used in reconstruction. First, a delaunay triangulation is done on the vertices
+     * of model mesh. Then, the same triangulation is made on each depth model to
+     * make correspondence of triangles on all models. The models must have vertices
+     * already initialized to match the feature points of the face to be reconstructed.
+     * @param model model with vertices being the feature points of reconstructed face
+     * @param gems list of depth models to be used in reconstruction.
+     */
     private void initializeDelaunayMeshes(Model model, ArrayList<Model> gems) {
         // triangulate face model
         ArrayList<ArrayList<Integer>> triangulation = delaunay(model.getVerts());
@@ -631,29 +594,29 @@ public final class ImportFromImage implements ActionListener {
     private void subdivideUntilSatisfied(Model model, ArrayList<Model> gems, int numOfVerts) {
         // subdivide both models the same way until we have enough verts
         while(model.getVerts().size() < numOfVerts) {
-            //loopSubdivision(model);
-            //loopSubdivision(gem);
-            loop2(model);
+            loopSubdiv(model);
             for(Model gem : gems) {
-                loop2(gem);
+                loopSubdiv(gem);
             }
         }
     }
 
     private void assignDepth(Model model, ArrayList<Model> gems, File imageFile, List<FacialPoint> points) {
+        // read depth map imagess for each depth model
         ArrayList<BufferedImage> gemImgs = new ArrayList<>(gems.size());
         for(Model gem : gems) {
             File gemImgFile = new File(gem.getMatrials().getMatrials().get(0).getTextureFile());
-            BufferedImage gemImg = null;
+            BufferedImage gemImg;
             try {
                 gemImg = ImageIO.read(gemImgFile);
                 gemImgs.add(gemImg);
             } catch (IOException ex) {
-                System.err.println("Could not load depth image from " + gemImgFile.getAbsolutePath());
+                System.err.println("Could not load depth image from " + gemImgFile.getAbsolutePath() + ": " + ex.getMessage());
             }
         }
         
-        BufferedImage texImg = null;
+        // load the input image that will be used as a texture to imported model
+        BufferedImage texImg;
         try {
             texImg = ImageIO.read(imageFile);
         } catch (IOException ex) {
@@ -661,11 +624,7 @@ public final class ImportFromImage implements ActionListener {
             return;
         }
         
-        double sumX = 0;
-        double sumY = 0;
-        double sumZ = 0;
-        float maxY = Float.MIN_VALUE;
-        float minY = Float.MAX_VALUE;
+        // compute the width of the face to be able to adjust depth to it
         float maxX = Float.MIN_VALUE;
         float minX = Float.MAX_VALUE;
         for(FacialPoint p : points) {
@@ -677,6 +636,7 @@ public final class ImportFromImage implements ActionListener {
         float factor = 1.5f * (maxX - minX);
         model.getTexCoords().clear();
         for (int i = 0; i < model.getVerts().size(); i++) {
+            Vector3f currentVertex = model.getVerts().get(i);
             // compute and assign depth of point
             int summedDepth = 0;
             for(int j=0;j<gems.size();j++) {
@@ -688,7 +648,7 @@ public final class ImportFromImage implements ActionListener {
                 summedDepth += color.getRed();
             }
             float averageDepth = ((float)summedDepth)/gems.size();
-            model.getVerts().get(i).setZ((averageDepth / 255) * factor);
+            currentVertex.setZ((averageDepth / 255) * factor);
             
             // compute and assign texture coordinate of point
             Vector3f texCoord = new Vector3f();
@@ -697,27 +657,19 @@ public final class ImportFromImage implements ActionListener {
             texCoord.z = 0;
             model.getTexCoords().add(texCoord);
             
-            // get min and max
-            Vector3f v = model.getVerts().get(i);
-            v.y = texImg.getHeight() - v.y;
-            sumX += v.x;
-            sumY += v.y;
-            sumZ += v.z;
-            maxY = Math.max(maxY, v.y);
-            minY = Math.min(minY, v.y);
-        }
-        
-        // translate all points and scale
-        double n = model.getVerts().size();
-        Vector3f centroid = new Vector3f((float)(sumX/n), (float)(sumY/n), (float)(sumZ/n));
-        float scale = 200/(maxY-minY);
-        for(Vector3f v : model.getVerts()) {
-            v.sub(centroid);
-            v.scale(scale);
+            // finally flip Y axis because of different origin of coordinates
+            currentVertex.y = texImg.getHeight() - currentVertex.y;
         }
     }
 
-    private void adjustProportions(Model model, List<FacialPoint> points) {
+    /**
+     * Adjusts proportions of the model to make it have some normalised size.
+     * This is needed mainly to transfer the model from the XY coordinates of
+     * input image to the 3D coordinates of the 3D face (and the coordinates
+     * which our application uses).
+     * @param model model of face reconstructed from image.
+     */
+    private void adjustProportions(Model model) {
         double sumX = 0;
         double sumY = 0;
         double sumZ = 0;
@@ -726,14 +678,7 @@ public final class ImportFromImage implements ActionListener {
         float maxY = Float.MIN_VALUE;
         float minY = Float.MAX_VALUE;
         
-        for (FacialPoint p : points) {
-            if (p.isActive()) {
-                maxX = Math.max(maxX, p.getPosition().x);
-                minX = Math.min(minX, p.getPosition().x);
-            }
-        }
-        float factor = 1.5f * (maxX - minX);
-        
+        // compute bounds of all vertices of model
         for(int i=0;i<model.getVerts().size();i++) {
             Vector3f v = model.getVerts().get(i);
             maxX = Math.max(maxX, v.x);
@@ -745,16 +690,25 @@ public final class ImportFromImage implements ActionListener {
             sumZ += v.z;
         }
         
-        // translate all points and scale
+        // compute centroid of the model to be able to translate center to zero
         double n = model.getVerts().size();
         Vector3f centroid = new Vector3f((float)(sumX/n), (float)(sumY/n), (float)(sumZ/n));
-        float scale = 200/(maxY-minY);
+
+        // translate the model's center to zero coordinates and scale model to
+        // some reasonable size
+        float scale = HEIGHT_TO_FIT/(maxY-minY);
         for(Vector3f v : model.getVerts()) {
             v.sub(centroid);
             v.scale(scale);
         }
     }
 
+    /**
+     * Does some final adjustments needed to be done on model after it is created
+     * in order to make it usable in the whole program. (e.g. compute normals,
+     * set up some default materials etc).
+     * @param model model of face reconstructed from image.
+     */
     private void postprocessModel(Model model) {
         // use material appropriately
         for(int i=0;i<model.getFaces().getNumFaces();i++) {
@@ -763,34 +717,5 @@ public final class ImportFromImage implements ActionListener {
         
         // recompute normals of the whole model
         model.setNormals((ArrayList<Vector3f>) SurfaceComparisonProcessing.instance().recomputeVertexNormals(model));
-    }
-
-    private class IncidentEdgeIterator implements Iterator<HalfEdge> {
-
-        private final HalfEdge start;
-        private HalfEdge next;
-
-        public IncidentEdgeIterator(Vertex vert) {
-            start = vert.getIncidentHalfEdge();
-            next = start;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        @Override
-        public HalfEdge next() {
-            HalfEdge n = next;
-
-            next = n.getTwin().getNext();
-
-            if (next == start) {
-                next = null;
-            }
-
-            return n;
-        }
     }
 }

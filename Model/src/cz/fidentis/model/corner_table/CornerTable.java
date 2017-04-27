@@ -187,6 +187,20 @@ public class CornerTable {
     public Corner getCorner(int i) {
         return vertices.get(i);
     }
+    
+    /**
+     * Gets the corner for given ID of a vertex in its model
+     * @param vertexId ID of a vertex in the model
+     * @return first corner for the vertex
+     */
+    public Corner getCornerByVertexId(int vertexId) {
+        for(Corner c : corners) {
+            if(c.vertex == vertexId) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     // deprecated, do not use
     public Corner corner_(int i) {

@@ -86,6 +86,25 @@ public class Corner {
         triangles.toArray(adjacentTriangles);
         return adjacentTriangles;
     }
+    
+    /**
+     * Returns an array of all corners belonging to the triangle of this corner.
+     * @return 
+     */
+    public Corner[] triangleCorners() {
+        ArrayList<Corner> neighbors = new ArrayList<>(3);
+        neighbors.add(this);
+        
+        Corner current = this.next;
+        while(current != this) {
+            neighbors.add(current);
+            current = current.next;
+        }
+        
+        Corner[] result = new Corner[neighbors.size()];
+        neighbors.toArray(result);
+        return result;
+    }
 
     public boolean isBoundary() {
         return this.twin == null;
