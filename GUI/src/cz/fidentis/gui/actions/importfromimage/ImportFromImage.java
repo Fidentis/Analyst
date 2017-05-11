@@ -5,6 +5,7 @@
  */
 package cz.fidentis.gui.actions.importfromimage;
 
+import cz.fidentis.comparison.icp.KdTreeIndexed;
 import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
@@ -759,12 +760,13 @@ public final class ImportFromImage implements ActionListener {
     private List<FacialPoint> projectLandmarksTo3D(Model m, List<FacialPoint> landmarksIn2D, File imageFile) {
         List<FacialPoint> projectedLandmarks = new ArrayList<>(landmarksIn2D.size());
         HashMap<Integer, Integer> textureVertexCorrespondence = textureVertexCorrespondence(m.getFaces());
+        KdTreeIndexed faceTexTree = new KdTreeIndexed(m.getTexCoords());
 
         try {
             BufferedImage img = ImageIO.read(imageFile);
  
             for (FacialPoint fp : landmarksIn2D) {
-                Vector3f pos = findClosest3Dvertex(m.getVerts(), m.getTexCoords(), textureVertexCorrespondence, fp.getPosition(), img.getWidth(), img.getHeight());
+                Vector3f pos = findClosest3Dvertex(faceTexTree, m.getVerts(), textureVertexCorrespondence, fp.getPosition(), img.getWidth(), img.getHeight());
                 projectedLandmarks.add(new FacialPoint(fp.getType(), pos));
             }
         } catch (IOException ex) {
@@ -793,22 +795,13 @@ public final class ImportFromImage implements ActionListener {
         return corr;
     }
     
-    private Vector3f findClosest3Dvertex(List<Vector3f> vertices, List<Vector3f> textures, HashMap<Integer, Integer> corr, Vector3f landmark, int imageWidth, int imageHeight){
-        int closestIndex = 0;
-        double closestDistance = Double.MAX_VALUE;
-        
+    private Vector3f findClosest3Dvertex(KdTreeIndexed faceTxtTree, List<Vector3f> vertices, HashMap<Integer, Integer> corr, Vector3f landmark, int imageWidth, int imageHeight){        
         // needs to flip Y axis due to opengl texture mapping process
         Vector3f mapped = new Vector3f(landmark.x / imageWidth, (imageHeight - landmark.y) / imageHeight, landmark.z);
         
-        //TODO: smarter look-up
-        for(int i = 0; i < textures.size(); i++){
-            double dist = MathUtils.instance().distancePoints(textures.get(i), mapped);
-            if(dist < closestDistance){
-                closestIndex = i;
-                closestDistance = dist;
-            }
-        }
+        int closestIndex = faceTxtTree.nearestIndex(mapped);
         
         return vertices.get(corr.get(closestIndex));
     }
+    
 }
