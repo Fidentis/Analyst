@@ -77,10 +77,15 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
     public boolean isCanceled() {
         return this.canceled;
     }
+    
+    public boolean projectLandmarks(){
+        return projectLandmarksCheckbox.isSelected();
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         but_ok.setEnabled(featurePoints.size() >= 3);
+        but_saveFp.setEnabled(featurePoints.size() > 0);
     }
 
     /**
@@ -108,9 +113,12 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
         jLabel3 = new javax.swing.JLabel();
         but_ok = new javax.swing.JButton();
         but_cancel = new javax.swing.JButton();
+        but_saveFp = new javax.swing.JButton();
+        projectLandmarksCheckbox = new javax.swing.JCheckBox();
+        projectLandmarksLabel = new javax.swing.JLabel();
 
         setTitle(org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(512, 260));
+        setMinimumSize(new java.awt.Dimension(512, 300));
         setModal(true);
 
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -157,7 +165,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
                 .addGroup(panel_primarySecondaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radio_primary)
                     .addComponent(radio_secondary))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         numOfVertsSpinner.setModel(new javax.swing.SpinnerNumberModel(1000, 0, 10000, 1));
@@ -187,6 +195,18 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(but_saveFp, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.but_saveFp.text")); // NOI18N
+        but_saveFp.setEnabled(false);
+        but_saveFp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                but_saveFpActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(projectLandmarksCheckbox, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.projectLandmarksCheckbox.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(projectLandmarksLabel, org.openide.util.NbBundle.getMessage(ImportFromImageDialog.class, "ImportFromImageDialog.projectLandmarksLabel.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -195,20 +215,29 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
             .addComponent(but_browse, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panel_primarySecondary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ageComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(numOfVertsSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                    .addComponent(genderSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(but_cancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(but_ok))
+            .addComponent(but_saveFp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                        .addComponent(numOfVertsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(projectLandmarksLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(projectLandmarksCheckbox)
+                            .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,19 +246,25 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(but_loadFp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel_primarySecondary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(but_saveFp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numOfVertsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addComponent(panel_primarySecondary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel1)
+                    .addComponent(numOfVertsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel2)
+                    .addComponent(ageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(projectLandmarksCheckbox)
+                    .addComponent(projectLandmarksLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(but_ok)
@@ -253,7 +288,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
+                    .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -283,9 +318,9 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
 
     private void but_loadFpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_but_loadFpActionPerformed
         //despite list this will always be just one file
-        List<FpModel> loadedFp = FPImportExport.instance().importPoints(tc, false);
-        if(loadedFp == null)
-            return;
+        List<FpModel> loadedFp = FPImportExport.instance().importPoints(this, false);
+        if(loadedFp == null) return;
+        featurePoints.clear();
         featurePoints.addAll(loadedFp.get(0).getFacialPoints());
         
         canvas.setPoints(featurePoints);
@@ -301,6 +336,16 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
         this.setVisible(false);
     }//GEN-LAST:event_but_okActionPerformed
 
+    private void but_saveFpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_but_saveFpActionPerformed
+        ArrayList<FpModel> exportList = new ArrayList<>(featurePoints.size());
+        String modelName = "points";
+        if(imageFile != null) {
+            modelName = imageFile.getName();
+        }
+        exportList.add(FPImportExport.instance().getFpModelFromFP(featurePoints, modelName));
+        FPImportExport.instance().exportPoints(this, exportList);
+    }//GEN-LAST:event_but_saveFpActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<AgeCategories> ageComboBox;
@@ -308,6 +353,7 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
     private javax.swing.JButton but_cancel;
     private javax.swing.JButton but_loadFp;
     private javax.swing.JButton but_ok;
+    private javax.swing.JButton but_saveFp;
     private javax.swing.ButtonGroup buttonGroup1;
     private cz.fidentis.gui.actions.importfromimage.ImageFpCanvas canvas;
     private javax.swing.JComboBox<Gender> genderSelect;
@@ -317,6 +363,8 @@ public class ImportFromImageDialog extends javax.swing.JDialog implements Proper
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner numOfVertsSpinner;
     private javax.swing.JPanel panel_primarySecondary;
+    private javax.swing.JCheckBox projectLandmarksCheckbox;
+    private javax.swing.JLabel projectLandmarksLabel;
     private javax.swing.JRadioButton radio_primary;
     private javax.swing.JRadioButton radio_secondary;
     // End of variables declaration//GEN-END:variables
