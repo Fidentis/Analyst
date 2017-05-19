@@ -16,6 +16,7 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
+import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.featurePoints.FpProcessing;
 import java.io.File;
@@ -377,7 +378,7 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                 ArrayList<File> models = new ArrayList<>(1);
                 models.add(ageing.getOriginModel().getFile());
                 FpResultsBatch result = FpProcessing.instance().calculatePointsBatch(cancelTask, models);
-                Model registered = result.getRegisteredModels().get(0);
+                Model registered = ModelLoader.instance().loadModel(ageing.getOriginModel().getFile(), Boolean.TRUE, Boolean.TRUE);
 
                 List<FacialPoint> pts = result.getFps().get(ageing.getOriginModel().getName());
                 tc.getAgeingViewerPanel().getListenerOrigin().setModels(registered);

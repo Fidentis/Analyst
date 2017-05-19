@@ -6,7 +6,6 @@
 package cz.fidentis.featurepoints.results;
 
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.model.Model;
 import java.util.List;
 import java.util.Map;
 
@@ -16,19 +15,13 @@ import java.util.Map;
  */
 public class FpResultsBatch {
     private final Map<String, List<FacialPoint>> fps;
-    private final List<Model> registeredModels;
 
-    public FpResultsBatch(Map<String, List<FacialPoint>> fps, List<Model> registeredModels) {
+    public FpResultsBatch(Map<String, List<FacialPoint>> fps) {
         this.fps = fps;
-        this.registeredModels = registeredModels;
     }
 
     public Map<String, List<FacialPoint>> getFps() {
         return fps;
-    }
-
-    public List<Model> getRegisteredModels() {
-        return registeredModels;
     }
        
 }

@@ -12,12 +12,6 @@ import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 
 /**
  *
@@ -106,7 +100,6 @@ public class TwoFacesGUISetup {
        data.setComparisonMethod(COMPARISON_METHOD);
        
        //FP
-       data.setFpScaling(FP_SCALE);
        data.setUseDatabase(FP_DATABASE ? 1 : 0);
        data.setFpTreshold(FP_THRESHOLD);
        

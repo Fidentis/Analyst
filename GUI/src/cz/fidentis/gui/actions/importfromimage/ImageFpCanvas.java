@@ -69,7 +69,7 @@ public class ImageFpCanvas extends JPanel {
     public void setPoints(List<FacialPoint> pts) {
         this.points = pts;
         for(FacialPoint p : points) {
-            p.getPosition().y = image.getHeight()-p.getPosition().y;
+            //p.getPosition().y = image.getHeight()-p.getPosition().y;
             constrainPoint(p.getPosition());
         }
         this.repaint();
@@ -82,21 +82,10 @@ public class ImageFpCanvas extends JPanel {
             image = origI;
             currentX = 0; currentY = 0; currentW = image.getWidth();
             this.repaint();
-            //offsetY = (this.getHeight() - this.getIcon().getIconHeight()) / 2;
-            //offsetX = (this.getWidth() - this.getIcon().getIconWidth()) / 2;
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Could not open image.");
         }
     }
-    
-    /*@Override
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        if(propertyName.equals(FP_PROPERTY_NAME)) {
-            this._listener = listener;
-        } else {
-            super.addPropertyChangeListener(propertyName, listener);
-        }
-    }*/
 
     @Override
     public void paint(Graphics g) {
@@ -152,7 +141,6 @@ public class ImageFpCanvas extends JPanel {
     
     private int computeHeight() {
         if(image != null) {
-            //return (int)(currentW / (image.getWidth()/((double)image.getHeight())));
             float aspect = this.getHeight() / (float) this.getWidth();
             return (int)(aspect*currentW);
         } else {
@@ -187,21 +175,6 @@ public class ImageFpCanvas extends JPanel {
         float yr = ((float)y) / this.getHeight();
         return new Vector3f(currentX + currentW*xr, currentY + computeHeight()*yr, 0);
     }
-    
-    /*private Vector3f pointToCoords(Vector3f point) {
-        if(this.getIcon() == null) {
-            return new Vector3f();
-        }
-        double x = (point.x / origWidth) * this.getIcon().getIconWidth();
-        double y = ((origHeight - point.y) / origHeight) * this.getIcon().getIconHeight();
-        return new Vector3f((float)x + offsetX, (float)y + offsetY, 0);
-    }
-    
-    private Vector3f coordsToPoint(int x, int y) {
-        double px = ((double)(x - offsetX) / this.getIcon().getIconWidth()) * origWidth;
-        double py = (1-((double)(y - offsetY) / this.getIcon().getIconHeight())) * origHeight;
-        return new Vector3f((float)px, (float)py, 0);
-    }*/
     
     private void constrainView() {
         if(image == null) return;

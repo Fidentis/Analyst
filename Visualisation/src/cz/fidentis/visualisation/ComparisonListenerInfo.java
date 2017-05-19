@@ -165,7 +165,8 @@ public class ComparisonListenerInfo {
     }
     
     public int getNextFreeFPID(){
-        int i = 0;
+        //Indexing starts from 1
+        int i = 1;
         while(containsFP(i)){
             i++;
         }

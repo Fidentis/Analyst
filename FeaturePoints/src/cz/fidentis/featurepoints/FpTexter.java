@@ -100,7 +100,7 @@ public class FpTexter {
             }
                       
         }catch(NumberFormatException ex){
-            result = FacialPointType.valueOf(text).ordinal();
+            result = FacialPointType.valueOf(text).ordinal() + 1;
         }
         
         return result;        
@@ -223,9 +223,9 @@ public class FpTexter {
      */
     public TableData landmarkDescription(){     
      Set<Integer> ids = fpTexts.keySet();
-     int landmarkNumber = fpTexts.size() - 1;       //acount for -1 which is unspecified, but not shown in GUI
+     int landmarkNumber = fpTexts.size();       //acount for -1 which is unspecified, but not shown in GUI
      int counter = 0;
-     int buildinLandmarksNum = FacialPointType.values().length;
+     int buildinLandmarksNum = FacialPointType.values().length - 1;
      
      TableData td = new TableData();
      
@@ -240,7 +240,7 @@ public class FpTexter {
      String[] tableLine = new String[]{"ID", "Landmark Name", "Landmark Description"};
      td.setHeader(tableLine);   
      
-     for(int i = 0; ;i++){      //to have ordered results
+     for(int i = 1; ;i++){      //to have ordered results
          if(ids.contains(i)){
              List<String> desc = fpTexts.get(i);
              tableLine = new String[]{Integer.toString(i), desc.get(0), desc.get(1)};             
