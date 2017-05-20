@@ -2519,23 +2519,26 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void setSelectionStart(Point point) {
-
-        selectionStart = point;
-        selectionCube[0] = setSelection3Dpoint(point.x, point.y);
-        selectionCube[1] = setSelection3Dpoint(point.x, point.y);
-        selectionCube[2] = setSelection3Dpoint(point.x, point.y);
-        selectionCube[3] = setSelection3Dpoint(point.x, point.y);
-        selectionCube[4] = new Vector3f((float) xCameraPosition, (float) yCameraPosition, (float) zCameraPosition);
-        info.getHdInfo().setIsSelection(false);
+        if(point != null){
+            selectionStart = point;
+            selectionCube[0] = setSelection3Dpoint(point.x, point.y);
+            selectionCube[1] = setSelection3Dpoint(point.x, point.y);
+            selectionCube[2] = setSelection3Dpoint(point.x, point.y);
+            selectionCube[3] = setSelection3Dpoint(point.x, point.y);
+            selectionCube[4] = new Vector3f((float) xCameraPosition, (float) yCameraPosition, (float) zCameraPosition);
+            info.getHdInfo().setIsSelection(false);
+        }
     }
 
     public void setSelectionEnd(Point point, int width, int height) {
-        selectionCube[1] = setSelection3Dpoint(point.x, selectionStart.y);
-        selectionCube[2] = setSelection3Dpoint(point.x, point.y);
-        selectionCube[3] = setSelection3Dpoint(selectionStart.x, point.y);
-        selectionEnd = point;
-        info.getHdInfo().setIsSelection(false);
-        selectionCube[4] = new Vector3f((float) xCameraPosition, (float) yCameraPosition, (float) zCameraPosition);
+        if(point != null){
+            selectionCube[1] = setSelection3Dpoint(point.x, selectionStart.y);
+            selectionCube[2] = setSelection3Dpoint(point.x, point.y);
+            selectionCube[3] = setSelection3Dpoint(selectionStart.x, point.y);
+            selectionEnd = point;
+            info.getHdInfo().setIsSelection(false);
+            selectionCube[4] = new Vector3f((float) xCameraPosition, (float) yCameraPosition, (float) zCameraPosition);
+        }
 
     }
 

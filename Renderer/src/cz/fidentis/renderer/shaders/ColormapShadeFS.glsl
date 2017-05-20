@@ -31,26 +31,26 @@ uint fragment_pointer[MAX_FRAGMENTS];
               vec3 a;
         vec3 b;
         float param;
-         if (pos < 1 / 4f) {
+         if (pos < 1 / 4.0f) {
                 a = c1;
                 b = c2;
-                param =  pos / (1 / 4f);
-        } else if (pos < 2 / 4f) {
+                param =  pos / (1 / 4.0f);
+        } else if (pos < 2 / 4.0f) {
                 a = c2;
                 b = c3;
-                param = (pos - (1 / 4f)) / (1 / 4f);
-        } else if (pos < 3 / 4f) {
+                param = (pos - (1 / 4.0f)) / (1 / 4.0f);
+        } else if (pos < 3 / 4.0f) {
                 a = c3;
                 b = c4;
-                param =  (pos - (2 / 4f)) / (1 / 4f);
+                param =  (pos - (2 / 4.0f)) / (1 / 4.0f);
         } else {
                 a = c4;
                 b = c5;
-                param =  (pos - (3 / 4f)) / (1 / 4f);       
+                param =  (pos - (3 / 4.0f)) / (1 / 4.0f);       
         }
 
-        a = a/255f;
-        b = b/255f;
+        a = a/255.0f;
+        b = b/255.0f;
 
         vec3 col = clamp(mix(a,b,param),0,1);
 
@@ -69,26 +69,26 @@ uint fragment_pointer[MAX_FRAGMENTS];
                vec3 a;
         vec3 b;
         float param;
-         if (pos < 1 / 4f) {
+         if (pos < 1 / 4.0f) {
                 a = c1;
                 b = c2;
-                param =  pos / (1 / 4f);
-        } else if (pos < 2 / 4f) {
+                param =  pos / (1 / 4.0f);
+        } else if (pos < 2 / 4.0f) {
                 a = c2;
                 b = c3;
-                param = (pos - (1 / 4f)) / (1 / 4f);
-        } else if (pos < 3 / 4f) {
+                param = (pos - (1 / 4.0f)) / (1 / 4.0f);
+        } else if (pos < 3 / 4.0f) {
                 a = c3;
                 b = c4;
-                param =  (pos - (2 / 4f)) / (1 / 4f);
+                param =  (pos - (2 / 4.0f)) / (1 / 4.0f);
         } else {
                 a = c4;
                 b = c5;
-                param =  (pos - (3 / 4f)) / (1 / 4f);       
+                param =  (pos - (3 / 4.0f)) / (1 / 4.0f);       
         }
 
-        a = a/255f;
-        b = b/255f;
+        a = a/255.0f;
+        b = b/255.0f;
 
         vec3 col = clamp(mix(a,b,param),0,1);
 
@@ -107,26 +107,26 @@ uint fragment_pointer[MAX_FRAGMENTS];
         vec3 a;
         vec3 b;
         float param;
-         if (pos < 1 / 4f) {
+         if (pos < 1 / 4.0f) {
                 a = c1;
                 b = c2;
-                param =  pos / (1 / 4f);
-        } else if (pos < 2 / 4f) {
+                param =  pos / (1 / 4.0f);
+        } else if (pos < 2 / 4.0f) {
                 a = c2;
                 b = c3;
-                param = (pos - (1 / 4f)) / (1 / 4f);
-        } else if (pos < 3 / 4f) {
+                param = (pos - (1 / 4.0f)) / (1 / 4.0f);
+        } else if (pos < 3 / 4.0f) {
                 a = c3;
                 b = c4;
-                param =  (pos - (2 / 4f)) / (1 / 4f);
+                param =  (pos - (2 / 4.0f)) / (1 / 4.0f);
         } else {
                 a = c4;
                 b = c5;
-                param =  (pos - (3 / 4f)) / (1 / 4f);       
+                param =  (pos - (3 / 4.0f)) / (1 / 4.0f);       
         }
 
-        a = a/255f;
-        b = b/255f;
+        a = a/255.0f;
+        b = b/255.0f;
 
         vec3 col = clamp(mix(a,b,param),0,1);
 
@@ -181,7 +181,7 @@ void main(void)
                 color = shade * vec4(chooseRainbowColor(minThreshDistance,maxThreshDistance,currentDistance),1);
             }
     }else{
-            color = shade/2;
+            color = shade/2.0f;
     }
     gl_FragDepth =  uintBitsToFloat(frag.z);
     gl_FragColor = color ;
