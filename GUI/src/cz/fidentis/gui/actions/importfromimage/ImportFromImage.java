@@ -102,6 +102,7 @@ public final class ImportFromImage implements ActionListener {
                             if(landmarksIn3D != null){
                                 tc.getViewerPanel_2Faces().getListener1().setFacialPoints(landmarksIn3D);
                                 tc.getProject().getSelectedComparison2Faces().setMainFp(landmarksIn3D);
+                                tc.getViewerPanel_2Faces().checkFpAvaibility();
                             }
                         } else {
                             tc.getViewerPanel_2Faces().getListener2().setModels(model);
@@ -112,6 +113,7 @@ public final class ImportFromImage implements ActionListener {
                             if(landmarksIn3D != null){
                                 tc.getViewerPanel_2Faces().getListener2().setFacialPoints(landmarksIn3D);
                                 tc.getProject().getSelectedComparison2Faces().setSecondaryFp(landmarksIn3D);
+                                tc.getViewerPanel_2Faces().checkFpAvaibility();
                             }
                         }
                         break;
@@ -136,8 +138,11 @@ public final class ImportFromImage implements ActionListener {
                             }
                         }
                         
-                        if(landmarksIn3D != null)
+                        if(landmarksIn3D != null){
                             tc.getProject().getSelectedOneToManyComparison().addFacialPoints(imported.getName(),landmarksIn3D);
+                            tc.getOneToManyViewerPanel().checkFpAvailable();
+                        }
+                            
                         
                         break;
                     case 4:
@@ -148,6 +153,7 @@ public final class ImportFromImage implements ActionListener {
                         if(landmarksIn3D != null){
                             tc.getViewerPanel_Batch().getListener().setFacialPoints(landmarksIn3D);
                             tc.getProject().getSelectedBatchComparison().addFacialPoints(imported.getName(), landmarksIn3D);
+                            tc.getViewerPanel_Batch().checkFpAvaialable();
                         }
                         break;
                     /*case 5:
