@@ -411,7 +411,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private float getGauss(int x, float peak, int center, int width) {
-        float exp = -(float) (Math.pow(x - center, 2)) / width;
+        float exp = -(float) peak * (float)(Math.pow(x - center, 2)) / width;
         float value = peak * (float) Math.exp(exp);
         return value + 1;
     }
@@ -468,12 +468,6 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
 
             activeArea = new Vector4f(70, 70, this.getWidth() - 160, this.getHeight() - 70);
 
-            FontMetrics fm = getFontMetrics(getFont());
-            int h = fm.getHeight();
-            /*  if (cellHeight < h) {
-         Font yFont = g2.getFont();
-         g2.setFont(yFont.deriveFont(cellHeight));
-         }*/
             Font f = getFont();
             f = f.deriveFont(10f);
             g2.setFont(f);
@@ -523,23 +517,27 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
                 for (int j = 0; j < numValuesY; j++) {
                     g2.setPaint(Color.BLACK);
                     if (pointInActiveArea(mousePosition) && zoom) {
-                        if (j == 0) {
-                            fm = getFontMetrics(getFont());
-                            h = fm.getHeight();
-                            if (h > currentHeight) {
-                                h = (int) currentHeight;
-                            }
+                        if (j == 0 ) {
+                            if (currentHeight < 10) {
+                                float h = (int) currentHeight;
+                                g2.setFont(getFont().deriveFont(h));
+                            }else{
+                                g2.setFont(getFont().deriveFont(10f));
+                            }    
+                            FontMetrics fm = getFontMetrics(getFont());
                             int w = fm.stringWidth(names[i]);
-                            g2.drawString(names[i], 75 - w, 70 + gaussY + currentHeight - h);
+                            g2.drawString(names[i], 75 - w, 70 + gaussY + currentHeight/2);
                         }
 
                     } else {
                         if (j == 0) {
-                            fm = getFontMetrics(getFont());
-                            h = fm.getHeight();
-                            if (h > cellHeight) {
-                                h = (int) cellHeight;
-                            }
+                            float h = (int) currentHeight;
+                           if (cellHeight < 10) {                                
+                                g2.setFont(getFont().deriveFont(h));
+                            }else{
+                                g2.setFont(getFont().deriveFont(10f));
+                            }    
+                            FontMetrics fm = getFontMetrics(getFont());
                             int w = fm.stringWidth(names[i]);
                             g2.drawString(names[i], 75 - w, 70 + (i + 1) * cellHeight + i - (cellHeight - h));
                         }
@@ -628,6 +626,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }
 
     private void paintScale(Graphics2D g2, float max, float min, int steps) {
+        g2.setFont(getFont().deriveFont(10f));
         g2.draw(new Line2D.Float(this.getWidth() - 70, 70, this.getWidth() - 70, this.getHeight() - 70));
         float stepHeight = (this.getHeight() - 140) / (float) steps;
         float step = (max - min) / (float) steps;
@@ -730,7 +729,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         g2.setPaint(c);
         g2.setStroke(new BasicStroke(2));
         if (pointInActiveArea(mousePosition) && zoom) {
-            g2.draw(new Rectangle2D.Double(subselectionTip.x, 67 + gaussY + y, subselWidth, currentHeight + 9));
+            g2.draw(new Rectangle2D.Double(subselectionTip.x, 70 + gaussY, subselWidth, currentHeight));
         } else {
             g2.draw(new Rectangle2D.Double(subselectionTip.x, subselectionTip.y, subselWidth, cellHeight + 9));
         }
@@ -743,7 +742,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(2));
         if (pointInActiveArea(mousePosition) && zoom) {
-            g2.draw(new Rectangle2D.Double(68, 67 + gaussY + y, this.getWidth() - 228, currentHeight + 5));
+            g2.draw(new Rectangle2D.Double(68, 70 + gaussY, this.getWidth() - 228, currentHeight));
         } else {
             g2.draw(new Rectangle2D.Double(68, 67 + (y * cellHeight) + y, this.getWidth() - 228, cellHeight + 5));
         }
