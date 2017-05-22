@@ -2174,15 +2174,24 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             res = FileUtils.instance().readFolderWithCSV(bc.getHdCSVresults().getPath() + File.separator + (jComboBox1.getSelectedIndex()), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, true);
         }
 
-        float values[][] = new float[res.size()][res.get(0).size()];
-        for (int i = 0; i < res.size(); i++) {
-            for (int j = 0; j < res.get(0).size(); j++) {
-                values[i][j] = res.get(i).get(j);
+        if(res.size() >0 ){
+            float values[][] = new float[res.size()][res.get(0).size()];
+            for (int i = 0; i < res.size(); i++) {
+                for (int j = 0; j < res.get(0).size(); j++) {
+                    values[i][j] = res.get(i).get(j);
+                }
+
             }
 
+            String names[] = new String[bc.getModels().size()];
+            int i = 0;
+            for (File f :bc.getModels()) {
+                names[i] = f.getName();
+                i++;
+            }
+            plotsDrawingPanelAuxiliary2.setNames(names);
+            plotsDrawingPanelAuxiliary2.setValues(values);
         }
-
-        plotsDrawingPanelAuxiliary2.setValues(values);
         plotsDrawingPanelAuxiliary2.revalidate();
         plotsDrawingPanelAuxiliary2.repaint();
 

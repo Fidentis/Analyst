@@ -1915,7 +1915,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             pairComparisonPanel1.clear();
             jPanel4.setVisible(false);
             pairFrame.setVisible(true);
-            pairFrame.setSize(500, 500);
+            pairFrame.setSize(800, 600);
 
             Runnable run = new Runnable() {
                 @Override
@@ -1942,7 +1942,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     pairComparisonPanel1.revalidate();
                     pairComparisonPanel1.repaint();
 
-                    pairFrame.setTitle(primary.getName() + " vs. " + pairComparisonPanel1.getListener().getModels().get(1));
+                    pairFrame.setTitle(primary.getName() + " vs. " + bc.getModel(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName());
                     Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
 
                     pairFrame.setIconImage(icon);

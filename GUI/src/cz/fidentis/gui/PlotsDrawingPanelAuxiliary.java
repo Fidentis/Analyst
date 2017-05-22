@@ -54,6 +54,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     private boolean subselectionSelected;
     private Point subselectionTip = new Point();
     private String[] names;
+    private int[] nameIndices;
     private int subselWidth = 0;
     private int selectedModelIndex = -1;
     private int selectedVertexIndex = -1;
@@ -62,6 +63,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     private static final float MINIMAL_HEIGHT = 30;
     private boolean zoom;
     private float peakStrength = 5;
+    private int selectionIndex = -1;
 
     /**
      * Creates new form plotsPanel
@@ -96,6 +98,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }
 
     public void setValues(float[][] values) {
+        resetNameIndices();
         unsortedValues = values;
         values = sortValues(values);
         this.vl = values;
@@ -104,11 +107,18 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         this.repaint();
         this.repaint();
     }
+    
+    private void resetNameIndices(){
+        nameIndices = new int[names.length];
+        for(int i = 0; i<nameIndices.length; i++){
+            nameIndices[i] = i;            
+        }
+    }
 
     public void resetValues() {
+        resetNameIndices();
         values = sortValues(unsortedValues);
         this.vl = values;
-        this.values = values;
         select = false;
         this.repaint();
         this.repaint();
@@ -164,9 +174,9 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
                     s[j] = tmpf;
 
                     if (names != null && names[i] != null) {
-                        String nm = names[i];
-                        names[i] = names[j];
-                        names[j] = nm;
+                        int idx = nameIndices[i];
+                        nameIndices[i] = nameIndices[j];
+                        nameIndices[j] = idx;
                     }
                 }
             }
@@ -175,9 +185,6 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         return val;
     }
 
-    /*   public void setP(PlotsPanel p) {
-     this.p = p;
-     }*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -230,9 +237,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             select = true;
             float y = lastClickedPoint.y;
             y = (float) Math.floor((y - 70) / (cellHeight + 1));
-            //          p.getHistogramPanel1().setRestriction((int) y);
-
-            if (evt.getX() - subselWidth / 2 > activeArea.z) {
+            if (evt.getX() + subselWidth / 2 > activeArea.z) {
                 subselectionTip = new Point((int) activeArea.z - subselWidth, (int) (67 + (y * cellHeight) + y - 2));
             } else if (evt.getX() - subselWidth / 2 < activeArea.x) {
                 subselectionTip = new Point((int) activeArea.x, (int) (67 + (y * cellHeight) + y - 2));
@@ -244,19 +249,15 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             this.repaint();
 
         } else if (evt.getX() > 67 && evt.getX() < this.getWidth() - 158 && evt.getY() > (this.getHeight() - 63) && evt.getY() < this.getHeight() - 13) {
-            // 67, this.getHeight() - 63, this.getWidth() - 225, 50
             float width = this.getWidth() - 230;
 
             int ratio = (int) Math.ceil(vl[0].length / (int) Math.floor(width));
             int x = subselectionTip.x - 70;
             int first = x * ratio;
-            int y = lastClickedPoint.y;
-            y = (int) Math.floor((y - 70) / (cellHeight + 1));
             int i = x + first - 70;
             System.out.println(i);
 
         } else {
-            //  p.getHistogramPanel1().setRestriction(-1);
             select = false;
             selectedModelIndex = -1;
         }
@@ -264,11 +265,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }
 
     public int getSelectedModelIndex() {
-        return selectedModelIndex;
-    }
-
-    public void setSelectedModelIndex(int selectedModelIndex) {
-        this.selectedModelIndex = selectedModelIndex;
+        return selectedModelIndex != -1 ? nameIndices[selectedModelIndex] : -1;
     }
 
     public int getSelectedVertexIndex() {
@@ -313,7 +310,6 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         slider1Tip = new Point(this.getWidth() - 50, 70);
         slider2Tip = new Point(this.getWidth() - 50, this.getHeight() - 70);
-        select = false;
         adjustValues();
 
 
@@ -364,7 +360,6 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             subselP = subselectionTip.x;
         }
 
-
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
@@ -411,7 +406,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private float getGauss(int x, float peak, int center, int width) {
-        float exp = -(float) peak * (float)(Math.pow(x - center, 2)) / width;
+        float exp = -(float) peak * (float) (Math.pow(x - center, 2)) / width;
         float value = peak * (float) Math.exp(exp);
         return value + 1;
     }
@@ -479,7 +474,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             float s2 = (slider2Tip.y - 70) * ((2f / 3f) / (this.getHeight() - 140));
             float distance = (maxValue - minValue) / (2f / 3f);
 
-            if (cellHeight < MINIMAL_HEIGHT) {
+            if (cellHeight < MINIMAL_HEIGHT && peakStrength > 0 && pointInActiveArea(mousePosition)) {
                 zoom = true;
             } else {
                 zoom = false;
@@ -491,10 +486,10 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             float gauss = 0;
             int gauseHeight = (row - 1) > (numValuesX - row) ? (row - 1) : (numValuesX - row);
 
-            float selectionY = -1;
-            if (select) {
-                selectionY = (float) Math.floor((lastClickedPoint.y - 70) / (cellHeight + 1));
-                paintZoom(g2);
+            if (select  && lastClickedPoint != null) {               
+                selectionIndex = (int) Math.floor((lastClickedPoint.y - 70) / (cellHeight + 1)); 
+                if(selectionIndex > -1 && selectionIndex < names.length)
+                paintZoom(g2);                 
             }
 
             if (pointInActiveArea(mousePosition) && zoom) {
@@ -510,36 +505,36 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             float gaussY = 0;
             for (int i = 0; i < numValuesX; i++) {
                 float currentHeight = getGauss(i, peakStrength, row, gauseHeight) * zoomCellHeight;
-                if (select && i == selectionY) {
+                if (select && i == selectionIndex) {
                     selectionPos = gaussY;
                     selectionHeight = currentHeight;
                 }
                 for (int j = 0; j < numValuesY; j++) {
                     g2.setPaint(Color.BLACK);
                     if (pointInActiveArea(mousePosition) && zoom) {
-                        if (j == 0 ) {
+                        if (j == 0) {
                             if (currentHeight < 10) {
                                 float h = (int) currentHeight;
                                 g2.setFont(getFont().deriveFont(h));
-                            }else{
+                            } else {
                                 g2.setFont(getFont().deriveFont(10f));
-                            }    
+                            }
                             FontMetrics fm = getFontMetrics(getFont());
-                            int w = fm.stringWidth(names[i]);
-                            g2.drawString(names[i], 75 - w, 70 + gaussY + currentHeight/2);
+                            int w = fm.stringWidth(names[nameIndices[i]]);
+                            g2.drawString(names[nameIndices[i]], 75 - w, 70 + gaussY + currentHeight / 2);
                         }
 
                     } else {
                         if (j == 0) {
-                            float h = (int) currentHeight;
-                           if (cellHeight < 10) {                                
+                            float h = (int) cellHeight;
+                            if (cellHeight < 10) {
                                 g2.setFont(getFont().deriveFont(h));
-                            }else{
+                            } else {
                                 g2.setFont(getFont().deriveFont(10f));
-                            }    
+                            }
                             FontMetrics fm = getFontMetrics(getFont());
-                            int w = fm.stringWidth(names[i]);
-                            g2.drawString(names[i], 75 - w, 70 + (i + 1) * cellHeight + i - (cellHeight - h));
+                            int w = fm.stringWidth(names[nameIndices[i]]);
+                            g2.drawString(names[nameIndices[i]], 75 - w, 70 + (i + 1) * cellHeight + i - (cellHeight - h));
                         }
                     }
 
@@ -617,9 +612,9 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
                     "Vertices", 70, 30);
 
             g2.setFont(f);
-            if (select) {
-                paintSelection(g2, selectionY, selectionPos, selectionHeight);
-                paintSubselection(g2, selectionY, selectionPos, selectionHeight);
+            if (select && selectionIndex> -1 && selectionIndex < names.length) {
+                paintSelection(g2, selectionIndex, selectionPos, selectionHeight);
+                paintSubselection(g2, selectionIndex, selectionPos, selectionHeight);
             }
         }
 
@@ -728,10 +723,10 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         Color c = Color.getHSBColor(5f / 6f, 1, 1);
         g2.setPaint(c);
         g2.setStroke(new BasicStroke(2));
-        if (pointInActiveArea(mousePosition) && zoom) {
+        if (zoom) {
             g2.draw(new Rectangle2D.Double(subselectionTip.x, 70 + gaussY, subselWidth, currentHeight));
         } else {
-            g2.draw(new Rectangle2D.Double(subselectionTip.x, subselectionTip.y, subselWidth, cellHeight + 9));
+            g2.draw(new Rectangle2D.Double(subselectionTip.x, 67 + (y * cellHeight) + y - 2, subselWidth, cellHeight + 9));
         }
 
         g2.draw(new Rectangle2D.Double(67, this.getHeight() - 63, this.getWidth() - 225, 50));
@@ -741,11 +736,12 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     private void paintSelection(Graphics2D g2, float y, float gaussY, float currentHeight) {
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(2));
-        if (pointInActiveArea(mousePosition) && zoom) {
+        if (zoom) {
             g2.draw(new Rectangle2D.Double(68, 70 + gaussY, this.getWidth() - 228, currentHeight));
         } else {
             g2.draw(new Rectangle2D.Double(68, 67 + (y * cellHeight) + y, this.getWidth() - 228, cellHeight + 5));
         }
+
         g2.setStroke(new BasicStroke(1));
 
     }
