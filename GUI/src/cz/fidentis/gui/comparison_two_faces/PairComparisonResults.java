@@ -1505,7 +1505,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         Comparison2Faces c = getContext();
         
        VisualizationBox.setSelectedItem(c.getVisualization());
-       valuesComboBox.setSelectedItem(c.getValuesTypeIndex());
+       valuesComboBox.setSelectedIndex(c.getValuesTypeIndex());
        
        maxThresholdSlider.setValue(c.getHausdorfMaxTreshold());
        maxThresholdSpinner.setValue(c.getHausdorfMaxTreshold());
