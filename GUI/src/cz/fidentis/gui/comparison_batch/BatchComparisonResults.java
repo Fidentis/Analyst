@@ -1514,7 +1514,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), 1920, 1920);
+        if(getContext().getHDinfo() != null && getContext().getHDinfo().getvType() == VisualizationType.CROSSSECTION)
+            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), tc.getViewerPanel_Batch().getListener2(),1920, 1920);
+        else
+            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), 1920, 1920);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
