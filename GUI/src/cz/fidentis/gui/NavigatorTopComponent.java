@@ -439,7 +439,7 @@ public final class NavigatorTopComponent extends TopComponent {
                             List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());   //there will always be at least empty list
                             
                             // reverse transformations made on facial points if needed
-                            if(comparison.getTrans() != null) {
+                            if(comparison.getTrans() != null && comparison.getTrans().size() > lastNodeIndex) {
                                 l = Icp.instance().reverseFacialPointsRegistration(l, comparison.getTrans(lastNodeIndex), comparison.isFpScaling());
                             }
                             
