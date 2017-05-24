@@ -1453,9 +1453,11 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        if (getContext().getHdPaintingInfo().getvType() == VisualizationType.CROSSSECTION) {
+        if (getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener2(), 1920, 1920);
-        } else {
+        } else if (getContext().getHdPaintingInfo() != null && getContext().getHdPaintingInfo().getvType() == VisualizationType.CROSSSECTION){
+            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener1(), tc.getOneToManyViewerPanel().getListener2(), 1920, 1920);
+        }else {
             ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener1(), 1920, 1920);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
