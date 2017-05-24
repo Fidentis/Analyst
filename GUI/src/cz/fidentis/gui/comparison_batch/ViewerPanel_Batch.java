@@ -111,6 +111,10 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     public void setFpExportEnable(ObservableMaster fpExportEnable) {
         this.fpExportEnable = fpExportEnable;
     }
+
+    public ObservableMaster getFpExportEnable() {
+        return fpExportEnable;
+    }
     
 
     public void setEditablePoints(boolean b) {

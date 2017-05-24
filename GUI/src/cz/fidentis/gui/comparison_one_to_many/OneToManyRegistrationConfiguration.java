@@ -1052,12 +1052,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                         c.setRegisteredModels(r);
 
-                        if (c.isFpScaling()) {
-                            tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(c.getFpSize() / 30f);
-
-                            tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(c.getFpSize() / 30f);
-                        }
-
                         tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
                                 tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
                                         tc.getOneToManyViewerPanel().getListener2().getModel().getName()
@@ -1360,6 +1354,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
            radiusSlider.setValue(50);
        }
        
+       GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getFpExportEnable().updateObservers();
        continueComparisonCheckBox.setSelected(c.isContinueComparison());
         
         if ((c.getRegistrationMethod().ordinal() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {
