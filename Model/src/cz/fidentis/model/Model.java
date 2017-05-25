@@ -109,6 +109,7 @@ public class Model {
 
         } 
     }
+   
 
     //decentralize passed verticies based on centralization of this model
     public void decentralize(List<Vector3f> vertices) {

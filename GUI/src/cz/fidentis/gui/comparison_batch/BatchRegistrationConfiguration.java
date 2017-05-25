@@ -1096,10 +1096,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()));                            
                             
                             //Update canvas with registered model
-                            /*if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
+                            if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
                                 tc.getViewerPanel_Batch().getListener().setModels(m);
                                 tc.getViewerPanel_Batch().getListener().setFacialPoints(c.getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
-                            }*/
+                            }
                             
                             ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
 
