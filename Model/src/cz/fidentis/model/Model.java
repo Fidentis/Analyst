@@ -200,14 +200,20 @@ public class Model {
         // render the model face-by-face
         String faceMat;
         
-        gl.glBegin(GL2.GL_TRIANGLES);
-
+        
+        //render material
         for (int i = 0; i < faces.getNumFaces(); i++) {
 
             faceMat = faces.findMaterial(i);      // get material used by face i
             if (faceMat != null && materials != null) {
                 flipTexCoords = materials.renderWithMaterial(faceMat, gl);
             }  // render using that material
+        }
+        
+        //render geometry
+        gl.glBegin(GL2.GL_TRIANGLES);
+
+        for (int i = 0; i < faces.getNumFaces(); i++) {
 
             faces.renderFace(i, flipTexCoords, gl);                  // draw face i
         }
@@ -221,6 +227,7 @@ public class Model {
         gl.glPopMatrix();
 
     }
+    
     public double getVertAngle(int faceIdx, int vertIdx) {
         List<Vector3f> neighborVerts = new ArrayList<>();
 
