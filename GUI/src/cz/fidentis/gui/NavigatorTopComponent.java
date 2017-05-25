@@ -450,7 +450,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = comparison.getRegisteredModels().get(lastNodeIndex);
                         
-                        Model model = ModelLoader.instance().loadModel(file, true, true);
+                        Model model = ModelLoader.instance().loadModel(file, true, false);
                         listenerSecondary.setModels(model);
                         
                         // display facial points of corresponding model (by index)

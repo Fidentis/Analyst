@@ -359,6 +359,7 @@ public class Icp {
             for (Vector3f v : verticies) {
                 double[] point = {v.x, v.y, v.z};
                 Matrix p = new Matrix(point, 1);
+
                 p = p.times(inverse);
                 v.setX((float) p.get(0, 0));
                 v.setY((float) p.get(0, 1));
