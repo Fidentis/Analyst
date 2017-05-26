@@ -5,6 +5,7 @@ import Jama.SingularValueDecomposition;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
+import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -517,18 +518,22 @@ public class ProcrustesAnalysis implements Serializable {
      * To be able to visually analyse the results within the software, results are scaled to 100 instead of 1
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    public void normalize(boolean scaling) {    
+    public ICPTransformation normalize(boolean scaling) {    
         
         Vector3f cs = this.findCentroid();
         float size = this.countSize(cs);
 
-        this.centerConfigToOrigin(cs);     
+        this.centerConfigToOrigin(cs);   
+        Vector3f normalizationTrans = MathUtils.instance().multiplyVectorByNumber(cs, -1);
+        ICPTransformation trans = new ICPTransformation(normalizationTrans, 1.0f, null, 0.0f, null);
         
         if (scaling && config.keySet().size() >= 3) {
         
             this.setSizeTo1(size / SIZE_SCALE);
             //change scale to size / 100 to get proper size of model
         }
+        
+        return trans;
     }
 
    /**
