@@ -1110,15 +1110,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         }
 
                         c.setRegistrationResults(results);
-                        
-                        if (c.isFpScaling()) {
-                            //tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 7);
-                            tc.getViewerPanel_Batch().getListener().setFacialPointRadius(c.getFpSize() / 30f);
-                        }
-                        /*else {
-                        tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
-                       // tc.getViewerPanel_Batch().getListener().setFacialPointRadius(jSlider1.getValue());
-                    }*/
+                       
                         
                     }else{
                         noRegistration();
@@ -1420,15 +1412,11 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             exportFpButton.setEnabled(true);
         }
         
-        //populateFacesComboBox();
         
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getFpExportEnable().updateObservers();
         facesComboBox.setSelectedIndex(c.getTemplateIndex());
         continueComparisonCheckBox.setSelected(c.isContinueComparison());
-        
-       /* if(c.getModels().size() > 0)
-            facesComboBox.setSelectedIndex(c.getTemplateIndex() + 3);
-       */
-       
+
     }
     
     private BatchComparison getContext(){

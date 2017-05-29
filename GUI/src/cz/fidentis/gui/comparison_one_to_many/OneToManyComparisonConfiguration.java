@@ -476,9 +476,14 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getModel().getFile(), false, true);
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setModels(model);
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getFacialPoints().clear();
+        getContext().getFacialPoints().clear();
 
         model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getModel().getFile(), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setModels(model);
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getFacialPoints().clear();
+ 
+        
         getContext().setState(1);
         GUIController.getConfigurationTopComponent().addOneToManyRegistrationComponent();
     }//GEN-LAST:event_jButton1ActionPerformed

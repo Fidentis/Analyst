@@ -85,6 +85,10 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     public void setFpExportEnable(ObservableMaster fpExportEnable) {
         this.fpExportEnable = fpExportEnable;
     }
+
+    public ObservableMaster getFpExportEnable() {
+        return fpExportEnable;
+    }
     
     
 
