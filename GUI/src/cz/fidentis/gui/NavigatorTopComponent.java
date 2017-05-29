@@ -23,6 +23,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.JPopupMenu;
@@ -399,7 +400,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = batchComparison.getRegistrationResults().get(lastNodeIndex);
                         
-                        Model model = ModelLoader.instance().loadModel(file, true, true);
+                        Model model = ModelLoader.instance().loadModel(file, true, false);
                         listener.setModels(model);
                         
                         // display facial points of corresponding model (by index)
@@ -449,7 +450,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = comparison.getRegisteredModels().get(lastNodeIndex);
                         
-                        Model model = ModelLoader.instance().loadModel(file, true, true);
+                        Model model = ModelLoader.instance().loadModel(file, true, false);
                         listenerSecondary.setModels(model);
                         
                         // display facial points of corresponding model (by index)
