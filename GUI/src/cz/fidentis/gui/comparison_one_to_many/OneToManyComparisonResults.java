@@ -1689,69 +1689,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
                     HDpaintingInfo info = c.getHdPaintingInfo();
 
-                    if (c.getVisualization() == VisualizationType.COLORMAP) {
-                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
-                        info.setvType(VisualizationType.COLORMAP);
-                        tc.getOneToManyViewerPanel().getListener2().removeModel();
-                        
-                        Model modelShown = c.getAvgFace();
-
-                        if (modelShown == null) {
-                            if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
-
-                                File m =c.getRegisteredModels().get(0);
-                                modelShown = ModelLoader.instance().loadModel(m, false, false);
-                            } else {
-                                File f = c.getModels().get(0);
-                                modelShown = ModelLoader.instance().loadModel(f, false, true);
-                            }
-                        }
-
-                        tc.getOneToManyViewerPanel().getListener2().addModel(modelShown);
-
-                    }
-                    if (c.getVisualization() == VisualizationType.VECTORS) {
-                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
-                        info.setvType(VisualizationType.VECTORS);
-
-                        Model modelShown = c.getAvgFace();
-
-                        if (modelShown == null) {
-                            if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
-
-                                File m = c.getRegisteredModels().get(0);
-                                modelShown = ModelLoader.instance().loadModel(m, false, false);
-                            } else {
-                                File f = c.getModels().get(0);
-                                modelShown = ModelLoader.instance().loadModel(f, false, true);
-                            }
-                        }
-
-                        tc.getOneToManyViewerPanel().getListener2().setModels(modelShown);
-                    }
-                    if (c.getVisualization() == VisualizationType.CROSSSECTION) {
-                        tc.getOneToManyViewerPanel().getListener2().setSecondaryListener(true);
-                        tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
-                        tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
-                        tc.getOneToManyViewerPanel().getListener1().setPlanePoint(c.getPlanePosition());
-                        
-                        ArrayList<Model> models = new ArrayList<>();
-                        models.add(c.getPrimaryModel());
-                        
-                        
-                        for (int i = 0; i < c.getRegisteredModels().size(); i++) {
-                            //registered models will be null if ICP wasn't used
-                            Model m = ModelLoader.instance().loadModel(c.getRegisteredModels().get(i), false, false);
-                            models.add(m);
-                        }
-                        tc.getOneToManyViewerPanel().getListener2().setModels(models);
-                        tc.getOneToManyViewerPanel().getListener1().setPrimaryModel();
-                        tc.getOneToManyViewerPanel().setPlaneNormal(c.getArbitraryPlanePos(), true);
-                        //  tc.getOneToManyViewerPanel().getListener1().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()));
-
-                        info.setvType(VisualizationType.CROSSSECTION);
-
-                    }
+                    setupVisualizationControls(info);
 
                     info.setDensity(c.getVectorDensity());
                     info.setCylLengthFactor(c.getVectorLength());
@@ -1787,6 +1725,76 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         t.start();
     }//GEN-LAST:event_comparisonButtonActionPerformed
 
+    
+            private void setupVisualizationControls(HDpaintingInfo info) {
+                final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+                final OneToManyComparison c = getContext();
+                
+                if (c.getVisualization() == VisualizationType.COLORMAP) {
+                    tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
+                    info.setvType(VisualizationType.COLORMAP);
+                    tc.getOneToManyViewerPanel().getListener2().removeModel();
+                    
+                    Model modelShown = c.getAvgFace();
+                    
+                    if (modelShown == null) {
+                        if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
+                            
+                            File m =c.getRegisteredModels().get(0);
+                            modelShown = ModelLoader.instance().loadModel(m, false, false);
+                        } else {
+                            File f = c.getModels().get(0);
+                            modelShown = ModelLoader.instance().loadModel(f, false, true);
+                        }
+                    }
+                    
+                    tc.getOneToManyViewerPanel().getListener2().addModel(modelShown);
+                    
+                }
+                if (c.getVisualization() == VisualizationType.VECTORS) {
+                    tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
+                    info.setvType(VisualizationType.VECTORS);
+                    
+                    Model modelShown = c.getAvgFace();
+                    
+                    if (modelShown == null) {
+                        if (c.getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
+                            
+                            File m = c.getRegisteredModels().get(0);
+                            modelShown = ModelLoader.instance().loadModel(m, false, false);
+                        } else {
+                            File f = c.getModels().get(0);
+                            modelShown = ModelLoader.instance().loadModel(f, false, true);
+                        }
+                    }
+                    
+                    tc.getOneToManyViewerPanel().getListener2().setModels(modelShown);
+                }
+                if (c.getVisualization() == VisualizationType.CROSSSECTION) {
+                    tc.getOneToManyViewerPanel().getListener2().setSecondaryListener(true);
+                    tc.getOneToManyViewerPanel().getListener2().setHdInfo(info);
+                    tc.getOneToManyViewerPanel().getListener2().setPaintHD(true);
+                    tc.getOneToManyViewerPanel().getListener1().setPlanePoint(c.getPlanePosition());
+                    
+                    ArrayList<Model> models = new ArrayList<>();
+                    models.add(c.getPrimaryModel());
+                    
+                    
+                    for (int i = 0; i < c.getRegisteredModels().size(); i++) {
+                        //registered models will be null if ICP wasn't used
+                        Model m = ModelLoader.instance().loadModel(c.getRegisteredModels().get(i), false, false);
+                        models.add(m);
+                    }
+                    tc.getOneToManyViewerPanel().getListener2().setModels(models);
+                    tc.getOneToManyViewerPanel().getListener1().setPrimaryModel();
+                    tc.getOneToManyViewerPanel().setPlaneNormal(c.getArbitraryPlanePos(), true);
+                    //  tc.getOneToManyViewerPanel().getListener1().setPlaneNormal(new Vector3f((float) normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue()));
+                    
+                    info.setvType(VisualizationType.CROSSSECTION);
+                    
+                }
+            }
+    
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
         if (VisualizationBox.getSelectedItem() == VisualizationType.COLORMAP) {
             densLabel.setVisible(false);
@@ -1818,8 +1826,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             colorMapPanel.setVisible(false);
             slicesPanel.setVisible(true);
         }
-        
+                
         getContext().setVisualization((VisualizationType) VisualizationBox.getSelectedItem());
+        
+        //setupVisualizationControls takes visualization type from data model, needs to be called after
+        //value in data model was set
+        setupVisualizationControls(getContext().getHdPaintingInfo());
         updateHistograms();
     }//GEN-LAST:event_VisualizationBoxActionPerformed
 

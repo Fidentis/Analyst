@@ -89,6 +89,10 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     public ComparisonGLEventListener getListener() {
         return listener;
     }
+    
+    public void checkFpAvaialable(){
+        fpExportEnable.updateObservers();
+    }
 
     public void setModel(Model model) {
         listener.setModels(model);
