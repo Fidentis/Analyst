@@ -866,8 +866,8 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                         } else {
                             //Procrustes analysis without using database
                             try {
-                                Procrustes2Models procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                        tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), c.isFpScaling());
+                                Procrustes2Models procrustes = new Procrustes2Models(c.getMainFp(),
+                                        c.getSecondaryFp(), c.isFpScaling());
 
                                 String result = procrustes.compare2Models(c.getFpTreshold() / 100f);
                                 c.setNumericalResults(result);

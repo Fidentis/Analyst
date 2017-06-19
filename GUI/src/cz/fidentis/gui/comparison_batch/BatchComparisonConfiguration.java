@@ -443,11 +443,13 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         //get correct value for selected avg model
         c.setTemplateIndex(c.getTemplateIndex() + 3);
         
-        c.setState(1);
-        GUIController.getConfigurationTopComponent().addBatchRegistrationComponent();
-       
         Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getFacialPoints().clear();
+        c.getFacialPoints().clear();
+        
+        c.setState(1);
+        GUIController.getConfigurationTopComponent().addBatchRegistrationComponent();  
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

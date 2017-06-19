@@ -110,6 +110,10 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     public Canvas getCanvas2() {
         return canvas2;
     }
+    
+    public void checkFpAvaibility(){
+        fpExportEnable.updateObservers();
+    }
 
     public void resizeCanvas() {
         canvas2.resizeCanvas(jSplitPane1.getLeftComponent().getSize());

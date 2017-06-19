@@ -1023,8 +1023,11 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         c.getPrimaryModel().setVerts(procrustes.getPa().getVertices());
                         //procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints()); WHAT DOES THIS DO?
 
+                        List<FacialPoint> mainFp = c.getFacialPoints(mainFace.getName());
+                        
                         //clear all current Feature Points in listener
                         c.clearFacialPoints();
+                        c.addFacialPoints(c.getPrimaryModel().getName(), mainFp);
                         List<File> r = new LinkedList<>();      //registered models saved to disk
                         File tmpModuleFile = new File("" + System.currentTimeMillis());
 
@@ -1051,12 +1054,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         }
 
                         c.setRegisteredModels(r);
-
-                        if (c.isFpScaling()) {
-                            tc.getOneToManyViewerPanel().getListener1().setFacialPointRadius(c.getFpSize() / 30f);
-
-                            tc.getOneToManyViewerPanel().getListener2().setFacialPointRadius(c.getFpSize() / 30f);
-                        }
 
                         tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
                                 tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
@@ -1360,6 +1357,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
            radiusSlider.setValue(50);
        }
        
+       GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getFpExportEnable().updateObservers();
        continueComparisonCheckBox.setSelected(c.isContinueComparison());
         
         if ((c.getRegistrationMethod().ordinal() == 0 && !areFPCalculated(GUIController.getSelectedProjectTopComponent())) || (!areModelsLoaded(GUIController.getSelectedProjectTopComponent()))) {

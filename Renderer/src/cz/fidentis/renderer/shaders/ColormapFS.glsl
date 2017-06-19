@@ -91,9 +91,9 @@ void main(void)
         vec3 normal = normalize(cross((selectionRectangle[1]-selectionRectangle[0]),(selectionRectangle[3]-selectionRectangle[0])));
         vec3 proj = findLinePlaneIntersection(originalPosition, p, normal, selectionRectangle[0]);
 
-        float a = (selectionRectangle[0].x -  selectionRectangle[2].x)/2f;
-        float b = (selectionRectangle[0].y -  selectionRectangle[2].y)/2f;
-        vec3 center = (selectionRectangle[0] +  selectionRectangle[2])/2f;
+        float a = (selectionRectangle[0].x -  selectionRectangle[2].x)/2.0f;
+        float b = (selectionRectangle[0].y -  selectionRectangle[2].y)/2.0f;
+        vec3 center = (selectionRectangle[0] +  selectionRectangle[2])/2.0f;
 
         float ec = (proj.x - center.x)*(proj.x - center.x)/(a*a) + (proj.y - center.y)*(proj.y - center.y)/(b*b);
 
