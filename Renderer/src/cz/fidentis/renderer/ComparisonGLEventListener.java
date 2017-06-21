@@ -39,6 +39,7 @@ import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -92,9 +93,12 @@ import static javax.media.opengl.GL2ES2.GL_FRAGMENT_SHADER;
 import static javax.media.opengl.GL2ES2.GL_INFO_LOG_LENGTH;
 import static javax.media.opengl.GL2ES2.GL_LINK_STATUS;
 import static javax.media.opengl.GL2ES2.GL_VERTEX_SHADER;
+import javax.media.opengl.GL2GL3;
 import static javax.media.opengl.GL2GL3.GL_ALL_BARRIER_BITS;
 import static javax.media.opengl.GL2GL3.GL_ATOMIC_COUNTER_BUFFER;
 import static javax.media.opengl.GL2GL3.GL_DYNAMIC_COPY;
+import static javax.media.opengl.GL2GL3.GL_MAP_READ_BIT;
+import static javax.media.opengl.GL2GL3.GL_MAP_WRITE_BIT;
 import static javax.media.opengl.GL2GL3.GL_PIXEL_UNPACK_BUFFER;
 import static javax.media.opengl.GL2GL3.GL_R32UI;
 import static javax.media.opengl.GL2GL3.GL_READ_WRITE;
@@ -155,7 +159,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private int OITShadersId;
     private int FinalShadersId;
     private int ColorMapShadersId;
-    private int ColorMapMinMaxShadersId;
     private int ColorMapReductionShadersId;
 
     /*private LinkedList<Vector3f> plane = new LinkedList<>();
@@ -410,9 +413,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         gl.glBindImageTexture(1, hpTexture[0], 0, false, 0, GL_READ_WRITE, GL_R32UI);
         gl.glBindImageTexture(2, fsTexture[0], 0, false, 0, GL_WRITE_ONLY, GL_RGBA32UI);
 
-        gl.glBindImageTexture(1, hpTexture[0], 0, false, 0, GL_READ_WRITE, GL_R32UI);
-        gl.glBindImageTexture(2, fsTexture[0], 0, false, 0, GL_WRITE_ONLY, GL_RGBA32UI);
-
         gl.glActiveTexture(GL_TEXTURE3);
         gl.glEnable(GL_TEXTURE_2D);
         renderModels(false, true);
@@ -420,19 +420,32 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         gl.glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
         if (!info.getHdInfo().isRecomputed() && selectionStart != null && selectionEnd != null && info.getHdInfo().isIsSelection()) {
-            gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            gl.glUseProgram(ColorMapMinMaxShadersId);
-            gl.glUniform2i(startUniform, 0, 0);
-            gl.glUniform2i(endUniform, currentWidth, currentHeight);
-            gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-            gl.glMemoryBarrier(GL_ALL_BARRIER_BITS);
-            info.getHdInfo().setIsRecomputed(true);
+            gl.glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, acBuffer[0]);
+            ByteBuffer bf = gl.glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, zero.capacity() * 4, GL_MAP_READ_BIT);
+            int count = bf.getInt();
+            gl.glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER); 
+
+            FloatBuffer data = Buffers.newDirectFloatBuffer(count);
 
             gl.glBindBuffer(GL_TEXTURE_BUFFER, fsBuffer[0]);
-            FloatBuffer data = Buffers.newDirectFloatBuffer(8);
-            gl.glGetBufferSubData(GL_TEXTURE_BUFFER, 0, 8, data);
-            info.getHdInfo().setMinSelection(data.get(0));
-            info.getHdInfo().setMaxSelection(data.get(1));
+            gl.glGetBufferSubData(GL_TEXTURE_BUFFER, 0, count*4, data);
+            float[] d = new float[count];
+            float minimum = Float.POSITIVE_INFINITY;
+            float maximum = Float.NEGATIVE_INFINITY;
+            for (int i = 0; i < count; i++) {
+                if (i % 4 == 1 && i > 3) {
+                    if (data.get(i) < minimum) {
+                        minimum = data.get(i);
+                    }
+                    if (data.get(i) > maximum && data.get(i) < Float.POSITIVE_INFINITY) {
+                        maximum = data.get(i);
+                    }
+                }
+                d[i] = data.get(i);
+            }
+            info.getHdInfo().setIsRecomputed(true);
+            info.getHdInfo().setMinSelection(minimum);
+            info.getHdInfo().setMaxSelection(maximum);
             gl.glBindBuffer(GL_TEXTURE_BUFFER, 0);
         }
 
@@ -2266,7 +2279,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         String fragmentShaderOIT = null;
         String fragmentShaderFinal = null;
         String colorMapvertexShader = null;
-        String colorMapMinMaxFragmentShader = null;
         String colorMapfragmentShader = null;
         String colorMapShadeFragmentShader = null;
 
@@ -2284,8 +2296,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
             colorMapvertexShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapVS.glsl"));
             colorMapfragmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapFS.glsl"));
-
-            colorMapMinMaxFragmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapMinMaxFS.glsl"));
 
             colorMapShadeFragmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapShadeFS.glsl"));
 
@@ -2307,8 +2317,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         int colorMapvertexShaderID = initShader(gl, GL_VERTEX_SHADER, colorMapvertexShader);
         int colorMapfragmentShaderID = initShader(gl, GL_FRAGMENT_SHADER, colorMapfragmentShader);
 
-        int colorMapMinMaxFragmentShaderID = initShader(gl, GL_FRAGMENT_SHADER, colorMapMinMaxFragmentShader);
-
         int colorMapShadeFragmentShaderID = initShader(gl, GL_FRAGMENT_SHADER, colorMapShadeFragmentShader);
 
         shadowMapShadersId = gl.glCreateProgram();
@@ -2317,7 +2325,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         FinalShadersId = gl.glCreateProgram();
         ColorMapShadersId = gl.glCreateProgram();
         ColorMapReductionShadersId = gl.glCreateProgram();
-        ColorMapMinMaxShadersId = gl.glCreateProgram();
 
         gl.glAttachShader(shadowMapShadersId, vertexShaderSMId);
         gl.glAttachShader(shadowMapShadersId, fragmentShaderSMId);
@@ -2368,15 +2375,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         selectionTypeUniform = gl.glGetUniformLocation(ColorMapShadersId, "selectionType");
 
         checkProgramStatus(gl, ColorMapShadersId, 3);
-
-        gl.glAttachShader(ColorMapMinMaxShadersId, vertexShaderOITId);
-        gl.glAttachShader(ColorMapMinMaxShadersId, colorMapMinMaxFragmentShaderID);
-        gl.glLinkProgram(ColorMapMinMaxShadersId);
-
-        startUniform = gl.glGetUniformLocation(ColorMapMinMaxShadersId, "startPosition");
-        endUniform = gl.glGetUniformLocation(ColorMapMinMaxShadersId, "endPosition");
-
-        checkProgramStatus(gl, ColorMapMinMaxShadersId, 3);
 
         gl.glAttachShader(ColorMapReductionShadersId, vertexShaderOITId);
         gl.glAttachShader(ColorMapReductionShadersId, colorMapShadeFragmentShaderID);
@@ -2519,7 +2517,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void setSelectionStart(Point point) {
-        if(point != null){
+        if (point != null) {
             selectionStart = point;
             selectionCube[0] = setSelection3Dpoint(point.x, point.y);
             selectionCube[1] = setSelection3Dpoint(point.x, point.y);
@@ -2531,7 +2529,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void setSelectionEnd(Point point, int width, int height) {
-        if(point != null && selectionStart != null){
+        if (point != null && selectionStart != null) {
             selectionCube[1] = setSelection3Dpoint(point.x, selectionStart.y);
             selectionCube[2] = setSelection3Dpoint(point.x, point.y);
             selectionCube[3] = setSelection3Dpoint(selectionStart.x, point.y);
