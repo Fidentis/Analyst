@@ -408,6 +408,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     public void clearSelection() {
         listener1.clearSelection();
         GUIController.getConfigurationTopComponent().getPairComparisonResults().updateHistograms();
+        GUIController.getConfigurationTopComponent().getPairComparisonResults().adjustThresholds();
         GUIController.getConfigurationTopComponent().getPairComparisonResults().getHistogram1().resetSlider();
 
     }
@@ -422,6 +423,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     tc.getPairComparisonResults().updateHistograms();
+                    tc.getPairComparisonResults().adjustThresholds();
                     tc.getPairComparisonResults().getHistogram1().resetSlider();
                 }
             };

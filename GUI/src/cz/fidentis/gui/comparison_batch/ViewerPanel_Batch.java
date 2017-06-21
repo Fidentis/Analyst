@@ -338,8 +338,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     }
 
     public void clearSelection() {
-        listener.clearSelection();
+        listener.clearSelection();        
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().updateHistograms();
+        GUIController.getConfigurationTopComponent().getBatchComparisonResults().adjustThresholds();
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().getHistogram().resetSlider();
 
     }
@@ -495,7 +496,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     tc.getBatchComparisonResults().updateHistograms();
-                    tc.getBatchComparisonResults().getHistogram().resetSlider();
+                    tc.getBatchComparisonResults().adjustThresholds();
+                    tc.getBatchComparisonResults().getHistogram().resetSlider();                    
                 }
             };
             Timer t = new Timer();

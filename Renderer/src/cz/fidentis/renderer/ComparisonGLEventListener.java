@@ -424,7 +424,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             ByteBuffer bf = gl.glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, zero.capacity() * 4, GL_MAP_READ_BIT);
             int count = bf.getInt();
             gl.glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER); 
-
             FloatBuffer data = Buffers.newDirectFloatBuffer(count);
 
             gl.glBindBuffer(GL_TEXTURE_BUFFER, fsBuffer[0]);
@@ -442,11 +441,11 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                     }
                 }
                 d[i] = data.get(i);
-            }
-            info.getHdInfo().setIsRecomputed(true);
+            }            
             info.getHdInfo().setMinSelection(minimum);
             info.getHdInfo().setMaxSelection(maximum);
             gl.glBindBuffer(GL_TEXTURE_BUFFER, 0);
+            info.getHdInfo().setIsRecomputed(true);
         }
 
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

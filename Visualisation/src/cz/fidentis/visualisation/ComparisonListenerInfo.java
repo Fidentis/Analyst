@@ -477,7 +477,4 @@ public class ComparisonListenerInfo {
         this.verticesInfo = verticesInfo;
     }
     
-    
-    
-    
 }

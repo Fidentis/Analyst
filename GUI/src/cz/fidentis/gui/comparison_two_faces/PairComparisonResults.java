@@ -1427,6 +1427,30 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    public void adjustThresholds(){
+        List<Float> l = getContext().getValuesTypeIndex() == 0 ? getContext().getSortedHdValuesRelative() : getContext().getSortedHdValuesAbs();
+        int count = 0;
+        int count2 = 0;
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i) <= getContext().getHdPaintingInfo().getMaxThreshValue()) {
+                count++;
+            }
+            if (l.get(i) >= getContext().getHdPaintingInfo().getMinThreshValue()) {
+                count2++;
+            }
+        }
+        minTresholdValueChanged = true;
+        maxTresholdValueChanged = true;
+        float percent = count / (float) l.size();
+        maxThresholdSlider.setValue((int) (percent * 100));
+        maxThresholdSpinner.setValue((int) (percent * 100));
+        float percent2 = count2 / (float) l.size();
+        minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        minThreshSpinner.setValue(100 - (int) (percent2 * 100));
+        minTresholdValueChanged = false;
+        maxTresholdValueChanged = false;      
+    }
+    
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
         List<Float> l = getContext().getValuesTypeIndex() == 0 ? getContext().getSortedHdValuesRelative() : getContext().getSortedHdValuesAbs();
         int count = 0;
@@ -1621,12 +1645,19 @@ public class PairComparisonResults extends javax.swing.JPanel {
     }
 
     public void updateHistograms() {
-        HDpainting hdp = getContext().getHDP();
+        HDpaintingInfo hdp = getContext().getHdPaintingInfo();
         if (hdp == null) {
             return;
+        }        
+        if(hdp.getMinThreshValue() < hdp.getMinSelection()){
+            hdp.setMinSelection(hdp.getMinThreshValue());
+        }
+        
+         if(hdp.getMaxThreshValue() > hdp.getMaxSelection()){
+            hdp.setMaxSelection(hdp.getMaxThreshValue());
         }
 
-        List<Float> f = hdp.getInfo().getDistance();
+        List<Float> f = hdp.getDistance();
 
         histogram1.setHdp(getContext().getHdPaintingInfo());
         histogram1.setValues(f);
@@ -1637,6 +1668,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         //    histogramPanel2.repaint();
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox VisualizationBox;

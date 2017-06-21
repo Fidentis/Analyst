@@ -2224,6 +2224,31 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
+    public void adjustThresholds(){
+        List<Float> l = getContext().getSortedHd();
+        int count = 0;
+        int count2 = 0;
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i) <= getContext().getHDinfo().getMaxThreshValue()) {
+                count++;
+            }
+            if (l.get(i) >= getContext().getHDinfo().getMinThreshValue()) {
+                count2++;
+            }
+        }
+        minTresholdValueChanged = true;
+        maxTresholdValueChanged = true;
+        float percent = count / (float) l.size();
+        maxThresholdSlider.setValue((int) (percent * 100));
+        maxThresholdSpinner.setValue((int) (percent * 100));
+        float percent2 = count2 / (float) l.size();
+        minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        minThreshSpinner.setValue(100 - (int) (percent2 * 100));
+        minTresholdValueChanged = false;
+        maxTresholdValueChanged = false;
+      
+    }
+    
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
         List<Float> l = getContext().getSortedHd();
         int count = 0;
@@ -2458,6 +2483,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         if (hdp == null) {
             return;
         }
+        if(hdp.getMinThreshValue() < hdp.getMinSelection()){
+            hdp.setMinSelection(hdp.getMinThreshValue());
+        }
+        
+         if(hdp.getMaxThreshValue() > hdp.getMaxSelection()){
+            hdp.setMaxSelection(hdp.getMaxThreshValue());
+        }       
 
         List<Float> f = hdp.getDistance();
         histogramPanel1.setHdp(getContext().getHDinfo());

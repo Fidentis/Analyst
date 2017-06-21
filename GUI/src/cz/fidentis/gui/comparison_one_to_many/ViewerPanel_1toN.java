@@ -317,6 +317,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     public void clearSelection() {
         listener1.clearSelection();
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().updateHistograms();
+        GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().adjustThresholds();
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().getHistogram().resetSlider();
 
     }
@@ -531,6 +532,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     tc.getOneToManyComparisonResults().updateHistograms();
+                    tc.getOneToManyComparisonResults().adjustThresholds();
                     tc.getOneToManyComparisonResults().getHistogram().resetSlider();
                 }
             };

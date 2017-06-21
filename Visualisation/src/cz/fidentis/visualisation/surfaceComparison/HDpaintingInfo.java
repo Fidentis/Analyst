@@ -131,8 +131,7 @@ public class HDpaintingInfo {
      public float getMinThreshValue() {
         return minThreshValue;
     } 
-    
-    
+   
     public float getMinDistance(){
         float min = Float.POSITIVE_INFINITY;
         for (Float f : distance) {
@@ -192,6 +191,7 @@ public class HDpaintingInfo {
 
     public void setMinSelection(float minSelection) {
         this.minSelection = minSelection;
+         minThreshValue = minSelection;
     }
 
     public float getMaxSelection() {
@@ -209,9 +209,11 @@ public class HDpaintingInfo {
 
     public void setIsSelection(boolean isSelection) {
         maxThreshValue = Float.POSITIVE_INFINITY;
+        minThreshValue = Float.NEGATIVE_INFINITY;
         minSelection = getMinDistance();
         maxSelection = getMaxDistance();
         maxThreshValue = maxSelection;
+        minThreshValue = minSelection;
         this.isSelection = isSelection;
     }
 

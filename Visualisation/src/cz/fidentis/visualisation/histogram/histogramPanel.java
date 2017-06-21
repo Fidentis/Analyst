@@ -385,7 +385,7 @@ public class histogramPanel extends JComponent {
             slider2Tip.x=5;            
         }
         if(slider1Tip.x>this.getWidth() - 5){
-            slider2Tip.x=this.getWidth() - 5;            
+            slider1Tip.x=this.getWidth() - 5;            
         }
         
         

@@ -1930,6 +1930,31 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         getContext().setMetricTypeIndex(metricComboBox.getSelectedIndex());
     }//GEN-LAST:event_metricComboBoxActionPerformed
 
+    public void adjustThresholds(){
+         List<Float> l = getContext().getValuesTypeIndex() == 0 ? getContext().getSortedHdRel() : getContext().getSortedHdAbs();
+        int count = 0;
+        int count2 = 0;
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i) <= getContext().getHdPaintingInfo().getMaxThreshValue()) {
+                count++;
+            }
+            if (l.get(i) >= getContext().getHdPaintingInfo().getMinThreshValue()) {
+                count2++;
+            }
+        }
+        minTresholdValueChanged = true;
+        maxTresholdValueChanged = true;
+        float percent = count / (float) l.size();
+        maxThresholdSlider.setValue((int) (percent * 100));
+        maxThresholdSpinner.setValue((int) (percent * 100));
+        float percent2 = count2 / (float) l.size();
+        minThreshSlider.setValue(100 - (int) (percent2 * 100));
+        minThreshSpinner.setValue(100 - (int) (percent2 * 100));
+        minTresholdValueChanged = false;
+        maxTresholdValueChanged = false;
+      
+    }
+    
     private void histogram1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_histogram1MouseDragged
         List<Float> l = getContext().getValuesTypeIndex() == 0 ? getContext().getSortedHdRel() : getContext().getSortedHdAbs();
         int count = 0;
@@ -2305,8 +2330,18 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     public void updateHistograms() {
         //Procrustes
+        HDpaintingInfo hdp = getContext().getHdPaintingInfo();
+        
         if (getContext().getHDP() == null) {
             return;
+        }
+        
+        if(hdp.getMinThreshValue() < hdp.getMinSelection()){
+            hdp.setMinSelection(hdp.getMinThreshValue());
+        }
+        
+         if(hdp.getMaxThreshValue() > hdp.getMaxSelection()){
+            hdp.setMaxSelection(hdp.getMaxThreshValue());
         }
 
         List<Float> f = getContext().getHDP().getInfo().getDistance();
