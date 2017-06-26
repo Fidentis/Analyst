@@ -403,7 +403,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                     }
 
                     //Created list of points
-                    Procrustes1ToMany procrustes = new Procrustes1ToMany(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints(),
+                    Procrustes1ToMany procrustes = new Procrustes1ToMany(c.getFacialPoints(c.getPrimaryModel().getName()),
                             list, c.isFpScaling());
 
                     String result = procrustes.compare1toN(c.getFpTreshold() / 100f, tc.getOneToManyViewerPanel().getListener1().getModel().getName(),
