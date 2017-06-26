@@ -223,6 +223,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         densLabel1 = new javax.swing.JLabel();
         thickness = new javax.swing.JSlider();
         colorPanel = new javax.swing.JPanel();
+        boxplotCheckBox = new javax.swing.JCheckBox();
+        boxplotContinuousCheckBox = new javax.swing.JCheckBox();
         comparisonButton = new javax.swing.JButton();
         colormapPanel = new javax.swing.JPanel();
         histogram1 = new cz.fidentis.visualisation.histogram.histogramPanel();
@@ -720,24 +722,27 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(valuesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(metricComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(minThreshSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(valuesComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(density, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cylLength, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cylRadius, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(VisualizationBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                            .addComponent(VisualizationBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(metricComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(63, 63, 63))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(minThreshSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(21, Short.MAX_VALUE))
+                            .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(68, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -751,6 +756,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(valuesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -759,13 +768,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)))
+                            .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel14))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(density, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(densLabel))
@@ -1082,6 +1087,20 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             .addGap(0, 16, Short.MAX_VALUE)
         );
 
+        org.openide.awt.Mnemonics.setLocalizedText(boxplotCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.boxplotCheckBox.text")); // NOI18N
+        boxplotCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxplotCheckBoxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(boxplotContinuousCheckBox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.boxplotContinuousCheckBox.text")); // NOI18N
+        boxplotContinuousCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxplotContinuousCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout slicesPanelLayout = new javax.swing.GroupLayout(slicesPanel);
         slicesPanel.setLayout(slicesPanelLayout);
         slicesPanelLayout.setHorizontalGroup(
@@ -1095,11 +1114,15 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                             .addComponent(showPlaneCheckBox))
                         .addGap(23, 23, 23)
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(samplingRaysCheckBox)
+                            .addComponent(vectorsCheckBox)
+                            .addComponent(boxplotCheckBox))
+                        .addGap(41, 41, 41)
+                        .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(slicesPanelLayout.createSequentialGroup()
-                                .addComponent(vectorsCheckBox)
-                                .addGap(41, 41, 41)
-                                .addComponent(allCutsCheckBox)))
+                                .addComponent(allCutsCheckBox)
+                                .addGap(18, 18, 18)
+                                .addComponent(samplingRaysCheckBox))
+                            .addComponent(boxplotContinuousCheckBox))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(slicesPanelLayout.createSequentialGroup()
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1158,7 +1181,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                                         .addComponent(yzRadioButton)
                                         .addGap(18, 18, 18)
                                         .addComponent(xzRadioButton)))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(43, Short.MAX_VALUE))))
         );
         slicesPanelLayout.setVerticalGroup(
             slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1203,11 +1226,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(highlightCutsCheckBox)
                             .addComponent(vectorsCheckBox)
-                            .addComponent(allCutsCheckBox))
+                            .addComponent(allCutsCheckBox)
+                            .addComponent(samplingRaysCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(samplingRaysCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(showPlaneCheckBox)))
+                            .addComponent(showPlaneCheckBox)
+                            .addComponent(boxplotCheckBox)
+                            .addComponent(boxplotContinuousCheckBox)))
                     .addGroup(slicesPanelLayout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -1298,15 +1323,15 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(21, 21, 21)
-                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBox3, 0, 239, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                     .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         colormapPanelLayout.setVerticalGroup(
@@ -1368,7 +1393,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(colormapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1422,7 +1447,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1559, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -2313,7 +2338,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_alignResButtonActionPerformed
 
     private void thicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_thicknessStateChanged
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setCutThickness(thickness.getValue() / 10f);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setCutThickness(thickness.getValue() / 10f);
         getContext().setCrosscutThickness(thickness.getValue());
     }//GEN-LAST:event_thicknessStateChanged
 
@@ -2321,7 +2346,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         activeColorPanel = colorPanel;
         jColorChooser1.setColor(colorPanel.getBackground());
         colorDialog.setVisible(true);
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setColorOfCuts(colorPanel.getBackground().getRGBColorComponents(new float[3]));
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setColorOfCut(colorPanel.getBackground().getRGBColorComponents(new float[3]));
         getContext().setCrosscutColor(colorPanel.getBackground());
 
     }//GEN-LAST:event_colorPanelMouseClicked
@@ -2363,6 +2388,16 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void cylRadiusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylRadiusStateChanged
         getContext().setCylinderRadius(cylRadius.getValue());
     }//GEN-LAST:event_cylRadiusStateChanged
+
+    private void boxplotCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxplotCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setShowBoxplot(boxplotCheckBox.isSelected());
+        getContext().setShowBoxplot(boxplotCheckBox.isSelected());
+    }//GEN-LAST:event_boxplotCheckBoxActionPerformed
+
+    private void boxplotContinuousCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxplotContinuousCheckBoxActionPerformed
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
+        getContext().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
+    }//GEN-LAST:event_boxplotContinuousCheckBoxActionPerformed
 
     public histogramPanel getHistogram() {
         return histogram1;
@@ -2410,10 +2445,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         thickness.setValue(c.getCrosscutThickness());
         colorPanel.setBackground(c.getCrosscutColor());
 
-        highlightCutsCheckBox.setSelected(c.isHighlightCuts());
         vectorsCheckBox.setSelected(c.isShowVectors());
+        highlightCutsCheckBox.setSelected(c.isHighlightCuts());
         allCutsCheckBox.setSelected(c.isAllCuts());
         samplingRaysCheckBox.setSelected(c.isSamplingRays());
+        boxplotCheckBox.setSelected(c.isShowBoxplot());
+        boxplotContinuousCheckBox.setSelected(c.isShowBoxplotFunction());
         showPlaneCheckBox.setSelected(c.isShowPlane());
 
         //vector visualization
@@ -2513,6 +2550,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JTable alignmentTable;
     private javax.swing.JCheckBox allCutsCheckBox;
     private javax.swing.JRadioButton arbitraryRadioButton;
+    private javax.swing.JCheckBox boxplotCheckBox;
+    private javax.swing.JCheckBox boxplotContinuousCheckBox;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JPanel colorPanel;

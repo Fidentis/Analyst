@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import static java.lang.Float.NaN;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -423,11 +424,11 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             gl.glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, acBuffer[0]);
             ByteBuffer bf = gl.glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, zero.capacity() * 4, GL_MAP_READ_BIT);
             int count = bf.getInt();
-            gl.glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER); 
+            gl.glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
             FloatBuffer data = Buffers.newDirectFloatBuffer(count);
 
             gl.glBindBuffer(GL_TEXTURE_BUFFER, fsBuffer[0]);
-            gl.glGetBufferSubData(GL_TEXTURE_BUFFER, 0, count*4, data);
+            gl.glGetBufferSubData(GL_TEXTURE_BUFFER, 0, count * 4, data);
             float[] d = new float[count];
             float minimum = Float.POSITIVE_INFINITY;
             float maximum = Float.NEGATIVE_INFINITY;
@@ -441,7 +442,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                     }
                 }
                 d[i] = data.get(i);
-            }            
+            }
             info.getHdInfo().setMinSelection(minimum);
             info.getHdInfo().setMaxSelection(maximum);
             gl.glBindBuffer(GL_TEXTURE_BUFFER, 0);
@@ -519,6 +520,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
     public void setSecondaryListener(boolean s) {
         this.secondaryListener = s;
+    }    
+    
+    public boolean isSecondaryListener() {
+        return secondaryListener;
     }
 
     private void slicesAllRender() {
@@ -530,20 +535,25 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         gl.glClear(GL_DEPTH_BUFFER_BIT);
         if (info.isShowSamplingRays()) {
             gl.glColor4fv(info.getColorOfCut(), 0);
-            if (!info.getLists2().isEmpty()) {
-                for (LinkedList<Vector2f> l : info.getLists2().get(0)) {
-                    for (int i = 1; i < info.getSamplePoints().size(); i++) {
-                        if (info.getSamplePoints().get(i) != null) {
-                            gl.glLineWidth(info.getCutThickness() + 1);
-                            gl.glBegin(GL_LINES);
-                            gl.glVertex2d(info.getSamplePoints().get(i).x, info.getSamplePoints().get(i).y);
-                            gl.glVertex2d(l.get(i).x, l.get(i).y);
-                            gl.glEnd();
-                        }
-                    }
+            for (int i = 1; i < info.getSampleNormals().size(); i++) {
+                 if (info.getPointDistances()!= null && info.getPointDistances().get(i).size() > 1) {
+                    Vector2f n = new Vector2f(info.getSampleNormals().get(i));
+                    n.normalize();
+                    Vector2f a = new Vector2f(n);               
+                    a.scale(info.getPointDistances().get(i).get(0));
+                    a.add(info.getSamplePoints().get(i));
+                    Vector2f b = new Vector2f(n);
+                    b.scale(info.getPointDistances().get(i).get(info.getPointDistances().get(i).size() - 1));
+                    b.add(info.getSamplePoints().get(i));
+                    gl.glLineWidth(info.getCutThickness());
+                    gl.glBegin(GL_LINES);
+                    gl.glVertex2d(a.x, a.y);
+                    gl.glVertex2d(b.x, b.y);
+                    gl.glEnd();
                 }
             }
         }
+
         if (info.isShowBoxplot() || info.isShowBoxplotFunction()) {
             gl.glColor4fv(info.getColorOfCut(), 0);
             //intersections/normals
@@ -781,7 +791,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         float angle = xAxis.angle(vector);
         Vector3f axis = new Vector3f();
         axis.cross(xAxis, vector);
-        Vector3f p = IntersectionUtils.findLinePlaneIntersection(new Vector3f(), info.getPlaneNormal(), info.getPlaneNormal(), info.getPlaneNormal());
+        Vector3f p = IntersectionUtils.findLinePlaneIntersection(new Vector3f(), info.getPlaneNormal(), info.getPlaneNormal(), info.getPlanePoint());
 
         for (int i = 0; i < originalGizmo.getVerts().size(); i++) {
             Vector3f v = new Vector3f(originalGizmo.getVerts().get(i));
@@ -1024,7 +1034,10 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                     Vector2f ab = new Vector2f(pb);
                     ab.sub(pa);
                     float dot = n.dot(ab);
-                    ptDistances.add(Math.signum(dot) * ab.length());
+                    float pt = Math.signum(dot) * ab.length();
+                    if (pt != NaN) {
+                        ptDistances.add(Math.signum(dot) * ab.length());
+                    }
                 } else {
                     //  ptDistances.add(null);
                 }
@@ -2282,24 +2295,44 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         String colorMapShadeFragmentShader = null;
 
         try {
-            SMvertexShaderList = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ShadowMapVS.glsl"));
-            SMfragmentShaderList = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ShadowMapFS.glsl"));
+            SMvertexShaderList = readFile(ComparisonGLEventListener.class
+                    .getResourceAsStream("shaders/ShadowMapVS.glsl"));
+            SMfragmentShaderList
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/ShadowMapFS.glsl"));
 
-            vertexShaderList = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/FirstPassVS.glsl"));
-            fragmentShaderList = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/FirstPassFS.glsl"));
+            vertexShaderList
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/FirstPassVS.glsl"));
+            fragmentShaderList
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/FirstPassFS.glsl"));
 
-            vertexShaderOIT = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/OITresultVS.glsl"));
-            fragmentShaderOIT = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/OITresultFS.glsl"));
+            vertexShaderOIT
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/OITresultVS.glsl"));
+            fragmentShaderOIT
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/OITresultFS.glsl"));
 
-            fragmentShaderFinal = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/FinalPassFS.glsl"));
+            fragmentShaderFinal
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/FinalPassFS.glsl"));
 
-            colorMapvertexShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapVS.glsl"));
-            colorMapfragmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapFS.glsl"));
+            colorMapvertexShader
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/ColormapVS.glsl"));
+            colorMapfragmentShader
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/ColormapFS.glsl"));
 
-            colorMapShadeFragmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/ColormapShadeFS.glsl"));
+            colorMapShadeFragmentShader
+                    = readFile(ComparisonGLEventListener.class
+                            .getResourceAsStream("shaders/ColormapShadeFS.glsl"));
 
         } catch (IOException ex) {
-            Logger.getLogger(ComparisonGLEventListener.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ComparisonGLEventListener.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         int vertexShaderSMId = initShader(gl, GL_VERTEX_SHADER, SMvertexShaderList);
@@ -2666,14 +2699,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
     public void setTransformations(List<ICPTransformation> trans) {
         info.setTransformations(trans);
-    }
-
-    public void setColorOfCuts(float[] color) {
-        info.setColorOfCut(color);
-    }
-
-    public void setCutThickness(float f) {
-        info.setCutThickness(f);
     }
 
     public GL2 getGLContext() {

@@ -360,6 +360,12 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
             
         }else if(selection && SwingUtilities.isLeftMouseButton(evt)){
             listener1.setSelectionStart(evt.getPoint());
+        }else if (!listener.isSecondaryListener() && listener.getModel() != null && listener.pickManipulator(evt.getX(), evt.getY())) {
+            dragging = true;
+            draggingStart = evt.getPoint();
+            startGizmoCenter2D = listener.getPlaneCenter2D();
+            startGizmoCenter3D = listener.getPlaneCenter();
+            startPlanePoint = listener.getPlanePoint();        
         }else if (listener.getModel() != null) {        //pick point on the mesh
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
 

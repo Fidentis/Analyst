@@ -46,8 +46,6 @@ public class ComparisonListenerInfo {
     private boolean showAllCuts;
     private boolean showSamplingRays;
     private boolean showVectors = true;
-    private boolean showBoxplot = false;
-    private boolean showBoxplotFunction = true;
     private boolean render;
     private Vector3f planePoint = new Vector3f(0, 0, 0);
     private Vector3f planeNormal = new Vector3f(1, 0, 0);
@@ -67,6 +65,8 @@ public class ComparisonListenerInfo {
     private float[] primaryColor = {51f / 255f, 153f / 255f, 1f, 1.0f};
     private float[] secondaryColor = {1f, 1f, 0f, 1.0f};
     private float[] fogColor = {0f, 0f, 255f, 1.0f};
+    private boolean showBoxplot = false;
+    private boolean showBoxplotFunction = false;
 
     public ComparisonListenerInfo() {
         models = new ArrayList<>();
@@ -330,24 +330,6 @@ public class ComparisonListenerInfo {
         this.showVectors = showVectors;
     }
 
-    public boolean isShowBoxplot() {
-        return showBoxplot;
-    }
-
-    public void setShowBoxplot(boolean showBoxplot) {
-        this.showBoxplot = showBoxplot;
-    }
-
-    public boolean isShowBoxplotFunction() {
-        return showBoxplotFunction;
-    }
-
-    public void setShowBoxplotFunction(boolean showBoxplotFunction) {
-        this.showBoxplotFunction = showBoxplotFunction;
-    }
-    
-    
-
     public boolean isRender() {
         return render;
     }
@@ -476,5 +458,22 @@ public class ComparisonListenerInfo {
     public void setVerticesInfo(ArrayList<ArrayList<VertexInfo>> verticesInfo) {
         this.verticesInfo = verticesInfo;
     }
+    
+    public boolean isShowBoxplot() {
+        return showBoxplot;
+    }
+
+    public void setShowBoxplot(boolean showBoxplot) {
+        this.showBoxplot = showBoxplot;
+    }
+
+    public boolean isShowBoxplotFunction() {
+        return showBoxplotFunction;
+    }
+
+    public void setShowBoxplotFunction(boolean showBoxplotFunction) {
+        this.showBoxplotFunction = showBoxplotFunction;
+    }
+   
     
 }

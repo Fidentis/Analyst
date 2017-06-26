@@ -49,6 +49,9 @@ public class BatchComparison {
     
     private List<List<ICPTransformation>> trans;
     
+    private boolean showBoxplot = false;
+    private boolean showBoxplotFunction = true;
+    
     private boolean showPointInfo = true;   //whether to show description of the feature points
     private Color pointColor = Color.red;   //color of displayed feature points
     private int valuesTypeIndex = 0;        //relative, absolute
@@ -138,7 +141,22 @@ public class BatchComparison {
         crosscutViz.setShowPlane(showPlane);
     }
     
+    public boolean isShowBoxplot() {
+        return showBoxplot;
+    }
 
+    public void setShowBoxplot(boolean showBoxplot) {
+        this.showBoxplot = showBoxplot;
+    }
+
+    public boolean isShowBoxplotFunction() {
+        return showBoxplotFunction;
+    }
+
+    public void setShowBoxplotFunction(boolean showBoxplotFunction) {
+        this.showBoxplotFunction = showBoxplotFunction;
+    }
+   
     public VisualizationType getVisualization() {
         return visualization;
     }
