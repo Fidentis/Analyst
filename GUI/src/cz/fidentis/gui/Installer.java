@@ -72,6 +72,13 @@ public class Installer extends ModuleInstall {
          UIManager.put("text", new Color(0, 0, 0));}*/ catch (URISyntaxException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ConcurrentModificationException ex) {
             Exceptions.printStackTrace(ex);
         }
+        
+        // delete the temp folder if it existed before the start of the program
+        try {
+            FileUtils.instance().createTMPfolder(true);
+        } catch (FileManipulationException ex) {
+            Exceptions.printStackTrace(ex);
+        }
 
     }
 
