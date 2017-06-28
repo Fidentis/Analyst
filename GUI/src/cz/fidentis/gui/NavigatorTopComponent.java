@@ -406,15 +406,15 @@ public final class NavigatorTopComponent extends TopComponent {
                         // display facial points of corresponding model (by index)
                         listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(lastNodeIndex).getName()));
                     }
-                    if(previousNodeText.equals(strings.getString("tree.node.averageModel"))) {
-                        if(batchComparison.getAverageFace() == null) listener.setModels(batchComparison.getAverageFace());
-                        else listener.setModels(batchComparison.getAverageFace());
+                    if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.averageModel"))) {
+                        listener.setModels(batchComparison.getAverageFace());
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.results"))) {
                         if(batchComparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
                             listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(0).getName()));
                             listener.setProcrustes(true);
                         } else {
+                            listener.setModels(batchComparison.getAverageFace());
                             listener.drawHD(true);
                         }
                     }

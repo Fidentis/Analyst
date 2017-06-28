@@ -8,25 +8,19 @@ package cz.fidentis.gui;
 import cz.fidentis.controller.Controller;
 import cz.fidentis.controller.Project;
 import cz.fidentis.gui.actions.ButtonHelper;
-import cz.fidentis.gui.observer.ObservableMaster;
-import cz.fidentis.gui.observer.ProgressHandleObserver;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.BorderFactory;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
-import org.openide.windows.WindowManager;
 
 /**
  *
  * @author Katka
  */
 public class StartingPanel extends javax.swing.JPanel {
-    private static boolean triedDeleting = false;    
-    
     /**
      * Creates new form StartingPanel
      */
@@ -304,28 +298,7 @@ public class StartingPanel extends javax.swing.JPanel {
             Project project = new Project("Project " + dateFormat.format(date));
             project.setName("Project " + dateFormat.format(date));
             try {
-                if(!triedDeleting){
-                    triedDeleting = true;
-                    
-                    ObservableMaster master = new ObservableMaster();
-                    final ProgressHandleObserver obs = new ProgressHandleObserver("Deleting tmp files");
-                    master.addObserver(obs);
-                
-                    Runnable run = new Runnable() {
-                        @Override
-                        public void run() {
-                            obs.startHandle();
-                        }
-                    };
-                
-                    Thread t = new Thread(run);
-                    t.start();                    
-                
-                    project.setTempDirectory(FileUtils.instance()
-                        .createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
-                
-                    master.updateObservers();
-                }
+                project.setTempDirectory(FileUtils.instance().createTMPmoduleFolder(String.valueOf(System.currentTimeMillis())));
             } catch (FileManipulationException ex) {
                 Exceptions.printStackTrace(ex);
             }

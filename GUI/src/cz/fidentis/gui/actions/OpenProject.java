@@ -283,8 +283,19 @@ public final class OpenProject implements ActionListener {
                 ntc.getOneToManyViewerPanel().getCanvas2().setImportLabelVisible(false);
             }
             if (loadedFps != null) {
-                FPImportExport.instance().alignPointsToModels(loadedFps, comparison1N.getModels());
+                List<File> allModelFiles = new ArrayList<>();
+                allModelFiles.addAll(comparison1N.getModels());
+                if (comparison1N.getPrimaryModel() != null) {
+                    allModelFiles.add(comparison1N.getPrimaryModel().getFile());
+                }
+                FPImportExport.instance().alignPointsToModels(loadedFps, allModelFiles);
                 for (FpModel model : loadedFps) {
+                    if (comparison1N.getPrimaryModel() != null
+                            && model.getModelName().equals(comparison1N.getPrimaryModel().getName())) {
+                        ntc.getOneToManyViewerPanel().getListener1().setFacialPoints(model.getFacialPoints());
+                        ntc.getOneToManyViewerPanel().getListener1().initFpUniverse(model.getFacialPoints());
+
+                    }
                     comparison1N.addFacialPoints(model.getModelName(), model.getFacialPoints());
                 }
             }
@@ -498,12 +509,6 @@ public final class OpenProject implements ActionListener {
             comparison.setContinueComparison(Boolean.parseBoolean(attr));
         }
         
-        attr = projectE.getAttribute("firstCreated");
-        if(attr != null && !attr.isEmpty()){
-            comparison.setFirstCreated(Boolean.parseBoolean(attr));
-        }
-        
-        
         attr = projectE.getAttribute("visualization");
         if(attr != null && !attr.isEmpty()){
             comparison.setVisualization(VisualizationType.valueOf(attr));
@@ -716,10 +721,6 @@ public final class OpenProject implements ActionListener {
         attr = projectE.getAttribute("continueComparison");
         if (attr != null && !attr.isEmpty()) {
             comparison.setContinueComparison(Boolean.parseBoolean(attr));
-        }
-        attr = projectE.getAttribute("firstCreated");
-        if (attr != null && !attr.isEmpty()) {
-            comparison.setFirstCreated(Boolean.parseBoolean(attr));
         }
         
         attr = projectE.getAttribute("visualization");
@@ -980,11 +981,6 @@ public final class OpenProject implements ActionListener {
         attr = projectE.getAttribute("continueComparison");
         if(attr != null && !attr.isEmpty()){
             comparison.setContinueComparison(Boolean.parseBoolean(attr));
-        }
-        
-        attr = projectE.getAttribute("firstCreated");
-        if(attr != null && !attr.isEmpty()){
-            comparison.setFirstCreated(Boolean.parseBoolean(attr));
         }
         
         attr = projectE.getAttribute("visualization");
