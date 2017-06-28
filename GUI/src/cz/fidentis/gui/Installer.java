@@ -5,24 +5,19 @@
 package cz.fidentis.gui;
 
 import cz.fidentis.controller.Controller;
-import static cz.fidentis.gui.GUIController.addProjectTopComponent;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utils.LoadLibraries;
 import cz.fidentis.utilsException.FileManipulationException;
 import cz.fidentis.validator.OSValidator;
-import java.awt.Color;
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.opencv.LoadOpenCV;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
+import org.netbeans.core.startup.Splash;
 
 public class Installer extends ModuleInstall {
 
@@ -74,6 +69,8 @@ public class Installer extends ModuleInstall {
         }
         
         // delete the temp folder if it existed before the start of the program
+        Splash s = Splash.getInstance();
+        s.print("Removing the old temporary directory.");
         try {
             FileUtils.instance().createTMPfolder(true);
         } catch (FileManipulationException ex) {
