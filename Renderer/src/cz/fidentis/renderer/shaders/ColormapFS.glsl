@@ -72,7 +72,7 @@ void main(void)
     uint old_head;
     vec4 frag_color;
 
-    uint index = atomicCounterIncrement(index_counter)+1;
+    uint index = atomicCounterIncrement(index_counter);
     old_head = imageAtomicExchange(head_pointer_image, ivec2(gl_FragCoord.xy), int(index));
     
 
@@ -80,8 +80,7 @@ void main(void)
   
    
     uvec4 item;
-    item.x = old_head;
-    item.y = floatBitsToUint(currentDistance);	
+    item.x = old_head;    
     item.z = floatBitsToUint(gl_FragCoord.z); 
 
    
@@ -116,12 +115,17 @@ void main(void)
     else if(selectionType==-1){
         selected =1;  
     }
+    if(selected == 1){
+        item.y = floatBitsToUint(currentDistance);	
+    }else{
+        item.y = floatBitsToUint(1.0/0.0);	
+    }
      item.w = packUnorm4x8(vec4(color.x,color.y,color.z,selected));
 
     memoryBarrier();
     imageStore(list_buffer, int(index), item);
-    
-    gl_FragColor = color;
+discard;
+   // gl_FragColor = color;
 }
 
 

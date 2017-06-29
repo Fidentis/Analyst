@@ -317,6 +317,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     public void clearSelection() {
         listener1.clearSelection();
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().updateHistograms();
+        GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().adjustThresholds();
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().getHistogram().resetSlider();
 
     }
@@ -357,7 +358,15 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                 }                
             }
             
-        } else if (listener.getModel() != null) {        //pick point on the mesh
+        }else if(selection && SwingUtilities.isLeftMouseButton(evt)){
+            listener1.setSelectionStart(evt.getPoint());
+        }else if (!listener.isSecondaryListener() && listener.getModel() != null && listener.pickManipulator(evt.getX(), evt.getY())) {
+            dragging = true;
+            draggingStart = evt.getPoint();
+            startGizmoCenter2D = listener.getPlaneCenter2D();
+            startGizmoCenter3D = listener.getPlaneCenter();
+            startPlanePoint = listener.getPlanePoint();        
+        }else if (listener.getModel() != null) {        //pick point on the mesh
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
 
             if (pos == null) {        //not on mesh, deselect
@@ -529,6 +538,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     tc.getOneToManyComparisonResults().updateHistograms();
+                    tc.getOneToManyComparisonResults().adjustThresholds();
                     tc.getOneToManyComparisonResults().getHistogram().resetSlider();
                 }
             };

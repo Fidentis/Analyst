@@ -31,7 +31,7 @@ public class ModelLoader {
     private Model model;
     private static final float DUMMY_Z_TC = -5.0f;
 
-    private ModelLoader() {
+    public ModelLoader() {
     }
     
     public static ModelLoader instance(){

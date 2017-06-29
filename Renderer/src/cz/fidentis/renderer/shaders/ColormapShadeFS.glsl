@@ -170,7 +170,7 @@ void main(void)
    vec4 shade = vec4((unpackUnorm4x8(frag.w)).xyz,1);
    vec4 color = shade;
    float currentDistance = uintBitsToFloat(frag.y);
-    if((unpackUnorm4x8(frag.w)).w == 1 && (currentDistance<maxThreshDistance) && (currentDistance>minThreshDistance)){           
+    if((unpackUnorm4x8(frag.w)).w == 1 && (currentDistance<=maxThreshDistance) && (currentDistance>=minThreshDistance)){           
            if(colorScheme == 1){
                 color = shade * vec4(chooseDivergingColor(minThreshDistance,maxThreshDistance,currentDistance),1);
             }
