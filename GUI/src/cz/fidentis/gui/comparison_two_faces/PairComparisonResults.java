@@ -1329,13 +1329,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         float[] color = new float[4];
         primaryColorPanel.getBackground().getRGBColorComponents(color);
-        color[3] = primSolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
+        color[3] = c.isIsSecondarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
         tc.setPrimaryColor(color);
         c.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
 
         float[] color2 = new float[4];
         secondaryColorPanel.getBackground().getRGBColorComponents(color2);
-        color2[3] = secSolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
+        color2[3] = c.isIsPrimarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
         tc.setSecondaryColor(color2);
         c.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
 

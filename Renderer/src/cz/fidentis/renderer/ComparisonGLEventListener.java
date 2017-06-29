@@ -535,6 +535,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         gl.glClear(GL_DEPTH_BUFFER_BIT);
         if (info.isShowSamplingRays()) {
             gl.glColor4fv(info.getColorOfCut(), 0);
+            gl.glLineWidth(info.getCutThickness());
+            gl.glBegin(GL_LINES);
             for (int i = 1; i < info.getSampleNormals().size(); i++) {
                  if (info.getPointDistances()!= null && info.getPointDistances().get(i).size() > 1) {
                     Vector2f n = new Vector2f(info.getSampleNormals().get(i));
@@ -544,14 +546,12 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                     a.add(info.getSamplePoints().get(i));
                     Vector2f b = new Vector2f(n);
                     b.scale(info.getPointDistances().get(i).get(info.getPointDistances().get(i).size() - 1));
-                    b.add(info.getSamplePoints().get(i));
-                    gl.glLineWidth(info.getCutThickness());
-                    gl.glBegin(GL_LINES);
+                    b.add(info.getSamplePoints().get(i));                    
                     gl.glVertex2d(a.x, a.y);
-                    gl.glVertex2d(b.x, b.y);
-                    gl.glEnd();
+                    gl.glVertex2d(b.x, b.y);                    
                 }
             }
+            gl.glEnd();
         }
 
         if (info.isShowBoxplot() || info.isShowBoxplotFunction()) {

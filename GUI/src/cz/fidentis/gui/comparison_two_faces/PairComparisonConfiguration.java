@@ -1264,25 +1264,26 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     }
 
     public void setColors() {
-        ComparisonGLEventListener c = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
-        Comparison2Faces tc = getContext();
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
+        Comparison2Faces c = getContext();
         float[] color = new float[4];
+        
         primaryColorPanel.getBackground().getRGBColorComponents(color);
-        color[3] = primSolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
-        tc.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
-        c.setPrimaryColor(color);
+        color[3] = c.isIsSecondarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
+        tc.setPrimaryColor(color);
+        c.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
 
         float[] color2 = new float[4];
         secondaryColorPanel.getBackground().getRGBColorComponents(color2);
-        color2[3] = secSolidCheckbox.isSelected() ? 1 : transparencySlider.getValue() / (float) 100;
-        tc.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
-        c.setSecondaryColor(color2);
-
+        color2[3] = c.isIsPrimarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
+        tc.setSecondaryColor(color2);
+        c.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
+        
         float[] color3 = new float[4];
         fogColorPanel.getBackground().getRGBColorComponents(color3);
 
-        c.setFogColor(color3);
-        tc.setFogColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color3, 1));
+        tc.setFogColor(color3);
+        c.setFogColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color3, 1));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

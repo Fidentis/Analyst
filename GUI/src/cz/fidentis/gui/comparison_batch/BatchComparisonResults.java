@@ -135,9 +135,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jFrame3 = new javax.swing.JFrame();
         jPanel7 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox();
+        colorschemeComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
-        jSlider4 = new javax.swing.JSlider();
+        lensSlider = new javax.swing.JSlider();
         jScrollPane4 = new javax.swing.JScrollPane();
         plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -353,20 +353,20 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel22, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel22.text")); // NOI18N
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
-        jComboBox5.addActionListener(new java.awt.event.ActionListener() {
+        colorschemeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sequential", "Diverging", "Rainbow" }));
+        colorschemeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox5ActionPerformed(evt);
+                colorschemeComboBoxActionPerformed(evt);
             }
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel1.text")); // NOI18N
 
-        jSlider4.setMaximum(1000);
-        jSlider4.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jSlider4.toolTipText")); // NOI18N
-        jSlider4.addChangeListener(new javax.swing.event.ChangeListener() {
+        lensSlider.setMaximum(1000);
+        lensSlider.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.lensSlider.toolTipText")); // NOI18N
+        lensSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider4StateChanged(evt);
+                lensSliderStateChanged(evt);
             }
         });
 
@@ -378,11 +378,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(colorschemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lensSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -391,12 +391,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGap(13, 13, 13)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorschemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(jSlider4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         plotsDrawingPanelBatchNumerical1.setPreferredSize(new java.awt.Dimension(500, 388));
@@ -2306,10 +2306,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
-    private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
-        plotsDrawingPanelBatchNumerical1.setScheme(ColorScheme.values()[jComboBox5.getSelectedIndex()]);
+    private void colorschemeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorschemeComboBoxActionPerformed
+        plotsDrawingPanelBatchNumerical1.setScheme(ColorScheme.values()[colorschemeComboBox.getSelectedIndex()]);
         plotsDrawingPanelBatchNumerical1.repaint();
-    }//GEN-LAST:event_jComboBox5ActionPerformed
+    }//GEN-LAST:event_colorschemeComboBoxActionPerformed
 
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
         plotsDrawingPanelAuxiliary2.setScheme(ColorScheme.values()[jComboBox7.getSelectedIndex()]);
@@ -2373,9 +2373,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         updateHistograms();
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
-    private void jSlider4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider4StateChanged
-        plotsDrawingPanelBatchNumerical1.setPeakStrength(jSlider4.getValue() / (float) 10);
-    }//GEN-LAST:event_jSlider4StateChanged
+    private void lensSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_lensSliderStateChanged
+        plotsDrawingPanelBatchNumerical1.setPeakStrength(lensSlider.getValue() / 10f);
+    }//GEN-LAST:event_lensSliderStateChanged
 
     private void densityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_densityStateChanged
         getContext().setVectorDensity(density.getValue());
@@ -2557,6 +2557,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JPanel colorPanel;
     private javax.swing.JComboBox colorSchemeComboBox;
     private javax.swing.JPanel colormapPanel;
+    private javax.swing.JComboBox colorschemeComboBox;
     private javax.swing.JButton comparisonButton;
     private javax.swing.JSlider crosscutSizeSlider;
     private javax.swing.JSlider cylLength;
@@ -2591,7 +2592,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox5;
     private javax.swing.JComboBox jComboBox7;
     private javax.swing.JComboBox jComboBox8;
     private javax.swing.JDialog jDialog1;
@@ -2630,8 +2630,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSlider jSlider4;
     private javax.swing.JTable jTable1;
+    private javax.swing.JSlider lensSlider;
     private javax.swing.JSlider maxThresholdSlider;
     private javax.swing.JSpinner maxThresholdSpinner;
     private javax.swing.JComboBox metricComboBox;
