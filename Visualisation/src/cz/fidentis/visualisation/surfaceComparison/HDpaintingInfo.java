@@ -8,6 +8,7 @@ package cz.fidentis.visualisation.surfaceComparison;
 
 import cz.fidentis.model.Graph2;
 import cz.fidentis.model.Model;
+import cz.fidentis.utils.SortUtils;
 import cz.fidentis.visualisation.ColorScheme;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import javax.vecmath.Vector3f;
  */
 public class HDpaintingInfo {
     private List<Float> distance;
+    private List<Float> sortedDistance;
     private final Model model;
   //  private float threshPecent = 1f;
     private float maxThreshValue = Float.POSITIVE_INFINITY; 
@@ -131,8 +133,7 @@ public class HDpaintingInfo {
      public float getMinThreshValue() {
         return minThreshValue;
     } 
-    
-    
+   
     public float getMinDistance(){
         float min = Float.POSITIVE_INFINITY;
         for (Float f : distance) {
@@ -184,7 +185,14 @@ public class HDpaintingInfo {
 
     public void setDistance(List<Float> distance) {
         this.distance = distance;
+        this.sortedDistance = SortUtils.instance().sortValues(distance);
     }
+
+    public List<Float> getSortedDistance() {
+        return sortedDistance;
+    }
+    
+    
 
     public float getMinSelection() {
         return minSelection;
@@ -192,6 +200,7 @@ public class HDpaintingInfo {
 
     public void setMinSelection(float minSelection) {
         this.minSelection = minSelection;
+         minThreshValue = minSelection;
     }
 
     public float getMaxSelection() {
@@ -209,9 +218,11 @@ public class HDpaintingInfo {
 
     public void setIsSelection(boolean isSelection) {
         maxThreshValue = Float.POSITIVE_INFINITY;
+        minThreshValue = Float.NEGATIVE_INFINITY;
         minSelection = getMinDistance();
         maxSelection = getMaxDistance();
         maxThreshValue = maxSelection;
+        minThreshValue = minSelection;
         this.isSelection = isSelection;
     }
 

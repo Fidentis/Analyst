@@ -88,6 +88,8 @@ public class OneToManyComparison {
     private CrosscutConfig crosscutViz = new CrosscutConfig();
     private VectorsConfig vectorsViz = new VectorsConfig();
     private ColormapConfig colormapViz = new ColormapConfig();
+    private boolean showBoxplot;
+    private boolean showBoxplotFunction;
             
             
 
@@ -660,6 +662,31 @@ public class OneToManyComparison {
 
     public void setAvgFace(Model avgFace) {
         this.avgFace = avgFace;
+    }
+    
+    
+    public boolean isShowPlane() {
+        return crosscutViz.isShowPlane();
+    }
+
+    public void setShowPlane(boolean showPlane) {
+        crosscutViz.setShowPlane(showPlane);
+    }
+    
+    public boolean isShowBoxplot() {
+        return showBoxplot;
+    }
+
+    public void setShowBoxplot(boolean showBoxplot) {
+        this.showBoxplot = showBoxplot;
+    }
+
+    public boolean isShowBoxplotFunction() {
+        return showBoxplotFunction;
+    }
+
+    public void setShowBoxplotFunction(boolean showBoxplotFunction) {
+        this.showBoxplotFunction = showBoxplotFunction;
     }
     
     
