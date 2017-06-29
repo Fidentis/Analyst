@@ -130,8 +130,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         fogColorPanel = new javax.swing.JPanel();
         useContoursCheckbox = new javax.swing.JCheckBox();
-        primSolidCheckbox = new javax.swing.JCheckBox();
-        secSolidCheckbox = new javax.swing.JCheckBox();
+        secondarySolidCheckbox = new javax.swing.JCheckBox();
+        primarySolidCheckbox = new javax.swing.JCheckBox();
         transpSpinner = new javax.swing.JSpinner();
         colormapPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -466,17 +466,17 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(primSolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.primSolidCheckbox.text")); // NOI18N
-        primSolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(secondarySolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.secondarySolidCheckbox.text")); // NOI18N
+        secondarySolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                primSolidCheckboxActionPerformed(evt);
+                secondarySolidCheckboxActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(secSolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.secSolidCheckbox.text")); // NOI18N
-        secSolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(primarySolidCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.primarySolidCheckbox.text")); // NOI18N
+        primarySolidCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                secSolidCheckboxActionPerformed(evt);
+                primarySolidCheckboxActionPerformed(evt);
             }
         });
 
@@ -499,7 +499,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                         .addGap(26, 26, 26)
                         .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(transpSpinner))
+                        .addComponent(transpSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
                     .addGroup(shadersPanelLayout.createSequentialGroup()
                         .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(useContoursCheckbox)
@@ -523,10 +523,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
                                     .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(fogColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                     .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(primSolidCheckbox)
-                                    .addComponent(secSolidCheckbox))))
+                                    .addComponent(secondarySolidCheckbox)
+                                    .addComponent(primarySolidCheckbox))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -536,21 +536,19 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(shadersPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(primSolidCheckbox))
+                        .addGap(0, 3, Short.MAX_VALUE)
+                        .addComponent(primarySolidCheckbox))
                     .addGroup(shadersPanelLayout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(primaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(shadersPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(secondaryColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, shadersPanelLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(secSolidCheckbox)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(secondarySolidCheckbox)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel15)
@@ -701,9 +699,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(colormapPanelLayout.createSequentialGroup()
-                                        .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, 0))
+                                    .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(colorSchemeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(colormapPanelLayout.createSequentialGroup()
@@ -1329,13 +1325,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
         float[] color = new float[4];
         primaryColorPanel.getBackground().getRGBColorComponents(color);
-        color[3] = c.isIsSecondarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
+        color[3] = c.isIsPrimarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
         tc.setPrimaryColor(color);
         c.setPrimaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color, 1));
 
         float[] color2 = new float[4];
         secondaryColorPanel.getBackground().getRGBColorComponents(color2);
-        color2[3] = c.isIsPrimarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
+        color2[3] = c.isIsSecondarySolid() ? 1 : c.getOverlayTransparency() / (float) 100;
         tc.setSecondaryColor(color2);
         c.setSecondaryColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color2, 1));
 
@@ -1408,15 +1404,15 @@ public class PairComparisonResults extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().clearSelection();
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void primSolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_primSolidCheckboxActionPerformed
-        getContext().setIsSecondarySolid(primSolidCheckbox.isSelected());
+    private void secondarySolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secondarySolidCheckboxActionPerformed
+        getContext().setIsSecondarySolid(secondarySolidCheckbox.isSelected());
         setColors();
-    }//GEN-LAST:event_primSolidCheckboxActionPerformed
+    }//GEN-LAST:event_secondarySolidCheckboxActionPerformed
 
-    private void secSolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secSolidCheckboxActionPerformed
-        getContext().setIsPrimarySolid(secSolidCheckbox.isSelected());
+    private void primarySolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_primarySolidCheckboxActionPerformed
+        getContext().setIsPrimarySolid(primarySolidCheckbox.isSelected());
         setColors();
-    }//GEN-LAST:event_secSolidCheckboxActionPerformed
+    }//GEN-LAST:event_primarySolidCheckboxActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if (jComboBox1.getSelectedItem().equals(SelectionType.RECTANGLE.toString())) {
@@ -1585,9 +1581,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
        
        //overlay
         primaryColorPanel.setBackground(c.getPrimaryColor());
-        secSolidCheckbox.setSelected(c.isIsPrimarySolid());
+        primarySolidCheckbox.setSelected(c.isIsPrimarySolid());
         secondaryColorPanel.setBackground(c.getSecondaryColor());
-        primSolidCheckbox.setSelected(c.isIsSecondarySolid());
+        secondarySolidCheckbox.setSelected(c.isIsSecondarySolid());
         fogColorPanel.setBackground(c.getFogColor());
         transparencySlider.setValue((int) c.getOverlayTransparency());
         transpSpinner.setValue((int) c.getOverlayTransparency());
@@ -1732,10 +1728,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider minThreshSlider;
     private javax.swing.JSpinner minThreshSpinner;
     private javax.swing.JRadioButton noneRadioButton;
-    private javax.swing.JCheckBox primSolidCheckbox;
     private javax.swing.JPanel primaryColorPanel;
-    private javax.swing.JCheckBox secSolidCheckbox;
+    private javax.swing.JCheckBox primarySolidCheckbox;
     private javax.swing.JPanel secondaryColorPanel;
+    private javax.swing.JCheckBox secondarySolidCheckbox;
     private javax.swing.JToggleButton selectionButton;
     private javax.swing.JPanel shadersPanel;
     private javax.swing.JLabel sizeLabel;

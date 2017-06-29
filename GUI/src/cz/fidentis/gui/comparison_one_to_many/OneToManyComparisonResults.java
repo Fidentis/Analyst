@@ -150,6 +150,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jComboBox4 = new javax.swing.JComboBox();
         jLabel20 = new javax.swing.JLabel();
         jComboBox5 = new javax.swing.JComboBox();
+        lensSlider = new javax.swing.JSlider();
+        jLabel10 = new javax.swing.JLabel();
         alignFrame = new javax.swing.JFrame();
         jScrollPane5 = new javax.swing.JScrollPane();
         alignTable = new javax.swing.JTable();
@@ -388,7 +390,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         );
         plotsDrawingPanelAuxiliary2Layout.setVerticalGroup(
             plotsDrawingPanelAuxiliary2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
+            .addGap(0, 361, Short.MAX_VALUE)
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel19, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.jLabel19.text")); // NOI18N
@@ -410,19 +412,34 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             }
         });
 
+        lensSlider.setMaximum(1000);
+        lensSlider.setToolTipText(org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.lensSlider.toolTipText")); // NOI18N
+        lensSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                lensSliderStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.jLabel10.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel19)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(jLabel20)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -434,7 +451,11 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel20)
                     .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -448,7 +469,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(plotsDrawingPanelAuxiliary2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2069,7 +2090,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             pairComparisonPanel1.clear();
             jPanel4.setVisible(false);
             pairFrame.setVisible(true);
-            pairFrame.setSize(500, 500);
+            pairFrame.setSize(800, 600);
 
             Runnable run = new Runnable() {
                 @Override
@@ -2096,7 +2117,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     pairComparisonPanel1.revalidate();
                     pairComparisonPanel1.repaint();
 
-                    pairFrame.setTitle(primary.getName() + " vs. " + pairComparisonPanel1.getListener().getModels().get(1));
+                    pairFrame.setTitle(primary.getName() + " vs. " + bc.getModel(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName());
                     Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
 
                     pairFrame.setIconImage(icon);
@@ -2199,6 +2220,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void cylRadiusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cylRadiusStateChanged
         getContext().setCylinderRadius(cylRadius.getValue());
     }//GEN-LAST:event_cylRadiusStateChanged
+
+    private void lensSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_lensSliderStateChanged
+        plotsDrawingPanelAuxiliary2.setPeakStrength(lensSlider.getValue()/(float)10);
+    }//GEN-LAST:event_lensSliderStateChanged
 
     private void boxplotCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxplotCheckBoxActionPerformed
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getInfo().setShowBoxplot(boxplotCheckBox.isSelected());
@@ -2464,6 +2489,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2496,6 +2522,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
+    private javax.swing.JSlider lensSlider;
     private javax.swing.JSlider maxThresholdSlider;
     private javax.swing.JSpinner maxThresholdSpinner;
     private javax.swing.JComboBox metricComboBox;

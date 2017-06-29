@@ -54,18 +54,23 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     private boolean subselectionSelected;
     private Point subselectionTip = new Point();
     private String[] names;
+    private int[] nameIndices;
     private int subselWidth = 0;
     private int selectedModelIndex = -1;
     private int selectedVertexIndex = -1;
     private boolean absolute = false;
     private ColorScheme scheme = ColorScheme.DIVERGING;
+    private static final float MINIMAL_HEIGHT = 30;
+    private boolean zoom;
+    private float peakStrength = 5;
+    private int selectionIndex = -1;
 
     /**
      * Creates new form plotsPanel
      */
     public PlotsDrawingPanelAuxiliary() {
         initComponents();
-
+        mousePosition = new Point(0, 0);
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 50; j++) {
                 Random r = new Random();
@@ -93,6 +98,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }
 
     public void setValues(float[][] values) {
+        resetNameIndices();
         unsortedValues = values;
         values = sortValues(values);
         this.vl = values;
@@ -101,11 +107,18 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         this.repaint();
         this.repaint();
     }
+    
+    private void resetNameIndices(){
+        nameIndices = new int[names.length];
+        for(int i = 0; i<nameIndices.length; i++){
+            nameIndices[i] = i;            
+        }
+    }
 
     public void resetValues() {
+        resetNameIndices();
         values = sortValues(unsortedValues);
         this.vl = values;
-        this.values = values;
         select = false;
         this.repaint();
         this.repaint();
@@ -161,9 +174,9 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
                     s[j] = tmpf;
 
                     if (names != null && names[i] != null) {
-                        String nm = names[i];
-                        names[i] = names[j];
-                        names[j] = nm;
+                        int idx = nameIndices[i];
+                        nameIndices[i] = nameIndices[j];
+                        nameIndices[j] = idx;
                     }
                 }
             }
@@ -172,9 +185,6 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         return val;
     }
 
-    /*   public void setP(PlotsPanel p) {
-     this.p = p;
-     }*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -227,9 +237,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             select = true;
             float y = lastClickedPoint.y;
             y = (float) Math.floor((y - 70) / (cellHeight + 1));
-            //          p.getHistogramPanel1().setRestriction((int) y);
-
-            if (evt.getX() - subselWidth / 2 > activeArea.z) {
+            if (evt.getX() + subselWidth / 2 > activeArea.z) {
                 subselectionTip = new Point((int) activeArea.z - subselWidth, (int) (67 + (y * cellHeight) + y - 2));
             } else if (evt.getX() - subselWidth / 2 < activeArea.x) {
                 subselectionTip = new Point((int) activeArea.x, (int) (67 + (y * cellHeight) + y - 2));
@@ -241,19 +249,15 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             this.repaint();
 
         } else if (evt.getX() > 67 && evt.getX() < this.getWidth() - 158 && evt.getY() > (this.getHeight() - 63) && evt.getY() < this.getHeight() - 13) {
-            // 67, this.getHeight() - 63, this.getWidth() - 225, 50
             float width = this.getWidth() - 230;
 
             int ratio = (int) Math.ceil(vl[0].length / (int) Math.floor(width));
             int x = subselectionTip.x - 70;
             int first = x * ratio;
-            int y = lastClickedPoint.y;
-            y = (int) Math.floor((y - 70) / (cellHeight + 1));
             int i = x + first - 70;
             System.out.println(i);
 
         } else {
-            //  p.getHistogramPanel1().setRestriction(-1);
             select = false;
             selectedModelIndex = -1;
         }
@@ -261,11 +265,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }
 
     public int getSelectedModelIndex() {
-        return selectedModelIndex;
-    }
-
-    public void setSelectedModelIndex(int selectedModelIndex) {
-        this.selectedModelIndex = selectedModelIndex;
+        return selectedModelIndex != -1 ? nameIndices[selectedModelIndex] : -1;
     }
 
     public int getSelectedVertexIndex() {
@@ -310,13 +310,13 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         slider1Tip = new Point(this.getWidth() - 50, 70);
         slider2Tip = new Point(this.getWidth() - 50, this.getHeight() - 70);
-        select = false;
         adjustValues();
 
 
     }//GEN-LAST:event_formComponentResized
 
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        mousePosition = new Point(evt.getX(), evt.getY());
         /*       lastMovedTime = System.currentTimeMillis();
          mousePosition = new Point(evt.getX(), evt.getY());
          final PlotsDrawingPanelAuxiliary pdp = this;
@@ -360,7 +360,6 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
             subselP = subselectionTip.x;
         }
 
-
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
@@ -370,6 +369,7 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        mousePosition = new Point(evt.getX(), evt.getY());
         if (slider1Selected) {
             int y = evt.getY() - lastClickedPoint.y;
             if (slider1P + y < 70) {
@@ -405,6 +405,12 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formMouseDragged
 
+    private float getGauss(int x, float peak, int center, int width) {
+        float exp = -(float) peak * (float) (Math.pow(x - center, 2)) / width;
+        float value = peak * (float) Math.exp(exp);
+        return value + 1;
+    }
+
     @Override
     public void paint(Graphics g) {
 
@@ -413,104 +419,146 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         g2.fill(new Rectangle2D.Double(0, 0, this.getWidth(), this.getHeight()));
         int height = this.getHeight() - 140;
 
-        paintGrdient(g2, this.getWidth() - 70, 70, height, 20);
-        int width = this.getWidth() - 230;
-        if (values[0].length > width + 1) {
-            adjustValues();
-        }
-
-        int numValuesX = values.length;
-        int numValuesY = values[0].length;
-
-        //   cellWidth = width / (float) numValuesX - 1;
-        cellHeight = height / (float) numValuesX - 1;
-
-        float maxValue = Float.MIN_VALUE;
-        float minValue = Float.MAX_VALUE;
-        for (int i = 0; i < numValuesX; i++) {
-            for (int j = 0; j < numValuesY; j++) {
-                if (absolute) {
-                    if (Math.abs(values[i][j]) > maxValue) {
-                        maxValue = Math.abs(values[i][j]);
-                    }
-                    if (Math.abs(values[i][j]) < minValue) {
-                        minValue = Math.abs(values[i][j]);
-                    }
-                } else {
-                    if (values[i][j] > maxValue) {
-                        maxValue = values[i][j];
-                    }
-                    if (values[i][j] < minValue) {
-                        minValue = values[i][j];
-                    }
-                }
+        if (names != null) {
+            paintGrdient(g2, this.getWidth() - 70, 70, height, 20);
+            int width = this.getWidth() - 230;
+            if (values[0].length > width + 1) {
+                adjustValues();
             }
-        }
-        if (minValue < 0) {
-            if (Math.abs(minValue) > maxValue) {
-                maxValue = Math.abs(minValue);
-            } else {
-                minValue = -maxValue;
-            }
-        }
 
-        activeArea = new Vector4f(70, 70, this.getWidth() - 160, this.getHeight() - 70);
+            int numValuesX = values.length;
+            int numValuesY = values[0].length;
 
-        FontMetrics fm = getFontMetrics(getFont());
-        int h = fm.getHeight();
-        /*  if (cellHeight < h) {
-         Font yFont = g2.getFont();
-         g2.setFont(yFont.deriveFont(cellHeight));
-         }*/
-        Font f = getFont();
-        f = f.deriveFont(10f);
-        g2.setFont(f);
+            //   cellWidth = width / (float) numValuesX - 1;
+            cellHeight = height / (float) numValuesX - 1;
 
-        if (numValuesY > width) {
-            numValuesY = width;
-        }
-        float s1 = (slider1Tip.y - 70) * ((2f / 3f) / (this.getHeight() - 140));
-        float s2 = (slider2Tip.y - 70) * ((2f / 3f) / (this.getHeight() - 140));
-        float distance = (maxValue - minValue) / (2f / 3f);
-
-        for (int i = 0; i < numValuesX; i++) {
-            for (int j = 0; j < numValuesY; j++) {
-                g2.setPaint(Color.BLACK);
-                if (j == 0) {
-                    fm = getFontMetrics(getFont());
-                    h = fm.getHeight();
-                    if (h > cellHeight) {
-                        h = (int) cellHeight;
-                    }
-                    int w = fm.stringWidth(names[i]);
-                    if (w > 65) {
-
-                    }
-
-                    g2.drawString(names[i], 75 - w, 70 + (i + 1) * cellHeight + i - (cellHeight - h));
-                }
-
-                float v = values[i][j];
-                if (absolute) {
-                    v = Math.abs(v);
-                }
-                v = (v - minValue) / distance;
-                ColorSelector s = new ColorSelector();
-
-                if (v >= s1 && v <= s2) {
+            float maxValue = Float.MIN_VALUE;
+            float minValue = Float.MAX_VALUE;
+            for (int i = 0; i < numValuesX; i++) {
+                for (int j = 0; j < numValuesY; j++) {
                     if (absolute) {
-                        Color c = s.chooseColor(minValue, maxValue, Math.abs(values[i][j]), scheme);
-                        g2.setPaint(c);
+                        if (Math.abs(values[i][j]) > maxValue) {
+                            maxValue = Math.abs(values[i][j]);
+                        }
+                        if (Math.abs(values[i][j]) < minValue) {
+                            minValue = Math.abs(values[i][j]);
+                        }
                     } else {
-                        Color c = s.chooseColor(minValue, maxValue, values[i][j], scheme);
-                        g2.setPaint(c);
-
+                        if (values[i][j] > maxValue) {
+                            maxValue = values[i][j];
+                        }
+                        if (values[i][j] < minValue) {
+                            minValue = values[i][j];
+                        }
                     }
-                } else {
-                    g2.setPaint(Color.getHSBColor(1, 0, 0.5f));
                 }
+            }
+            if (minValue < 0) {
+                if (Math.abs(minValue) > maxValue) {
+                    maxValue = Math.abs(minValue);
+                } else {
+                    minValue = -maxValue;
+                }
+            }
 
-                /* if (v >= s1 && v <= s2) {
+            activeArea = new Vector4f(70, 70, this.getWidth() - 160, this.getHeight() - 70);
+
+            Font f = getFont();
+            f = f.deriveFont(10f);
+            g2.setFont(f);
+
+            if (numValuesY > width) {
+                numValuesY = width;
+            }
+            float s1 = (slider1Tip.y - 70) * ((2f / 3f) / (this.getHeight() - 140));
+            float s2 = (slider2Tip.y - 70) * ((2f / 3f) / (this.getHeight() - 140));
+            float distance = (maxValue - minValue) / (2f / 3f);
+
+            if (cellHeight < MINIMAL_HEIGHT && peakStrength > 0 && pointInActiveArea(mousePosition)) {
+                zoom = true;
+            } else {
+                zoom = false;
+            }
+
+            float y = mousePosition.y;
+            int row = (int) Math.floor((y - 70) / (cellHeight + 1));
+            float zoomCellHeight = height / (float) numValuesX - 1;
+            float gauss = 0;
+            int gauseHeight = (row - 1) > (numValuesX - row) ? (row - 1) : (numValuesX - row);
+
+            if (select  && lastClickedPoint != null) {               
+                selectionIndex = (int) Math.floor((lastClickedPoint.y - 70) / (cellHeight + 1)); 
+                if(selectionIndex > -1 && selectionIndex < names.length)
+                paintZoom(g2);                 
+            }
+
+            if (pointInActiveArea(mousePosition) && zoom) {
+                for (int i = 0; i < numValuesX; i++) {
+                    gauss += getGauss(i, peakStrength, row, gauseHeight);
+                }
+                zoomCellHeight = height / (float) gauss;
+            }
+
+            float selectionPos = -1;
+            float selectionHeight = -1;
+
+            float gaussY = 0;
+            for (int i = 0; i < numValuesX; i++) {
+                float currentHeight = getGauss(i, peakStrength, row, gauseHeight) * zoomCellHeight;
+                if (select && i == selectionIndex) {
+                    selectionPos = gaussY;
+                    selectionHeight = currentHeight;
+                }
+                for (int j = 0; j < numValuesY; j++) {
+                    g2.setPaint(Color.BLACK);
+                    if (pointInActiveArea(mousePosition) && zoom) {
+                        if (j == 0) {
+                            if (currentHeight < 10) {
+                                float h = (int) currentHeight;
+                                g2.setFont(getFont().deriveFont(h));
+                            } else {
+                                g2.setFont(getFont().deriveFont(10f));
+                            }
+                            FontMetrics fm = getFontMetrics(getFont());
+                            int w = fm.stringWidth(names[nameIndices[i]]);
+                            g2.drawString(names[nameIndices[i]], 75 - w, 70 + gaussY + currentHeight / 2);
+                        }
+
+                    } else {
+                        if (j == 0) {
+                            float h = (int) cellHeight;
+                            if (cellHeight < 10) {
+                                g2.setFont(getFont().deriveFont(h));
+                            } else {
+                                g2.setFont(getFont().deriveFont(10f));
+                            }
+                            FontMetrics fm = getFontMetrics(getFont());
+                            int w = fm.stringWidth(names[nameIndices[i]]);
+                            g2.drawString(names[nameIndices[i]], 75 - w, 70 + (i + 1) * cellHeight + i - (cellHeight - h));
+                        }
+                    }
+
+                    float v = values[i][j];
+                    if (absolute) {
+                        v = Math.abs(v);
+                    }
+                    v = (v - minValue) / distance;
+                    ColorSelector s = new ColorSelector();
+
+                    if (v >= s1 && v <= s2) {
+                        if (absolute) {
+                            Color c = s.chooseColor(minValue, maxValue, Math.abs(values[i][j]), scheme);
+                            g2.setPaint(c);
+                        } else {
+                            Color c = s.chooseColor(minValue, maxValue, values[i][j], scheme);
+                            g2.setPaint(c);
+
+                        }
+                    } else {
+                        g2.setPaint(Color.getHSBColor(1, 0, 0.5f));
+                    }
+
+                    /* if (v >= s1 && v <= s2) {
                  if (v < 1 / (float) 3) {
                  g2.setPaint(Color.getHSBColor(1, 1 - 2 * v, 1 - v));
                  } else {
@@ -519,54 +567,61 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
                  } else {
                  g2.setPaint(Color.getHSBColor(v, 0, 0.5f));
                  }*/
-                g2.draw(new Line2D.Double(70 + j, 70 + (i * cellHeight) + i, 70 + j, 70 + (i * cellHeight) + i + cellHeight - 1));
+                    if (pointInActiveArea(mousePosition) && zoom) {
+                        Line2D l = new Line2D.Double(70 + j, 70 + gaussY + 1, 70 + j, 70 + gaussY + currentHeight - 1);
+                        g2.draw(l);
+                    } else {
+                        g2.draw(new Line2D.Double(70 + j, 70 + (i * cellHeight) + i, 70 + j, 70 + (i * cellHeight) + i + cellHeight - 1));
+                    }
+                }
+                gaussY += currentHeight;
+            }
 
+            paintSlider(g2, slider1Tip);
+
+            paintSlider(g2, slider2Tip);
+
+            paintScale(g2, maxValue, minValue,
+                    10);
+
+            //     Font f = g2.getFont();
+            Font fn = g2.getFont();
+
+            g2.setPaint(Color.BLACK);
+
+            g2.fill(
+                    new Rectangle2D.Double(70, 35, 165, 5));
+
+            int xPoints[] = {235, 250, 235};
+            int yPoints[] = {30, 38, 45};
+
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
+            g2.fill(
+                    new Polygon(xPoints, yPoints, 3));
+
+            fn.deriveFont(Font.BOLD,
+                    20f);
+            g2.setFont(fn);
+
+            g2.drawString(
+                    "Vertices", 70, 30);
+
+            g2.setFont(f);
+            if (select && selectionIndex> -1 && selectionIndex < names.length) {
+                paintSelection(g2, selectionIndex, selectionPos, selectionHeight);
+                paintSubselection(g2, selectionIndex, selectionPos, selectionHeight);
             }
         }
-
-        paintSlider(g2, slider1Tip);
-
-        paintSlider(g2, slider2Tip);
-
-        paintScale(g2, maxValue, minValue,
-                10);
-        if (select) {
-            paintSelection(g2, numValuesX, numValuesY);
-            paintSubselection(g2);
-            paintZoom(g2);
-        }
-        //     Font f = g2.getFont();
-        Font fn = g2.getFont();
-
-        g2.setPaint(Color.BLACK);
-
-        g2.fill(
-                new Rectangle2D.Double(70, 35, 165, 5));
-
-        int xPoints[] = {235, 250, 235};
-        int yPoints[] = {30, 38, 45};
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-        g2.fill(
-                new Polygon(xPoints, yPoints, 3));
-
-        fn.deriveFont(Font.BOLD,
-                20f);
-        g2.setFont(fn);
-
-        g2.drawString(
-                "Vertices", 70, 30);
-
-        g2.setFont(f);
 
     }
 
     private void paintScale(Graphics2D g2, float max, float min, int steps) {
+        g2.setFont(getFont().deriveFont(10f));
         g2.draw(new Line2D.Float(this.getWidth() - 70, 70, this.getWidth() - 70, this.getHeight() - 70));
         float stepHeight = (this.getHeight() - 140) / (float) steps;
         float step = (max - min) / (float) steps;
@@ -664,26 +719,29 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
         }
     }
 
-    private void paintSubselection(Graphics2D g2) {
-        float x = lastClickedPoint.x;
-        float y = lastClickedPoint.y;
-        y = (float) Math.floor((y - 70) / (cellHeight + 1));
+    private void paintSubselection(Graphics2D g2, float y, float gaussY, float currentHeight) {
         Color c = Color.getHSBColor(5f / 6f, 1, 1);
         g2.setPaint(c);
         g2.setStroke(new BasicStroke(2));
-        g2.draw(new Rectangle2D.Double(subselectionTip.x, subselectionTip.y, subselWidth, cellHeight + 9));
+        if (zoom) {
+            g2.draw(new Rectangle2D.Double(subselectionTip.x, 70 + gaussY, subselWidth, currentHeight));
+        } else {
+            g2.draw(new Rectangle2D.Double(subselectionTip.x, 67 + (y * cellHeight) + y - 2, subselWidth, cellHeight + 9));
+        }
 
         g2.draw(new Rectangle2D.Double(67, this.getHeight() - 63, this.getWidth() - 225, 50));
 
     }
 
-    private void paintSelection(Graphics2D g2, int numValuesX, int numValuesY) {
-        float x = lastClickedPoint.x;
-        float y = lastClickedPoint.y;
-        y = (float) Math.floor((y - 70) / (cellHeight + 1));
+    private void paintSelection(Graphics2D g2, float y, float gaussY, float currentHeight) {
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(2));
-        g2.draw(new Rectangle2D.Double(68, 67 + (y * cellHeight) + y, this.getWidth() - 228, cellHeight + 5));
+        if (zoom) {
+            g2.draw(new Rectangle2D.Double(68, 70 + gaussY, this.getWidth() - 228, currentHeight));
+        } else {
+            g2.draw(new Rectangle2D.Double(68, 67 + (y * cellHeight) + y, this.getWidth() - 228, cellHeight + 5));
+        }
+
         g2.setStroke(new BasicStroke(1));
 
     }
@@ -741,6 +799,14 @@ public class PlotsDrawingPanelAuxiliary extends javax.swing.JPanel {
          g2.setPaint(gp);
          g2.fill(new Rectangle2D.Double(x, y + (i * fraction), width, fraction));
          }*/
+    }
+
+    public float getPeakStrength() {
+        return peakStrength;
+    }
+
+    public void setPeakStrength(float peakStrength) {
+        this.peakStrength = peakStrength;
     }
 
 

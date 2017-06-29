@@ -490,8 +490,8 @@
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="secSolidCheckbox" min="-2" max="-2" attributes="0"/>
-                                      <Component id="primSolidCheckbox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="secondarySolidCheckbox" min="-2" max="-2" attributes="0"/>
+                                      <Component id="primarySolidCheckbox" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -504,23 +504,22 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel9" min="-2" pref="23" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="primaryColorPanel" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="primSolidCheckbox" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel9" min="-2" pref="23" max="-2" attributes="0"/>
+                                      <Component id="primaryColorPanel" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Component id="jLabel13" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="3" max="32767" attributes="0"/>
+                                  <Component id="primarySolidCheckbox" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="secondaryColorPanel" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="secSolidCheckbox" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="secondarySolidCheckbox" alignment="1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -776,24 +775,24 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="useContoursCheckboxActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="primSolidCheckbox">
+                <Component class="javax.swing.JCheckBox" name="secondarySolidCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.primSolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.secondarySolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="primSolidCheckboxActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="secondarySolidCheckboxActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="secSolidCheckbox">
+                <Component class="javax.swing.JCheckBox" name="primarySolidCheckbox">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.secSolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonConfiguration.primarySolidCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="secSolidCheckboxActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="primarySolidCheckboxActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="transpSpinner">
