@@ -151,7 +151,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jComboBox7 = new javax.swing.JComboBox();
         jLabel24 = new javax.swing.JLabel();
         jComboBox8 = new javax.swing.JComboBox();
-        jSlider5 = new javax.swing.JSlider();
+        auxLensSlider = new javax.swing.JSlider();
         jLabel7 = new javax.swing.JLabel();
         pairFrame = new javax.swing.JFrame();
         pairComparisonPanel = new cz.fidentis.gui.PairComparisonPanel();
@@ -476,11 +476,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        jSlider5.setMaximum(1000);
-        jSlider5.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jSlider5.toolTipText")); // NOI18N
-        jSlider5.addChangeListener(new javax.swing.event.ChangeListener() {
+        auxLensSlider.setMaximum(1000);
+        auxLensSlider.setToolTipText(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.auxLensSlider.toolTipText")); // NOI18N
+        auxLensSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider5StateChanged(evt);
+                auxLensSliderStateChanged(evt);
             }
         });
 
@@ -503,7 +503,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addComponent(jLabel24)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSlider5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(auxLensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -522,7 +522,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(auxLensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 11, Short.MAX_VALUE))))
@@ -2421,9 +2421,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_cylRadiusStateChanged
 
 
-    private void jSlider5StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider5StateChanged
-       plotsDrawingPanelAuxiliary2.setPeakStrength(jSlider5.getValue()/(float)10);
-    }//GEN-LAST:event_jSlider5StateChanged
+    private void auxLensSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_auxLensSliderStateChanged
+       plotsDrawingPanelAuxiliary2.setPeakStrength(auxLensSlider.getValue()/(float)10);
+    }//GEN-LAST:event_auxLensSliderStateChanged
 
     private void boxplotCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxplotCheckBoxActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setShowBoxplot(boxplotCheckBox.isSelected());
@@ -2587,6 +2587,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JTable alignmentTable;
     private javax.swing.JCheckBox allCutsCheckBox;
     private javax.swing.JRadioButton arbitraryRadioButton;
+    private javax.swing.JSlider auxLensSlider;
     private javax.swing.JCheckBox boxplotCheckBox;
     private javax.swing.JCheckBox boxplotContinuousCheckBox;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -2668,8 +2669,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSlider jSlider4;
-    private javax.swing.JSlider jSlider5;
     private javax.swing.JTable jTable1;
     private javax.swing.JSlider lensSlider;
     private javax.swing.JSlider maxThresholdSlider;
