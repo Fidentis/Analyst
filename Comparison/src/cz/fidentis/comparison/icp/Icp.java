@@ -357,12 +357,13 @@ public class Icp {
             Matrix inverse = trans.getTransMatrix().inverse();
 
             for (Vector3f v : verticies) {
-                double[] point = {v.x, v.y, v.z};
+               double[] point = {v.x, v.y, v.z};
                 Matrix p = new Matrix(point, 1);
                 p = p.times(inverse);
                 v.setX((float) p.get(0, 0));
                 v.setY((float) p.get(0, 1));
                 v.setZ((float) p.get(0, 2));
+ 
             }
         } else {
 
@@ -380,6 +381,9 @@ public class Icp {
                 }
             }
 
+            if(trans.getRotation() == null)
+                return;
+            
             //Quaternion reverse = conjugateQ(trans.getRotation());
             //Quaternion reverse = new Quaternion(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
             //reverse.inverse();

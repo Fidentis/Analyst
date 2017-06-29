@@ -299,6 +299,30 @@ public class ResultExports {
 
     }
     
+    public void exportVisualResults(Component tc, GLEventListener canvas1, GLEventListener canvas2, int width, int height){
+        String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
+
+        if (filePath == null) {
+            //selection of folder wasn't approved, nothing happens
+            return;
+        }
+
+        String filePath_left = createCanvasSpecificName(filePath, "_left");   
+        String filePath_right = createCanvasSpecificName(filePath, "_right");
+        
+        savePicture(filePath_left, tc, canvas1, width, height);
+        savePicture(filePath_right, tc, canvas2, width, height);
+    }
+
+    private String createCanvasSpecificName(String filePath, String specificName) {
+        if(filePath.endsWith(".png"))
+            filePath = filePath.substring(0, filePath.length() - 4) + specificName;
+        else
+            filePath += specificName;
+        
+        return filePath;
+    }
+    
      public void exportVisualResults(Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
 

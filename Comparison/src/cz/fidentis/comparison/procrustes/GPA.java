@@ -68,10 +68,14 @@ public class GPA implements Serializable {
      * This method moves this all configurations to the center and normalize theirs size
      */
     
-    public void normalizeAll(){
+    public List<ICPTransformation> normalizeAll(){
+        List<ICPTransformation> trans = new LinkedList<>();
+        
         for(int i = 0; i < configs.size(); i++){
-            configs.get(i).normalize(scaling);
+            trans.add(configs.get(i).normalize(scaling));
         }  
+        
+        return trans;
     }
     
     /**
@@ -169,7 +173,7 @@ public class GPA implements Serializable {
         List<ProcrustesAnalysis> helpList = new ArrayList();
         List<List<ICPTransformation>> trans = new ArrayList<>();
         
-        this.normalizeAll();
+        List<ICPTransformation> normalizationTrans = this.normalizeAll();
         
         ProcrustesAnalysis oldMean = configs.get(0);            //doesn't create copy 
         ProcrustesAnalysis newMean;
@@ -183,10 +187,13 @@ public class GPA implements Serializable {
                 return null;        //couldn't rotate
             
             List<ICPTransformation> t = new ArrayList<>();
+            t.add(normalizationTrans.get(i));
             t.add(tran);
             
             trans.add(t);
         }
+        
+        normalizationTrans = null;
         
         newMean = this.countMeanConfig();
         newDistance = newMean.countDistance(oldMean, scaling);

@@ -23,6 +23,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.JPopupMenu;
@@ -389,7 +390,7 @@ public final class NavigatorTopComponent extends TopComponent {
                             List<FacialPoint> l = batchComparison.getFacialPoints(model.getName());
                             
                             // reverse transformations made on facial points if needed
-                            if(batchComparison.getTrans() != null) {
+                            if(batchComparison.getTrans() != null && batchComparison.getTrans().size() > lastNodeIndex) {
                                 l = Icp.instance().reverseFacialPointsRegistration(l, batchComparison.getTrans(lastNodeIndex), batchComparison.isFpScaling());
                             }
                             
@@ -399,21 +400,21 @@ public final class NavigatorTopComponent extends TopComponent {
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = batchComparison.getRegistrationResults().get(lastNodeIndex);
                         
-                        Model model = ModelLoader.instance().loadModel(file, true, true);
+                        Model model = ModelLoader.instance().loadModel(file, true, false);
                         listener.setModels(model);
                         
                         // display facial points of corresponding model (by index)
                         listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(lastNodeIndex).getName()));
                     }
-                    if(previousNodeText.equals(strings.getString("tree.node.averageModel"))) {
-                        if(batchComparison.getAverageFace() == null) listener.setModels(batchComparison.getAverageFace());
-                        else listener.setModels(batchComparison.getAverageFace());
+                    if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.averageModel"))) {
+                        listener.setModels(batchComparison.getAverageFace());
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.results"))) {
                         if(batchComparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
                             listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(0).getName()));
                             listener.setProcrustes(true);
                         } else {
+                            listener.setModels(batchComparison.getAverageFace());
                             listener.drawHD(true);
                         }
                     }
@@ -439,7 +440,7 @@ public final class NavigatorTopComponent extends TopComponent {
                             List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());   //there will always be at least empty list
                             
                             // reverse transformations made on facial points if needed
-                            if(comparison.getTrans() != null) {
+                            if(comparison.getTrans() != null && comparison.getTrans().size() > lastNodeIndex) {
                                 l = Icp.instance().reverseFacialPointsRegistration(l, comparison.getTrans(lastNodeIndex), comparison.isFpScaling());
                             }
                             
@@ -449,7 +450,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     if(previousNodeText.equals(strings.getString("tree.node.registeredModels"))) {
                         File file = comparison.getRegisteredModels().get(lastNodeIndex);
                         
-                        Model model = ModelLoader.instance().loadModel(file, true, true);
+                        Model model = ModelLoader.instance().loadModel(file, true, false);
                         listenerSecondary.setModels(model);
                         
                         // display facial points of corresponding model (by index)

@@ -46,7 +46,7 @@ public final class FileUtils {
 
     private FileUtils() {
         try {
-            createTMPfolder(true);
+            createTMPfolder(false);
         } catch (FileManipulationException ex) {
             Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
         }

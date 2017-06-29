@@ -403,7 +403,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                     }
 
                     //Created list of points
-                    Procrustes1ToMany procrustes = new Procrustes1ToMany(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints(),
+                    Procrustes1ToMany procrustes = new Procrustes1ToMany(c.getFacialPoints(c.getPrimaryModel().getName()),
                             list, c.isFpScaling());
 
                     String result = procrustes.compare1toN(c.getFpTreshold() / 100f, tc.getOneToManyViewerPanel().getListener1().getModel().getName(),
@@ -476,9 +476,14 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getModel().getFile(), false, true);
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setModels(model);
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().getFacialPoints().clear();
+        getContext().getFacialPoints().clear();
 
         model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getModel().getFile(), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setModels(model);
+        GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().getFacialPoints().clear();
+ 
+        
         getContext().setState(1);
         GUIController.getConfigurationTopComponent().addOneToManyRegistrationComponent();
     }//GEN-LAST:event_jButton1ActionPerformed

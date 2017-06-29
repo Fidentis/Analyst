@@ -5,6 +5,7 @@ import Jama.SingularValueDecomposition;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
+import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -517,18 +518,22 @@ public class ProcrustesAnalysis implements Serializable {
      * To be able to visually analyse the results within the software, results are scaled to 100 instead of 1
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    public void normalize(boolean scaling) {    
+    public ICPTransformation normalize(boolean scaling) {    
         
         Vector3f cs = this.findCentroid();
         float size = this.countSize(cs);
 
-        this.centerConfigToOrigin(cs);     
+        this.centerConfigToOrigin(cs);   
+        Vector3f normalizationTrans = MathUtils.instance().multiplyVectorByNumber(cs, -1);
+        ICPTransformation trans = new ICPTransformation(normalizationTrans, 1.0f, null, 0.0f, null);
         
         if (scaling && config.keySet().size() >= 3) {
         
             this.setSizeTo1(size / SIZE_SCALE);
             //change scale to size / 100 to get proper size of model
         }
+        
+        return trans;
     }
 
    /**
@@ -586,11 +591,13 @@ public class ProcrustesAnalysis implements Serializable {
      * @param pa2 another configuration
      * @param scaling says if algorithm should set size to 1 or keep it
      */
-    private ICPTransformation superimpose(ProcrustesAnalysis pa2, boolean scaling) {
-       this.normalize(scaling);
+    private List<ICPTransformation> superimpose(ProcrustesAnalysis pa2, boolean scaling) {
+      List<ICPTransformation> trans = new LinkedList<>();
+        
+       trans.add(this.normalize(scaling));
        pa2.normalize(scaling);
 
-       ICPTransformation trans = pa2.rotate(this);
+       trans.add(pa2.rotate(this));
        
        return trans;
     }
@@ -665,19 +672,13 @@ public class ProcrustesAnalysis implements Serializable {
      * @return distance Procrustes distance
      */
     public List<ICPTransformation> doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
-        List<ICPTransformation> t = new LinkedList<>();
-
-        ICPTransformation trans = this.superimpose(config2, scaling);
+        List<ICPTransformation> trans = this.superimpose(config2, scaling);
         if(trans == null)       //no transformation performed
             return null;
         setVisMatrix();
         config2.setVisMatrix();
-        //distance = this.countDistance(config2);
 
-        //return distance;
-        t.add(trans);
-        
-        return t;
+        return trans;
     }
 
 
