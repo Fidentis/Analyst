@@ -1187,7 +1187,7 @@ public final class OpenProject implements ActionListener {
         if(attr != null && !attr.isEmpty())
             arbitraryPlane.z = Float.parseFloat(attr);
         
-        crossViz.setArbitraryPlanePos(arbitraryPlane);
+        crossViz.setArbitraryPlanePos(arbitraryPlane.x, arbitraryPlane.y, arbitraryPlane.z);
         
         Vector3f planePos = new Vector3f();
         attr = crossE.getAttribute("planePosX");
@@ -1199,7 +1199,7 @@ public final class OpenProject implements ActionListener {
         attr = crossE.getAttribute("planePosZ");
         if(attr != null && !attr.isEmpty())
             planePos.z = Float.parseFloat(attr);
-        crossViz.setPlanePosition(planePos);
+        crossViz.setPlanePosition(planePos.x, planePos.y, planePos.z);
         
         crossViz.setCrosscutSize(Integer.parseInt(crossE.getAttribute("crosscutSize")));
         crossViz.setCrosscutThickness(Integer.parseInt(crossE.getAttribute("crosscutThickness")));

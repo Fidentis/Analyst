@@ -127,8 +127,8 @@ public class BatchGUIsetup {
          data.setFpSize(FP_SIZE);  
        
          data.setCrossCutPlaneIndex(SELECTED_PLANE);
-         data.setArbitraryPlanePos(ARBITRARY_NORMAL);
-         data.setPlanePosition(PLANE_POSITION);
+         data.setArbitraryPlanePos(ARBITRARY_NORMAL.x, ARBITRARY_NORMAL.y, ARBITRARY_NORMAL.z);
+         data.setPlanePosition(PLANE_POSITION.x, PLANE_POSITION.y, PLANE_POSITION.z);
          data.setCrosscutSize(CROSSCUT_SIZE);
          data.setCrosscutThickness(CROSSCUT_THICKNESS);
          data.setCrosscutColor(CROSSCUT_COLOR);       

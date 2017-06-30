@@ -1620,42 +1620,42 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void xPositionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xPositionSpinnerStateChanged
         if (!valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()), true);
-            getContext().setPlanePosition(new Vector3f((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()));
+            getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
         }
     }//GEN-LAST:event_xPositionSpinnerStateChanged
 
     private void yPositionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_yPositionSpinnerStateChanged
         if (!valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()), true);
-            getContext().setPlanePosition(new Vector3f((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()));
+            getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
         }
     }//GEN-LAST:event_yPositionSpinnerStateChanged
 
     private void zPositionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_zPositionSpinnerStateChanged
         if (!valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()), true);
-            getContext().setPlanePosition(new Vector3f((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()));
+            getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
         }
     }//GEN-LAST:event_zPositionSpinnerStateChanged
 
     private void zArbitrarySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_zArbitrarySpinnerStateChanged
         if (zArbitrarySpinner.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()), true);
-            getContext().setArbitraryPlanePos(new Vector3f((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()));
+            getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
         }
     }//GEN-LAST:event_zArbitrarySpinnerStateChanged
 
     private void yArbitrarySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_yArbitrarySpinnerStateChanged
         if (yArbitrarySpinner.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()), true);
-            getContext().setArbitraryPlanePos(new Vector3f((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()));
+            getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
         }
     }//GEN-LAST:event_yArbitrarySpinnerStateChanged
 
     private void xArbitrarySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xArbitrarySpinnerStateChanged
         if (xArbitrarySpinner.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()), true);
-            getContext().setArbitraryPlanePos(new Vector3f((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()));
+            getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
         }
     }//GEN-LAST:event_xArbitrarySpinnerStateChanged
 
@@ -2223,14 +2223,14 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         xArbitrarySpinner.setValue(normal.x);
         yArbitrarySpinner.setValue(normal.y);
         zArbitrarySpinner.setValue(normal.z);   
-        getContext().setArbitraryPlanePos(new Vector3f((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()));
+        getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
     }
 
     public void setPlanePoint(Vector3f p) {
         xPositionSpinner.setValue(p.x);
         yPositionSpinner.setValue(p.y);
         zPositionSpinner.setValue(p.z);
-        getContext().setPlanePosition(new Vector3f((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()));
+        getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
 
     }
 
