@@ -9,6 +9,7 @@ import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.ViewerPanel;
 import cz.fidentis.gui.actions.landmarks.EditLandmarkID;
 import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.model.Model;
@@ -32,7 +33,7 @@ import javax.vecmath.Vector3f;
  *
  * @author Katka
  */
-public class ViewerPanel_1toN extends javax.swing.JPanel {
+public class ViewerPanel_1toN extends javax.swing.JPanel implements ViewerPanel {
 
     private ProjectTopComponent projectComponent;
 
@@ -96,7 +97,8 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     
     
 
-    void setPlaneNormal(Vector3f vector3f, boolean recountEverything) {
+    @Override
+    public void setPlaneNormal(Vector3f vector3f, boolean recountEverything) {
         listener1.setPlaneNormal(vector3f);
         listener2.setPlaneNormal(vector3f);
 
@@ -118,7 +120,8 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
         }
     }
 
-    void setPlanePoint(Vector3f vector3f, boolean recountEverything) {
+    @Override
+    public void setPlanePoint(Vector3f vector3f, boolean recountEverything) {
         listener1.setPlanePoint(vector3f);
         listener2.setPlanePoint(vector3f);
 
@@ -573,4 +576,5 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     private cz.fidentis.gui.Canvas canvas2;
     private javax.swing.JSplitPane jSplitPane1;
     // End of variables declaration//GEN-END:variables
+
 }
