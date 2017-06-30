@@ -1017,15 +1017,15 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         colorMapPanelLayout.setHorizontalGroup(
             colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(colorMapPanelLayout.createSequentialGroup()
-                .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel21)
+                .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(colorMapPanelLayout.createSequentialGroup()
                         .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(minThreshSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(minThreshSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(maxThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
@@ -1049,15 +1049,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(colorMapPanelLayout.createSequentialGroup()
                 .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(colorMapPanelLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(colorMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
@@ -1261,13 +1259,11 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 230, Short.MAX_VALUE))
                     .addComponent(slicesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(colorMapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(59, 59, 59))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(cylRadiusLabel)
                         .addGap(15, 15, 15)
@@ -1291,7 +1287,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cylLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(cylLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1644,42 +1641,42 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private void xPositionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xPositionSpinnerStateChanged
         if (!valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()), true);
-            getContext().getPlanePosition().x = (float) xPositionSpinner.getValue();
+            getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
         }
     }//GEN-LAST:event_xPositionSpinnerStateChanged
 
     private void yPositionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_yPositionSpinnerStateChanged
         if (!valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()), true);
-            getContext().getPlanePosition().y = (float) yPositionSpinner.getValue();
+            getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
         }
     }//GEN-LAST:event_yPositionSpinnerStateChanged
 
     private void zPositionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_zPositionSpinnerStateChanged
         if (!valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlanePoint(new Vector3f((float) xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue()), true);
-            getContext().getPlanePosition().z = (float) zPositionSpinner.getValue();
+            getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
         }
     }//GEN-LAST:event_zPositionSpinnerStateChanged
 
     private void zArbitrarySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_zArbitrarySpinnerStateChanged
         if (zArbitrarySpinner.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()), true);
-            getContext().getArbitraryPlanePos().z = (float) zArbitrarySpinner.getValue();
+            getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
         }
     }//GEN-LAST:event_zArbitrarySpinnerStateChanged
 
     private void yArbitrarySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_yArbitrarySpinnerStateChanged
         if (yArbitrarySpinner.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()), true);
-            getContext().getArbitraryPlanePos().y = (float) yArbitrarySpinner.getValue();
+            getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
         }
     }//GEN-LAST:event_yArbitrarySpinnerStateChanged
 
     private void xArbitrarySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xArbitrarySpinnerStateChanged
         if (xArbitrarySpinner.isEnabled() && !valuesModified) {
             GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setPlaneNormal(new Vector3f((float) xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue()), true);
-            getContext().getArbitraryPlanePos().x = (float) xArbitrarySpinner.getValue();
+            getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
         }
     }//GEN-LAST:event_xArbitrarySpinnerStateChanged
 
@@ -1692,7 +1689,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_arbitraryPlaneRadioButtonActionPerformed
 
     private void xzPlaneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xzPlaneRadioButtonActionPerformed
-
         setNormalControlsEnabled(false);
         xArbitrarySpinner.setValue(0f);
         yArbitrarySpinner.setValue(1f);
@@ -2240,16 +2236,26 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         getContext().setShowPlane(showPlaneCheckBox.isSelected());
     }//GEN-LAST:event_showPlaneCheckBoxActionPerformed
 
+    public void enableArbitraryNormal() {
+        getContext().setCrossCutPlaneIndex(4);
+        arbitraryPlaneRadioButton.setEnabled(true);
+        arbitraryPlaneRadioButton.setSelected(true);
+        setNormalControlsEnabled(true);
+        
+    }
+    
     public void setPlaneNormal(Vector3f normal) {
         xArbitrarySpinner.setValue(normal.x);
         yArbitrarySpinner.setValue(normal.y);
-        zArbitrarySpinner.setValue(normal.z);
+        zArbitrarySpinner.setValue(normal.z);   
+        getContext().setArbitraryPlanePos((float)xArbitrarySpinner.getValue(), (float) yArbitrarySpinner.getValue(), (float) zArbitrarySpinner.getValue());
     }
 
     public void setPlanePoint(Vector3f p) {
         xPositionSpinner.setValue(p.x);
         yPositionSpinner.setValue(p.y);
         zPositionSpinner.setValue(p.z);
+        getContext().setPlanePosition((float)xPositionSpinner.getValue(), (float) yPositionSpinner.getValue(), (float) zPositionSpinner.getValue());
 
     }
 
@@ -2348,6 +2354,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 break;
         }
 
+        valuesModified = true;
         xArbitrarySpinner.setValue(c.getArbitraryPlanePos().x);
         yArbitrarySpinner.setValue(c.getArbitraryPlanePos().y);
         zArbitrarySpinner.setValue(c.getArbitraryPlanePos().z);
@@ -2355,6 +2362,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         xPositionSpinner.setValue(c.getPlanePosition().x);
         yPositionSpinner.setValue(c.getPlanePosition().y);
         zPositionSpinner.setValue(c.getPlanePosition().z);
+        valuesModified = false;
 
         crosscutSizeSlider.setValue(c.getCrosscutSize());
         crosscutThicknessSlider.setValue(c.getCrosscutThickness());

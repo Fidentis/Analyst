@@ -165,6 +165,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
         setPlanePoint(p, false);
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().setValuesModified(true);
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().setPlanePoint(p);
+        GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().enableArbitraryNormal();
         GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().setValuesModified(false);
     }
 
@@ -440,6 +441,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                     setPlaneNormal(n,false);
                     GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().setValuesModified(true);
                     GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().setPlaneNormal(n);
+                    GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().enableArbitraryNormal();
                     GUIController.getConfigurationTopComponent().getOneToManyComparisonResults().setValuesModified(false);
                 } else {
                     listener1.rotate(-thetaX, -thetaY);

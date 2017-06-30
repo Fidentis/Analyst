@@ -532,6 +532,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                     setPlaneNormal(n, false);
                     GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(true);
                     GUIController.getConfigurationTopComponent().getBatchComparisonResults().setPlaneNormal(n);
+                    GUIController.getConfigurationTopComponent().getBatchComparisonResults().enableArbitraryNormal();
                     GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(false);
                 } else {
                     listener.rotate(-thetaX, -thetaY);
@@ -582,6 +583,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         setPlanePoint(p, true);
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(true);
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setPlanePoint(p);
+        GUIController.getConfigurationTopComponent().getBatchComparisonResults().enableArbitraryNormal();
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(false);
     }
 
@@ -660,6 +662,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                     n.normalize();
                     setPlaneNormal(n, true);
                     GUIController.getConfigurationTopComponent().getBatchComparisonResults().setPlaneNormal(n);
+                    GUIController.getConfigurationTopComponent().getBatchComparisonResults().enableArbitraryNormal();
                 } else {
                     listener.rotate(-thetaX, -thetaY);
                 }

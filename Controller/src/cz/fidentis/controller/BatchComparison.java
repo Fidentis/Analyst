@@ -177,16 +177,16 @@ public class BatchComparison {
         return crosscutViz.getArbitraryPlanePos();
     }
 
-    public void setArbitraryPlanePos(Vector3f arbitraryPlanePos) {
-        crosscutViz.setArbitraryPlanePos(arbitraryPlanePos);
+    public void setArbitraryPlanePos(float x, float y, float z) {
+        crosscutViz.setArbitraryPlanePos(x, y, z);
     }
 
     public Vector3f getPlanePosition() {
         return crosscutViz.getPlanePosition();
     }
 
-    public void setPlanePosition(Vector3f planePosition) {
-        crosscutViz.setPlanePosition(planePosition);
+    public void setPlanePosition(float x, float y, float z) {
+        crosscutViz.setPlanePosition(x, y, z);
     }
 
     public int getCrosscutSize() {

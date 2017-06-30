@@ -47,7 +47,7 @@ public class OneToManyGUISetup {
    
    //comparison results
    private static final int SELECTED_METRIC = 0;
-   private static final int SELECTED_PLANE = 0;
+   private static final int SELECTED_PLANE = 1;
    private static final Vector3f ARBITRARY_NORMAL = new Vector3f(1,0,0);
    private static final Vector3f PLANE_POSITION = new Vector3f();
    private static final int CROSSCUT_SIZE = 50;
@@ -57,6 +57,9 @@ public class OneToManyGUISetup {
    private static final boolean CROSSCUT_VECTORS = true;
    private static final boolean ALL_CUTS = false;
    private static final boolean SAMPLINGR_RAYS = false;
+   private static final boolean SHOW_PLANE = true;
+   private static final boolean BOXPLOT = false;
+   private static final boolean CONTINUOUS_BOXPLOT = false;
    
    private static final VisualizationType VISUALIZATION = VisualizationType.COLORMAP;
    private static final int VALUES_TYPE = 0;
@@ -124,8 +127,8 @@ public class OneToManyGUISetup {
          data.setFpSize(FP_SIZE);  
        
          data.setCrossCutPlaneIndex(SELECTED_PLANE);
-         data.setArbitraryPlanePos(ARBITRARY_NORMAL);
-         data.setPlanePosition(PLANE_POSITION);
+         data.setArbitraryPlanePos(ARBITRARY_NORMAL.x, ARBITRARY_NORMAL.y, ARBITRARY_NORMAL.z );
+         data.setPlanePosition(PLANE_POSITION.x, PLANE_POSITION.y, PLANE_POSITION.z);
          data.setCrosscutSize(CROSSCUT_SIZE);
          data.setCrosscutThickness(CROSSCUT_THICKNESS);
          data.setCrosscutColor(CROSSCUT_COLOR);       
@@ -134,6 +137,9 @@ public class OneToManyGUISetup {
          data.setShowVectors(CROSSCUT_VECTORS);
          data.setAllCuts(ALL_CUTS);
          data.setSamplingRays(SAMPLINGR_RAYS);
+         data.setShowPlane(SHOW_PLANE);
+         data.setShowBoxplot(BOXPLOT);
+         data.setShowBoxplotFunction(CONTINUOUS_BOXPLOT);
      }
    
 }
