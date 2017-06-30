@@ -1912,17 +1912,26 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         }
     }
+    
+     public void enableArbitraryNormal() {
+        getContext().setCrossCutPlaneIndex(4);
+        arbitraryRadioButton.setEnabled(true);
+        arbitraryRadioButton.setSelected(true);
+        setNormalControlsEnabled(true);        
+    }
 
     public void setPlaneNormal(Vector3f normal) {
         normalSpinnerX.setValue(normal.x);
         normalSpinnerY.setValue(normal.y);
         normalSpinnerZ.setValue(normal.z);
+        getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
     }
 
     public void setPlanePoint(Vector3f p) {
         positionSpinnerX.setValue(p.x);
         positionSpinnerY.setValue(p.y);
         positionSpinnerZ.setValue(p.z);
+        getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
 
     }
 
@@ -2075,42 +2084,42 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void normalSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerXStateChanged
         if (normalSpinnerX.isEnabled() && !valuesModified) {
-            getContext().getArbitraryPlanePos().x = (float) normalSpinnerX.getValue();
+            getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerXStateChanged
 
     private void normalSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerYStateChanged
         if (normalSpinnerY.isEnabled() && !valuesModified) {
-            getContext().getArbitraryPlanePos().y = (float) normalSpinnerY.getValue();
+            getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerYStateChanged
 
     private void normalSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerZStateChanged
         if (normalSpinnerZ.isEnabled() && !valuesModified) {
-            getContext().getArbitraryPlanePos().z = (float) normalSpinnerZ.getValue();
+            getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerZStateChanged
 
     private void positionSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerZStateChanged
         if (!valuesModified) {
-            getContext().getPlanePosition().z = (float) positionSpinnerZ.getValue();
+            getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerZStateChanged
 
     private void positionSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerYStateChanged
         if (!valuesModified) {
-            getContext().getPlanePosition().y = (float) positionSpinnerY.getValue();
+            getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerYStateChanged
 
     private void positionSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerXStateChanged
         if (!valuesModified) {
-            getContext().getPlanePosition().x = (float) positionSpinnerX.getValue();
+            getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerXStateChanged
@@ -2470,6 +2479,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 break;
         }
 
+        valuesModified = true;
         normalSpinnerX.setValue(c.getArbitraryPlanePos().x);
         normalSpinnerY.setValue(c.getArbitraryPlanePos().y);
         normalSpinnerZ.setValue(c.getArbitraryPlanePos().z);
@@ -2477,6 +2487,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         positionSpinnerX.setValue(c.getPlanePosition().x);
         positionSpinnerY.setValue(c.getPlanePosition().y);
         positionSpinnerZ.setValue(c.getPlanePosition().z);
+        valuesModified = false;
 
         crosscutSizeSlider.setValue(c.getCrosscutSize());
         thickness.setValue(c.getCrosscutThickness());
