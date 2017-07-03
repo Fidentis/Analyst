@@ -1045,6 +1045,9 @@ public class PairComparisonPanel extends javax.swing.JPanel {
     private void setMaxthreshValue() {
         float usedValues;
         List<Float> list = info.getSortedDistance();
+        
+        if(list == null)
+            list = SortUtils.instance().sortValues(info.getDistance());
 
         int size = list.size();
         int index = (int) (size * (maxThresholdSlider.getValue() / 100f));

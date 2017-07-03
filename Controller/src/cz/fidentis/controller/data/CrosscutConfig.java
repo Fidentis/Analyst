@@ -42,6 +42,9 @@ public class CrosscutConfig {
     }
 
     public void setArbitraryPlanePos(float x, float y, float z) {
+        if(arbitraryPlanePos == null)
+            arbitraryPlanePos = new Vector3f();
+        
         this.arbitraryPlanePos.setX(x);
         this.arbitraryPlanePos.setY(y);
         this.arbitraryPlanePos.setZ(z);
@@ -52,6 +55,9 @@ public class CrosscutConfig {
     }
 
     public void setPlanePosition(float x, float y, float z) {
+        if(planePosition == null)
+            planePosition = new Vector3f();
+        
         this.planePosition.setX(x);
         this.planePosition.setY(y);
         this.planePosition.setZ(z);        
