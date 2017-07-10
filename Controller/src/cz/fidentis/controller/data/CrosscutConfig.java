@@ -15,8 +15,8 @@ import javax.vecmath.Vector3f;
  */
 public class CrosscutConfig {
     private int crossCutPlaneIndex;
-    private Vector3f arbitraryPlanePos;
-    private Vector3f planePosition;
+    private Vector3f arbitraryPlanePos = new Vector3f();
+    private Vector3f planePosition = new Vector3f();;
     private int crosscutSize;
     private int crosscutThickness;
     private Color crosscutColor;

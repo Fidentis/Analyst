@@ -922,9 +922,9 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                     //move to GUI manipulation eventually
                     c.setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
-                    tc.getViewerPanel_Batch().getListener().setFacialPoints(
+                    tc.getViewerPanel_Batch().getListener1().setFacialPoints(
                              c.getFacialPoints(
-                                    tc.getViewerPanel_Batch().getListener().getModel().getName()
+                                    tc.getViewerPanel_Batch().getListener1().getModel().getName()
                             ));
 
                     registerButton.setEnabled(areFPCalculated(tc));
@@ -1019,7 +1019,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             models = SurfaceComparisonProcessing.instance().createSymModelAndSave(models);
                         }
 
-                        tc.getViewerPanel_Batch().getListener().setModels(template);
+                        tc.getViewerPanel_Batch().getListener1().setModels(template);
                         List<File> results = models;
 
                         try {
@@ -1096,9 +1096,9 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                             procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()));                            
                             
                             //Update canvas with registered model
-                            if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
-                                tc.getViewerPanel_Batch().getListener().setModels(m);
-                                tc.getViewerPanel_Batch().getListener().setFacialPoints(c.getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
+                            if (m.getName().equals(tc.getViewerPanel_Batch().getListener1().getModel().getName())) {
+                                tc.getViewerPanel_Batch().getListener1().setModels(m);
+                                tc.getViewerPanel_Batch().getListener1().setFacialPoints(c.getFacialPoints(tc.getViewerPanel_Batch().getListener1().getModel().getName()));
                             }
                             
                             ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
@@ -1195,8 +1195,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         FPImportExport.instance().alignPointsToModels(loaded, models);
 
         for (FpModel model : loaded) {
-            if (tc.getViewerPanel_Batch().getListener().getModel().getName().equals(model.getModelName())) {
-                tc.getViewerPanel_Batch().getListener().setFacialPoints(model.getFacialPoints());
+            if (tc.getViewerPanel_Batch().getListener1().getModel().getName().equals(model.getModelName())) {
+                tc.getViewerPanel_Batch().getListener1().setFacialPoints(model.getFacialPoints());
             }
 
             c.addFacialPoints(
@@ -1329,12 +1329,12 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
        getContext().setContinueComparison(continueComparisonCheckBox.isSelected());
     }//GEN-LAST:event_continueComparisonCheckBoxActionPerformed
     private void setColor() {
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         getContext().setPointColor(fpColorPanel.getBackground());
     }
 
     private void setFacialPointRadius() {
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPointRadius(fpSizeSlider.getValue() / 10.0f);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().setFacialPointRadius(fpSizeSlider.getValue() / 10.0f);
         getContext().setFpSize(fpSizeSlider.getValue());
     }
 

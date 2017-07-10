@@ -9,15 +9,22 @@ import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.ViewerPanel;
 import cz.fidentis.gui.actions.landmarks.AddEditLandmarkDialogue;
 import cz.fidentis.gui.actions.landmarks.EditLandmarkID;
 import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.model.Model;
 import cz.fidentis.renderer.ComparisonGLEventListener;
+import cz.fidentis.utils.IntersectionUtils;
+import cz.fidentis.utils.MathUtils;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.media.opengl.GLEventListener;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Vector3f;
 
@@ -25,7 +32,7 @@ import javax.vecmath.Vector3f;
  *
  * @author Katka
  */
-public class ViewerPanel_2Faces extends javax.swing.JPanel {
+public class ViewerPanel_2Faces extends javax.swing.JPanel implements ViewerPanel {
 
     private ProjectTopComponent projectComponent;
 
@@ -42,6 +49,11 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private boolean selection = false;
 
     private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
+    private boolean dragging;
+    private Point draggingStart;
+    private Point startGizmoCenter2D;
+    private Vector3f startGizmoCenter3D;
+    private Vector3f startPlanePoint;
 
     /**
      * Creates new form ViewerPanel
@@ -65,10 +77,12 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
         this.selection = selection;
     }
 
+    @Override
     public ComparisonGLEventListener getListener2() {
         return listener2;
     }
 
+    @Override
     public ComparisonGLEventListener getListener1() {
         return listener1;
     }
@@ -110,8 +124,8 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     public Canvas getCanvas2() {
         return canvas2;
     }
-    
-    public void checkFpAvaibility(){
+
+    public void checkFpAvaibility() {
         fpExportEnable.updateObservers();
     }
 
@@ -325,45 +339,89 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
                 float thetaY = 360.0f * ((x - mouseDraggedX) / (float) size.width);
                 float thetaX = 360.0f * ((mouseDraggedY - y) / (float) size.height);
 
-                listener1.rotate(-thetaX, -thetaY);
+                mouseDraggedX = x;
+                mouseDraggedY = y;
+                if (dragging) {
+                    Vector3f xAxe = listener1.getXaxis();
+                    Vector3f yAxe = listener1.getYaxis();
+                    Vector3f n = new Vector3f(listener1.getPlaneNormal());
+                    n = listener1.rotateAroundAxe(n, yAxe, Math.toRadians(thetaY));
+                    n = listener1.rotateAroundAxe(n, xAxe, Math.toRadians(thetaX));
+                    n.normalize();
+                    setPlaneNormal(n, false);
+                    GUIController.getConfigurationTopComponent().getPairComparisonResults().setValuesModified(true);
+                    GUIController.getConfigurationTopComponent().getPairComparisonResults().setPlaneNormal(n);
+                    GUIController.getConfigurationTopComponent().getPairComparisonResults().enableArbitraryNormal();
+                    GUIController.getConfigurationTopComponent().getPairComparisonResults().setValuesModified(false);
+                } else {
+                    listener1.rotate(-thetaX, -thetaY);
+                }
+
+            }
+
+        } else if (SwingUtilities.isRightMouseButton(evt)) {
+            if (dragging) {
+                shift(evt.getPoint());
+            } else {
+                float x = evt.getX();
+                float y = evt.getY();
+                Dimension size = evt.getComponent().getSize();
+                float thetaX = 360.0f * ((x - mouseDraggedX) / (float) size.width);
+                float thetaY = 360.0f * ((mouseDraggedY - y) / (float) size.height);
+
+                listener1.move(thetaX, -thetaY);
 
                 mouseDraggedX = x;
                 mouseDraggedY = y;
             }
-
-        } else if (SwingUtilities.isRightMouseButton(evt)) {
-            float x = evt.getX();
-            float y = evt.getY();
-            Dimension size = evt.getComponent().getSize();
-            float thetaX = 360.0f * ((x - mouseDraggedX) / (float) size.width);
-            float thetaY = 360.0f * ((mouseDraggedY - y) / (float) size.height);
-
-            listener1.move(thetaX, -thetaY);
-
-            mouseDraggedX = x;
-            mouseDraggedY = y;
         }
-
-
     }//GEN-LAST:event_canvas1MouseDragged
 
+     private void shift(Point destination) {
+        double x = startGizmoCenter2D.x - draggingStart.x;
+        double y = startGizmoCenter2D.x - draggingStart.y;
+        double initialDistance = Math.sqrt(x * x + y * y);
+
+        double distanceRatio = 1;
+        distanceRatio = MathUtils.instance().distancePoints(listener1.getGizmoIntersection(), startGizmoCenter3D) / initialDistance;
+
+        double k = (destination.x * x - draggingStart.x * x + destination.y * y - draggingStart.y * y) / (x * x + y * y);
+        double distance = Math.sqrt(((-k * x) * (-k * x)) + ((-k * y) * (-k * y))) * distanceRatio;
+
+        if (k > 0) {
+            distance = -distance;
+        }
+
+        Vector3f n = new Vector3f(listener1.getPlaneNormal());
+        n.normalize();
+        n.scale((float) distance);
+
+        Vector3f p = new Vector3f(startPlanePoint);
+        p.add(n);
+        setPlanePoint(p, false);
+        GUIController.getConfigurationTopComponent().getPairComparisonResults().setValuesModified(true);
+        GUIController.getConfigurationTopComponent().getPairComparisonResults().setPlanePoint(p);
+        GUIController.getConfigurationTopComponent().getPairComparisonResults().enableArbitraryNormal();
+        GUIController.getConfigurationTopComponent().getPairComparisonResults().setValuesModified(false);
+    }
+    
     private void canvas2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MouseDragged
         if (manipulatePoint && editablePoints) {
             if (listener2.editSelectedPoint(listener2.checkPointInMesh(evt.getX(), evt.getY()))) {
                 canvas2.setCoordInfo(listener2.getFacialPoint(indexOfSelectedPoint));
             }
         } else if (SwingUtilities.isLeftMouseButton(evt)) {
-                float x = evt.getX();
-                float y = evt.getY();
-                Dimension size = evt.getComponent().getSize();
-                float thetaY = 360.0f * ((x - mouseDraggedX) / (float) size.width);
-                float thetaX = 360.0f * ((mouseDraggedY - y) / (float) size.height);
+            float x = evt.getX();
+            float y = evt.getY();
+            Dimension size = evt.getComponent().getSize();
+            float thetaY = 360.0f * ((x - mouseDraggedX) / (float) size.width);
+            float thetaX = 360.0f * ((mouseDraggedY - y) / (float) size.height);
 
-                listener2.rotate(-thetaX, -thetaY);
+            listener2.rotate(-thetaX, -thetaY);
 
-                mouseDraggedX = x;
-                mouseDraggedY = y;
-            
+            mouseDraggedX = x;
+            mouseDraggedY = y;
+
         } else if (SwingUtilities.isRightMouseButton(evt)) {
 
             float x = evt.getX();
@@ -402,7 +460,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
     private void canvas2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MouseReleased
         manipulatePoint = false;
-       
+
     }//GEN-LAST:event_canvas2MouseReleased
 
     public void clearSelection() {
@@ -415,7 +473,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
 
     private void canvas1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseReleased
         manipulatePoint = false;
-         if (selection && SwingUtilities.isLeftMouseButton(evt)) {
+        if (selection && SwingUtilities.isLeftMouseButton(evt)) {
             listener1.setSelectionEnd(evt.getPoint(), canvas1.getWidth(), canvas1.getHeight());
             listener1.setSelectionFinished(true);
             final ConfigurationTopComponent tc = GUIController.getConfigurationTopComponent();
@@ -438,4 +496,52 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private cz.fidentis.gui.Canvas canvas2;
     private javax.swing.JSplitPane jSplitPane1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setPlaneNormal(Vector3f vector3f, boolean recountEverything) {
+        listener1.setPlaneNormal(vector3f);
+        listener2.setPlaneNormal(vector3f);
+
+        if (listener1.getModels() != null) {
+            if (recountEverything) {
+                ArrayList<LinkedList<LinkedList<Vector3f>>> lists = new ArrayList<>();
+
+                for (Model m : listener2.getModels()) {
+                    lists.add(IntersectionUtils.findModelPlaneIntersection(m, listener1.getPlaneNormal(), listener1.getPlanePoint()));
+                }
+                listener2.setLists(lists, true);
+                listener1.setLists(lists);
+            } else {
+                ArrayList<LinkedList<LinkedList<Vector3f>>> lists = new ArrayList<>();
+                lists.add(IntersectionUtils.findModelPlaneIntersection(listener1.getModels().get(0), listener1.getPlaneNormal(), listener1.getPlanePoint()));
+                listener1.setLists(lists);
+                listener2.setLists(lists, true);
+            }
+        }
+    }
+
+    @Override
+    public void setPlanePoint(Vector3f vector3f, boolean recountEverything) {
+        listener1.setPlanePoint(vector3f);
+        listener2.setPlanePoint(vector3f);
+
+        if (listener1.getModels() != null) {
+            if (recountEverything) {
+                ArrayList<LinkedList<LinkedList<Vector3f>>> lists = new ArrayList<>();
+
+                for (Model m : listener2.getModels()) {
+                    lists.add(IntersectionUtils.findModelPlaneIntersection(m, listener1.getPlaneNormal(), listener1.getPlanePoint()));
+                }
+                listener2.setLists(lists, true);
+                listener1.setLists(lists);
+
+            } else {
+                ArrayList<LinkedList<LinkedList<Vector3f>>> lists = new ArrayList<>();
+                lists.add(IntersectionUtils.findModelPlaneIntersection(listener1.getModels().get(0), listener1.getPlaneNormal(), listener1.getPlanePoint()));
+                listener1.setLists(lists);
+                listener2.setLists(lists, true);
+            }
+        }
+    }
+
 }

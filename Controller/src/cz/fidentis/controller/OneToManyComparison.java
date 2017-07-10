@@ -28,12 +28,12 @@ import javax.vecmath.Vector3f;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Katka
  */
-public class OneToManyComparison {
+public class OneToManyComparison implements ComparisonContext {
+
     private String name = new String();             //name of view(??)
     private HDpainting HDP;                         //object to draw surface comparison results (color map currently through shaders)
     private HDpaintingInfo hdPaintingInfo;          //information needed for visualization of results
@@ -45,7 +45,7 @@ public class OneToManyComparison {
     private List<File> registeredModels;            //models after registration, stored on the disk
     private Model primaryModel;                     //mainFace
     private Model avgFace;                          //avgFace
-    private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<String, List<FacialPoint>>();         //feature points associated with the model of given name
+    private HashMap<String, List<FacialPoint>> facialPoints = new HashMap<String, List<FacialPoint>>();         //feature points associated with the model of given name
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private Node node;
     private Node node_primaryModel;
@@ -53,12 +53,12 @@ public class OneToManyComparison {
     private Node node_registered;
     private Node node_result;
     private ResourceBundle strings = ResourceBundle.getBundle("cz.fidentis.controller.Bundle");
-    
+
     private List<List<ICPTransformation>> trans = new ArrayList<>();
-      
+
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
- 
+
     private boolean createAvgFace = true;          //whether to create avg face during computatio of numerical results
     private boolean fpScaling;                     //whether feature points are scaled or not
     private int fpTreshold = 30;                   //threshold for feature points (still no clue what it is for)
@@ -75,23 +75,21 @@ public class OneToManyComparison {
     private boolean scaleEnabled;               //was scaling for ICp enabled
     private int valuesTypeIndex = 0;            //relative or absolute
     private int metricTypeIndex = 0;            //RMS, min, max, etc.
-    
+
     private int method;             //undersampling method
     private int type;               //undersampling type
     private float value;              //undersampling value
-    
+
     private boolean continueComparison = false;     //whether to continue comparison after registration
     private boolean firstCreated = true;
-    
-    private VisualizationType visualization;  
-    
+
+    private VisualizationType visualization;
+
     private CrosscutConfig crosscutViz = new CrosscutConfig();
     private VectorsConfig vectorsViz = new VectorsConfig();
     private ColormapConfig colormapViz = new ColormapConfig();
     private boolean showBoxplot;
     private boolean showBoxplotFunction;
-            
-            
 
     public CrosscutConfig getCrosscutViz() {
         return crosscutViz;
@@ -116,7 +114,7 @@ public class OneToManyComparison {
     public void setColormapViz(ColormapConfig colormapViz) {
         this.colormapViz = colormapViz;
     }
-    
+
     public ColorScheme getUsedColorScheme() {
         return colormapViz.getUsedColorScheme();
     }
@@ -124,7 +122,6 @@ public class OneToManyComparison {
     public void setUsedColorScheme(ColorScheme usedColorScheme) {
         colormapViz.setUsedColorScheme(usedColorScheme);
     }
-    
 
     public int getVectorDensity() {
         return vectorsViz.getVectorDensity();
@@ -150,82 +147,102 @@ public class OneToManyComparison {
         vectorsViz.setCylinderRadius(cylinderRadius);
     }
 
+    @Override
     public boolean isHighlightCuts() {
         return crosscutViz.isHighlightCuts();
     }
 
+    @Override
     public void setHighlightCuts(boolean highlightCuts) {
         crosscutViz.setHighlightCuts(highlightCuts);
     }
 
+    @Override
     public boolean isShowVectors() {
         return crosscutViz.isShowVector();
     }
 
+    @Override
     public void setShowVectors(boolean showVectors) {
         crosscutViz.setShowVector(showVectors);
     }
 
+    @Override
     public boolean isAllCuts() {
         return crosscutViz.isAllCuts();
     }
 
+    @Override
     public void setAllCuts(boolean allCuts) {
         crosscutViz.setAllCuts(allCuts);
     }
 
+    @Override
     public boolean isSamplingRays() {
         return crosscutViz.isSamplingRays();
     }
 
+    @Override
     public void setSamplingRays(boolean samplingRays) {
         crosscutViz.setSamplingRays(samplingRays);
     }
-   
+
+    @Override
     public Color getCrosscutColor() {
         return crosscutViz.getCrosscutColor();
     }
 
+    @Override
     public void setCrosscutColor(Color crosscutColor) {
         crosscutViz.setCrosscutColor(crosscutColor);
     }
-   
+
+    @Override
     public int getCrosscutThickness() {
         return crosscutViz.getCrosscutThickness();
     }
 
+    @Override
     public void setCrosscutThickness(int crosscutThickness) {
         crosscutViz.setCrosscutThickness(crosscutThickness);
     }
 
+    @Override
     public int getCrosscutSize() {
         return crosscutViz.getCrosscutSize();
     }
 
+    @Override
     public void setCrosscutSize(int vectorSize) {
         crosscutViz.setCrosscutSize(vectorSize);
     }
 
+    @Override
     public Vector3f getPlanePosition() {
         return crosscutViz.getPlanePosition();
     }
 
+    @Override
     public void setPlanePosition(float x, float y, float z) {
         crosscutViz.setPlanePosition(x, y, z);
     }
 
+    @Override
     public Vector3f getArbitraryPlanePos() {
         return crosscutViz.getArbitraryPlanePos();
     }
 
+    @Override
     public void setArbitraryPlanePos(float x, float y, float z) {
         crosscutViz.setArbitraryPlanePos(x, y, z);
     }
 
+    @Override
     public int getCrossCutPlaneIndex() {
         return crosscutViz.getCrossCutPlaneIndex();
     }
 
+    @Override
     public void setCrossCutPlaneIndex(int crossCutPlaneIndex) {
         crosscutViz.setCrossCutPlaneIndex(crossCutPlaneIndex);
     }
@@ -237,7 +254,7 @@ public class OneToManyComparison {
     public void setVisualization(VisualizationType visualization) {
         this.visualization = visualization;
     }
-    
+
     public String getNumericalResults() {
         return numericalResults;
     }
@@ -269,16 +286,16 @@ public class OneToManyComparison {
     public void addTrans(List<ICPTransformation> trans) {
         this.trans.add(trans);
     }
-    
-    public void clearTrans(){
+
+    public void clearTrans() {
         this.trans.clear();
     }
-    
-    public List<List<ICPTransformation>> getTrans(){
+
+    public List<List<ICPTransformation>> getTrans() {
         return this.trans;
     }
-    
-    public void setTrans(List<List<ICPTransformation>> trans){
+
+    public void setTrans(List<List<ICPTransformation>> trans) {
         this.trans = trans;
     }
 
@@ -319,7 +336,7 @@ public class OneToManyComparison {
     }
 
     public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
-        this.facialPoints.clear();   
+        this.facialPoints.clear();
         this.facialPoints.putAll(facialPoints);
     }
 
@@ -353,8 +370,7 @@ public class OneToManyComparison {
 
     public void setHausdorfMinTreshold(int hausdorfMinTreshold) {
         colormapViz.setHausdorfMinTreshold(hausdorfMinTreshold);
-    }   
-    
+    }
 
     public List<ArrayList<Float>> getNumResults() {
         return numResults;
@@ -371,7 +387,6 @@ public class OneToManyComparison {
     public void setCreateAvgFace(boolean createAvgFace) {
         this.createAvgFace = createAvgFace;
     }
-    
 
     public boolean isFpScaling() {
         return fpScaling;
@@ -436,7 +451,6 @@ public class OneToManyComparison {
     public void setContinueComparison(boolean continueComparison) {
         this.continueComparison = continueComparison;
     }
-    
 
     public ComparisonMethod getComparisonMethod() {
         return CompareMethod;
@@ -477,8 +491,6 @@ public class OneToManyComparison {
     public void setFirstCreated(boolean firstCreated) {
         this.firstCreated = firstCreated;
     }
-    
-   
 
     public int getFpDistance() {
         return fpDistance;
@@ -495,14 +507,13 @@ public class OneToManyComparison {
     public void setCompareButtonEnabled(boolean compareButtonEnabled) {
         this.compareButtonEnabled = compareButtonEnabled;
     }
-      
 
     public Model getPrimaryModel() {
         return primaryModel;
     }
 
     public void setPrimaryModel(Model primaryModel) {
-        if(node_primaryModel == null) {
+        if (node_primaryModel == null) {
             node_primaryModel = node.addChild(strings.getString("tree.node.primaryModel"));
         } else {
             node_primaryModel.removeChildren();
@@ -510,14 +521,11 @@ public class OneToManyComparison {
         this.primaryModel = primaryModel;
         this.node_primaryModel.addChild(primaryModel.getFile());
     }
-   
-    
-    
+
     public int getState() {
         return state;
     }
 
-     
     public void setState(int state) {
         this.state = state;
         if (state >= 3) {
@@ -528,13 +536,10 @@ public class OneToManyComparison {
             this.node.removeChild(this.node.getChildren().indexOf(this.node_result));
         }
     }
-    
 
     public OneToManyComparison() {
         models = new ArrayList<File>();
     }
-  
-
 
     /**
      *
@@ -543,33 +548,36 @@ public class OneToManyComparison {
     public List<File> getModels() {
         return models;
     }
-    
-    public File getModel(String name){
-        for (int i = 0; i< models.size();i++){
-            if(models.get(i).getName().equals(name)){
+
+    public File getModel(String name) {
+        for (int i = 0; i < models.size(); i++) {
+            if (models.get(i).getName().equals(name)) {
                 return models.get(i);
             }
         }
         return null;
     }
+
     public File getModel(int i) {
         return models.get(i);
     }
-    
+
     public void removeModel(int index) {
-        if(index < 0 || index >= models.size()) return;
+        if (index < 0 || index >= models.size()) {
+            return;
+        }
         models.remove(index);
         node_models.removeChild(index);
-        if(models.isEmpty()) {
+        if (models.isEmpty()) {
             node.removeChild(node.getChildren().indexOf(node_models));
             node_models = null;
         }
     }
 
-    public void addModel(File model){
+    public void addModel(File model) {
         models.add(model);
         facialPoints.put(model.getName(), new LinkedList<FacialPoint>());      //make sure there's list to add FPs to
-        if(node_models == null) {
+        if (node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }
         node_models.addChild(model);
@@ -580,33 +588,32 @@ public class OneToManyComparison {
     }
 
     public void setRegisteredModels(List<File> registeredModels) {
-        if(node_registered == null) {
+        if (node_registered == null) {
             node_registered = node.addChild(strings.getString("tree.node.registeredModels"));
         } else {
             node_registered.removeChildren();
         }
         this.registeredModels = registeredModels;
-        for(File mod : registeredModels) {
+        for (File mod : registeredModels) {
             node_registered.addChild(mod);
         }
     }
-    
-    
-    public void addFacialPoints(String model, List<FacialPoint> FP){
+
+    public void addFacialPoints(String model, List<FacialPoint> FP) {
         facialPoints.put(model, FP);
-        
+
     }
-    
-    public void clearFacialPoints(){
+
+    public void clearFacialPoints() {
         facialPoints.clear();
     }
-    
-    public List<FacialPoint> getFacialPoints(String model){
+
+    public List<FacialPoint> getFacialPoints(String model) {
         return facialPoints.get(model);
-        
+
     }
-    
-      public void setNode(ProjectTree.Node node){
+
+    public void setNode(ProjectTree.Node node) {
         this.node = node;
     }
 
@@ -625,7 +632,6 @@ public class OneToManyComparison {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public HDpainting getHDP() {
         return HDP;
@@ -646,11 +652,11 @@ public class OneToManyComparison {
     public void setScaleEnabled(boolean selected) {
         scaleEnabled = selected;
     }
-    
+
     public boolean getScaleEnabled() {
         return scaleEnabled;
     }
-    
+
     @Override
     public String toString() {
         return name;
@@ -663,34 +669,35 @@ public class OneToManyComparison {
     public void setAvgFace(Model avgFace) {
         this.avgFace = avgFace;
     }
-    
-    
+
+    @Override
     public boolean isShowPlane() {
         return crosscutViz.isShowPlane();
     }
 
+    @Override
     public void setShowPlane(boolean showPlane) {
         crosscutViz.setShowPlane(showPlane);
     }
-    
+
+    @Override
     public boolean isShowBoxplot() {
         return showBoxplot;
     }
 
+    @Override
     public void setShowBoxplot(boolean showBoxplot) {
         this.showBoxplot = showBoxplot;
     }
 
+    @Override
     public boolean isShowBoxplotFunction() {
         return showBoxplotFunction;
     }
 
+    @Override
     public void setShowBoxplotFunction(boolean showBoxplotFunction) {
         this.showBoxplotFunction = showBoxplotFunction;
     }
-    
-    
-    
-
 
 }

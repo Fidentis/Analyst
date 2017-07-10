@@ -10,6 +10,7 @@ import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.ViewerPanel;
 import cz.fidentis.gui.actions.landmarks.EditLandmarkID;
 import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.model.Model;
@@ -36,7 +37,7 @@ import org.openide.awt.StatusDisplayer;
  *
  * @author Katka
  */
-public class ViewerPanel_Batch extends javax.swing.JPanel {
+public class ViewerPanel_Batch extends javax.swing.JPanel implements ViewerPanel{
 
     private ProjectTopComponent projectComponent;
 
@@ -86,7 +87,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         return canvas1;
     }
 
-    public ComparisonGLEventListener getListener() {
+    public ComparisonGLEventListener getListener1() {
         return listener;
     }
     
@@ -143,7 +144,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         canvas1.resizeCanvas(this.getSize());
     }
 
-    void setPlaneNormal(Vector3f vector3f, boolean recountEverything) {
+    @Override
+    public void setPlaneNormal(Vector3f vector3f, boolean recountEverything) {
         listener.setPlaneNormal(vector3f);
         listener2.setPlaneNormal(vector3f);
 
@@ -587,7 +589,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().setValuesModified(false);
     }
 
-    void setPlanePoint(Vector3f vector3f, boolean recountEverything) {
+    @Override
+    public void setPlanePoint(Vector3f vector3f, boolean recountEverything) {
         listener.setPlanePoint(vector3f);
         listener2.setPlanePoint(vector3f);
 

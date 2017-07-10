@@ -328,13 +328,13 @@ public final class OpenProject implements ActionListener {
             }
             if (comparison.getState() >= 3) {
                 if (comparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-                    ntc.getViewerPanel_Batch().getListener().setProcrustes(true);
+                    ntc.getViewerPanel_Batch().getListener1().setProcrustes(true);
                 } else {
-                    ntc.getViewerPanel_Batch().getListener().setModels(comparison.getHDinfo().getModel());
-                    ntc.getViewerPanel_Batch().getListener().setHdInfo(comparison.getHDinfo());
-                    ntc.getViewerPanel_Batch().getListener().setHdPaint(comparison.getHDP());
-                    ntc.getViewerPanel_Batch().getListener().setPaintHD(true);
-                    ntc.getViewerPanel_Batch().getListener().drawHD(true);
+                    ntc.getViewerPanel_Batch().getListener1().setModels(comparison.getHDinfo().getModel());
+                    ntc.getViewerPanel_Batch().getListener1().setHdInfo(comparison.getHDinfo());
+                    ntc.getViewerPanel_Batch().getListener1().setHdPaint(comparison.getHDP());
+                    ntc.getViewerPanel_Batch().getListener1().setPaintHD(true);
+                    ntc.getViewerPanel_Batch().getListener1().drawHD(true);
                 }
             }
             ntc.showBatchViewer();
@@ -547,10 +547,10 @@ public final class OpenProject implements ActionListener {
 
         if (paInfoE != null) {
             PApaintingInfo info = parsePaInfo(paInfoE);
-            tc.getViewerPanel_Batch().getListener().setPaInfo(info);
+            tc.getViewerPanel_Batch().getListener1().setPaInfo(info);
 
             PApainting painting = new PApainting(info);
-            tc.getViewerPanel_Batch().getListener().setPaPainting(painting);
+            tc.getViewerPanel_Batch().getListener1().setPaPainting(painting);
         }
         
         if(transpE != null){
@@ -1041,10 +1041,10 @@ public final class OpenProject implements ActionListener {
 
         if (paInfoE != null) {
             PApaintingInfo info = parsePaInfo(paInfoE);
-            tc.getViewerPanel_Batch().getListener().setPaInfo(info);
+            tc.getViewerPanel_Batch().getListener1().setPaInfo(info);
 
             PApainting painting = new PApainting(info);
-            tc.getViewerPanel_Batch().getListener().setPaPainting(painting);
+            tc.getViewerPanel_Batch().getListener1().setPaPainting(painting);
         }
         
         if(crossE != null){

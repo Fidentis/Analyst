@@ -376,7 +376,7 @@ public final class NavigatorTopComponent extends TopComponent {
                 case "Batch comparison":
                     project.setSelectedPart(4);
                     BatchComparison batchComparison = project.getSelectedBatchComparison();
-                    ComparisonGLEventListener listener = tc.getViewerPanel_Batch().getListener();
+                    ComparisonGLEventListener listener = tc.getViewerPanel_Batch().getListener1();
                     listener.drawHD(false);
                     listener.setProcrustes(false);
                     listener.setFacialPoints(null);

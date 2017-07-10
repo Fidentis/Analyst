@@ -34,7 +34,7 @@ import javax.vecmath.Vector3f;
  *
  * @author Katka
  */
-public class BatchComparison {
+public class BatchComparison implements ComparisonContext{
     private String name = new String();         //name of view(??)
     private HDpainting HDP;                     //object to draw surface comparison results (color map currently through shaders)
     private HDpaintingInfo HDinfo;              //information needed for visualization of results
@@ -165,82 +165,102 @@ public class BatchComparison {
         this.visualization = visualization;
     }
 
+    @Override
     public int getCrossCutPlaneIndex() {
         return crosscutViz.getCrossCutPlaneIndex();
     }
 
+    @Override
     public void setCrossCutPlaneIndex(int crossCutPlaneIndex) {
         crosscutViz.setCrossCutPlaneIndex(crossCutPlaneIndex);
     }
 
+    @Override
     public Vector3f getArbitraryPlanePos() {
         return crosscutViz.getArbitraryPlanePos();
     }
 
+    @Override
     public void setArbitraryPlanePos(float x, float y, float z) {
         crosscutViz.setArbitraryPlanePos(x, y, z);
     }
 
+    @Override
     public Vector3f getPlanePosition() {
         return crosscutViz.getPlanePosition();
     }
 
+    @Override
     public void setPlanePosition(float x, float y, float z) {
         crosscutViz.setPlanePosition(x, y, z);
     }
 
+    @Override
     public int getCrosscutSize() {
         return crosscutViz.getCrosscutSize();
     }
 
+    @Override
     public void setCrosscutSize(int crosscutSize) {
         crosscutViz.setCrosscutSize(crosscutSize);
     }
 
+    @Override
     public int getCrosscutThickness() {
         return crosscutViz.getCrosscutThickness();
     }
 
+    @Override
     public void setCrosscutThickness(int crosscutThickness) {
         crosscutViz.setCrosscutThickness(crosscutThickness);
     }
 
+    @Override
     public Color getCrosscutColor() {
         return crosscutViz.getCrosscutColor();
     }
 
+    @Override
     public void setCrosscutColor(Color crosscutColor) {
         crosscutViz.setCrosscutColor(crosscutColor);
     }
 
+    @Override
     public boolean isHighlightCuts() {
         return crosscutViz.isHighlightCuts();
     }
 
+    @Override
     public void setHighlightCuts(boolean highlightCuts) {
         crosscutViz.setHighlightCuts(highlightCuts);
     }
 
+    @Override
     public boolean isShowVectors() {
         return crosscutViz.isShowVector();
     }
 
+    @Override
     public void setShowVectors(boolean showVectors) {
         crosscutViz.setShowVector(showVectors);
     }
 
+    @Override
     public boolean isAllCuts() {
         return crosscutViz.isAllCuts();
     }
 
+    @Override
     public void setAllCuts(boolean allCuts) {
         crosscutViz.setAllCuts(allCuts);
     }
 
+    @Override
     public boolean isSamplingRays() {
         return crosscutViz.isSamplingRays();
     }
 
+    @Override
     public void setSamplingRays(boolean samplingRays) {
         crosscutViz.setSamplingRays(samplingRays);
     }

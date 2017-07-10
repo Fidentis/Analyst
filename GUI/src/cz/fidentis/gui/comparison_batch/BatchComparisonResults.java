@@ -1503,7 +1503,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void fpSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpSizeSliderStateChanged
         getContext().setFpSize(fpSizeSlider.getValue());
 
-        PApaintingInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo();
+        PApaintingInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().getPaInfo();
         if (info != null) {
             info.setPointSize(fpSizeSlider.getValue() * 3);
         }
@@ -1512,8 +1512,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void fpDistanceSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpDistanceSliderStateChanged
         if (GUIController.getSelectedProjectTopComponent() != null) {
-            if (GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo() != null) {
-                GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getPaInfo().setEnhance(fpDistanceSlider.getValue());
+            if (GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().getPaInfo() != null) {
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().getPaInfo().setEnhance(fpDistanceSlider.getValue());
             }
             //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setEnhance(jSlider2.getValue());
             repaint();
@@ -1558,9 +1558,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         if(getContext().getHDinfo() != null && getContext().getHDinfo().getvType() == VisualizationType.CROSSSECTION)
-            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), tc.getViewerPanel_Batch().getListener2(),1920, 1920);
+            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener1(), tc.getViewerPanel_Batch().getListener2(),1920, 1920);
         else
-            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), 1920, 1920);
+            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener1(), 1920, 1920);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -1626,8 +1626,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         getContext().setState(2);
         GUIController.getConfigurationTopComponent().addBatchComparisonComponent();
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setProcrustes(false);
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().drawHD(false);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().setProcrustes(false);
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().drawHD(false);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().sliceViewerVisible(false);
 
         if (getContext().getRegistrationMethod() == RegistrationMethod.HAUSDORFF) {
@@ -1637,12 +1637,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().setFacialPoints(
                     getContext().getFacialPoints(m.getName())
             );
         }
 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().rotationAndSizeRestart();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().rotationAndSizeRestart();
 
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -1885,7 +1885,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             tc.getViewerPanel_Batch().getListener2().setSecondaryListener(true);
             tc.getViewerPanel_Batch().getListener2().setHdInfo(c.getHDinfo());
             tc.getViewerPanel_Batch().getListener2().setPaintHD(true);
-            tc.getViewerPanel_Batch().getListener().setPlanePoint(c.getPlanePosition());
+            tc.getViewerPanel_Batch().getListener1().setPlanePoint(c.getPlanePosition());
             Runnable run = new Runnable() {
 
                 @Override
@@ -1899,7 +1899,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         models.add(m);
                     }
                     tc.getViewerPanel_Batch().getListener2().setModels(models);
-                    tc.getViewerPanel_Batch().getListener().setPrimaryModel();
+                    tc.getViewerPanel_Batch().getListener1().setPrimaryModel();
                     tc.getViewerPanel_Batch().setPlaneNormal(c.getArbitraryPlanePos(), true);
 
                     c.getHDinfo().setvType(VisualizationType.CROSSSECTION);
@@ -2130,7 +2130,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_crosscutSizeSliderStateChanged
 
     private void highlightCutsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highlightCutsCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setHighlightCuts(highlightCutsCheckBox.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().setHighlightCuts(highlightCutsCheckBox.isSelected());
         getContext().setHighlightCuts(highlightCutsCheckBox.isSelected());
     }//GEN-LAST:event_highlightCutsCheckBoxActionPerformed
 
@@ -2150,7 +2150,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_vectorsCheckBoxActionPerformed
 
     private void showPlaneCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPlaneCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setShowPlane(showPlaneCheckBox.isSelected());
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().setShowPlane(showPlaneCheckBox.isSelected());
         getContext().setShowPlane(showPlaneCheckBox.isSelected());
     }//GEN-LAST:event_showPlaneCheckBoxActionPerformed
 

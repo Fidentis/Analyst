@@ -301,7 +301,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         }
                         
 
-                        tc.getViewerPanel_Batch().getListener().getModels().set(0, template);
+                        tc.getViewerPanel_Batch().getListener1().getModels().set(0, template);
 
                         try {
                             
@@ -323,11 +323,11 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
                             HDpainting paintMain = new HDpainting(info);
 
-                            tc.getViewerPanel_Batch().getListener().setHdPaint(paintMain);
-                            tc.getViewerPanel_Batch().getListener().setHdInfo(info);
+                            tc.getViewerPanel_Batch().getListener1().setHdPaint(paintMain);
+                            tc.getViewerPanel_Batch().getListener1().setHdInfo(info);
                             c.setHDP(paintMain);
                             c.setHDinfo(info);
-                            tc.getViewerPanel_Batch().getListener().drawHD(true);
+                            tc.getViewerPanel_Batch().getListener1().drawHD(true);
 
                             //numerical results
                             numResults = SurfaceComparisonProcessing.instance().batchCompareNumericalResults(models, 0, true,
@@ -365,21 +365,21 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         c.setNumericalResults(result);
 
                         //GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1().setDescriptionText(result);
-                        tc.getViewerPanel_Batch().getListener().setProcrustes(true);
+                        tc.getViewerPanel_Batch().getListener1().setProcrustes(true);
 
                         PApaintingInfo paInfo = new PApaintingInfo(procrustes.getGpa(), null, 2);
 
                         if (c.isFpScaling()) {      //??
-                            tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
+                            tc.getViewerPanel_Batch().getListener1().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
 
                         } else {
-                            tc.getViewerPanel_Batch().getListener().setCameraPosition(0, 0, 700);
+                            tc.getViewerPanel_Batch().getListener1().setCameraPosition(0, 0, 700);
                             paInfo.setPointSize(30 * 3);
                         }
 
-                        tc.getViewerPanel_Batch().getListener().setPaInfo(paInfo);
-                        tc.getViewerPanel_Batch().getListener().setPaPainting(new PApainting(paInfo));
+                        tc.getViewerPanel_Batch().getListener1().setPaInfo(paInfo);
+                        tc.getViewerPanel_Batch().getListener1().setPaPainting(new PApainting(paInfo));
 
                         repaint();
                     }
@@ -445,7 +445,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         
         Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getFacialPoints().clear();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener1().getFacialPoints().clear();
         c.getFacialPoints().clear();
         
         c.setState(1);

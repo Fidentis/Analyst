@@ -869,7 +869,7 @@ public class Canvas extends javax.swing.JPanel {
             File file = projectTopComponent.getProject().getSelectedBatchComparison().getModel(0);
             
             Model model = ModelLoader.instance().loadModel(file, true, true);
-            projectTopComponent.getViewerPanel_Batch().getListener().setModels(model);
+            projectTopComponent.getViewerPanel_Batch().getListener1().setModels(model);
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().updateRegisterButtonEnabled();
             GUIController.getConfigurationTopComponent().getBatchRegistrationConfiguration().populateFacesComboBox();
         } else if (projectTopComponent.getProject().getSelectedPart() == 6) {

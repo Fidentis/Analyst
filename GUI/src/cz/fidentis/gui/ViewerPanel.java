@@ -5,6 +5,8 @@
  */
 package cz.fidentis.gui;
 
+import cz.fidentis.renderer.ComparisonGLEventListener;
+import javax.media.opengl.GLEventListener;
 import javax.vecmath.Vector3f;
 
 /**
@@ -15,5 +17,7 @@ public interface ViewerPanel {
     
     public void setPlaneNormal(Vector3f n, boolean recount);
     public void setPlanePoint(Vector3f n, boolean recount);
+    public ComparisonGLEventListener getListener1();
+    public ComparisonGLEventListener getListener2();
     
 }

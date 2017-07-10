@@ -458,8 +458,8 @@ public final class SaveProject implements ActionListener {
             appendHdInfo(comparison.getHDinfo(), comparisonE);
         }
 
-        if (tc.getViewerPanel_Batch().getListener().getPaInfo() != null) {
-            appendPaInfo(tc.getViewerPanel_Batch().getListener().getPaInfo(), auxFile, comparisonE);
+        if (tc.getViewerPanel_Batch().getListener1().getPaInfo() != null) {
+            appendPaInfo(tc.getViewerPanel_Batch().getListener1().getPaInfo(), auxFile, comparisonE);
         }
 
         //comparisonE.setAttribute("description", comparison.getDecription());

@@ -9,9 +9,11 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.hausdorffDistance.ComparisonMetrics;
 import cz.fidentis.controller.Comparison2Faces;
+import cz.fidentis.controller.ComparisonContext;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.TableProcessing;
+import cz.fidentis.gui.ViewerPanel;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
+import javax.vecmath.Vector3f;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Exceptions;
@@ -151,6 +154,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         cylLength = new javax.swing.JSlider();
         cylLengthLabel = new javax.swing.JLabel();
         cylRadiusLabel = new javax.swing.JLabel();
+        crosscutsPanel1 = new cz.fidentis.gui.CrosscutsPanel((ViewerPanel)GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces(),(ComparisonContext)GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces());
         jPanel2 = new javax.swing.JPanel();
         fpDistanceSlider = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
@@ -499,7 +503,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                         .addGap(26, 26, 26)
                         .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(transpSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
+                        .addComponent(transpSpinner))
                     .addGroup(shadersPanelLayout.createSequentialGroup()
                         .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(useContoursCheckbox)
@@ -678,7 +682,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         colormapPanel.setLayout(colormapPanelLayout);
         colormapPanelLayout.setHorizontalGroup(
             colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -796,9 +800,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 21, Short.MAX_VALUE)
-                        .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(crosscutsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -823,6 +830,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(shadersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(crosscutsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(comparisonButton)
                 .addGap(14, 14, 14))
         );
@@ -930,7 +939,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2)
                     .addComponent(alignParamButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -968,7 +977,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1617, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1608,8 +1617,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 noneRadioButton.setSelected(true);
         }
 
-        VisualizationBox.removeItem(VisualizationType.CROSSSECTION);
-
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
         } else {
@@ -1634,6 +1641,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setInnerSurfaceVisible(c.isInnerSurfaceSolid());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setUseGlyphs(c.isUseGlyphs());
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFogVersion(c.getFogVersion());
+        
+        crosscutsPanel1.setConfiguration();
     }
 
     public histogramPanel getHistogram1() {
@@ -1665,7 +1674,21 @@ public class PairComparisonResults extends javax.swing.JPanel {
         //    histogramPanel2.repaint();
     }
     
+    public void setValuesModified(boolean valuesModified) {
+        crosscutsPanel1.setValuesModified(valuesModified);
+    }
     
+     public void enableArbitraryNormal() {
+        crosscutsPanel1.enableArbitraryNormal();        
+    }
+    
+    public void setPlaneNormal(Vector3f normal) {
+        crosscutsPanel1.setPlaneNormal(normal);
+    }
+
+    public void setPlanePoint(Vector3f p) {
+        crosscutsPanel1.setPlanePoint(p);
+    } 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox VisualizationBox;
@@ -1678,6 +1701,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JComboBox colorSchemeComboBox;
     private javax.swing.JPanel colormapPanel;
     private javax.swing.JButton comparisonButton;
+    private cz.fidentis.gui.CrosscutsPanel crosscutsPanel1;
     private javax.swing.JSlider cylLength;
     private javax.swing.JLabel cylLengthLabel;
     private javax.swing.JSlider cylRadius;

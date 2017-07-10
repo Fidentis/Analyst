@@ -12,6 +12,7 @@ import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
 import java.awt.Color;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -57,6 +58,19 @@ public class TwoFacesGUISetup {
    private static final int FOG_VERSION = 0;
    
    //comparison results
+    private static final int SELECTED_PLANE = 1;
+   private static final Vector3f ARBITRARY_NORMAL = new Vector3f(1,0,0);
+   private static final Vector3f PLANE_POSITION = new Vector3f();
+   private static final int CROSSCUT_SIZE = 50;
+   private static final int CROSSCUT_THICKNESS = 50;
+   private static final Color CROSSCUT_COLOR = new Color(255,255,255);
+   private static final boolean HIGHLIGHT_CUTS = true;
+   private static final boolean CROSSCUT_VECTORS = true;
+   private static final boolean ALL_CUTS = false;
+   private static final boolean SAMPLINGR_RAYS = false;
+   private static final boolean SHOW_PLANE = true;
+   private static final boolean BOXPLOT = false;
+   private static final boolean CONTINUOUS_BOXPLOT = false;
    private static final VisualizationType VISUALIZATION = VisualizationType.COLORMAP;
    private static final int VALUES_TYPE = 0;
    private static final int MAX_THRESHOLD = 100;
@@ -136,6 +150,21 @@ public class TwoFacesGUISetup {
        
        data.setFpDistance(FP_DISTANCE);
        data.setFpSize(FP_SIZE);
+       
+        data.setCrossCutPlaneIndex(SELECTED_PLANE);
+         data.setArbitraryPlanePos(ARBITRARY_NORMAL.x, ARBITRARY_NORMAL.y, ARBITRARY_NORMAL.z );
+         data.setPlanePosition(PLANE_POSITION.x, PLANE_POSITION.y, PLANE_POSITION.z);
+         data.setCrosscutSize(CROSSCUT_SIZE);
+         data.setCrosscutThickness(CROSSCUT_THICKNESS);
+         data.setCrosscutColor(CROSSCUT_COLOR);       
+       
+         data.setHighlightCuts(HIGHLIGHT_CUTS);
+         data.setShowVectors(CROSSCUT_VECTORS);
+         data.setAllCuts(ALL_CUTS);
+         data.setSamplingRays(SAMPLINGR_RAYS);
+         data.setShowPlane(SHOW_PLANE);
+         data.setShowBoxplot(BOXPLOT);
+         data.setShowBoxplotFunction(CONTINUOUS_BOXPLOT);
        
        overlaySetupData(data);
    }

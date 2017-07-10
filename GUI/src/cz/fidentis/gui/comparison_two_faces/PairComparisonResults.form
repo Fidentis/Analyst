@@ -203,7 +203,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane2" alignment="0" pref="1617" max="32767" attributes="0"/>
+          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -231,7 +231,7 @@
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="alignParamButton" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="19" max="32767" attributes="0"/>
+                      <EmptySpace pref="23" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -338,11 +338,15 @@
                                   </Group>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace type="separate" pref="21" max="32767" attributes="0"/>
-                                  <Component id="VisualizationBox" min="-2" pref="257" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="VisualizationBox" min="-2" pref="294" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="crosscutsPanel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -373,6 +377,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="shadersPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="crosscutsPanel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="comparisonButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       </Group>
@@ -445,7 +451,7 @@
                                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                       <Component id="transparencySlider" min="-2" pref="170" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="transpSpinner" pref="54" max="32767" attributes="0"/>
+                                      <Component id="transpSpinner" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -802,7 +808,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="histogram1" alignment="1" pref="350" max="32767" attributes="0"/>
+                          <Component id="histogram1" alignment="1" pref="388" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel21" min="-2" pref="117" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -1085,6 +1091,11 @@
                       <ResourceString bundle="cz/fidentis/gui/comparison_two_faces/Bundle.properties" key="PairComparisonResults.cylRadiusLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
+                </Component>
+                <Component class="cz.fidentis.gui.CrosscutsPanel" name="crosscutsPanel1">
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new cz.fidentis.gui.CrosscutsPanel((ViewerPanel)GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces(),(ComparisonContext)GUIController.getSelectedProjectTopComponent().getProject().getSelectedComparison2Faces())"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>

@@ -5,6 +5,10 @@
  */
 package cz.fidentis.gui;
 
+import cz.fidentis.controller.ComparisonContext;
+import java.awt.Dimension;
+import java.util.Hashtable;
+import javax.swing.JLabel;
 import javax.vecmath.Vector3f;
 
 /**
@@ -17,10 +21,20 @@ public class CrosscutsPanel extends javax.swing.JPanel {
      * Creates new form CrosscutsPanel
      */
     private ViewerPanel viewerPanel;
+    private ComparisonContext context;
+    private boolean valuesModified;
+    
+    public CrosscutsPanel(ViewerPanel viewerPanel, ComparisonContext c) {
+        this.viewerPanel = viewerPanel;
+        this.context = c;
+        initComponents();
+    }
     
     public CrosscutsPanel() {
         initComponents();
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,6 +45,12 @@ public class CrosscutsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        colorDialog = new javax.swing.JDialog();
+        jColorChooser1 = new javax.swing.JColorChooser();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jDialog1 = new javax.swing.JDialog();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         slicesPanel = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         xyRadioButton = new javax.swing.JRadioButton();
@@ -64,10 +84,59 @@ public class CrosscutsPanel extends javax.swing.JPanel {
         boxplotCheckBox = new javax.swing.JCheckBox();
         boxplotContinuousCheckBox = new javax.swing.JCheckBox();
 
+        Dimension dimension = new Dimension();
+        dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
+        colorDialog.setMinimumSize(dimension);
+        colorDialog.setModal(true);
+        colorDialog.setResizable(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton4, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.jButton4.text")); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.jButton5.text")); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout colorDialogLayout = new javax.swing.GroupLayout(colorDialog.getContentPane());
+        colorDialog.getContentPane().setLayout(colorDialogLayout);
+        colorDialogLayout.setHorizontalGroup(
+            colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jColorChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colorDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
+                .addGap(6, 6, 6))
+        );
+        colorDialogLayout.setVerticalGroup(
+            colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(colorDialogLayout.createSequentialGroup()
+                .addComponent(jColorChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton4))
+                .addGap(0, 16, Short.MAX_VALUE))
+        );
+
+        jDialog1.setModal(true);
+        jDialog1.setModalityType(java.awt.Dialog.ModalityType.DOCUMENT_MODAL);
+        jDialog1.setName("Numerical results "); // NOI18N
+        jDialog1.getContentPane().setLayout(new java.awt.GridLayout(1, 1));
+
         slicesPanel.setName(""); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.jLabel8.text")); // NOI18N
 
+        buttonGroup1.add(xyRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(xyRadioButton, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.xyRadioButton.text")); // NOI18N
         xyRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,6 +144,7 @@ public class CrosscutsPanel extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup1.add(yzRadioButton);
         yzRadioButton.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(yzRadioButton, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.yzRadioButton.text")); // NOI18N
         yzRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -83,6 +153,7 @@ public class CrosscutsPanel extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup1.add(xzRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(xzRadioButton, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.xzRadioButton.text")); // NOI18N
         xzRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +161,7 @@ public class CrosscutsPanel extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup1.add(arbitraryRadioButton);
         org.openide.awt.Mnemonics.setLocalizedText(arbitraryRadioButton, org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.arbitraryRadioButton.text")); // NOI18N
         arbitraryRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,7 +239,6 @@ public class CrosscutsPanel extends javax.swing.JPanel {
         crosscutSizeSlider.setPaintLabels(true);
         crosscutSizeSlider.setPaintTicks(true);
         crosscutSizeSlider.setToolTipText(org.openide.util.NbBundle.getMessage(CrosscutsPanel.class, "CrosscutsPanel.crosscutSizeSlider.toolTipText")); // NOI18N
-        fpDistanceSlider.setValue(10);
         crosscutSizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 crosscutSizeSliderStateChanged(evt);
@@ -218,8 +289,6 @@ public class CrosscutsPanel extends javax.swing.JPanel {
 
         thickness.setMaximum(80);
         thickness.setMinimum(10);
-        density.setVisible(false);
-        densLabel.setVisible(false);
         thickness.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 thicknessStateChanged(evt);
@@ -430,10 +499,10 @@ public class CrosscutsPanel extends javax.swing.JPanel {
         normalSpinnerY.setValue(0f);
         normalSpinnerZ.setValue(1f);
         viewerPanel.setPlaneNormal(new Vector3f(0f, 0f, 1f), true);
-        getContext().getArbitraryPlanePos().x = 0f;
-        getContext().getArbitraryPlanePos().y = 0f;
-        getContext().getArbitraryPlanePos().z = 1f;
-        getContext().setCrossCutPlaneIndex(0);
+        context.getArbitraryPlanePos().x = 0f;
+        context.getArbitraryPlanePos().y = 0f;
+        context.getArbitraryPlanePos().z = 1f;
+        context.setCrossCutPlaneIndex(0);
     }//GEN-LAST:event_xyRadioButtonActionPerformed
 
     private void yzRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yzRadioButtonActionPerformed
@@ -442,10 +511,10 @@ public class CrosscutsPanel extends javax.swing.JPanel {
         normalSpinnerY.setValue(0f);
         normalSpinnerZ.setValue(0f);
         viewerPanel.setPlaneNormal(new Vector3f(1f, 0f, 0f), true);
-        getContext().getArbitraryPlanePos().x = 1f;
-        getContext().getArbitraryPlanePos().y = 0f;
-        getContext().getArbitraryPlanePos().z = 0f;
-        getContext().setCrossCutPlaneIndex(1);
+        context.getArbitraryPlanePos().x = 1f;
+        context.getArbitraryPlanePos().y = 0f;
+        context.getArbitraryPlanePos().z = 0f;
+        context.setCrossCutPlaneIndex(1);
     }//GEN-LAST:event_yzRadioButtonActionPerformed
 
     private void xzRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xzRadioButtonActionPerformed
@@ -454,10 +523,10 @@ public class CrosscutsPanel extends javax.swing.JPanel {
         normalSpinnerY.setValue(1f);
         normalSpinnerZ.setValue(0f);
         viewerPanel.setPlaneNormal(new Vector3f(0f, 1f, 0f), true);
-        getContext().getArbitraryPlanePos().x = 0f;
-        getContext().getArbitraryPlanePos().y = 1f;
-        getContext().getArbitraryPlanePos().z = 0f;
-        getContext().setCrossCutPlaneIndex(2);
+        context.getArbitraryPlanePos().x = 0f;
+        context.getArbitraryPlanePos().y = 1f;
+        context.getArbitraryPlanePos().z = 0f;
+        context.setCrossCutPlaneIndex(2);
     }//GEN-LAST:event_xzRadioButtonActionPerformed
 
     private void arbitraryRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arbitraryRadioButtonActionPerformed
@@ -465,119 +534,208 @@ public class CrosscutsPanel extends javax.swing.JPanel {
             setNormalControlsEnabled(true);
 
         }
+        viewerPanel.setPlaneNormal(context.getArbitraryPlanePos(), true);
 
-        BatchComparison c = getContext();
-        viewerPanel.setPlaneNormal(c.getArbitraryPlanePos(), true);
-
-        c.setCrossCutPlaneIndex(3);
+        context.setCrossCutPlaneIndex(3);
     }//GEN-LAST:event_arbitraryRadioButtonActionPerformed
 
     private void normalSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerXStateChanged
         if (normalSpinnerX.isEnabled() && !valuesModified) {
-            getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
-            viewerPanel.setPlaneNormal(getContext().getArbitraryPlanePos(), true);
+            context.setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
+            viewerPanel.setPlaneNormal(context.getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerXStateChanged
 
     private void normalSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerYStateChanged
         if (normalSpinnerY.isEnabled() && !valuesModified) {
-            getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
-            viewerPanel.setPlaneNormal(getContext().getArbitraryPlanePos(), true);
+            context.setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
+            viewerPanel.setPlaneNormal(context.getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerYStateChanged
 
     private void normalSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_normalSpinnerZStateChanged
         if (normalSpinnerZ.isEnabled() && !valuesModified) {
-            getContext().setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlaneNormal(getContext().getArbitraryPlanePos(), true);
+            context.setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
+            viewerPanel.setPlaneNormal(context.getArbitraryPlanePos(), true);
         }
     }//GEN-LAST:event_normalSpinnerZStateChanged
 
     private void positionSpinnerZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerZStateChanged
         if (!valuesModified) {
-            getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
+            context.setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
+            viewerPanel.setPlanePoint(context.getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerZStateChanged
 
     private void positionSpinnerYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerYStateChanged
         if (!valuesModified) {
-            getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
+            context.setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
+            viewerPanel.setPlanePoint(context.getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerYStateChanged
 
     private void positionSpinnerXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_positionSpinnerXStateChanged
         if (!valuesModified) {
-            getContext().setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setPlanePoint(getContext().getPlanePosition(), true);
+            context.setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
+            viewerPanel.setPlanePoint(context.getPlanePosition(), true);
         }
     }//GEN-LAST:event_positionSpinnerXStateChanged
 
     private void crosscutSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_crosscutSizeSliderStateChanged
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setVectroScale(crosscutSizeSlider.getValue() / (float) 10);
-        getContext().setCrosscutSize(crosscutSizeSlider.getValue());
+        viewerPanel.getListener2().setVectroScale(crosscutSizeSlider.getValue() / (float) 10);
+        context.setCrosscutSize(crosscutSizeSlider.getValue());
     }//GEN-LAST:event_crosscutSizeSliderStateChanged
 
     private void highlightCutsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highlightCutsCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setHighlightCuts(highlightCutsCheckBox.isSelected());
-        getContext().setHighlightCuts(highlightCutsCheckBox.isSelected());
+        viewerPanel.getListener1().setHighlightCuts(highlightCutsCheckBox.isSelected());
+        context.setHighlightCuts(highlightCutsCheckBox.isSelected());
     }//GEN-LAST:event_highlightCutsCheckBoxActionPerformed
 
     private void samplingRaysCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_samplingRaysCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowSamplingRays(samplingRaysCheckBox.isSelected());
-        getContext().setSamplingRays(samplingRaysCheckBox.isSelected());
+        viewerPanel.getListener2().setShowSamplingRays(samplingRaysCheckBox.isSelected());
+        context.setSamplingRays(samplingRaysCheckBox.isSelected());
     }//GEN-LAST:event_samplingRaysCheckBoxActionPerformed
 
     private void allCutsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allCutsCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowAllCuts(allCutsCheckBox.isSelected());
-        getContext().setAllCuts(allCutsCheckBox.isSelected());
+        viewerPanel.getListener2().setShowAllCuts(allCutsCheckBox.isSelected());
+        context.setAllCuts(allCutsCheckBox.isSelected());
     }//GEN-LAST:event_allCutsCheckBoxActionPerformed
 
     private void vectorsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vectorsCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().setShowVectors(vectorsCheckBox.isSelected());
-        getContext().setShowVectors(vectorsCheckBox.isSelected());
+        viewerPanel.getListener2().setShowVectors(vectorsCheckBox.isSelected());
+        context.setShowVectors(vectorsCheckBox.isSelected());
     }//GEN-LAST:event_vectorsCheckBoxActionPerformed
 
     private void showPlaneCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPlaneCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setShowPlane(showPlaneCheckBox.isSelected());
-        getContext().setShowPlane(showPlaneCheckBox.isSelected());
+        viewerPanel.getListener1().setShowPlane(showPlaneCheckBox.isSelected());
+        context.setShowPlane(showPlaneCheckBox.isSelected());
     }//GEN-LAST:event_showPlaneCheckBoxActionPerformed
 
     private void thicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_thicknessStateChanged
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setCutThickness(thickness.getValue() / 10f);
-        getContext().setCrosscutThickness(thickness.getValue());
+        viewerPanel.getListener2().getInfo().setCutThickness(thickness.getValue() / 10f);
+        context.setCrosscutThickness(thickness.getValue());
     }//GEN-LAST:event_thicknessStateChanged
 
     private void colorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorPanelMouseClicked
-        activeColorPanel = colorPanel;
         jColorChooser1.setColor(colorPanel.getBackground());
         colorDialog.setVisible(true);
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setColorOfCut(colorPanel.getBackground().getRGBColorComponents(new float[3]));
-        getContext().setCrosscutColor(colorPanel.getBackground());
+        viewerPanel.getListener2().getInfo().setColorOfCut(colorPanel.getBackground().getRGBColorComponents(new float[3]));
+        context.setCrosscutColor(colorPanel.getBackground());
     }//GEN-LAST:event_colorPanelMouseClicked
 
     private void boxplotCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxplotCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setShowBoxplot(boxplotCheckBox.isSelected());
-        getContext().setShowBoxplot(boxplotCheckBox.isSelected());
+       viewerPanel.getListener2().getInfo().setShowBoxplot(boxplotCheckBox.isSelected());
+        context.setShowBoxplot(boxplotCheckBox.isSelected());
     }//GEN-LAST:event_boxplotCheckBoxActionPerformed
 
     private void boxplotContinuousCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxplotContinuousCheckBoxActionPerformed
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener2().getInfo().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
-        getContext().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
+        viewerPanel.getListener2().getInfo().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
+        context.setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
     }//GEN-LAST:event_boxplotContinuousCheckBoxActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        colorDialog.setVisible(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        colorDialog.setVisible(false);
+        colorPanel.setBackground(jColorChooser1.getColor());
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+    
+    private void setNormalControlsEnabled(boolean en) {
+        normalSpinnerX.setEnabled(en);
+        normalSpinnerY.setEnabled(en);
+        normalSpinnerZ.setEnabled(en);
+        jLabel9.setEnabled(en);
+        jLabel12.setEnabled(en);
+        jLabel15.setEnabled(en);
+    }
+    
+    public void enableArbitraryNormal() {
+        context.setCrossCutPlaneIndex(4);
+        arbitraryRadioButton.setEnabled(true);
+        arbitraryRadioButton.setSelected(true);
+        setNormalControlsEnabled(true);
+        
+    }
+    
+    public void setPlaneNormal(Vector3f normal) {
+        normalSpinnerX.setValue(normal.x);
+        normalSpinnerY.setValue(normal.y);
+        normalSpinnerZ.setValue(normal.z);   
+        context.setArbitraryPlanePos((float)normalSpinnerX.getValue(), (float) normalSpinnerY.getValue(), (float) normalSpinnerZ.getValue());
+    }
+
+    public void setPlanePoint(Vector3f p) {
+        positionSpinnerX.setValue(p.x);
+        positionSpinnerY.setValue(p.y);
+        positionSpinnerZ.setValue(p.z);
+        context.setPlanePosition((float)positionSpinnerX.getValue(), (float) positionSpinnerY.getValue(), (float) positionSpinnerZ.getValue());
+
+    }
+
+    public void setValuesModified(boolean valuesModified) {
+        this.valuesModified = valuesModified;
+    }
+    
+     public void setConfiguration() {
+        //crosscutPlane
+        switch (context.getCrossCutPlaneIndex()) {
+            case 0:
+                xyRadioButton.setSelected(true);
+                break;
+            case 1:
+                yzRadioButton.setSelected(true);
+                break;
+            case 2:
+                xzRadioButton.setSelected(true);
+                break;
+            case 3:
+                arbitraryRadioButton.setSelected(true);
+                break;
+        }
+
+        valuesModified = true;
+        normalSpinnerX.setValue(context.getArbitraryPlanePos().x);
+        normalSpinnerY.setValue(context.getArbitraryPlanePos().y);
+        normalSpinnerZ.setValue(context.getArbitraryPlanePos().z);
+
+        positionSpinnerX.setValue(context.getPlanePosition().x);
+        positionSpinnerY.setValue(context.getPlanePosition().y);
+        positionSpinnerZ.setValue(context.getPlanePosition().z);
+        valuesModified = false;
+
+        crosscutSizeSlider.setValue(context.getCrosscutSize());
+        thickness.setValue(context.getCrosscutThickness());
+        colorPanel.setBackground(context.getCrosscutColor());
+
+        vectorsCheckBox.setSelected(context.isShowVectors());
+        highlightCutsCheckBox.setSelected(context.isHighlightCuts());
+        allCutsCheckBox.setSelected(context.isAllCuts());
+        samplingRaysCheckBox.setSelected(context.isSamplingRays());
+        boxplotCheckBox.setSelected(context.isShowBoxplot());
+        boxplotContinuousCheckBox.setSelected(context.isShowBoxplotFunction());
+        showPlaneCheckBox.setSelected(context.isShowPlane());
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox allCutsCheckBox;
     private javax.swing.JRadioButton arbitraryRadioButton;
     private javax.swing.JCheckBox boxplotCheckBox;
     private javax.swing.JCheckBox boxplotContinuousCheckBox;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JDialog colorDialog;
     private javax.swing.JPanel colorPanel;
     private javax.swing.JSlider crosscutSizeSlider;
     private javax.swing.JLabel densLabel1;
     private javax.swing.JLabel densLabel2;
     private javax.swing.JCheckBox highlightCutsCheckBox;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JColorChooser jColorChooser1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;

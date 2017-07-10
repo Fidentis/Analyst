@@ -7,6 +7,7 @@ import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.controller.ProjectTree.Node;
 import cz.fidentis.controller.data.ColormapConfig;
+import cz.fidentis.controller.data.CrosscutConfig;
 import cz.fidentis.controller.data.TransparencyConfig;
 import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
+import javax.vecmath.Vector3f;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,7 +34,7 @@ import javax.swing.ImageIcon;
  *
  * @author Katka
  */
-public class Comparison2Faces {
+public class Comparison2Faces implements ComparisonContext{
     private String name = new String();                 //name of the view (??)
     private HDpainting HDP;                             //object to draw surface comparison (color map currently through shader)
     private HDpaintingInfo hdPaintingInfo;              //information needed for visualization of results
@@ -93,8 +95,18 @@ public class Comparison2Faces {
     private TransparencyConfig transparencyViz = new TransparencyConfig();
     private VectorsConfig vectorsViz = new VectorsConfig();
     private ColormapConfig colormapViz = new ColormapConfig();
+    private CrosscutConfig crosscutViz = new CrosscutConfig();
+    private boolean showBoxplot;
+    private boolean showBoxplotFunction;
     
     
+     public CrosscutConfig getCrosscutViz() {
+        return crosscutViz;
+    }
+
+    public void setCrosscutViz(CrosscutConfig crosscutViz) {
+        this.crosscutViz = crosscutViz;
+    }
 
     public TransparencyConfig getTransparencyViz() {
         return transparencyViz;
@@ -643,6 +655,140 @@ public class Comparison2Faces {
     }
     public ImageIcon getResultIcon() {
        return resultIcon;
+    }
+    
+    /*
+    *Crosscut Info
+    */
+    
+     @Override
+    public int getCrossCutPlaneIndex() {
+        return crosscutViz.getCrossCutPlaneIndex();
+    }
+
+    @Override
+    public void setCrossCutPlaneIndex(int crossCutPlaneIndex) {
+        crosscutViz.setCrossCutPlaneIndex(crossCutPlaneIndex);
+    }
+
+    @Override
+    public Vector3f getArbitraryPlanePos() {
+        return crosscutViz.getArbitraryPlanePos();
+    }
+
+    @Override
+    public void setArbitraryPlanePos(float x, float y, float z) {
+        crosscutViz.setArbitraryPlanePos(x, y, z);
+    }
+
+    @Override
+    public Vector3f getPlanePosition() {
+        return crosscutViz.getPlanePosition();
+    }
+
+    @Override
+    public void setPlanePosition(float x, float y, float z) {
+        crosscutViz.setPlanePosition(x, y, z);
+    }
+
+    @Override
+    public int getCrosscutSize() {
+        return crosscutViz.getCrosscutSize();
+    }
+
+    @Override
+    public void setCrosscutSize(int crosscutSize) {
+        crosscutViz.setCrosscutSize(crosscutSize);
+    }
+
+    @Override
+    public int getCrosscutThickness() {
+        return crosscutViz.getCrosscutThickness();
+    }
+
+    @Override
+    public void setCrosscutThickness(int crosscutThickness) {
+        crosscutViz.setCrosscutThickness(crosscutThickness);
+    }
+
+    @Override
+    public Color getCrosscutColor() {
+        return crosscutViz.getCrosscutColor();
+    }
+
+    @Override
+    public void setCrosscutColor(Color crosscutColor) {
+        crosscutViz.setCrosscutColor(crosscutColor);
+    }
+
+    @Override
+    public boolean isHighlightCuts() {
+        return crosscutViz.isHighlightCuts();
+    }
+
+    @Override
+    public void setHighlightCuts(boolean highlightCuts) {
+        crosscutViz.setHighlightCuts(highlightCuts);
+    }
+
+    @Override
+    public boolean isShowVectors() {
+        return crosscutViz.isShowVector();
+    }
+
+    @Override
+    public void setShowVectors(boolean showVectors) {
+        crosscutViz.setShowVector(showVectors);
+    }
+
+    @Override
+    public boolean isAllCuts() {
+        return crosscutViz.isAllCuts();
+    }
+
+    @Override
+    public void setAllCuts(boolean allCuts) {
+        crosscutViz.setAllCuts(allCuts);
+    }
+
+    @Override
+    public boolean isSamplingRays() {
+        return crosscutViz.isSamplingRays();
+    }
+
+    @Override
+    public void setSamplingRays(boolean samplingRays) {
+        crosscutViz.setSamplingRays(samplingRays);
+    }
+    
+    @Override
+        public boolean isShowPlane() {
+        return crosscutViz.isShowPlane();
+    }
+
+    @Override
+    public void setShowPlane(boolean showPlane) {
+        crosscutViz.setShowPlane(showPlane);
+    }
+
+    @Override
+    public boolean isShowBoxplot() {
+        return showBoxplot;
+    }
+
+    @Override
+    public void setShowBoxplot(boolean showBoxplot) {
+        this.showBoxplot = showBoxplot;
+    }
+
+    @Override
+    public boolean isShowBoxplotFunction() {
+        return showBoxplotFunction;
+    }
+
+    @Override
+    public void setShowBoxplotFunction(boolean showBoxplotFunction) {
+        this.showBoxplotFunction = showBoxplotFunction;
     }
 
 }

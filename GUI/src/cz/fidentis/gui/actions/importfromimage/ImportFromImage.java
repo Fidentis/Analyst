@@ -146,12 +146,12 @@ public final class ImportFromImage implements ActionListener {
                         
                         break;
                     case 4:
-                        tc.getViewerPanel_Batch().getListener().setModels(model);
+                        tc.getViewerPanel_Batch().getListener1().setModels(model);
                         tc.getViewerPanel_Batch().getCanvas1().setImportLabelVisible(false);
                         tc.getProject().getSelectedBatchComparison().addModel(modelFile);
                         
                         if(landmarksIn3D != null){
-                            tc.getViewerPanel_Batch().getListener().setFacialPoints(landmarksIn3D);
+                            tc.getViewerPanel_Batch().getListener1().setFacialPoints(landmarksIn3D);
                             tc.getProject().getSelectedBatchComparison().addFacialPoints(imported.getName(), landmarksIn3D);
                             tc.getViewerPanel_Batch().checkFpAvaialable();
                         }

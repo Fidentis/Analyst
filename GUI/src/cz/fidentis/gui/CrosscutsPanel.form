@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Container class="javax.swing.JDialog" name="colorDialog">
+      <Properties>
+        <Property name="modal" type="boolean" value="true"/>
+        <Property name="resizable" type="boolean" value="false"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Dimension dimension = new Dimension();&#xa;dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);&#xa;colorDialog.setMinimumSize(dimension);"/>
+      </AuxValues>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jColorChooser1" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButton5" min="-2" pref="73" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jColorChooser1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JColorChooser" name="jColorChooser1">
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton4">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cz/fidentis/gui/Bundle.properties" key="CrosscutsPanel.jButton4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton5">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cz/fidentis/gui/Bundle.properties" key="CrosscutsPanel.jButton5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JDialog" name="jDialog1">
+      <Properties>
+        <Property name="modal" type="boolean" value="true"/>
+        <Property name="modalityType" type="java.awt.Dialog$ModalityType" editor="org.netbeans.modules.form.editors.EnumEditor">
+          <Value id="DOCUMENT_MODAL"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="Numerical results " noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="1"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+    </Container>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    </Component>
+  </NonVisualComponents>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -213,6 +292,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="xyRadioButton">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cz/fidentis/gui/Bundle.properties" key="CrosscutsPanel.xyRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -223,6 +305,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="yzRadioButton">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cz/fidentis/gui/Bundle.properties" key="CrosscutsPanel.yzRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -234,6 +319,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="xzRadioButton">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cz/fidentis/gui/Bundle.properties" key="CrosscutsPanel.xzRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -244,6 +332,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="arbitraryRadioButton">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cz/fidentis/gui/Bundle.properties" key="CrosscutsPanel.arbitraryRadioButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -389,8 +480,7 @@
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="crosscutSizeSliderStateChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Hashtable&lt;Integer, JLabel&gt; labels =&#xa;                new Hashtable&lt;Integer, JLabel&gt;();&#xa;        labels.put(10, new JLabel(&quot;1&quot;));&#xa;        labels.put(20, new JLabel(&quot;2&quot;));&#xa;        labels.put(30, new JLabel(&quot;3&quot;));&#xa;        labels.put(40, new JLabel(&quot;4&quot;));&#xa;  labels.put(50, new JLabel(&quot;5&quot;));&#xa;  labels.put(60, new JLabel(&quot;6&quot;));&#xa;  labels.put(70, new JLabel(&quot;7&quot;));&#xa;  labels.put(80, new JLabel(&quot;8&quot;));&#xa;  labels.put(90, new JLabel(&quot;9&quot;));&#xa;  labels.put(100, new JLabel(&quot;10&quot;));&#xa;        crosscutSizeSlider.setLabelTable(labels);"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fpDistanceSlider.setValue(10);"/>
+            <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="Hashtable&lt;Integer, JLabel&gt; labels =&#xa;                new Hashtable&lt;Integer, JLabel&gt;();&#xa;        labels.put(10, new JLabel(&quot;1&quot;));&#xa;        labels.put(20, new JLabel(&quot;2&quot;));&#xa;        labels.put(30, new JLabel(&quot;3&quot;));&#xa;        labels.put(40, new JLabel(&quot;4&quot;));&#xa;  labels.put(50, new JLabel(&quot;5&quot;));&#xa;  labels.put(60, new JLabel(&quot;6&quot;));&#xa;  labels.put(70, new JLabel(&quot;7&quot;));&#xa;  labels.put(80, new JLabel(&quot;8&quot;));&#xa;  labels.put(90, new JLabel(&quot;9&quot;));&#xa;  labels.put(100, new JLabel(&quot;10&quot;));&#xa;        crosscutSizeSlider.setLabelTable(labels);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="highlightCutsCheckBox">
@@ -468,9 +558,6 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="thicknessStateChanged"/>
           </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="density.setVisible(false);&#xd;&#xa;densLabel.setVisible(false);"/>
-          </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="colorPanel">
           <Properties>
