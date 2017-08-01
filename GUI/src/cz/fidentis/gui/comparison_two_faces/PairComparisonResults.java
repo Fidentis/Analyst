@@ -976,7 +976,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if (getContext().getNumericalResults() != null) {
             String[][] values = TableProcessing.instance().parseTableAddHeader(getContext().getNumericalResults(), new String[]{
                 "Lower: " + getContext().getLowerHDTreshold() * 100 + "% Upper: "
-                + getContext().getUpperHDTreshold() * 100 + "% treshold",
+                + getContext().getUpperHDTreshold() * 100 + "% threshold",
                 getContext().getModel2().getName()});
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
