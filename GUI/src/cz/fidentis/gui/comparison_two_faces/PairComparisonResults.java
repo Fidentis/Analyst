@@ -1133,7 +1133,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if (!maxTresholdValueChanged
                 && getContext().getComparisonMethod() != ComparisonMethod.PROCRUSTES) {
             maxTresholdValueChanged = true;
-            getContext().setHausdorfMaxTreshold(Integer.valueOf(maxThresholdSpinner.getValue().toString()));
+            int value = Integer.valueOf(maxThresholdSpinner.getValue().toString());
+            getContext().setHausdorfMaxTreshold(value);
+            getContext().setUpperHDTreshold(value / 100.0f);
             maxThresholdSlider.setValue(getContext().getHausdorfMaxTreshold());
 
             setMaxThreshValue();
@@ -1489,6 +1491,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 && getContext().getComparisonMethod() != ComparisonMethod.PROCRUSTES) {
             maxTresholdValueChanged = true;
             getContext().setHausdorfMaxTreshold(maxThresholdSlider.getValue());
+            getContext().setUpperHDTreshold(maxThresholdSlider.getValue() / 100.0f);
             maxThresholdSpinner.setValue(getContext().getHausdorfMaxTreshold());
 
             setMaxThreshValue();
@@ -1513,6 +1516,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
             getContext().setHausdorfMinTreshold(minThreshSlider.getValue());
+            getContext().setLowerHDTreshold(minThreshSlider.getValue() / 100.0f);
             minThreshSpinner.setValue(getContext().getHausdorfMinTreshold());
 
             setMinThreshValue();
@@ -1523,7 +1527,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private void minThreshSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_minThreshSpinnerStateChanged
         if (!minTresholdValueChanged) {
             minTresholdValueChanged = true;
-            getContext().setHausdorfMinTreshold(Integer.valueOf(minThreshSpinner.getValue().toString()));
+            int value = Integer.valueOf(minThreshSpinner.getValue().toString());
+            getContext().setHausdorfMinTreshold(value);
+            getContext().setLowerHDTreshold(value / 100.0f);
             minThreshSlider.setValue(getContext().getHausdorfMinTreshold());
 
             setMinThreshValue();
