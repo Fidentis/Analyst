@@ -68,7 +68,8 @@ public class DialogUtils {
         int returnVal = chooser.showSaveDialog(tc);
 
         if(returnVal == JFileChooser.APPROVE_OPTION)  {
-            lastPath = chooser.getSelectedFile().getPath();
+            //without the name of last file
+            lastPath = chooser.getSelectedFile().getParent() + File.separator + " ";
             return lastPath;
         }    
         
@@ -180,7 +181,8 @@ public class DialogUtils {
                 loadedFiles[0] = chooser.getSelectedFile();
             }
             
-            lastPath = chooser.getSelectedFile().getPath();
+            //without name of last file
+            lastPath = chooser.getSelectedFile().getParent() + File.separator + " ";
             
             return loadedFiles;
         }
