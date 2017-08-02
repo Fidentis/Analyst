@@ -38,6 +38,9 @@ public class FPparser {
         FpModel fpModel = new FpModel();
 
         try {
+            if(!filePath.startsWith("file:\\"))
+                filePath = "file:\\" + filePath;
+            
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
             Document doc = documentBuilder.parse(filePath);
@@ -80,8 +83,8 @@ public class FPparser {
                 }
             }
         } catch (IOException | NumberFormatException | ParserConfigurationException | SAXException e) {
+            System.err.println(e);
         }
-
         return fpModel;
     }
 
