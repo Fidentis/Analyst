@@ -32,14 +32,16 @@ import org.xml.sax.SAXException;
  * @author Galvanizze
  */
 public class FPparser {
+    
+    private static final String FILE_PROTOCOL = "file:" + File.separator;
 
     public static FpModel load(String filePath) {
 
         FpModel fpModel = new FpModel();
 
         try {
-            if(!filePath.startsWith("file:\\"))
-                filePath = "file:\\" + filePath;
+            if(!filePath.startsWith(FILE_PROTOCOL))
+                filePath = FILE_PROTOCOL + filePath;
             
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
