@@ -14,6 +14,7 @@ import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.TableProcessing;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import cz.fidentis.undersampling.Methods;
@@ -63,6 +64,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         maxThresholdSlider.setVisible(false);
         jLabel5.setVisible(false);
         jButton8.setVisible(false);
+        exportLandmarksButton.setVisible(true);
 
     }
 
@@ -76,6 +78,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         maxThresholdSlider.setVisible(true);
         jLabel5.setVisible(true);
         jButton8.setVisible(true);
+        exportLandmarksButton.setVisible(false);
     }
 
     /**
@@ -160,6 +163,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jButton10 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         alignParamButton = new javax.swing.JButton();
+        exportLandmarksButton = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
         dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
@@ -678,7 +682,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         colormapPanel.setLayout(colormapPanelLayout);
         colormapPanelLayout.setHorizontalGroup(
             colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -693,7 +697,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(valuesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colormapPanelLayout.createSequentialGroup()
                                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(minThreshSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
                                     .addGroup(colormapPanelLayout.createSequentialGroup()
                                         .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -913,6 +917,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.exportLandmarksButton.text")); // NOI18N
+        exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportLandmarksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -929,7 +940,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2)
-                    .addComponent(alignParamButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(alignParamButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportLandmarksButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -947,9 +959,11 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addComponent(exportNumResButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8)
-                .addGap(7, 7, 7)
+                .addGap(4, 4, 4)
+                .addComponent(exportLandmarksButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(alignParamButton)
@@ -968,7 +982,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1617, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1562,6 +1576,16 @@ public class PairComparisonResults extends javax.swing.JPanel {
             transpTresholdValueChanged = false;
         }
     }//GEN-LAST:event_transpSpinnerStateChanged
+
+    private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        Comparison2Faces c = getContext();
+        FPImportExport.instance().exportTwoFaces(tc,
+                c.getMainFp(),
+                c.getModel1(),
+                c.getSecondaryFp(),
+                c.getModel2());
+    }//GEN-LAST:event_exportLandmarksButtonActionPerformed
     
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);
@@ -1690,6 +1714,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel cylRadiusLabel;
     private javax.swing.JLabel densLabel;
     private javax.swing.JSlider density;
+    private javax.swing.JButton exportLandmarksButton;
     private javax.swing.JButton exportNumResButton;
     private javax.swing.JPanel fogColorPanel;
     private javax.swing.JSlider fpDistanceSlider;

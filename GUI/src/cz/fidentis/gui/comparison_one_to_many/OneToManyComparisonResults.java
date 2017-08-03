@@ -15,6 +15,7 @@ import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -77,6 +78,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jLabel7.setVisible(false);
         heatplotButton.setVisible(false);
         heatplotButton1.setVisible(false);
+        exportLandmarksButton.setVisible(true);
     }
 
     public void showHausdorfControls() {
@@ -93,6 +95,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jLabel7.setVisible(true);
         heatplotButton.setVisible(true);
         heatplotButton1.setVisible(true);
+        
+        exportLandmarksButton.setVisible(false);
 
         if (VisualizationBox.getSelectedItem() == VisualizationType.COLORMAP) {
             densLabel.setVisible(false);
@@ -231,6 +235,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         cylLength = new javax.swing.JSlider();
         cylRadius = new javax.swing.JSlider();
         cylRadiusLabel = new javax.swing.JLabel();
+        exportLandmarksButton = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
         dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
@@ -1252,6 +1257,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(cylRadiusLabel, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.cylRadiusLabel.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.exportLandmarksButton.text")); // NOI18N
+        exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportLandmarksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1268,16 +1280,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addComponent(cylRadiusLabel)
                         .addGap(15, 15, 15)
                         .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(alignParametersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(heatplotButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(heatplotButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exportOrderedResultsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(comparisonButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -1288,7 +1290,18 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cylLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportOrderedResultsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(heatplotButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(heatplotButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(alignParametersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportLandmarksButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -1329,8 +1342,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 .addComponent(heatplotButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(heatplotButton1)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton6)
+                .addGap(4, 4, 4)
+                .addComponent(exportLandmarksButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1352,7 +1367,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1478, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1785,8 +1800,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
 
     
             private void setupVisualizationControls(HDpaintingInfo info) {
+               
                 final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
                 final OneToManyComparison c = getContext();
+                
+                //Procrustes
+                if(c.getHdPaintingInfo() == null)
+                    return;
                 
                 if (c.getVisualization() == VisualizationType.COLORMAP) {
                     tc.getOneToManyViewerPanel().getListener2().setPaintHD(false);
@@ -1895,8 +1915,15 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_VisualizationBoxActionPerformed
 
     private void setupVisualizationControls() {
+        
+        
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final OneToManyComparison c = getContext();
+        
+        //Procrustes
+        if(c.getHdPaintingInfo() == null)
+            return;
+        
         if (VisualizationBox.getSelectedItem().equals(VisualizationType.COLORMAP)) {
             colorMapPanel.setVisible(true);
             slicesPanel.setVisible(false);
@@ -2236,6 +2263,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         getContext().setShowPlane(showPlaneCheckBox.isSelected());
     }//GEN-LAST:event_showPlaneCheckBoxActionPerformed
 
+    private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        FPImportExport.instance().exportOneToMany(tc,
+                getContext(),
+                tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel());
+    }//GEN-LAST:event_exportLandmarksButtonActionPerformed
+
     public void enableArbitraryNormal() {
         getContext().setCrossCutPlaneIndex(4);
         arbitraryPlaneRadioButton.setEnabled(true);
@@ -2472,6 +2506,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel densLabel1;
     private javax.swing.JLabel densLabel2;
     private javax.swing.JSlider density;
+    private javax.swing.JButton exportLandmarksButton;
     private javax.swing.JButton exportOrderedResultsButton;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
