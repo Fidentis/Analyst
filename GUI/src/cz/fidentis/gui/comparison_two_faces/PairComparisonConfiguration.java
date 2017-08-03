@@ -923,10 +923,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         //if (GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getNumberOfModels() > 1) {
             Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), false, true);
 
+            Comparison2Faces c = getContext();
+            
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setModels(model);
             
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFacialPoints(null);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFacialPoints(null);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFacialPoints(c.getOriginalSecondaryFp());
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFacialPoints(c.getOriginalMainFp());
             
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setProcrustes(false);
             
@@ -934,7 +936,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setModels(model);
         //}
-        getContext().setState(1);
+        c.setState(1);
         GUIController.getConfigurationTopComponent().addRegistrationComponent();
 
     }//GEN-LAST:event_backRegistrationButtonActionPerformed

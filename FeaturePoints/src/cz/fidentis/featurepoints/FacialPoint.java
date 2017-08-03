@@ -62,7 +62,12 @@ public class FacialPoint implements Serializable {
         this.pos = new Vector3f(coords);
         
         this.type = type;
-    }    
+    }   
+    
+    public FacialPoint(Integer type, Vector3f pos, boolean active){
+        this(type, pos);
+        this.active = active;
+    }
 
     public boolean isActive() {
         return active;
@@ -109,5 +114,8 @@ public class FacialPoint implements Serializable {
         return type + ", " + getName() + ", " + getInfo();
     }
 
+    public FacialPoint deepCopyFp(){
+        return new FacialPoint(type, pos, active);
+    }
 
 }
