@@ -45,6 +45,7 @@ public class BatchComparison {
     private ArrayList<ArrayList<Float>> hdVisualResults;    //visual results, num of inner array == num of models, num of outer arrays == num of vertices of avgFace
     private ArrayList<File> models = new ArrayList<>();     //URLs to models stored on disk
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
+    private HashMap<String, List<FacialPoint>> originalFp = new HashMap<>();
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
     private List<List<ICPTransformation>> trans;
@@ -460,6 +461,19 @@ public class BatchComparison {
     public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
         this.facialPoints.clear();
         this.facialPoints.putAll(facialPoints);
+    }
+
+    public HashMap<String, List<FacialPoint>> getOriginalFp() {
+        return originalFp;
+    }
+
+    public void setOriginalFp(HashMap<String, List<FacialPoint>> originalFp) {
+        this.originalFp.clear();
+        this.originalFp.putAll(originalFp);
+    }
+    
+    public void addOriginalFp(String name, List<FacialPoint> fps){
+        this.originalFp.put(name, fps);
     }
 
     public boolean isShowPointInfo() {
