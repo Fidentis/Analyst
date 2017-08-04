@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.openide.util.Exceptions;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -85,7 +86,7 @@ public class FPparser {
                 }
             }
         } catch (IOException | NumberFormatException | ParserConfigurationException | SAXException e) {
-            System.err.println(e);
+            Exceptions.printStackTrace(e);
         }
         return fpModel;
     }
