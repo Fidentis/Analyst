@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.openide.util.Exceptions;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,12 +33,17 @@ import org.xml.sax.SAXException;
  * @author Galvanizze
  */
 public class FPparser {
+    
+    private static final String FILE_PROTOCOL = "file:" + File.separator;
 
     public static FpModel load(String filePath) {
 
         FpModel fpModel = new FpModel();
 
         try {
+            if(!filePath.startsWith(FILE_PROTOCOL))
+                filePath = FILE_PROTOCOL + filePath;
+            
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
             Document doc = documentBuilder.parse(filePath);
@@ -80,8 +86,8 @@ public class FPparser {
                 }
             }
         } catch (IOException | NumberFormatException | ParserConfigurationException | SAXException e) {
+            Exceptions.printStackTrace(e);
         }
-
         return fpModel;
     }
 
