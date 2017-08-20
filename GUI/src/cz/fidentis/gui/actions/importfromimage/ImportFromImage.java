@@ -6,6 +6,7 @@
 package cz.fidentis.gui.actions.importfromimage;
 
 import cz.fidentis.comparison.icp.KdTreeIndexed;
+import cz.fidentis.comparison.procrustes.Procrustes1ToMany;
 import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
@@ -77,7 +79,7 @@ public final class ImportFromImage implements ActionListener {
                 ProgressHandle p = ProgressHandle.createHandle("Creating face...");
                 p.start();
                 List<FacialPoint> points = dialog.getFeaturePoints();
-                Model imported = importFromImage(dialog.getImageFile(), dialog.getSelectedGender(), dialog.getSelectedAge(), points, dialog.getNumberOfVerts());             
+                Model imported = importFromImage(dialog.getImageFile(), dialog.getSelectedGender(), dialog.getSelectedAge(), points, dialog.getNumberOfVerts(), dialog.getNumOfClosestDepthMaps());             
                 
                 ModelExporter exp = new ModelExporter(imported);
                 File modelSaveDir = new File(tc.getProject().getTempDirectory().getPath() + File.separator + imported.getName().substring(0, imported.getName().length()-4));
@@ -179,9 +181,9 @@ public final class ImportFromImage implements ActionListener {
      * @param numOfVerts number of vertices the imported face should consist of
      * @return a mesh reconstructed from the given image
      */
-    public Model importFromImage(File imageFile, Gender targetGender, AgeCategories targetAge, List<FacialPoint> points, int numOfVerts) {
+    public Model importFromImage(File imageFile, Gender targetGender, AgeCategories targetAge, List<FacialPoint> points, int numOfVerts, int numOfClosestDepthMaps) {
         // 1. load suitable gem models
-        ArrayList<Model> gems = getSuitableGems(targetGender, targetAge, points);
+        ArrayList<Model> gems = getSuitableGems(targetGender, targetAge, points, numOfClosestDepthMaps);
         // 2. initialize models for computation
         Model model = new Model();
         initializeModels(model, gems, imageFile, points);
@@ -401,8 +403,9 @@ public final class ImportFromImage implements ActionListener {
      * @return list of depth models that match given parameters. Each model will
      * have all vertices that correspond to given facial points
      */
-    private ArrayList<Model> getSuitableGems(Gender gender, AgeCategories age, List<FacialPoint> points) {
+    private ArrayList<Model> getSuitableGems(Gender gender, AgeCategories age, List<FacialPoint> points, int numOfClosestGems) {
         ArrayList<Model> gems = new ArrayList<>();
+        ArrayList<List<FacialPoint>> fps = new ArrayList<>();
 
         String pathBase = GUIController.getPath() + File.separator + "models" + File.separator + "resources" + File.separator + "depth_models" + File.separator;
         try (BufferedReader reader = new BufferedReader(new FileReader(pathBase + "index.csv"));) {
@@ -423,6 +426,11 @@ public final class ImportFromImage implements ActionListener {
 
                         // load its points
                         List<FacialPoint> gemPoints = loadFidoCsv(new File(gemDir + File.separator + "pts.csv"));
+                        List<FacialPoint> pointsCopy = new ArrayList<>(gemPoints.size());
+                        for (FacialPoint p : gemPoints) {
+                            pointsCopy.add(new FacialPoint(p));
+                        }
+                        fps.add(pointsCopy);
 
                         for (FacialPoint point : points) {
                             if (point.isActive()) {
@@ -448,7 +456,36 @@ public final class ImportFromImage implements ActionListener {
             return null;
         }
 
-        return gems;
+        // now from the depth maps selected by age and gender select at most N
+        // most similar faces to the input
+        // if there is not enoug GEMs selected just use all
+        if (numOfClosestGems >= gems.size()) {
+            return gems;
+        }
+        // otherwise limit the selected depth maps by procrustes distance:
+        Procrustes1ToMany procrustes = new Procrustes1ToMany(points, fps, true);
+        // register the considered depth maps to the input feature points
+        procrustes.align1withN();
+        // compute the procrustes distances of depth models to the input face
+        List<Double> distances = procrustes.compare1WithN(0.0f);
+        // sort the result to be able to find out the max distance to be accepted
+        List<Double> sorted = new ArrayList<>(distances);
+        Collections.sort(sorted);
+        double max = sorted.get(numOfClosestGems);
+        // make a list of GEMs closer than the max distance, which should get N models
+        ArrayList<Model> result = new ArrayList<>();
+        for (int i = 0; i < gems.size(); i++) {
+            if (distances.get(i) < max) {
+                result.add(gems.get(i));
+            }
+            // when we have N models already selected we can finish. Also, this
+            // check may handle the case when a lot of models have the same distance
+            if (result.size() == numOfClosestGems) {
+                break;
+            }
+        }
+
+        return result;
     }
 
     public static ArrayList<FacialPoint> loadFidoCsv(File csvFile) {
