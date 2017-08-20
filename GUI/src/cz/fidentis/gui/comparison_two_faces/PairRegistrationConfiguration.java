@@ -1011,6 +1011,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                                 m, t, value, c);
 
                         p.finish();
+                        
+                        // apply registration to facial points as well
+                        List<FacialPoint> regFp = Icp.instance().applyFacialPointsRegistration(c.getSecondaryFp(), c.getCompFTransformations(), c.getScaleEnabled());
+                        c.setSecondaryFp(regFp);
+                        tc.getViewerPanel_2Faces().getListener2().setFacialPoints(regFp);
 
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                         tc.getViewerPanel_2Faces().getListener1().addModel(cFace);
