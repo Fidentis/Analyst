@@ -8,6 +8,8 @@ package cz.fidentis.gui.actions.landmarks;
 import cz.fidentis.featurepoints.FpTexter;
 import cz.fidentis.featurepoints.TableData;
 import cz.fidentis.utils.DialogUtils;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
@@ -212,14 +214,7 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     }//GEN-LAST:event_addLandmarkButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-       boolean result = FpTexter.getInstance().saveLandmarks();
-       
-       //check if save was successful
-       if(result)
-         setApplyButton(false);
-       else
-            errorSavingDescDialog();
-       
+        saveCurrentLandmarks(); 
     }//GEN-LAST:event_applyButtonActionPerformed
 
     private void loadDefaultDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDefaultDescriptionButtonActionPerformed
@@ -244,7 +239,7 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
                                                 "Unsaved changes.", JOptionPane.INFORMATION_MESSAGE);
             //save changes
             if(result == 0)
-                applyButtonActionPerformed(null);
+                saveCurrentLandmarks();
         }
            
         
@@ -318,6 +313,20 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     
     private void errorSavingDescDialog(){
         DialogUtils.instance().createMessageDialog(new String[]{"OK"}, 0, this, "Error saving landmark description.", "Saving failed.", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    protected void saveCurrentLandmarks() {
+        boolean result = FpTexter.getInstance().saveLandmarks();
+        
+        //check if save was successful
+        if(result)
+            setApplyButton(false);
+        else
+            errorSavingDescDialog();
+    }
+    
+    protected boolean hasUnsavedChanges(){
+        return applyButton.isEnabled();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
