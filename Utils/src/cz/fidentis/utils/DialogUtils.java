@@ -70,7 +70,7 @@ public class DialogUtils {
         if(returnVal == JFileChooser.APPROVE_OPTION)  {
             //without the name of last file
             lastPath = chooser.getSelectedFile().getParent() + File.separator + " ";
-            return lastPath;
+            return chooser.getSelectedFile().getAbsolutePath();
         }    
         
         return null;

@@ -7,6 +7,9 @@ package cz.fidentis.gui.actions.landmarks;
 
 import cz.fidentis.featurepoints.FpTexter;
 import cz.fidentis.featurepoints.TableData;
+import cz.fidentis.utils.DialogUtils;
+import java.io.File;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
 /**
@@ -209,10 +212,14 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     }//GEN-LAST:event_addLandmarkButtonActionPerformed
 
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-       FpTexter.getInstance().saveLandmarks();
+       boolean result = FpTexter.getInstance().saveLandmarks();
        
-        setApplyButton(false);
-       //some progress bar?
+       //check if save was successful
+       if(result)
+         setApplyButton(false);
+       else
+           JOptionPane.showConfirmDialog(this, "Error saving landmark description.");
+       
     }//GEN-LAST:event_applyButtonActionPerformed
 
     private void loadDefaultDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDefaultDescriptionButtonActionPerformed
@@ -223,7 +230,19 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     }//GEN-LAST:event_loadDefaultDescriptionButtonActionPerformed
 
     private void exportLandmarkDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarkDescriptionButtonActionPerformed
-        // TODO add your handling code here:
+        String filePath = DialogUtils.instance().openDialogueSaveFile(this, "CSV Files", new String[] {"csv"}, false);
+        
+        //Dialog canceled
+        if(filePath == null)
+            return;
+        
+        if(!filePath.endsWith(".csv"))
+            filePath += ".csv";
+        
+        boolean result = FpTexter.getInstance().exportLandmarks(filePath);
+        
+        if(!result)
+            JOptionPane.showConfirmDialog(this, "Error saving landmark description.");
     }//GEN-LAST:event_exportLandmarkDescriptionButtonActionPerformed
 
     private void loadLandmarkDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadLandmarkDescriptionButtonActionPerformed

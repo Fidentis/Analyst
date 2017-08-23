@@ -273,9 +273,25 @@ public class FpTexter {
      return td;
     }
 
-    public void saveLandmarks(){
+    public boolean saveLandmarks(){
+        String filePath;
         try {
-            String filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + TEXT_NAME;
+            filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + TEXT_NAME;
+            return saveLandmarks(filePath);
+        } catch (IOException ex) {
+            Logger.getLogger(FpTexter.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+    }
+    
+    public boolean exportLandmarks(String filePath){
+       return saveLandmarks(filePath);
+    }
+    
+    private boolean saveLandmarks(String filePath){
+        try {
+            
             StringBuilder sb = new StringBuilder("Type;Name;Info").append(System.lineSeparator());
         
             Set<Integer> ids = fpTexts.keySet();
@@ -304,6 +320,9 @@ public class FpTexter {
             
         } catch (IOException ex) {
             Logger.getLogger(FpTexter.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
+        
+        return true;
     }
 }
