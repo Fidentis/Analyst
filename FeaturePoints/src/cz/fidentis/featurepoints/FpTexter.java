@@ -40,6 +40,7 @@ public class FpTexter {
 
     public static FpTexter getInstance() {
         if (fpTexts.isEmpty()) {
+            //catch error loading?
             instance.loadCurrentLandmarkDescription();
         }
         return instance;
@@ -52,7 +53,7 @@ public class FpTexter {
         String filePath = "";
 
         try {
-            filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + landmarkText;
+            filePath =  landmarkText;
             
             int counter = 0;
             
@@ -93,12 +94,26 @@ public class FpTexter {
         }
     }
     
-    public void loadDefaultText(){
-        loadTexts(DEFAULT_TEXT);
+    public boolean loadDefaultText(){
+        try {
+            loadTexts(new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + DEFAULT_TEXT);
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
     }
     
-    public void loadCurrentLandmarkDescription(){
-        loadTexts(TEXT_NAME);
+    public boolean loadCurrentLandmarkDescription(){
+        try {
+            loadTexts(new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + TEXT_NAME);
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+    
+    public void importLandmarkDescription(String filePath){
+        loadTexts(filePath);
     }
     
     private Integer parseText(String text){
