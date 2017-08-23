@@ -30,8 +30,9 @@ import javax.swing.JOptionPane;
  */
 public class FpTexter {
 
-    private static String SEP = ";";
-    private static String textName = "fp_text.csv";
+    private static final String SEP = ";";
+    private static final String TEXT_NAME = "fp_text.csv";
+    private static final String DEFAULT_TEXT = "fp_text_default.csv";
     private static FpTexter instance  = new FpTexter();
     private static Map<Integer, List<String>> fpTexts = new HashMap<>();
 
@@ -39,19 +40,19 @@ public class FpTexter {
 
     public static FpTexter getInstance() {
         if (fpTexts.isEmpty()) {
-            instance.loadTexts();
+            instance.loadTexts(TEXT_NAME);
         }
         return instance;
     }
 
-    private void loadTexts() {
+    private void loadTexts(String landmarkText) {
 
         BufferedReader br = null;
         String line = "";
         String filePath = "";
 
         try {
-            filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + textName;
+            filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + landmarkText;
             
             int counter = 0;
             
@@ -88,6 +89,11 @@ public class FpTexter {
                 }
             }
         }
+    }
+    
+    public void loadDefaultText(){
+        fpTexts.clear();
+        loadTexts(DEFAULT_TEXT);
     }
     
     private Integer parseText(String text){
@@ -269,7 +275,7 @@ public class FpTexter {
 
     public void saveLandmarks(){
         try {
-            String filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + textName;
+            String filePath = new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + TEXT_NAME;
             StringBuilder sb = new StringBuilder("Type;Name;Info").append(System.lineSeparator());
         
             Set<Integer> ids = fpTexts.keySet();
@@ -284,7 +290,7 @@ public class FpTexter {
                     counter++;
                 }
 
-                if (counter >= landmarkNumber - 1) { //all landmarks have been added
+                if (counter > landmarkNumber - 1) { //all landmarks have been added
                     break;
                 }
             }

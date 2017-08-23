@@ -38,6 +38,9 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
         removeLandmarkButton = new javax.swing.JButton();
         editLandmarkButton = new javax.swing.JButton();
         addLandmarkButton = new javax.swing.JButton();
+        loadDefaultDescriptionButton = new javax.swing.JButton();
+        exportLandmarkDescriptionButton = new javax.swing.JButton();
+        loadLandmarkDescriptionButton = new javax.swing.JButton();
 
         landmarkTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,23 +100,59 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(loadDefaultDescriptionButton, org.openide.util.NbBundle.getMessage(LandmarkDescriptionDialogue.class, "LandmarkDescriptionDialogue.loadDefaultDescriptionButton.text")); // NOI18N
+        loadDefaultDescriptionButton.setMaximumSize(new java.awt.Dimension(71, 23));
+        loadDefaultDescriptionButton.setMinimumSize(new java.awt.Dimension(71, 23));
+        loadDefaultDescriptionButton.setPreferredSize(new java.awt.Dimension(71, 23));
+        loadDefaultDescriptionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadDefaultDescriptionButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarkDescriptionButton, org.openide.util.NbBundle.getMessage(LandmarkDescriptionDialogue.class, "LandmarkDescriptionDialogue.exportLandmarkDescriptionButton.text")); // NOI18N
+        exportLandmarkDescriptionButton.setMaximumSize(new java.awt.Dimension(71, 23));
+        exportLandmarkDescriptionButton.setMinimumSize(new java.awt.Dimension(71, 23));
+        exportLandmarkDescriptionButton.setPreferredSize(new java.awt.Dimension(71, 23));
+        exportLandmarkDescriptionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportLandmarkDescriptionButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(loadLandmarkDescriptionButton, org.openide.util.NbBundle.getMessage(LandmarkDescriptionDialogue.class, "LandmarkDescriptionDialogue.loadLandmarkDescriptionButton.text")); // NOI18N
+        loadLandmarkDescriptionButton.setMaximumSize(new java.awt.Dimension(71, 23));
+        loadLandmarkDescriptionButton.setMinimumSize(new java.awt.Dimension(71, 23));
+        loadLandmarkDescriptionButton.setPreferredSize(new java.awt.Dimension(71, 23));
+        loadLandmarkDescriptionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadLandmarkDescriptionButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(327, 327, 327)
-                .addComponent(addLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(removeLandmarkButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(applyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(loadDefaultDescriptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exportLandmarkDescriptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(loadLandmarkDescriptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removeLandmarkButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(applyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -126,7 +165,10 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
                     .addComponent(applyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(removeLandmarkButton)
                     .addComponent(editLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(addLandmarkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loadDefaultDescriptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(exportLandmarkDescriptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loadLandmarkDescriptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -173,6 +215,21 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
        //some progress bar?
     }//GEN-LAST:event_applyButtonActionPerformed
 
+    private void loadDefaultDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDefaultDescriptionButtonActionPerformed
+        //This doesn't save landmarks to disk!
+        FpTexter.getInstance().loadDefaultText();
+        fillTable();
+        setApplyButton(true);
+    }//GEN-LAST:event_loadDefaultDescriptionButtonActionPerformed
+
+    private void exportLandmarkDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarkDescriptionButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_exportLandmarkDescriptionButtonActionPerformed
+
+    private void loadLandmarkDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadLandmarkDescriptionButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loadLandmarkDescriptionButtonActionPerformed
+
     protected void fillTable(){
         TableData values = FpTexter.getInstance().landmarkDescription();
 
@@ -206,8 +263,11 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     private javax.swing.JButton addLandmarkButton;
     private javax.swing.JButton applyButton;
     private javax.swing.JButton editLandmarkButton;
+    private javax.swing.JButton exportLandmarkDescriptionButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable landmarkTable;
+    private javax.swing.JButton loadDefaultDescriptionButton;
+    private javax.swing.JButton loadLandmarkDescriptionButton;
     private javax.swing.JButton removeLandmarkButton;
     // End of variables declaration//GEN-END:variables
 }
