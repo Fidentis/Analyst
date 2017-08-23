@@ -139,14 +139,11 @@ public class DialogUtils {
      */
     public int rewriteFile(String fileName){
         String[] buttons = {"Yes", "Yes to all", "No", "Cancel"};
-                    int result = JOptionPane.showOptionDialog(null,
-                            "Do you really want to overwrite file \"" + fileName + "\"?",
-                            "Confirmation",
-                            JOptionPane.WARNING_MESSAGE,
-                            0,
-                            null,
-                            buttons,
-                            buttons[2]);
+        int result = createMessageDialog(buttons, 2, null,
+                    "Do you really want to overwrite file \"" + fileName + "\"?",
+                    "Confirmation",
+                    JOptionPane.WARNING_MESSAGE);
+                   
                     
         return result;
     }
@@ -189,6 +186,19 @@ public class DialogUtils {
         
         //if user didn't choose to pick any files
         return null;
+    }
+    
+    public int createMessageDialog(String[] buttons, int initialValue, Component component, String dialogMsg, String dialogTitle, int dialogOption){
+        int result =  JOptionPane.showOptionDialog(component,
+                            dialogMsg,
+                            dialogTitle,
+                            dialogOption,
+                            0,
+                            null,
+                            buttons,
+                            buttons[initialValue]);
+        
+        return result;
     }
     
 }

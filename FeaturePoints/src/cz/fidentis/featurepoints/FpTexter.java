@@ -40,13 +40,13 @@ public class FpTexter {
 
     public static FpTexter getInstance() {
         if (fpTexts.isEmpty()) {
-            instance.loadTexts(TEXT_NAME);
+            instance.loadCurrentLandmarkDescription();
         }
         return instance;
     }
 
-    private void loadTexts(String landmarkText) {
-
+    private void loadTexts(String landmarkText) {  
+        
         BufferedReader br = null;
         String line = "";
         String filePath = "";
@@ -57,6 +57,8 @@ public class FpTexter {
             int counter = 0;
             
             br = new BufferedReader(new FileReader(filePath));
+            fpTexts.clear();
+            
             while ((line = br.readLine()) != null) {
 
                 counter++;
@@ -92,8 +94,11 @@ public class FpTexter {
     }
     
     public void loadDefaultText(){
-        fpTexts.clear();
         loadTexts(DEFAULT_TEXT);
+    }
+    
+    public void loadCurrentLandmarkDescription(){
+        loadTexts(TEXT_NAME);
     }
     
     private Integer parseText(String text){
@@ -227,7 +232,8 @@ public class FpTexter {
      * 
      * @return TableData class containing header for table and information about landmarks.
      */
-    public TableData landmarkDescription(){     
+    public TableData landmarkDescription(){  
+        
      Set<Integer> ids = fpTexts.keySet();
      int landmarkNumber = fpTexts.size();       //acount for -1 which is unspecified, but not shown in GUI
      int counter = 0;

@@ -218,7 +218,7 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
        if(result)
          setApplyButton(false);
        else
-           JOptionPane.showConfirmDialog(this, "Error saving landmark description.");
+            DialogUtils.instance().createMessageDialog(new String[]{"OK"}, 0, this, "Error saving landmark description.", "Saving failed.", JOptionPane.ERROR_MESSAGE);
        
     }//GEN-LAST:event_applyButtonActionPerformed
 
@@ -230,6 +230,19 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     }//GEN-LAST:event_loadDefaultDescriptionButtonActionPerformed
 
     private void exportLandmarkDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarkDescriptionButtonActionPerformed
+        // If new added landmarks were not saved yet
+        if(applyButton.isEnabled()){
+            int result = DialogUtils.instance().createMessageDialog(new String[]{"Yes", "No"},
+                                                1, this, 
+                                                "Changes to landmark description were not saved. Do you want to save before exporting?", 
+                                                "Unsaved changes.", JOptionPane.INFORMATION_MESSAGE);
+            //save changes
+            if(result == 0)
+                applyButtonActionPerformed(null);
+        }
+           
+        
+        
         String filePath = DialogUtils.instance().openDialogueSaveFile(this, "CSV Files", new String[] {"csv"}, false);
         
         //Dialog canceled
@@ -242,7 +255,8 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
         boolean result = FpTexter.getInstance().exportLandmarks(filePath);
         
         if(!result)
-            JOptionPane.showConfirmDialog(this, "Error saving landmark description.");
+            DialogUtils.instance().createMessageDialog(new String[]{"OK"}, 0, this, "Error saving landmark description.", "Saving failed.", JOptionPane.ERROR_MESSAGE);
+           
     }//GEN-LAST:event_exportLandmarkDescriptionButtonActionPerformed
 
     private void loadLandmarkDescriptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadLandmarkDescriptionButtonActionPerformed
@@ -271,6 +285,8 @@ public class LandmarkDescriptionDialogue extends javax.swing.JPanel {
     }
     
     private void setConfiguration(){
+        //get latest saved landmark description
+        FpTexter.getInstance().loadCurrentLandmarkDescription();
         fillTable();    
     }
     
