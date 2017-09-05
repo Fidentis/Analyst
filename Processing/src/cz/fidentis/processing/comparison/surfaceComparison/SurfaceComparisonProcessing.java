@@ -918,7 +918,7 @@ public class SurfaceComparisonProcessing {
      * @return single number representing final variance computed from 'results'
      * based on 'varianceMethod'
      */
-    public float computeSingleVariation(List<Float> results, int varianceMethod, boolean useRelative) {
+    public static float computeSingleVariation(List<Float> results, int varianceMethod, boolean useRelative) {
         float variation = -1f;
 
         switch (varianceMethod) {

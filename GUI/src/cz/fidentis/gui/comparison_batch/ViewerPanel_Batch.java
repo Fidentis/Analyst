@@ -24,6 +24,7 @@ import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import static java.io.File.separatorChar;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,7 +62,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     private boolean removePoints = false;
     private boolean addPoints = false;
     private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
-
+    private LocalAreasJPanel pointer;
+    
     /**
      * Creates new form ViewerPanel4
      */
@@ -96,6 +98,10 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
 
     public void setModel(Model model) {
         listener.setModels(model);
+    }
+    
+    public void setLocalAreasJPanel(LocalAreasJPanel localAreasJPanel){
+        this.pointer = localAreasJPanel;
     }
 
     public void setResultButtonVisible(boolean b) {
@@ -294,6 +300,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 canvas1MouseDragged(evt);
             }
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                canvas1MouseMoved(evt);
+            }
         });
         canvas1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
@@ -303,6 +312,12 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 canvas1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                canvas1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                canvas1MouseExited(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 canvas1MousePressed(evt);
@@ -399,6 +414,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     }
 
     private void canvas1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MousePressed
+        if (pointer != null){
+            pointer.setMousePositionToSelectArea((double)evt.getX(), (double)evt.getY());
+        }
         canvasClicked(evt, listener, canvas1);
 
     }//GEN-LAST:event_canvas1MousePressed
@@ -713,6 +731,24 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
 
         }
     }//GEN-LAST:event_canvas1MouseWheelMoved
+
+    private void canvas1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseEntered
+        if (pointer != null) {
+            pointer.startMousePositionDetectionOnCanvas(true);
+        }
+    }//GEN-LAST:event_canvas1MouseEntered
+
+    private void canvas1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseExited
+        if (pointer != null) {
+            pointer.startMousePositionDetectionOnCanvas(false);
+        }
+    }//GEN-LAST:event_canvas1MouseExited
+
+    private void canvas1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseMoved
+        if (pointer != null){
+            pointer.setMousePosition(evt.getX(), evt.getY(), Calendar.getInstance());
+        }
+    }//GEN-LAST:event_canvas1MouseMoved
 
     // private JSplitPane jSplitPane1;
     // private Canvas canvas2;

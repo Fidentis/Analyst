@@ -71,6 +71,7 @@
                 <package>cz.fidentis.comparison.icp</package>
                 <package>cz.fidentis.comparison.kdTree</package>
                 <package>cz.fidentis.comparison.procrustes</package>
+                <package>cz.fidentis.comparison.localAreas</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/Jama-1.0.3.jar</runtime-relative-path>

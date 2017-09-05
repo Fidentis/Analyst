@@ -124,6 +124,10 @@
             <public-packages>
                 <package>cz.fidentis.renderer</package>
             </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/jglm-1.0.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jglm-1.0.0.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

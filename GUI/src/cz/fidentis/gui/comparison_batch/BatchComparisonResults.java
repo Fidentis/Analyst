@@ -9,13 +9,16 @@ import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.procrustes.DatabaseWorker;
 import cz.fidentis.controller.BatchComparison;
+import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.TableProcessing;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
+import cz.fidentis.model.corner_table.CornerTable;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.ResultExports;
+import cz.fidentis.renderer.ComparisonGLEventListener;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
 import cz.fidentis.utils.FileUtils;
@@ -39,6 +42,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import static javax.swing.JFileChooser.SAVE_DIALOG;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -58,6 +62,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     Boolean maxTresholdValueChanged = false;
     Boolean minTresholdValueChanged = false;
     private boolean valuesModified;
+    private JFrame LocalAreasFrame;
+    private LocalAreasJPanel localAreasJPanel;
+    private JFrame LocalSelectionFrame;
+    private UserSelectedAreaJPanel localSelectionJPanel;
+    private Model useModel;
+    private int modelIndex;
 
     /**
      * Creates new form BatchComparisonResults
@@ -65,6 +75,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     public BatchComparisonResults() {
         initComponents();
         activeColorPanel = new JPanel();
+        useModel = getContext().getAverageFace();
+        modelIndex = -1;
 
     }
 
@@ -131,6 +143,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jFrame2 = new javax.swing.JFrame();
+		plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
+		plotsDrawingPanelAuxiliary2 = new cz.fidentis.gui.PlotsDrawingPanelAuxiliary();
+		pairComparisonPanel = new cz.fidentis.gui.PairComparisonPanel();
         histogramPanel1 = new cz.fidentis.visualisation.histogram.histogramPanel();
         jFrame3 = new javax.swing.JFrame();
         jPanel7 = new javax.swing.JPanel();
@@ -139,11 +154,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         lensSlider = new javax.swing.JSlider();
         jScrollPane4 = new javax.swing.JScrollPane();
-        plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jFrame4 = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
-        plotsDrawingPanelAuxiliary2 = new cz.fidentis.gui.PlotsDrawingPanelAuxiliary();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
@@ -154,7 +167,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         auxLensSlider = new javax.swing.JSlider();
         jLabel7 = new javax.swing.JLabel();
         pairFrame = new javax.swing.JFrame();
-        pairComparisonPanel = new cz.fidentis.gui.PairComparisonPanel();
         alignmentFrame = new javax.swing.JFrame();
         jScrollPane3 = new javax.swing.JScrollPane();
         alignmentTable = new javax.swing.JTable();
@@ -236,8 +248,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jComboBox3 = new javax.swing.JComboBox();
         colorSchemeComboBox = new javax.swing.JComboBox();
         jLabel21 = new javax.swing.JLabel();
+        jButton13 = new javax.swing.JButton();
         heatplotButton1 = new javax.swing.JButton();
         alignResButton = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
         dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
@@ -400,8 +414,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGap(2, 2, 2)
                 .addComponent(lensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        plotsDrawingPanelBatchNumerical1.setPreferredSize(new java.awt.Dimension(500, 388));
+		plotsDrawingPanelBatchNumerical1.setPreferredSize(new java.awt.Dimension(500, 388));
 
         javax.swing.GroupLayout plotsDrawingPanelBatchNumerical1Layout = new javax.swing.GroupLayout(plotsDrawingPanelBatchNumerical1);
         plotsDrawingPanelBatchNumerical1.setLayout(plotsDrawingPanelBatchNumerical1Layout);
@@ -431,7 +444,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
         );
 
-        plotsDrawingPanelAuxiliary2.addMouseListener(new java.awt.event.MouseAdapter() {
+		plotsDrawingPanelAuxiliary2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 plotsDrawingPanelAuxiliary2MouseClicked(evt);
             }
@@ -493,7 +506,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -533,14 +546,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(plotsDrawingPanelAuxiliary2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+			.addComponent(plotsDrawingPanelAuxiliary2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(plotsDrawingPanelAuxiliary2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jFrame4Layout = new javax.swing.GroupLayout(jFrame4.getContentPane());
@@ -558,11 +570,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         pairFrame.getContentPane().setLayout(pairFrameLayout);
         pairFrameLayout.setHorizontalGroup(
             pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pairComparisonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         pairFrameLayout.setVerticalGroup(
             pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pairComparisonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 460, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         pairFrame.setSize(new Dimension(800,600));
@@ -764,7 +776,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(minThreshSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(maxThresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(68, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1203,7 +1215,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                                         .addComponent(yzRadioButton)
                                         .addGap(18, 18, 18)
                                         .addComponent(xzRadioButton)))))
-                        .addContainerGap(43, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         slicesPanelLayout.setVerticalGroup(
             slicesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1335,6 +1347,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel21, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel21.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton13, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton13.text")); // NOI18N
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout colormapPanelLayout = new javax.swing.GroupLayout(colormapPanel);
         colormapPanel.setLayout(colormapPanelLayout);
         colormapPanelLayout.setHorizontalGroup(
@@ -1345,15 +1364,16 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(jLabel21)
                         .addGap(21, 21, 21)
-                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(colorSchemeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox3, 0, 239, Short.MAX_VALUE)
+                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+                    .addComponent(histogram1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                     .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         colormapPanelLayout.setVerticalGroup(
@@ -1370,7 +1390,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(selectionButton)
                     .addComponent(jButton12)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton13))
                 .addGap(0, 0, 0))
         );
 
@@ -1387,6 +1408,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         alignResButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 alignResButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton6.text")); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
             }
         });
 
@@ -1414,7 +1442,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(slicesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(colormapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1433,6 +1462,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(heatplotButton)
@@ -1730,6 +1761,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void comparisonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comparisonButtonActionPerformed
 
+        if (LocalAreasFrame.isVisible()){
+            LocalAreasFrame.setVisible(false);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().HideLocalAreaRender();
+        } 
+        
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         final BatchComparison c = getContext();
         Runnable run = new Runnable() {
@@ -1970,6 +2006,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().clearSelection();
+        LocalSelectionFrame.setVisible(false);
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void selectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionButtonActionPerformed
@@ -2444,14 +2481,149 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         getContext().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
     }//GEN-LAST:event_boxplotContinuousCheckBoxActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (LocalAreasFrame.isVisible()){
+            LocalAreasFrame.setVisible(false);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().HideLocalAreaRender();
+           
+            localAreasJPanel.isVisible(false);
+            
+        } else {
+            LocalAreasFrame.setVisible(true);
+            LocalAreasFrame.setAlwaysOnTop(true);
+            if (!localAreasJPanel.isInitialized()){
+                localAreasJPanel.loadRangeValues(histogram1.getMin(), histogram1.getMax());
+            }
+            
+            localAreasJPanel.isVisible(true);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        if (selectionButton.isSelected()){
+            if (LocalSelectionFrame.isVisible()){
+                LocalSelectionFrame.setVisible(false);
+            } else {
+                LocalSelectionFrame.setVisible(true);
+                LocalSelectionFrame.setAlwaysOnTop(true);
+
+                localSelectionJPanel.SetArea( getContext().getHDinfo().getDistance(),
+                        getContext().getHDinfo().getSelectionVertices(), 
+                        true, 
+                        getContext().getHdVisualResults(), 
+                        getContext().getModels(),
+                        getContext().getMetricTypeIndex());
+            }
+        }
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void InitUserSelectedPanel(){
+        LocalSelectionFrame = new JFrame("LocalAreas");
+        LocalSelectionFrame.setVisible(false);
+        LocalSelectionFrame.setMinimumSize(new Dimension(400, 700));
+        LocalSelectionFrame.setMaximumSize(new Dimension(400, 700));
+        
+        localSelectionJPanel = new UserSelectedAreaJPanel();
+
+        LocalSelectionFrame.add(localSelectionJPanel);
+        
+        LocalSelectionFrame.pack();
+        
+    }
+            
+    private void InitLocalAreaPanel(){
+        LocalAreasFrame = new JFrame("LocalAreas");
+        LocalAreasFrame.setVisible(false);
+        LocalAreasFrame.setMinimumSize(new Dimension(400, 700));
+        LocalAreasFrame.setMaximumSize(new Dimension(400, 700));
+        
+        localAreasJPanel = new LocalAreasJPanel();
+        
+        localAreasJPanel.setPointerBatchComparisonResults(this);
+        LocalAreasFrame.add(localAreasJPanel);
+        
+        LocalAreasFrame.pack();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setLocalAreasJPanel(localAreasJPanel);
+        
+        LocalAreasFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().HideLocalAreaRender();
+                localAreasJPanel.closeSelectedArea();
+            }
+        });
+    }
+    // <editor-fold defaultstate="collapsed" desc="Getters">  
+    public Model getCurrentModel(){
+        useModel.setCornerTable(new CornerTable(useModel));
+        return useModel;
+    }
+    
+    public Model GetAverageModel(){
+        Model m = getContext().getAverageFace();
+
+        return m;
+    }
+    
+    public ArrayList<ArrayList<Float>> GetAuxiliaryResults(){
+        return getContext().getHdVisualResults();
+    }
+    
+    public List<Float> GetAuxiliaryAverageResults(){
+        
+        if (!getContext().getAverageFace().equals(this.getCurrentModel())){
+            ArrayList<ArrayList<Float>> values = new ArrayList<>();
+            for (int i = 0; i < getContext().getModels().size(); i++){
+                if (modelIndex != i){
+                    ArrayList<Float> value = new ArrayList<>(SurfaceComparisonProcessing.instance().numRawResForModel(getContext().getHdCSVresults(), 
+                                                                                    getContext().getModels().size(), 
+                                                                                    modelIndex, 
+                                                                                    i, 
+                                                                                    true));
+                    values.add(value);
+                }
+                
+                return SurfaceComparisonProcessing.instance().computeVariation(values, getContext().getMetricTypeIndex(), getContext().getValuesTypeIndex() == 0);
+            }
+        }
+        return getContext().getHd();
+    }
+
+    public LocalAreasJPanel getLocalAreasJPanel(){
+        return this.localAreasJPanel;
+    }
+    
+    public ComparisonGLEventListener getRenderer(){
+        return GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener();
+    }
+    
     public histogramPanel getHistogram() {
         return histogram1;
     }
-
-    private BatchComparison getContext() {
+    
+    public BatchComparison getContext(){
         return GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
     }
+    
+    public Canvas getCanvas(){
+        return GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getCanvas1();
+    }
+    
+    public boolean isVisibleLocalArea(){
+        return this.LocalAreasFrame.isVisible();
+    }
+    // </editor-fold>  
+    
+    // <editor-fold defaultstate="collapsed" desc="Setters">  
+     public void setCurrentModel(Model model, int index){
+        useModel = model;
+        modelIndex = index;
+    }
+    
+    public void setModelForCalculation(Model model){
+        useModel = model;
+    }
+    // </editor-fold>  
 
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);
@@ -2556,6 +2728,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         } else {
             alignResButton.setVisible(false);
         }
+        
+        InitLocalAreaPanel();
+        InitUserSelectedPanel();
     }
 
     public void setValuesModified(boolean valuesModified) {
@@ -2631,10 +2806,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
@@ -2690,10 +2867,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSpinner normalSpinnerX;
     private javax.swing.JSpinner normalSpinnerY;
     private javax.swing.JSpinner normalSpinnerZ;
-    private cz.fidentis.gui.PairComparisonPanel pairComparisonPanel;
     private javax.swing.JFrame pairFrame;
-    private cz.fidentis.gui.PlotsDrawingPanelAuxiliary plotsDrawingPanelAuxiliary2;
-    private cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical plotsDrawingPanelBatchNumerical1;
     private javax.swing.JSpinner positionSpinnerX;
     private javax.swing.JSpinner positionSpinnerY;
     private javax.swing.JSpinner positionSpinnerZ;
@@ -2708,6 +2882,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JRadioButton xyRadioButton;
     private javax.swing.JRadioButton xzRadioButton;
     private javax.swing.JRadioButton yzRadioButton;
+	private cz.fidentis.gui.PairComparisonPanel pairComparisonPanel;
+	private cz.fidentis.gui.PlotsDrawingPanelAuxiliary plotsDrawingPanelAuxiliary2;
+    private cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical plotsDrawingPanelBatchNumerical1;
     // End of variables declaration//GEN-END:variables
 
 }
