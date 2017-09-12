@@ -314,6 +314,7 @@ public class LocalAreasJPanel extends javax.swing.JPanel {
                 isAreaSelected = true;
                 startMousePositionDetectionOnCanvas(true);
                 AreasJList.setSelectedIndex(localAreas.getIndexes()[0]);
+                pointerBatchComparisonResult.getRenderer().hideSelectedArea();
                 return;
             }
             i++;

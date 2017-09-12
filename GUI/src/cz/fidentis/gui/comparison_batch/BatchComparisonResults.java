@@ -2501,19 +2501,19 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         if (selectionButton.isSelected()){
-            if (LocalSelectionFrame.isVisible()){
-                LocalSelectionFrame.setVisible(false);
-            } else {
+            if (!LocalSelectionFrame.isVisible()){
                 LocalSelectionFrame.setVisible(true);
                 LocalSelectionFrame.setAlwaysOnTop(true);
 
-                localSelectionJPanel.SetArea( getContext().getHDinfo().getDistance(),
+                
+            }
+            
+            localSelectionJPanel.SetArea( getContext().getHDinfo().getDistance(),
                         getContext().getHDinfo().getSelectionVertices(), 
                         true, 
                         getContext().getHdVisualResults(), 
                         getContext().getModels(),
                         getContext().getMetricTypeIndex());
-            }
         }
     }//GEN-LAST:event_jButton13ActionPerformed
 
@@ -2550,6 +2550,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().HideLocalAreaRender();
                 localAreasJPanel.closeSelectedArea();
+                localAreasJPanel.isVisible(false);
             }
         });
     }

@@ -93,7 +93,13 @@ public class HistogramJPanel extends javax.swing.JPanel {
 
             //calculating distribution
             points.calculateDistribution(Math.abs(points.max - points.min), Xmax - Xmin);
-
+            
+            int pointsCount = points.distribution.size();
+            
+            if (pointsCount < 1){
+                return;
+            }
+            
             if(g instanceof Graphics2D){
                 Graphics2D g2 = (Graphics2D)g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -139,9 +145,9 @@ public class HistogramJPanel extends javax.swing.JPanel {
                 g.drawLine(Xmin, Ymin, Xmin, Ymax);   
                 // </editor-fold>
                 
-                for (int i = 0; i < points.distribution.size(); i++){
+                for (int i = 0; i < pointsCount; i++){
                     // <editor-fold desc="Drawing column">
-                    int value = points.distribution.get(points.distribution.size() - i -1).size();
+                    int value = points.distribution.get(pointsCount - i -1).size();
                     int x = 46 + 5*i;
                     int y = 35 + ((height - 85)/points.maxClusteredPoints)*(points.maxClusteredPoints - value);
                     if (value == 0){
@@ -151,7 +157,7 @@ public class HistogramJPanel extends javax.swing.JPanel {
                     int heightRec = height - 50 - y;
                     int widthRec = 5;
 
-                    g.setColor(points.distributionColor.get(points.distribution.size() - i -1));
+                    g.setColor(points.distributionColor.get(pointsCount - i -1));
                     g.fillRect(x,y,widthRec,heightRec);
                     // </editor-fold>
 
@@ -179,19 +185,19 @@ public class HistogramJPanel extends javax.swing.JPanel {
                 // <editor-fold desc="Writing text for selected column">
                 if (this.selectedIndex != -1){
                     g.setColor(Color.black);
-                    g2.drawString("Count: "+points.distribution.get(points.distribution.size() - this.selectedIndex - 1).size(), 
+                    g2.drawString("Count: "+points.distribution.get(pointsCount - this.selectedIndex - 1).size(), 
                             30 + 5 * this.selectedIndex, Ymin - 22); 
                     
-                    g2.drawString(points.distributionBoundaries.get(points.distribution.size() - this.selectedIndex - 1), 
+                    g2.drawString(points.distributionBoundaries.get(pointsCount - this.selectedIndex - 1), 
                             10 + 5 * this.selectedIndex, Ymin - 5); 
                 }
                 
                 if (this.highlightedIndex != -1){
                     g.setColor(Color.red);
-                    g2.drawString("Count: "+points.distribution.get(points.distribution.size() - this.highlightedIndex - 1).size(), 
+                    g2.drawString("Count: "+points.distribution.get(pointsCount - this.highlightedIndex - 1).size(), 
                             30 + 5 * this.highlightedIndex, Ymin - 22); 
                     
-                    g2.drawString(points.distributionBoundaries.get(points.distribution.size() - this.highlightedIndex - 1), 
+                    g2.drawString(points.distributionBoundaries.get(pointsCount - this.highlightedIndex - 1), 
                             10 + 5 * this.highlightedIndex, Ymin - 5); 
                 }
                 // </editor-fold>
