@@ -467,7 +467,7 @@ public final class ImportFromImage implements ActionListener {
         // register the considered depth maps to the input feature points
         procrustes.align1withN();
         // compute the procrustes distances of depth models to the input face
-        List<Double> distances = procrustes.compare1WithN(0.0f);
+        List<Double> distances = procrustes.compare1WithN(0.05f);
         // sort the result to be able to find out the max distance to be accepted
         List<Double> sorted = new ArrayList<>(distances);
         Collections.sort(sorted);
