@@ -75,8 +75,8 @@ public class Procrustes1ToMany {
      * 
      * @return      numerical result which is Procrustes distance between reference and each from N conf.
      */    
-    public String compare1WithN(float treshold){
-        String distances = " ;1;\n";
+    public List<Double> compare1WithN(float treshold){
+        List<Double> distances = new ArrayList<>();
         List<ProcrustesAnalysis> list = new ArrayList();
         
         pa.normalize(scaling);
@@ -87,7 +87,7 @@ public class Procrustes1ToMany {
             gpa.addPA(pa2.get(i));
             gpa.setScaling(scaling);
             gpa.doGPA(treshold);            //align to pa?
-            distances = distances.concat((i+1) + ";" + gpa.getPA(0).countDistance(gpa.getPA(1), scaling) + ";\n");
+            distances.add(gpa.getPA(0).countDistance(gpa.getPA(1), scaling));
             
             list.add(gpa.getPA(1));
         }
