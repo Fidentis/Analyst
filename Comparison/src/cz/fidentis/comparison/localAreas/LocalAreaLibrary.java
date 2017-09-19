@@ -279,25 +279,7 @@ public class LocalAreaLibrary {
         
         return vertexList;
     }
-    
-    private static Vector3f crossProduct(Vector3f u, Vector3f v){
 
-        float x = u.getY() * v.getZ() - v.getY() * u.getZ();
-        float y = u.getZ() * v.getX() - v.getZ() * u.getX();
-        float z = u.getX() * v.getY() - v.getX() * u.getY();
-        
-        return new Vector3f(x, y, z);
-    }
-    
-     private static float dotProduct(Vector3f u, Vector3f v){
-
-        float x = u.getX() * v.getX();
-        float y = u.getY() * v.getY();
-        float z = u.getZ() * v.getZ();
-        
-        return x+y+z;
-    }
-    
     private static int smallestX(List<Point3D> points){
         int index = -1;
         int pomIndex = -1;

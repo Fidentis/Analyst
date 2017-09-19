@@ -389,4 +389,13 @@ public class MathUtils {
         
         return minValue;
     }
+
+    private static float dotProduct(Vector3f u, Vector3f v){
+
+        float x = u.getX() * v.getX();
+        float y = u.getY() * v.getY();
+        float z = u.getZ() * v.getZ();
+        
+        return x+y+z;
+    }
 }

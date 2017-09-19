@@ -248,10 +248,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jComboBox3 = new javax.swing.JComboBox();
         colorSchemeComboBox = new javax.swing.JComboBox();
         jLabel21 = new javax.swing.JLabel();
-        jButton13 = new javax.swing.JButton();
+        jButtonSelectedArea = new javax.swing.JButton();
         heatplotButton1 = new javax.swing.JButton();
         alignResButton = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jButtonLocalAreas = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
         dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
@@ -1347,10 +1347,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel21, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel21.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton13, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton13.text")); // NOI18N
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectedArea, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButtonSelectedArea.text")); // NOI18N
+        jButtonSelectedArea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                jButtonSelectedAreaActionPerformed(evt);
             }
         });
 
@@ -1368,7 +1368,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addGroup(colormapPanelLayout.createSequentialGroup()
                         .addComponent(selectionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonSelectedArea, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1391,7 +1391,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(selectionButton)
                     .addComponent(jButton12)
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton13))
+                    .addComponent(jButtonSelectedArea))
                 .addGap(0, 0, 0))
         );
 
@@ -1411,10 +1411,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton6, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton6.text")); // NOI18N
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonLocalAreas, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButtonLocalAreas.text")); // NOI18N
+        jButtonLocalAreas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                jButtonLocalAreasActionPerformed(evt);
             }
         });
 
@@ -1443,7 +1443,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(colormapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonLocalAreas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1462,7 +1462,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addComponent(jButtonLocalAreas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2481,7 +2481,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         getContext().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
     }//GEN-LAST:event_boxplotContinuousCheckBoxActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButtonLocalAreasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLocalAreasActionPerformed
         if (LocalAreasFrame.isVisible()){
             LocalAreasFrame.setVisible(false);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().HideLocalAreaRender();
@@ -2497,9 +2497,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             
             localAreasJPanel.isVisible(true);
         }
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_jButtonLocalAreasActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void jButtonSelectedAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectedAreaActionPerformed
         if (selectionButton.isSelected()){
             if (!LocalSelectionFrame.isVisible()){
                 LocalSelectionFrame.setVisible(true);
@@ -2515,7 +2515,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         getContext().getModels(),
                         getContext().getMetricTypeIndex());
         }
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_jButtonSelectedAreaActionPerformed
 
     private void InitUserSelectedPanel(){
         LocalSelectionFrame = new JFrame("LocalAreas");
@@ -2807,12 +2807,12 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButtonSelectedArea;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonLocalAreas;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
