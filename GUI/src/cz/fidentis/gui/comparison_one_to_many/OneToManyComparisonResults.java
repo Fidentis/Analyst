@@ -2393,6 +2393,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         fpSizeSlider.setValue(c.getFpSize());
 
         VisualizationBox.removeItem(VisualizationType.TRANSPARENCY);
+        //Temporary for Fidentis2
+        VisualizationBox.removeItem(VisualizationType.VECTORS);
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
