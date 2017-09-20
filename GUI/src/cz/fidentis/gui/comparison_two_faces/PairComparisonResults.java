@@ -24,6 +24,7 @@ import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import cz.fidnetis.gui.windows.VisExportResizeWindow;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.color.ColorSpace;
@@ -292,9 +293,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jButton3.text")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
             }
         });
 
@@ -1074,16 +1075,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         colorDialog.setVisible(false);
         activeColorPanel.setBackground(jColorChooser1.getColor());
 
-        //???
-        HDpaintingInfo hdp;
-
-        try {
-            hdp = getContext().getHdPaintingInfo();
-
-        } catch (NullPointerException ex) {
-            hdp = null;
-        }
-
         histogram1.repaint();
         setColors();
 
@@ -1099,19 +1090,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
         ResultExports.instance().exportCSVnumeric(tc, getContext().getNumericalResults());
 
     }//GEN-LAST:event_exportNumResButtonActionPerformed
-
-    /**
-     * This method saves current visualisation shown in the panel after pushing
-     * saving button into a png file
-     *
-     * @param evt
-     */
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-
-        ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_2Faces().getListener1(),
-                1920, 1920);
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         getContext().setState(2);
@@ -1556,6 +1534,17 @@ public class PairComparisonResults extends javax.swing.JPanel {
             transpTresholdValueChanged = false;
         }
     }//GEN-LAST:event_transpSpinnerStateChanged
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+
+        VisExportResizeWindow win = new VisExportResizeWindow(tc.getViewerPanel_2Faces().getListener1(), null, tc,
+        tc.getViewerPanel_2Faces().getCanvas1().getSize().width, tc.getViewerPanel_2Faces().getCanvas1().getSize().height, 0,0);
+        
+        win.setVisible(true);
+        
+        
+    }//GEN-LAST:event_jButton3MouseClicked
     
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);

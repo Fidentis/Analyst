@@ -25,6 +25,7 @@ import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import cz.fidnetis.gui.windows.VisExportResizeWindow;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -1512,13 +1513,20 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        VisExportResizeWindow win = null;
         if (getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener2(), 1920, 1920);
+            win = new VisExportResizeWindow(tc.getOneToManyViewerPanel().getListener2(), null, tc,
+            tc.getOneToManyViewerPanel().getCanvas2().getSize().width, tc.getOneToManyViewerPanel().getCanvas2().getSize().height, 0, 0);
         } else if (getContext().getHdPaintingInfo() != null && getContext().getHdPaintingInfo().getvType() == VisualizationType.CROSSSECTION){
-            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener1(), tc.getOneToManyViewerPanel().getListener2(), 1920, 1920);
+            win = new VisExportResizeWindow(tc.getOneToManyViewerPanel().getListener1(), tc.getOneToManyViewerPanel().getListener2(), tc,
+            tc.getOneToManyViewerPanel().getCanvas1().getSize().width, tc.getOneToManyViewerPanel().getCanvas1().getSize().height,
+            tc.getOneToManyViewerPanel().getCanvas2().getSize().width, tc.getOneToManyViewerPanel().getCanvas2().getSize().height);
         }else {
-            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener1(), 1920, 1920);
+            win = new VisExportResizeWindow(tc.getOneToManyViewerPanel().getListener1(), null, tc,
+            tc.getOneToManyViewerPanel().getCanvas1().getSize().width, tc.getOneToManyViewerPanel().getCanvas1().getSize().height, 0, 0);
         }
+        
+        win.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

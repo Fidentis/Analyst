@@ -1061,7 +1061,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         c.setCompFTransformations(trans);
 
                     } catch (FileNotFoundException ex) {
-                        System.err.println(ex);
                         Exceptions.printStackTrace(ex);
 
                     }

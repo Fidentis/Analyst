@@ -150,7 +150,7 @@ public class Materials {
             //          materials.add(currMaterial);
             //      }
         } catch (IOException e) {
-            //System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     } // end of readMaterials()
 

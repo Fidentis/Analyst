@@ -27,6 +27,7 @@ import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import cz.fidnetis.gui.windows.VisExportResizeWindow;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -1557,10 +1558,18 @@ public class BatchComparisonResults extends javax.swing.JPanel {
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        if(getContext().getHDinfo() != null && getContext().getHDinfo().getvType() == VisualizationType.CROSSSECTION)
-            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), tc.getViewerPanel_Batch().getListener2(),1920, 1920);
-        else
-            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), 1920, 1920);
+        VisExportResizeWindow win = null;
+        if(getContext().getHDinfo() != null && getContext().getHDinfo().getvType() == VisualizationType.CROSSSECTION){
+            win = new VisExportResizeWindow(tc.getViewerPanel_Batch().getListener(), tc.getViewerPanel_Batch().getListener2(), tc,
+            tc.getViewerPanel_Batch().getCanvas3().getSize().width, tc.getViewerPanel_Batch().getCanvas3().getSize().height,
+            tc.getViewerPanel_Batch().getCanvas4().getSize().width, tc.getViewerPanel_Batch().getCanvas4().getSize().height);
+        }
+        else{
+            win = new VisExportResizeWindow(tc.getViewerPanel_Batch().getListener(), null, tc, 
+                    tc.getViewerPanel_Batch().getCanvas1().getSize().width, tc.getViewerPanel_Batch().getCanvas1().getSize().height, 0,0);
+        }
+        
+        win.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
