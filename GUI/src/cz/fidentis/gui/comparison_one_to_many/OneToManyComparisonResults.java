@@ -1971,8 +1971,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             models.add(c.getPrimaryModel());
 
             for (int i = 0; i < c.getRegisteredModels().size(); i++) {
-                //registered models will be null if ICP wasn't used
-                Model m = l.loadModel(c.getRegisteredModels().get(i), false, false);
+                Model m;
+                if(c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION)
+                    m = l.loadModel(c.getRegisteredModels().get(i), false, true);
+                else
+                    m = l.loadModel(c.getRegisteredModels().get(i), false, false);
+                
                 models.add(m);
             }
             tc.getOneToManyViewerPanel().getListener2().setModels(models);
