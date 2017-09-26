@@ -86,6 +86,15 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         return canvas1;
     }
 
+    public Canvas getCanvas3() {
+        return canvas3;
+    }
+
+    public Canvas getCanvas4() {
+        return canvas4;
+    }
+    
+
     public ComparisonGLEventListener getListener() {
         return listener;
     }

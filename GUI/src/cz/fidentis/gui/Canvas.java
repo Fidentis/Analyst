@@ -25,6 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.TransferHandler;
 import org.netbeans.api.progress.*;
+import org.openide.util.Exceptions;
 
 /**
  * The basic canvas for displaying models containing GLJPanel and navigation for
@@ -830,6 +831,7 @@ public class Canvas extends javax.swing.JPanel {
 
                         GUIController.updateNavigator();
                     } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
                         p.finish();
                     }
                 }

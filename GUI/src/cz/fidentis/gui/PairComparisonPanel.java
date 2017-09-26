@@ -843,11 +843,6 @@ public class PairComparisonPanel extends javax.swing.JPanel {
         colorDialog.setVisible(false);
         activeColorPanel.setBackground(jColorChooser1.getColor());
 
-        try {
-
-        } catch (NullPointerException ex) {
-        }
-
         histogram1.repaint();
     }//GEN-LAST:event_jButton5ActionPerformed
 
