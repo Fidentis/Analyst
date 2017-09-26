@@ -1609,6 +1609,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
 
         VisualizationBox.removeItem(VisualizationType.CROSSSECTION);
+        
+        //Temporary for Fidentis2
+        VisualizationBox.removeItem(VisualizationType.VECTORS);
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
