@@ -234,8 +234,8 @@ public class Material
       texture.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
     }
     catch(Exception e)
-    { System.out.println("Error loading texture " + texFnm + e);  
-        
+    { 
+        System.out.println("Error loading texture " + texFnm + e);  
     }
   }  // end of loadTexture()
 

@@ -107,7 +107,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         exportNumResButton = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        visResExportButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         comparisonButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -292,10 +292,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jButton3.text")); // NOI18N
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+        org.openide.awt.Mnemonics.setLocalizedText(visResExportButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.visResExportButton.text")); // NOI18N
+        visResExportButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
+                visResExportButtonMouseClicked(evt);
             }
         });
 
@@ -925,7 +925,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     .addComponent(jButton10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(exportNumResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -949,7 +949,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8)
                 .addGap(7, 7, 7)
-                .addComponent(jButton3)
+                .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1535,7 +1535,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_transpSpinnerStateChanged
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void visResExportButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_visResExportButtonMouseClicked
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
 
         VisExportResizeWindow win = new VisExportResizeWindow(tc.getViewerPanel_2Faces().getListener1(), null, tc,
@@ -1544,7 +1544,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         win.setVisible(true);
         
         
-    }//GEN-LAST:event_jButton3MouseClicked
+    }//GEN-LAST:event_visResExportButtonMouseClicked
     
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);
@@ -1682,7 +1682,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JCheckBox innerSurfaceSolidCheckbox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -1730,5 +1729,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JCheckBox useContoursCheckbox;
     private javax.swing.JCheckBox useGlyphsCheckbox;
     private javax.swing.JComboBox valuesComboBox;
+    private javax.swing.JButton visResExportButton;
     // End of variables declaration//GEN-END:variables
 }
