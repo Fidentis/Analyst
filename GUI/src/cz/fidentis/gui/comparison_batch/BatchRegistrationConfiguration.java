@@ -1105,7 +1105,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                             k.start();
 
-                            results.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.FALSE));
+                            results.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.TRUE));
                             k.finish();     
                         }
 

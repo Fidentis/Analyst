@@ -161,7 +161,7 @@ public class SurfaceComparisonProcessing {
             List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
             data.addTrans(trans);
 
-            results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.FALSE));
+            results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.TRUE));
 
             i++;
         }
@@ -1309,7 +1309,7 @@ public class SurfaceComparisonProcessing {
             Model m = ModelLoader.instance().loadModel(models.get(i), false, Boolean.TRUE);
             createSymetricModelNoCopy(m);
             
-            savedTo.add(ProcessingFileUtils.instance().saveModelToTMP(m, saveFolder, -2, i, false));
+            savedTo.add(ProcessingFileUtils.instance().saveModelToTMP(m, saveFolder, -2, i, Boolean.TRUE));
         }
         } catch (FileManipulationException ex) {
             Exceptions.printStackTrace(ex);

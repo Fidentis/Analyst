@@ -93,7 +93,7 @@ public class ResultExports {
 
         ModelExporter me = new ModelExporter(face);
         File f = new File(filePath + File.separator + modelName + "_twoFaces_reg.obj");
-        me.exportModelToObj(f, false);
+        me.exportModelToObj(f, true);
     }
 
     /**
@@ -532,7 +532,7 @@ public class ResultExports {
     private void saveSingleModel(String path, Model mainF, String modelName, String mode) {
         ModelExporter me = new ModelExporter(mainF);
         File f = new File(path + File.separator + modelName + mode);
-        me.exportModelToObj(f, false);
+        me.exportModelToObj(f, true);
     }
 
     /**
