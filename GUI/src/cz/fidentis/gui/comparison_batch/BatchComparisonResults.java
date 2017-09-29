@@ -2017,6 +2017,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             getContext().getHDinfo().setsType(SelectionType.ELLIPSE);
         }
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setSelection(selectionButton.isSelected());
+        if (selectionButton.isSelected()){
+            this.jButtonLocalAreas.setEnabled(false);
+        } else {
+            this.jButtonLocalAreas.setEnabled(true);
+        }
     }//GEN-LAST:event_selectionButtonActionPerformed
 
     private void heatplotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_heatplotButtonActionPerformed
@@ -2482,6 +2487,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_boxplotContinuousCheckBoxActionPerformed
 
     private void jButtonLocalAreasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLocalAreasActionPerformed
+        if (selectionButton.isSelected()){
+            return;
+        }
+        
         if (LocalAreasFrame.isVisible()){
             LocalAreasFrame.setVisible(false);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().HideLocalAreaRender();

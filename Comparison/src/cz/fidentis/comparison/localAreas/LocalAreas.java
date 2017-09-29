@@ -5,8 +5,8 @@
  */
 package cz.fidentis.comparison.localAreas;
 
-import static cz.fidentis.comparison.localAreas.LocalAreaLibrary.giftWrapping;
 import cz.fidentis.model.Model;
+import static cz.fidentis.utils.MeshUtils.giftWrapping;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -270,7 +270,16 @@ public class LocalAreas {
                 faceIndexes = model.getFaces().getFaceVertIdxs(j);
                 indexesOfAreasTemp = getIndexes(faceIndexes, areas.get(i), indexesOfAreasTemp);
             }
-            vertexAreasPoints3D.add(giftWrapping(indexesOfAreasTemp, model));
+            
+            List<Point3D> points = new ArrayList();
+            for (int j = 0; j < indexesOfAreasTemp.size(); j++) {
+               Point3D point = new Point3D( model.getVerts().get(indexesOfAreasTemp.get(j)).x, 
+                                            model.getVerts().get(indexesOfAreasTemp.get(j)).y, 
+                                            model.getVerts().get(indexesOfAreasTemp.get(j)).z);
+               points.add(point);
+            }
+            
+            vertexAreasPoints3D.add(giftWrapping(points));
         }
         // </editor-fold> 
     }

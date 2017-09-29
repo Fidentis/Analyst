@@ -386,7 +386,7 @@ public class LocalAreasJPanel extends javax.swing.JPanel {
      * Calculate intersection with points
      */
     private void drawHooveredPoint(){
-        if (!this.isVisible()){
+        if (!this.LocalAreaJPanel.isVisible()){
             pointerBatchComparisonResult.getCanvas().showPointValue(false, "", 1, 1);
             return;
         }
