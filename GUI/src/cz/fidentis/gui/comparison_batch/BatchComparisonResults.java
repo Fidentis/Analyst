@@ -15,7 +15,6 @@ import cz.fidentis.gui.TableProcessing;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
-import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.exportProcessing.ResultExports;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -28,6 +27,7 @@ import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import cz.fidnetis.gui.windows.VisExportResizeWindow;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -89,8 +89,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         comparisonButton.setVisible(false);
         heatplotButton1.setVisible(false);
         heatplotButton.setVisible(false);
-        
-        exportLandmarksButton.setVisible(true);
     }
 
     public void showHausdorfControls() {
@@ -112,7 +110,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         comparisonButton.setVisible(true);
         heatplotButton1.setVisible(true);
         heatplotButton.setVisible(true);
-        exportLandmarksButton.setVisible(false);
         setupVisualizationControls(getContext().getVisualization());
 
     }
@@ -167,7 +164,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        visResExportButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel(null);
         maxThresholdSlider = new javax.swing.JSlider();
         metricComboBox = new javax.swing.JComboBox();
@@ -242,7 +239,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel21 = new javax.swing.JLabel();
         heatplotButton1 = new javax.swing.JButton();
         alignResButton = new javax.swing.JButton();
-        exportLandmarksButton = new javax.swing.JButton();
 
         Dimension dimension = new Dimension();
         dimension.setSize(jColorChooser1.getPreferredSize().width + 5, jColorChooser1.getPreferredSize().height+80);
@@ -617,10 +613,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton3.text")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(visResExportButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.visResExportButton.text")); // NOI18N
+        visResExportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                visResExportButtonActionPerformed(evt);
             }
         });
 
@@ -1395,13 +1391,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportLandmarksButton.text")); // NOI18N
-        exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportLandmarksButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1413,7 +1402,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(alignResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(exportDistToMeanButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(exportSymetricResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1426,8 +1415,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(slicesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(colormapPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exportLandmarksButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1460,9 +1448,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportDistToMeanButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(exportLandmarksButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1484,7 +1470,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1559, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1570,13 +1556,21 @@ public class BatchComparisonResults extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void visResExportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visResExportButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        if(getContext().getHDinfo() != null && getContext().getHDinfo().getvType() == VisualizationType.CROSSSECTION)
-            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), tc.getViewerPanel_Batch().getListener2(),1920, 1920);
-        else
-            ResultExports.instance().exportVisualResults(tc, tc.getViewerPanel_Batch().getListener(), 1920, 1920);
-    }//GEN-LAST:event_jButton3ActionPerformed
+        VisExportResizeWindow win = null;
+        if(getContext().getHDinfo() != null && getContext().getHDinfo().getvType() == VisualizationType.CROSSSECTION){
+            win = new VisExportResizeWindow(tc.getViewerPanel_Batch().getListener(), tc.getViewerPanel_Batch().getListener2(), tc,
+            tc.getViewerPanel_Batch().getCanvas3().getSize().width, tc.getViewerPanel_Batch().getCanvas3().getSize().height,
+            tc.getViewerPanel_Batch().getCanvas4().getSize().width, tc.getViewerPanel_Batch().getCanvas4().getSize().height);
+        }
+        else{
+            win = new VisExportResizeWindow(tc.getViewerPanel_Batch().getListener(), null, tc, 
+                    tc.getViewerPanel_Batch().getCanvas1().getSize().width, tc.getViewerPanel_Batch().getCanvas1().getSize().height, 0,0);
+        }
+        
+        win.setVisible(true);
+    }//GEN-LAST:event_visResExportButtonActionPerformed
 
     /**
      * This method is a help method for saving numerical results as database
@@ -2459,11 +2453,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         getContext().setShowBoxplotFunction(boxplotContinuousCheckBox.isSelected());
     }//GEN-LAST:event_boxplotContinuousCheckBoxActionPerformed
 
-    private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
-       final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-       FPImportExport.instance().exportBatch(tc, getContext());
-    }//GEN-LAST:event_exportLandmarksButtonActionPerformed
-
 
     public histogramPanel getHistogram() {
         return histogram1;
@@ -2538,6 +2527,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         fpSizeSlider.setValue(c.getFpSize());
 
         VisualizationBox.removeItem(VisualizationType.TRANSPARENCY);
+        //Temporary for Fidentis2
+        VisualizationBox.removeItem(VisualizationType.VECTORS);
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
@@ -2639,7 +2630,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider density;
     private javax.swing.JButton exportDatabaseButton;
     private javax.swing.JButton exportDistToMeanButton;
-    private javax.swing.JButton exportLandmarksButton;
     private javax.swing.JButton exportSymetricResults;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
@@ -2653,7 +2643,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton7;
@@ -2726,6 +2715,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider thickness;
     private javax.swing.JComboBox valuesComboBox;
     private javax.swing.JCheckBox vectorsCheckBox;
+    private javax.swing.JButton visResExportButton;
     private javax.swing.JRadioButton xyRadioButton;
     private javax.swing.JRadioButton xzRadioButton;
     private javax.swing.JRadioButton yzRadioButton;

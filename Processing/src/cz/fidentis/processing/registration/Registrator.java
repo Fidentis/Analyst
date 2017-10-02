@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.vecmath.Vector3f;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -90,7 +91,7 @@ public class Registrator {
         try {
             return ModelLoader.instance().loadModel(new File(AVERAGE_FACE_PATH).getCanonicalFile(), false, true);
         } catch (IOException ex) {
-            System.out.println("Can't load average face!");
+            Exceptions.printStackTrace(ex);
             return null;
         }
     }

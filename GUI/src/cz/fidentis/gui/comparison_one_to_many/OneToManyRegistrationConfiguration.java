@@ -968,6 +968,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             FileUtils.instance().createTMPmoduleFolder(new File("compF"));
                         } catch (FileManipulationException ex) {
                             //osefuj error
+                            Exceptions.printStackTrace(ex);
                             registerButton.setEnabled(true);
                         }
 
