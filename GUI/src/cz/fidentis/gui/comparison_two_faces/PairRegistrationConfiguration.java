@@ -888,8 +888,23 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
                             registerButton, exportPointsButton, calculatePointsButton);
 
+                    List<FacialPoint> mainCopy = new ArrayList<>();
+                    List<FacialPoint> secondaryCopy = new ArrayList<>();
+                    
+                    for(FacialPoint fp : res.getMainFps()){
+                        mainCopy.add(fp.deepCopyFp());
+                    }
+                    
+                    for(FacialPoint fp : res.getSecondaryFps()){
+                        secondaryCopy.add(fp.deepCopyFp());
+                    }
+                    
                     tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
                     tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
+                    
+                    c.setOriginalMainFp(mainCopy);
+                    c.setOriginalSecondaryFp(secondaryCopy);                   
+                     
                     
                     c.setMainFp(res.getMainFps());
                     c.setSecondaryFp(res.getSecondaryFps());
@@ -996,6 +1011,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                                 m, t, value, c);
 
                         p.finish();
+                        
+                        // apply registration to facial points as well
+                        List<FacialPoint> regFp = Icp.instance().applyFacialPointsRegistration(c.getSecondaryFp(), c.getCompFTransformations(), c.getScaleEnabled());
+                        c.setSecondaryFp(regFp);
+                        tc.getViewerPanel_2Faces().getListener2().setFacialPoints(regFp);
 
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                         tc.getViewerPanel_2Faces().getListener1().addModel(cFace);
@@ -1166,12 +1186,14 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener1().initFpUniverse(model.getFacialPoints());
                 getContext().setMainFp(model.getFacialPoints());
+                getContext().setOriginalMainFp(model.createListFp());
             }
 
             if (tc.getViewerPanel_2Faces().getListener2().getModel() != null
                     && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())) {
                 tc.getViewerPanel_2Faces().getListener2().initFpUniverse(model.getFacialPoints());
                 getContext().setSecondaryFp(model.getFacialPoints());
+                getContext().setOriginalSecondaryFp(model.createListFp());
             }
         }
 
@@ -1180,7 +1202,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
 
     }//GEN-LAST:event_loadPointsButtonActionPerformed
-
+    
     public Boolean validate(ImportPanel p) {
         String path = p.getFileName();
         if (!new File(path).exists()) {

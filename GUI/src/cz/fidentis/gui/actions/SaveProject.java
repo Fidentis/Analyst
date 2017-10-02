@@ -4,6 +4,7 @@
  */
 package cz.fidentis.gui.actions;
 
+import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.composite.CompositeModel;
 import cz.fidentis.controller.Project;
@@ -25,6 +26,7 @@ import cz.fidentis.controller.data.CrosscutConfig;
 import cz.fidentis.controller.data.TransparencyConfig;
 import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.enums.FileExtensions;
+import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
@@ -40,6 +42,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
@@ -206,14 +210,28 @@ public final class SaveProject implements ActionListener {
             appendModelElement(comparison.getModel2(), secondaryE, "secondaryModel");
         }
 
-        // database
-        /*if (comparison.getCompModelTransformations() != null) {
-         Element transE = doc.createElement("comp-model-transformations");
-         comparisonE.appendChild(transE);
-         for (ICPTransformation t : comparison.getCompModelTransformations()) {
-         appendICPTransformation(t, transE);
-         }
-         }*/
+        if (comparison.getCompFTransformations() != null && comparison.getCompFTransformations().size() > 0) {
+            Element transE = root.getOwnerDocument().createElement("trans");
+            comparisonE.appendChild(transE);
+
+            appendICPTranformationsList(comparison.getCompFTransformations(), transE);
+        }
+        
+        // savig of feature points - a bit complicated but reusing the same format
+        // as other project types
+        HashMap<String, List<FacialPoint>> fps = new HashMap<>(2);
+        HashMap<String, File> modelFiles = new HashMap<>(2);
+        if (comparison.getMainFp() != null && comparison.getMainFp().size() > 0) {
+            fps.put("main", comparison.getMainFp());
+        }
+        if (comparison.getSecondaryFp() != null && comparison.getSecondaryFp().size() > 0) {
+            fps.put("secondary", comparison.getSecondaryFp());
+            //modelFiles.put("secondary", comparison.getModel2().getFile());
+        }
+        if( fps.size() > 0) {
+            appendFeaturePoints(fps, modelFiles, comparisonE, auxFile);
+        }
+
         comparisonE.setAttribute("state", String.valueOf(comparison.getState()));
 
         comparisonE.setAttribute("showPointInfo", String.valueOf(comparison.isShowPointInfo()));
@@ -351,9 +369,10 @@ public final class SaveProject implements ActionListener {
             appendModelsList(comparison.getRegisteredModels(), registeredE);
         }
 
-        /*if (comparison.getFpModelsTransformations() != null) {
-         appendModelTransformations(comparison.getFpModelsTransformations(), comparisonE);
-         }*/
+        if (comparison.getTrans() != null && comparison.getTrans().size() > 0) {
+            appendICPTranformations(comparison.getTrans(), comparisonE);
+        }
+
         if (comparison.getPrimaryModel() != null) {
             Element primaryE = doc.createElement("primary-model");
             comparisonE.appendChild(primaryE);
@@ -362,24 +381,11 @@ public final class SaveProject implements ActionListener {
 
 
         if (comparison.getFacialPoints() != null && comparison.getFacialPoints().size() > 0) {
-            Element fpE = doc.createElement("facial-points");
-            comparisonE.appendChild(fpE);
-            String path = File.separator + "featurePoints.csv";
-            fpE.setAttribute("file", auxFile.getName() + path);
-            File fpFile = new File(auxFile.getAbsolutePath() + path);
-            ArrayList<FpModel> fps = new ArrayList<>(comparison.getFacialPoints().size());
+            HashMap<String, File> modelsMap = new HashMap<>(comparison.getFacialPoints().size());
             for (String name : comparison.getFacialPoints().keySet()) {
-                FpModel fpmodel = FPImportExport.instance().getFpModelFromFP(comparison.getFacialPoints(name), name);
-                File modelFile = comparison.getModel(name);
-                if(modelFile != null) {
-                    fpmodel.decentralizeToFile(comparison.getModel(name));
-                }
-                fps.add(fpmodel);
+                modelsMap.put(name, comparison.getModel(name));
             }
-            if (!fpFile.exists()) {
-                fpFile.createNewFile();
-            }
-            CSVparser.save(fps, fpFile.getAbsolutePath());
+            appendFeaturePoints(comparison.getFacialPoints(), modelsMap, comparisonE, auxFile);
         }
 
         comparisonE.setAttribute("state", String.valueOf(comparison.getState()));
@@ -509,27 +515,17 @@ public final class SaveProject implements ActionListener {
             appendModelsList(comparison.getModels(), modelsE);
         }
 
-        /*if (comparison.getFpModelsTransformations() != null) {
-         appendModelTransformations(comparison.getFpModelsTransformations(), comparisonE);
-         }*/
-        
+        if (comparison.getTrans() != null && comparison.getTrans().size() > 0) {
+            appendICPTranformations(comparison.getTrans(), comparisonE);
+        }
+
 
         if (comparison.getFacialPoints() != null && comparison.getFacialPoints().size() > 0) {
-            Element fpE = doc.createElement("facial-points");
-            comparisonE.appendChild(fpE);
-            String path = File.separator + "featurePoints.csv";
-            fpE.setAttribute("file", auxFile.getName() + path);
-            File fpFile = new File(auxFile.getAbsolutePath() + path);
-            ArrayList<FpModel> fps = new ArrayList<>(comparison.getFacialPoints().size());
+            HashMap<String, File> modelsMap = new HashMap<>(comparison.getFacialPoints().size());
             for (String name : comparison.getFacialPoints().keySet()) {
-                FpModel fpmodel = FPImportExport.instance().getFpModelFromFP(comparison.getFacialPoints(name), name);
-                fpmodel.decentralizeToFile(comparison.getModel(name));
-                fps.add(fpmodel);
+                modelsMap.put(name, comparison.getModel(name));
             }
-            if (!fpFile.exists()) {
-                fpFile.createNewFile();
-            }
-            CSVparser.save(fps, fpFile.getAbsolutePath());
+            appendFeaturePoints(comparison.getFacialPoints(), modelsMap, comparisonE, auxFile);
         }
 
         comparisonE.setAttribute("state", String.valueOf(comparison.getState()));
@@ -607,27 +603,116 @@ public final class SaveProject implements ActionListener {
 
         comparisonE.setAttribute("scaleEnabled", String.valueOf(comparison.getScaleEnabled()));
 
-        /*if (comparison.getAverageRegisteredFace() != null) {
-         Element avgE = doc.createElement("average-face-registered");
-         comparisonE.appendChild(avgE);
-         appendModelElement(comparison.getAverageRegisteredFace(), avgE, "avgRegistered");
-         }*/
         zipDirectory(auxFile, null);
 
         return comparisonE;
     }
 
+    /**
+     * Appends single ICP transformation as a child of given parent XML element
+     * as an XML element named "icp-transformation".
+     *
+     * @param t - ICP transformation to be appended to parent.
+     * @param parent - Parent element of the added transformation element
+     * containing the ICP transformation.
+     */
     private void appendICPTransformation(ICPTransformation t, Element parent) {
         Element te = parent.getOwnerDocument().createElement("icp-transformation");
         te.setAttribute("scale", String.valueOf(t.getScaleFactor()));
         te.setAttribute("meanD", String.valueOf(t.getMeanD()));
-        te.setAttribute("qX", String.valueOf(t.getRotation().getX()));
-        te.setAttribute("qY", String.valueOf(t.getRotation().getY()));
-        te.setAttribute("qZ", String.valueOf(t.getRotation().getZ()));
-        te.setAttribute("qW", String.valueOf(t.getRotation().getW()));
-        te.setAttribute("tX", String.valueOf(t.getTranslation().getX()));
-        te.setAttribute("tY", String.valueOf(t.getTranslation().getY()));
-        te.setAttribute("tZ", String.valueOf(t.getTranslation().getZ()));
+        Quaternion rotation = t.getRotation();
+        if (rotation != null) {
+            te.setAttribute("qX", String.valueOf(rotation.getX()));
+            te.setAttribute("qY", String.valueOf(rotation.getY()));
+            te.setAttribute("qZ", String.valueOf(rotation.getZ()));
+            te.setAttribute("qW", String.valueOf(rotation.getW()));
+        } else {
+            te.setAttribute("noRotation", "true");
+        }
+        Vector3f translation = t.getTranslation();
+        if (translation != null) {
+            te.setAttribute("tX", String.valueOf(t.getTranslation().getX()));
+            te.setAttribute("tY", String.valueOf(t.getTranslation().getY()));
+            te.setAttribute("tZ", String.valueOf(t.getTranslation().getZ()));
+        } else {
+            te.setAttribute("noTranslation", "true");
+        }
+    }
+    
+    /**
+     * Appends given list of ICP transformations as "transformations-list" element
+     * to the parent.
+     * @param trans - list of ICP transformations to append to parent element
+     * @param parent - parent element of the ICP transformations saved as XML
+     */
+    private void appendICPTranformationsList(List<ICPTransformation> trans, Element parent) {
+        Element transE = parent.getOwnerDocument().createElement("transformations-list");
+        parent.appendChild(transE);
+        
+        for(ICPTransformation t : trans) {
+            appendICPTransformation(t, transE);
+        }
+    }
+    
+    /**
+     * Adds "trans" element to the parent xml element. This element will contain
+     * given TCP transformations.
+     * @param trans - list of lists of ICP transformations to be saved as chind of given parent element
+     * @param parent - parent element of the ICP transformations saved as XML
+     */
+    private void appendICPTranformations(List<List<ICPTransformation>> trans, Element parent) {
+        Element transE = parent.getOwnerDocument().createElement("trans");
+        parent.appendChild(transE);
+        
+        for(List<ICPTransformation> transList : trans) {
+            appendICPTranformationsList(transList, transE);
+        }
+    }
+    
+    /**
+     * Appends the given named facial points to given parent element as a "facial-points"
+     * XML element. The XML element contains path to exported facial points that
+     * gets zipped with the saved project.
+     * @param fps - mapping of feature points to model names
+     * @param models - mapping of model files to model names. If facial points have
+     * corresponding model file, the model file is used to decentralise exported
+     * facial points. Optional parameter.
+     * @param parent - parent element of the created "facial-points" element.
+     * @param auxFile - the temporary directory of the project to be zipped.
+     * @throws IOException if there is a problem with writing feature points to file.
+     */
+    private void appendFeaturePoints(Map<String, List<FacialPoint>> fps, Map<String, File> models, Element parent, File auxFile) throws IOException {
+        // create a node describing how facial points are saved
+        Element fpE = parent.getOwnerDocument().createElement("facial-points");
+        parent.appendChild(fpE);
+        
+        // construct a path to file with saved feature points
+        String path = File.separator + "featurePoints.csv";
+        
+        // set the path to file as attribute of xml element
+        fpE.setAttribute("file", auxFile.getName() + path);
+        
+        // prepare the feature points data to be saved
+        File fpFile = new File(auxFile.getAbsolutePath() + path);
+        ArrayList<FpModel> fpModels = new ArrayList<>(fps.size());
+        for (String name : fps.keySet()) {
+            FpModel fpmodel = FPImportExport.instance().getFpModelFromFP(fps.get(name), name);
+            
+            // decentralize to file if possible
+            if (models != null && models.get(name) !=  null) {
+                fpmodel.decentralizeToFile(models.get(name));
+            }
+            
+            fpModels.add(fpmodel);
+        }
+        
+        // check if the file exists, create it if not
+        if (!fpFile.exists()) {
+            fpFile.createNewFile();
+        }
+        
+        // save the feature points to prepared file
+        CSVparser.save(fpModels, fpFile.getAbsolutePath());
     }
 
     private void appendModelsList(List<File> models, Element element) throws IOException {
@@ -777,18 +862,6 @@ public final class SaveProject implements ActionListener {
         colorE.setAttribute("haussdorfMinTreshold", String.valueOf(data.getHausdorfMinTreshold()));
         if (data.getUsedColorScheme() != null) {
             colorE.setAttribute("colorScheme", String.valueOf(data.getUsedColorScheme().name()));
-        }
-    }
-
-    private void appendModelTransformations(List<ArrayList<ICPTransformation>> transformations, Element parent) {
-        Element transE = parent.getOwnerDocument().createElement("fp-models-transformations");
-        parent.appendChild(transE);
-        for (ArrayList<ICPTransformation> transos : transformations) {
-            Element e = parent.getOwnerDocument().createElement("transformations");
-            transE.appendChild(e);
-            for (ICPTransformation t : transos) {
-                appendICPTransformation(t, e);
-            }
         }
     }
 

@@ -479,12 +479,16 @@ public class ProcrustesAnalysis implements Serializable {
 
         this.centerConfigToOrigin(cs);   
         Vector3f normalizationTrans = MathUtils.instance().multiplyVectorByNumber(cs, -1);
-        ICPTransformation trans = new ICPTransformation(normalizationTrans, 1.0f, null, 0.0f, null);
+        ICPTransformation trans;
         
         if (scaling && config.keySet().size() >= 3) {
         
             this.setSizeTo1(size / SIZE_SCALE);
             //change scale to size / 100 to get proper size of model
+            trans = new ICPTransformation(normalizationTrans, size / SIZE_SCALE, null, 0.0f, null);
+            
+        }else{
+            trans = new ICPTransformation(normalizationTrans, 1.0f, null, 0.0f, null);
         }
         
         return trans;

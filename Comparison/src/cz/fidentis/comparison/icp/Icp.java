@@ -449,6 +449,36 @@ public class Icp {
     }
     
     /**
+     * Creates a copy of given list of FacialPoints forward transformed by given
+     * transformations to apply the effect of registration by given
+     * transformations.
+     *
+     * @param points facial points of a model
+     * @param trans transformations that were used to register model
+     * @param scale whether scaling was used during the registration
+     * @return copy of facial points transformed by transformations.
+     */
+    public List<FacialPoint> applyFacialPointsRegistration(List<FacialPoint> points, List<ICPTransformation> trans, boolean scale) {
+        ArrayList<FacialPoint> result = new ArrayList<>(points.size());
+        ArrayList<Vector3f> positions = new ArrayList<>(points.size());
+
+        // make a copy of points and also store their positions
+        for (int i = 0; i < points.size(); i++) {
+            FacialPoint point = new FacialPoint(points.get(i));
+
+            result.add(point);
+            positions.add(point.getPosition());
+        }
+
+        // apply transformations to positions of points
+        for (int i = 0; i < trans.size(); i++) {
+            applyTransformation(positions, trans.get(i), scale);
+        }
+
+        return result;
+    }
+
+    /**
      * Create final transformation combining all transformations in the list.
      * 
      * @param trans - transformations to combine

@@ -919,6 +919,13 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     FpResultsBatch res = FpProcessing.instance().calculatePointsBatch(cancelTask,
                             c.getModels());
                     
+                    for(String key : res.getFps().keySet()){
+                        List<FacialPoint> originalFps = new ArrayList<>();
+                        for(FacialPoint fp : res.getFps().get(key))
+                            originalFps.add(fp.deepCopyFp());
+                        
+                        c.addOriginalFp(key, originalFps);
+                    }                    
 
                     //move to GUI manipulation eventually
                     c.setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
@@ -1198,6 +1205,9 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             if (tc.getViewerPanel_Batch().getListener().getModel().getName().equals(model.getModelName())) {
                 tc.getViewerPanel_Batch().getListener().setFacialPoints(model.getFacialPoints());
             }
+            
+            List<FacialPoint> originalFp = model.createListFp();
+            c.addOriginalFp(model.getModelName(), originalFp);
 
             c.addFacialPoints(
                     model.getModelName(), model.getFacialPoints());

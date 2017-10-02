@@ -8,6 +8,7 @@ import com.jogamp.graph.math.Quaternion;
 import cz.fidentis.comparison.ComparisonMethod;
 import cz.fidentis.comparison.RegistrationMethod;
 import cz.fidentis.comparison.icp.ICPTransformation;
+import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import cz.fidentis.comparison.procrustes.GPA;
 import cz.fidentis.composite.FacePartType;
@@ -22,6 +23,7 @@ import cz.fidentis.controller.data.ColormapConfig;
 import cz.fidentis.controller.data.CrosscutConfig;
 import cz.fidentis.controller.data.TransparencyConfig;
 import cz.fidentis.controller.data.VectorsConfig;
+import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
@@ -241,6 +243,18 @@ public final class OpenProject implements ActionListener {
             ntc.show2FacesViewer();
             Comparison2Faces comparison2f = p.getSelectedComparison2Faces();
             p.setSelectedPart(2);
+            if (loadedFps != null) {
+                for(FpModel m : loadedFps) {
+                    if (m.getModelName().equals("main")) {
+                        comparison2f.setMainFp(m.createListFp());
+                        ntc.getViewerPanel_2Faces().getListener1().setFacialPoints(comparison2f.getMainFp());
+                    }
+                    if (m.getModelName().equals("secondary")) {
+                        comparison2f.setSecondaryFp(m.createListFp());
+                        ntc.getViewerPanel_2Faces().getListener2().setFacialPoints(comparison2f.getSecondaryFp());
+                    }
+                }
+            }
             if (comparison2f.getModel1() != null) {
                 ntc.getViewerPanel_2Faces().getCanvas1().setImportLabelVisible(false);
                 ntc.getViewerPanel_2Faces().getListener1().setModels(comparison2f.getModel1());
@@ -372,6 +386,7 @@ public final class OpenProject implements ActionListener {
         NodeList children = projectE.getChildNodes();
         Element primaryE = null;
         Element secondaryE = null;
+        Element fpE = null;
         Element hdInfoE = null;
         Element paInfoE = null;
         Element transE = null;
@@ -393,13 +408,16 @@ public final class OpenProject implements ActionListener {
                 case "secondary-model":
                     secondaryE = e;
                     break;
+                case "facial-points":
+                    fpE = e;
+                    break;
                 case "hdInfo":
                     hdInfoE = e;
                     break;
                 case "paInfo":
                     paInfoE = e;
                     break;
-                case "comp-model-transformations":
+                case "trans":
                     transE = e;
                     break;
                 case "transparencyData":
@@ -531,10 +549,17 @@ public final class OpenProject implements ActionListener {
             Model model = ModelLoader.instance().loadModel(modelFile, true, true);
             comparison.setModel2(model);
         }
+        
+        if (fpE != null) {
+            String fileName = tempFile.getAbsolutePath() + File.separator + fpE.getAttribute("file");
+            loadedFps = CSVparser.load(fileName);
+        }
 
         if (transE != null) {
-            ArrayList<ICPTransformation> transforms = parseICPTransformations(transE);
-            //comparison.setCompModelTransformations(transforms);
+            List<List<ICPTransformation>> trans = parseICPTransformations(transE);
+            if (trans.size() == 1) {
+                comparison.setCompFTransformations(trans.get(0));
+            }
         }
 
         if (hdInfoE != null) {
@@ -578,7 +603,6 @@ public final class OpenProject implements ActionListener {
         OneToManyComparison comparison = tc.getProject().getSelectedOneToManyComparison();
         NodeList children = projectE.getChildNodes();
         Element registeredE = null;
-        Element preregE = null;
         Element modelsE = null;
         Element primaryE = null;
         Element fpE = null;
@@ -605,10 +629,7 @@ public final class OpenProject implements ActionListener {
                 case "registered-models":
                     registeredE = e;
                     break;
-                case "pre-registered-models":
-                    preregE = e;
-                    break;
-                case "fp-models-transformations":
+                case "trans":
                     icpTransE = e;
                     break;
                 case "facial-points":
@@ -749,12 +770,8 @@ public final class OpenProject implements ActionListener {
         }
 
         if (icpTransE != null) {
-            NodeList ch = icpTransE.getElementsByTagName("transformations");
-            for (int i = 0; i < ch.getLength(); i++) {
-                Element transE = (Element) ch.item(i);
-                ArrayList<ICPTransformation> transforms = parseICPTransformations(transE);
-                //comparison.addFpModelsTransformations(transforms);
-            }
+            List<List<ICPTransformation>> trans = parseICPTransformations(icpTransE);
+            comparison.setTrans(trans);
         }
 
         if (registeredE != null) {
@@ -808,10 +825,8 @@ public final class OpenProject implements ActionListener {
         BatchComparison comparison = tc.getProject().getSelectedBatchComparison();
         NodeList children = projectE.getChildNodes();
         Element registeredE = null;
-        Element preregE = null;
         Element modelsE = null;
         Element averageE = null;
-        Element averageRegE = null;
         Element fpE = null;
         Element icpTransE = null;
         Element hdInfoE = null;
@@ -838,13 +853,7 @@ public final class OpenProject implements ActionListener {
                 case "average-face":
                     averageE = e;
                     break;
-                case "average-face-registered":
-                    averageRegE = e;
-                    break;
-                case "pre-registered-models":
-                    preregE = e;
-                    break;
-                case "fp-models-transformations":
+                case "trans":
                     icpTransE = e;
                     break;
                 case "facial-points":
@@ -1003,12 +1012,8 @@ public final class OpenProject implements ActionListener {
         }
 
         if (icpTransE != null) {
-            NodeList ch = icpTransE.getElementsByTagName("transformations");
-            for (int i = 0; i < ch.getLength(); i++) {
-                Element transE = (Element) ch.item(i);
-                ArrayList<ICPTransformation> transforms = parseICPTransformations(transE);
-                //comparison.addFpModelsTransformations(transforms);
-            }
+            List<List<ICPTransformation>> transforms = parseICPTransformations(icpTransE);
+            comparison.setTrans(transforms);
         }
 
         if (registeredE != null) {
@@ -1115,26 +1120,54 @@ public final class OpenProject implements ActionListener {
         return result;
     }
 
-    private ArrayList<ICPTransformation> parseICPTransformations(Element transE) {
-        ArrayList<ICPTransformation> transforms = new ArrayList<>();
-        NodeList c = transE.getElementsByTagName("icp-transformation");
-        for (int j = 0; j < c.getLength(); j++) {
-            Element t = (Element) c.item(j);
-            float scale = Float.parseFloat(t.getAttribute("scale"));
-            float meanD = Float.parseFloat(t.getAttribute("meanD"));
+    private List<List<ICPTransformation>> parseICPTransformations(Element transE) {
+        NodeList c = transE.getElementsByTagName("transformations-list");
+        ArrayList<List<ICPTransformation>> transforms = new ArrayList<>(c.getLength());
+
+        for (int i = 0; i < c.getLength(); i++) {
+            Element transList = (Element) c.item(i);
+            List<ICPTransformation> trans = parseICPTransformationsList(transList);
+            transforms.add(trans);
+        }
+
+        return transforms;
+    }
+
+    private List<ICPTransformation> parseICPTransformationsList(Element transListE) {
+        NodeList c = transListE.getElementsByTagName("icp-transformation");
+        ArrayList<ICPTransformation> transforms = new ArrayList<>(c.getLength());
+
+        for (int i = 0; i < c.getLength(); i++) {
+            Element t = (Element) c.item(i);
+
+            transforms.add(parseICPTransformation(t));
+        }
+        
+        return transforms;
+    }
+
+    private ICPTransformation parseICPTransformation(Element t) {
+        float scale = Float.parseFloat(t.getAttribute("scale"));
+        float meanD = Float.parseFloat(t.getAttribute("meanD"));
+
+        Vector3f translation = null;
+        if (!t.hasAttribute("noTranslation")) {
             float tx = Float.parseFloat(t.getAttribute("tX"));
             float ty = Float.parseFloat(t.getAttribute("tY"));
             float tz = Float.parseFloat(t.getAttribute("tZ"));
-            Vector3f translation = new Vector3f(tx, ty, tz);
+            translation = new Vector3f(tx, ty, tz);
+        }
+
+        Quaternion q = null;
+        if (!t.hasAttribute("noRotation")) {
             float qx = Float.parseFloat(t.getAttribute("qX"));
             float qy = Float.parseFloat(t.getAttribute("qY"));
             float qz = Float.parseFloat(t.getAttribute("qZ"));
             float qw = Float.parseFloat(t.getAttribute("qW"));
-            Quaternion q = new Quaternion(qw, qx, qy, qz);
-            transforms.add(new ICPTransformation(translation, scale, q, meanD, null));
+            q = new Quaternion(qw, qx, qy, qz);
         }
-        return transforms;
 
+        return new ICPTransformation(translation, scale, q, meanD, null);
     }
 
     private HDpaintingInfo parseHdInfo(Element hdInfoE, boolean useRelative, List<Float> hd, Model model) {

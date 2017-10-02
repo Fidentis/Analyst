@@ -147,4 +147,15 @@ public class FpModel {
         this.facialPoints = copy;        
     }
     
+    public List<FacialPoint> createListFp(){
+        List<FacialPoint> copy = new ArrayList<>();
+        
+        for(FacialPoint fp: facialPoints){
+            FacialPoint copied = new FacialPoint(fp.getType(), new Vector3f(fp.getPosition()));
+            copy.add(copied);
+        }
+        
+        return copy;
+    }
+    
 }
