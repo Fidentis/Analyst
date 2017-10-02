@@ -1904,7 +1904,13 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     models.add(c.getAverageFace());
                     List<File> md = c.getRegistrationResults().size() > 0 ? c.getRegistrationResults() : c.getModels();
                     for (int i = 0; i < md.size(); i++) {
-                        Model m = ModelLoader.instance().loadModel(md.get(i), false, false);
+                        Model m;
+                        
+                        if(c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION)
+                            m = ModelLoader.instance().loadModel(md.get(i), false, true);
+                        else
+                            m = ModelLoader.instance().loadModel(md.get(i), false, false);
+                        
                         models.add(m);
                     }
                     tc.getViewerPanel_Batch().getListener2().setModels(models);
