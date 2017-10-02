@@ -127,6 +127,10 @@ public class FpTexter {
         }       
     }
     
+    public int getNumberOfLandmarks(){
+        return fpTexts.size();
+    }
+    
     /**
      * Removes landmark from the loaded list. Does NOT save the changes.
      * 

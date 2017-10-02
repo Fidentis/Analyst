@@ -26,7 +26,6 @@ public class ProcrustesAnalysis implements Serializable {
 
     //private Matrix config;
     private Map<Integer, FacialPoint> config;
-    private Matrix visMatrix;
     private Matrix vertices;        //to be able to register models with points -- change to list?
 
     public static final float SIZE_SCALE = 200.0f;
@@ -114,8 +113,7 @@ public class ProcrustesAnalysis implements Serializable {
                 fps.remove(i);
             }
         }
-        
-        setVisMatrix();
+
     }
     
       public ProcrustesAnalysis(List<FacialPoint> fps, List<Vector3f> verts) {
@@ -145,7 +143,6 @@ public class ProcrustesAnalysis implements Serializable {
      
     public ProcrustesAnalysis(Map<Integer, FacialPoint> config){
           this.config = config;
-          setVisMatrix();
       }
 
     
@@ -188,7 +185,7 @@ public class ProcrustesAnalysis implements Serializable {
         return config.get(ft).getPosition();
     }
     
-    private List<Integer> getFPtypeCorrespondence(ProcrustesAnalysis pa){
+    public List<Integer> getFPtypeCorrespondence(ProcrustesAnalysis pa){
         List<Integer> correspondence = new ArrayList<>();
         
         for(Integer ft : config.keySet()){
@@ -268,53 +265,10 @@ public class ProcrustesAnalysis implements Serializable {
                     break;
             }*/
         }
-        
-        setVisMatrix();
-    }
-    
-    public Matrix getVisualMatrix(){   
-        return this.visMatrix;  
-    }
-    
-    /**
-     * Creates matrix to be used for visualisation.
-     * Points: 
-     * 0 - EX_R
-     * 1 - EX_L
-     * 2 - EN_R
-     * 3 - EN_L
-     * 4 - PRN
-     * 5 - STO
-     * 6 - CH_R
-     * 7 - CH_L
-     * 8 - N
-     * 9 - G
-     * 10 - LS
-     * 11 - LI
-     * 12 - SL
-     * 13 - PG
-     */
-    public void setVisMatrix(){
-        Matrix visMat = new Matrix(14,3);
-        
-        setVisMatPoint(visMat, 0, config.get(FacialPointType.EX_R.ordinal()));
-        setVisMatPoint(visMat, 1, config.get(FacialPointType.EX_L.ordinal()));
-        setVisMatPoint(visMat, 2, config.get(FacialPointType.EN_R.ordinal()));
-        setVisMatPoint(visMat, 3, config.get(FacialPointType.EN_L.ordinal()));
-        setVisMatPoint(visMat, 4, config.get(FacialPointType.PRN.ordinal()));
-        setVisMatPoint(visMat, 5, config.get(FacialPointType.STO.ordinal()));
-        setVisMatPoint(visMat, 6, config.get(FacialPointType.CH_R.ordinal()));
-        setVisMatPoint(visMat, 7, config.get(FacialPointType.CH_L.ordinal()));
-        setVisMatPoint(visMat, 8, config.get(FacialPointType.N.ordinal()));
-        setVisMatPoint(visMat, 9, config.get(FacialPointType.G.ordinal()));
-        setVisMatPoint(visMat, 10, config.get(FacialPointType.LS.ordinal()));
-        setVisMatPoint(visMat, 11, config.get(FacialPointType.LI.ordinal()));
-        setVisMatPoint(visMat, 12, config.get(FacialPointType.SL.ordinal()));
-        setVisMatPoint(visMat, 13, config.get(FacialPointType.PG.ordinal()));
 
-        
-        this.visMatrix = visMat;
     }
+
+    
     
     private void setVisMatPoint(Matrix visMat, int line, FacialPoint point){
         if(point == null){
@@ -675,8 +629,6 @@ public class ProcrustesAnalysis implements Serializable {
         List<ICPTransformation> trans = this.superimpose(config2, scaling);
         if(trans == null)       //no transformation performed
             return null;
-        setVisMatrix();
-        config2.setVisMatrix();
 
         return trans;
     }
