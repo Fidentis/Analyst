@@ -45,7 +45,7 @@ public class BatchComparison {
     private ArrayList<ArrayList<Float>> hdVisualResults;    //visual results, num of inner array == num of models, num of outer arrays == num of vertices of avgFace
     private ArrayList<File> models = new ArrayList<>();     //URLs to models stored on disk
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
-    private HashMap<String, List<FacialPoint>> originalFp = new HashMap<>();
+    private HashMap<String, List<FacialPoint>> originalFp = new HashMap<>();    //original FPs loaded/computed into the programme, TODO: fix reverse transformation and delete this (there might be issue with not keeping all transformations with FP registration)
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
     private List<List<ICPTransformation>> trans;
