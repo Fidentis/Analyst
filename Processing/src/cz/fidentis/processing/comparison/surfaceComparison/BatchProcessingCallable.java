@@ -107,7 +107,7 @@ public class BatchProcessingCallable {
                     data.addTrans(tran, currentModelNumber);
                 }                
                 
-                ProcessingFileUtils.instance().saveModelToTMP(compF, saveTo, batchIteration + 1, currentModelNumber, Boolean.FALSE);
+                ProcessingFileUtils.instance().saveModelToTMP(compF, saveTo, batchIteration + 1, currentModelNumber, Boolean.TRUE);
             } catch (Exception ex) {
                 p.finish();
                 Exceptions.printStackTrace(ex);

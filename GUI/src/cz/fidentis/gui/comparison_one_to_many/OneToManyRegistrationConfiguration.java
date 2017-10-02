@@ -1050,7 +1050,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                             k.start();
 
-                            r.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.FALSE));
+                            r.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.TRUE));
                             k.finish();
                         }
 
