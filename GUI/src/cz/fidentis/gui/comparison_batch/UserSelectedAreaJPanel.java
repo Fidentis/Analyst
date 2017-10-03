@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.Arrays;
+import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
 import javax.swing.filechooser.FileSystemView;
 import org.openide.util.Exceptions;
@@ -32,6 +33,7 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
     private HistogramJPanel histogram;
     private List<Float> distances;
     private List<Integer> vertices;
+    private boolean relative;
     
     public UserSelectedAreaJPanel() {
         initComponents();
@@ -65,6 +67,7 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
         this.vertices = vertices;
         this.metric = ComparisonMetrics.instance();
         this.HdVisualResults = HdVisualResults;
+        this.relative = relative;
 
         faceComparison = calculateFaceComparison(HdVisualResults, vertices, metricIndex, relative);
         modelsName = filterModelName(models);
@@ -84,9 +87,35 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
 
         this.histogram.setSize(this.histogramHolder.getWidth(), this.histogramHolder.getHeight());
         this.histogram.setValues(this.distances);
+        
+        setJList();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Private methods"> 
+    private void setJList(){
+        
+        DefaultListModel listModel = new DefaultListModel();
+        
+        for (String item : modelsName){
+            listModel.addElement(item);
+        }
+            
+        jListUserFaces.setModel(listModel);
+    }
+    
+    private void updateFacesDifferences(int[] SelectedAreas) {
+        ArrayList<ArrayList<Float>> customArrayList = new ArrayList<>();
+        
+        for (int i = 0; i < SelectedAreas.length; i++){
+            customArrayList.add(HdVisualResults.get(SelectedAreas[i]));
+        }
+        
+        faceComparison = calculateFaceComparison(customArrayList, vertices, metricIndex, relative);
+        this.DifferentFace.setText(modelsName.get(SelectedAreas[0])+"");
+        this.SimilarFace.setText(modelsName.get(SelectedAreas[customArrayList.size()-1])+"");
+        this.MetricName.setText(metricName.get(metricIndex));
+    }
+    
     /**
      * Gets names of models
      * @param files
@@ -267,6 +296,10 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
         jButtonChangeColorMin = new javax.swing.JButton();
         jButtonExport1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListUserFaces = new javax.swing.JList<>();
+        jButtonUserSelectFaces = new javax.swing.JButton();
+        jButtonSelectAllFaces = new javax.swing.JButton();
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonExport, org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jButtonExport.text")); // NOI18N
         jButtonExport.addActionListener(new java.awt.event.ActionListener() {
@@ -365,6 +398,27 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jLabel2.text")); // NOI18N
         jLabel2.setToolTipText(org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jLabel2.toolTipText")); // NOI18N
 
+        jListUserFaces.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListUserFaces);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonUserSelectFaces, org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jButtonUserSelectFaces.text")); // NOI18N
+        jButtonUserSelectFaces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUserSelectFacesActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectAllFaces, org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jButtonSelectAllFaces.text")); // NOI18N
+        jButtonSelectAllFaces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSelectAllFacesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -375,23 +429,27 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
                     .addComponent(histogramHolder, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonChangeColorMin, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonChangeColorMin, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButtonUserSelectFaces, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonSelectAllFaces))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonChangeColorMax, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonExport1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(labelAreaName10)
                                     .addComponent(labelAreaName8)
                                     .addComponent(labelAreaName9))
-                                .addGap(157, 157, 157)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(DifferentFace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(MetricName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(SimilarFace, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButtonChangeColorMax, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonExport1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(DifferentFace, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(MetricName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(SimilarFace, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(11, 11, 11))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,25 +523,36 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
                 .addComponent(histogramHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonChangeColorMin)
+                    .addComponent(jButtonChangeColorMax))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonChangeColorMin)
-                        .addGap(18, 18, 18)
-                        .addComponent(labelAreaName10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelAreaName8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelAreaName9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(MetricName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(DifferentFace)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SimilarFace))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labelAreaName10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelAreaName8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelAreaName9)))
+                        .addGap(50, 50, 50)
+                        .addComponent(jButtonExport1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonChangeColorMax)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(MetricName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DifferentFace)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SimilarFace)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButtonExport1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButtonUserSelectFaces)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSelectAllFaces))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(59, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -546,6 +615,29 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formComponentResized
 
+    private void jButtonUserSelectFacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUserSelectFacesActionPerformed
+        int[] SelectedAreas = new int[jListUserFaces.getSelectedIndices().length];
+        SelectedAreas = jListUserFaces.getSelectedIndices();
+
+        if (jListUserFaces.getSelectedIndices().length>0){
+            updateFacesDifferences(SelectedAreas);
+        }
+    }//GEN-LAST:event_jButtonUserSelectFacesActionPerformed
+
+    private void jButtonSelectAllFacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectAllFacesActionPerformed
+
+        int[] SelectedAreas = new int[modelsName.size()];
+        for(int i=0; i<modelsName.size(); i++){
+            SelectedAreas[i]=i;
+        }
+
+        jListUserFaces.setSelectedIndices(SelectedAreas);
+
+        if (jListUserFaces.getSelectedIndices().length>0){
+            updateFacesDifferences(SelectedAreas);
+        }
+    }//GEN-LAST:event_jButtonSelectAllFacesActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AriMean;
@@ -563,7 +655,11 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButtonChangeColorMin;
     private javax.swing.JButton jButtonExport;
     private javax.swing.JButton jButtonExport1;
+    private javax.swing.JButton jButtonSelectAllFaces;
+    private javax.swing.JButton jButtonUserSelectFaces;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jListUserFaces;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAreaName;
     private javax.swing.JLabel labelAreaName1;
     private javax.swing.JLabel labelAreaName10;
