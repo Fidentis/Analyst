@@ -116,7 +116,7 @@ public class LocalAreaLibrary {
                                                int[] viewport, 
                                                double[] modelViewMatrix, 
                                                double[] projectionMatrix,
-                                               List<Point3D> areaBoundary) {
+                                               List<Vector3f> areaBoundary) {
         
         if (areaBoundary.size()<3){
             return null;
@@ -142,14 +142,14 @@ public class LocalAreaLibrary {
                 viewport, 0,
                 v1, 0);
 
-        Point3D a = areaBoundary.get(0);
+        Vector3f a = areaBoundary.get(0);
 
         for (int i = 1; i < areaBoundary.size()-1; i++){
             
-            Point3D b = areaBoundary.get(i);
-            Point3D c = areaBoundary.get(i+1);
+            Vector3f b = areaBoundary.get(i);
+            Vector3f c = areaBoundary.get(i+1);
 
-            Point3D[] triangle = {a, b, c};
+            Vector3f[] triangle = {a, b, c};
             
             //calculate if the given ray is inside this triangle
             Vector3f point = calculateIntersectionWithTriangle(v0, v1, triangle);
@@ -169,7 +169,7 @@ public class LocalAreaLibrary {
      * @param triangle array of three points
      * @return 
      */
-    private static Vector3f calculateIntersectionWithTriangle(double[] P0, double[] P1, Point3D[] triangle) {
+    private static Vector3f calculateIntersectionWithTriangle(double[] P0, double[] P1, Vector3f[] triangle) {
         if (triangle.length == 3) {
             //ray - points  P0, P1
             //triangle - points T0,T1,T2

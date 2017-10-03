@@ -76,16 +76,16 @@ public class MeshUtils {
      * @param model model
      * @return 
      */
-    public static List<Point3D> giftWrapping(List<Point3D> points){
+    public static List<Vector3f> giftWrapping(List<Vector3f> points){
         
         //getting pivot
-        List<Point3D> vertexList = new ArrayList<>();
+        List<Vector3f> vertexList = new ArrayList<>();
         
         int pivot = smallestX(points);
         int currentIndex = pivot;
         int previousIndex = pivot;
         
-        Point3D a = points.get(currentIndex);
+        Vector3f a = points.get(currentIndex);
         vertexList.add(a);
 
         List<Integer> indexes = new ArrayList<>();
@@ -108,15 +108,15 @@ public class MeshUtils {
         return vertexList;
     }
     
-    private static int smallestX(List<Point3D> points){
+    private static int smallestX(List<Vector3f> points){
         int index = -1;
         int pomIndex = -1;
-        Double smallestX = 5000.0;
+        float smallestX = 5000.0f;
         
-        for (Point3D point : points){
+        for (Vector3f point : points){
             pomIndex++;
             if (point.getX()<smallestX){
-                smallestX = point.getX();
+                smallestX = point.x;
                 index = pomIndex;
             }
         }
@@ -131,16 +131,16 @@ public class MeshUtils {
      * @param usedIndexes modification - prevents from cycling (3D is not 2D :D)
      * @return 
      */
-    private static int getMinimalAnglePoint(List<Point3D> points, int currentIndex, int previousIndex, List<Integer> usedIndexes){
-        Point3D currentPoint = points.get(currentIndex) ; 
-        Point3D previousPoint = points.get(previousIndex);
+    private static int getMinimalAnglePoint(List<Vector3f> points, int currentIndex, int previousIndex, List<Integer> usedIndexes){
+        Vector3f currentPoint = points.get(currentIndex) ; 
+        Vector3f previousPoint = points.get(previousIndex);
         
         //setting inicial line
         if (currentIndex == previousIndex){
-            previousPoint = new Point3D(previousPoint.getX(), previousPoint.getY()+100, previousPoint.getZ());
+            previousPoint = new Vector3f(previousPoint.getX(), previousPoint.getY()+100, previousPoint.getZ());
         }
         
-        double[] line1 =   {previousPoint.getX(), 
+        float[] line1 =   {previousPoint.getX(), 
                             previousPoint.getY(),
                             previousPoint.getZ(),
                             currentPoint.getX(),
@@ -150,22 +150,22 @@ public class MeshUtils {
         //inicializing loop
         int index = -1;
         int tempIndex = -1;
-        Double minimalAngle = 5000.0;
+        float minimalAngle = 5000.0f;
         
         //looking for point that have minimal angle to the two previous points
-        for (Point3D point : points){
+        for (Vector3f point : points){
             tempIndex++;
             
             if (tempIndex != currentIndex && tempIndex != previousIndex && !usedIndexes.contains(tempIndex)){
                 
-                double[] line2 =   {currentPoint.getX(),
+                float[] line2 =   {currentPoint.getX(),
                                     currentPoint.getY(),
                                     currentPoint.getZ(),
                                     point.getX(),
                                     point.getY(),
                                     point.getZ()};
 
-                Double  pomMinimalAngle = angleBetween2Lines(line1, line2);
+                float pomMinimalAngle = angleBetween2Lines(line1, line2);
 
                 if (pomMinimalAngle<minimalAngle){
                     minimalAngle = pomMinimalAngle;
@@ -176,21 +176,18 @@ public class MeshUtils {
         return index;
     }
     
-    private static double angleBetween2Lines(double[] line1, double[] line2){
+    private static float angleBetween2Lines(float[] line1, float[] line2){
         
-        Point3D a = new Point3D(line1[0] - line1[3], 
+        Vector3f a = new Vector3f(line1[0] - line1[3], 
                                 line1[1] - line1[4],
                                 line1[2] - line1[5]);
-        Double aNorm =  Math.sqrt(a.getX()*a.getX()+a.getY()*a.getY()+a.getZ()*a.getZ());
-        a = new Point3D(a.getX()/aNorm, a.getY()/aNorm, a.getZ()/aNorm);
+        a.normalize();
         
-        Point3D b = new Point3D(line2[0] - line2[3], 
+        Vector3f b = new Vector3f(line2[0] - line2[3], 
                                 line2[1] - line2[4],
                                 line2[2] - line2[5]);
-        Double bNorm =  Math.sqrt(b.getX()*b.getX()+b.getY()*b.getY()+b.getZ()*b.getZ());
-        b = new Point3D(b.getX()/bNorm, b.getY()/bNorm, b.getZ()/bNorm);
-        
-        Double dot = (a.getX()*b.getX()) + (a.getY()*b.getY()) + (a.getZ()*b.getZ());
-        return Math.abs(Math.toDegrees(Math.acos(dot)));
+        b.normalize();
+
+        return (float)Math.abs(Math.toDegrees(Math.acos(a.dot(b))));
     }
 }

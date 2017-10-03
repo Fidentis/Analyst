@@ -12,6 +12,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point3D;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 /**
@@ -26,7 +27,7 @@ public class LocalAreas {
     private float[] borderColorAreas;
     private float[] vertexes;
     private float[] vertexColors;
-    private List<List<Point3D>> vertexAreasPoints3D;
+    private List<List<Vector3f>> vertexAreasPoints3D;
     private List<Vector4f> allAreasPoints;
     private int[] indexesOfAreas;
     private List<Area> areas;
@@ -63,7 +64,7 @@ public class LocalAreas {
         return vertexColors;
     }
     
-    public List<List<Point3D>> getBoundariesAreasPoints(){
+    public List<List<Vector3f>> getBoundariesAreasPoints(){
         return vertexAreasPoints3D;
     }
     
@@ -271,11 +272,11 @@ public class LocalAreas {
                 indexesOfAreasTemp = getIndexes(faceIndexes, areas.get(i), indexesOfAreasTemp);
             }
             
-            List<Point3D> points = new ArrayList();
+            List<Vector3f> points = new ArrayList();
             for (int j = 0; j < indexesOfAreasTemp.size(); j++) {
-               Point3D point = new Point3D( model.getVerts().get(indexesOfAreasTemp.get(j)).x, 
-                                            model.getVerts().get(indexesOfAreasTemp.get(j)).y, 
-                                            model.getVerts().get(indexesOfAreasTemp.get(j)).z);
+               Vector3f point = new Vector3f( model.getVerts().get(indexesOfAreasTemp.get(j)).x, 
+                                             model.getVerts().get(indexesOfAreasTemp.get(j)).y, 
+                                             model.getVerts().get(indexesOfAreasTemp.get(j)).z);
                points.add(point);
             }
             

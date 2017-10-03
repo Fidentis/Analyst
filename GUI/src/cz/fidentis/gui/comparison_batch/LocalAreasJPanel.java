@@ -293,7 +293,7 @@ public class LocalAreasJPanel extends javax.swing.JPanel {
         
         int i = 0;
         //looking through all areas
-        for (List<Point3D> points : localAreas.getBoundariesAreasPoints()){
+        for (List<Vector3f> points : localAreas.getBoundariesAreasPoints()){
             Vector3f point = LocalAreaLibrary.intersectionWithArea(x, y, viewPort, modelViewMatrix, projectionMatrix, points);
 
             //if there is an intersection
@@ -428,7 +428,7 @@ public class LocalAreasJPanel extends javax.swing.JPanel {
         //set LocalAreaFrame
         LocalAreaFrame = new JFrame("Area");
         LocalAreaFrame.setVisible(false);
-        LocalAreaFrame.setMinimumSize(new Dimension(630, 730));
+        LocalAreaFrame.setMinimumSize(new Dimension(630, 830));
 
         LocalAreaJPanel = new LocalAreasSelectedAreaJPanel();
         LocalAreaJPanel.setPointerLocalAreasJPanel(this);
