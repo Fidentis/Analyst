@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.vecmath.Vector3f;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -210,21 +211,25 @@ public class ModelLoader {
                 addSTLNormals(normals);
                 model.setHasTCs3D(false);
             } catch (FileNotFoundException e) {
+                Exceptions.printStackTrace(e);
             } catch (IOException e) {
+                Exceptions.printStackTrace(e);
             } finally {
                 try {
                     inputStream.close();
 
                 } catch (IOException e) {
+                    Exceptions.printStackTrace(e);
                 } finally {
                     try {
                         is.close();
                     } catch (IOException ex) {
-                        Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, ex);
+                        Exceptions.printStackTrace(ex);
                     }
                 }
             }
         } catch (FileNotFoundException e) {
+            Exceptions.printStackTrace(e);
         }
     }
 
@@ -271,7 +276,7 @@ public class ModelLoader {
             //closed in method from which it has been called
             //br.close();
         } catch (IOException e) {
-            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, e);
+            Exceptions.printStackTrace(e);
         }
 
         if (!isLoaded) {
@@ -329,7 +334,7 @@ public class ModelLoader {
 
             return new Vector3f(x, y, z);
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
+            Exceptions.printStackTrace(e);
         }
 
         return null;   // means an error occurred
@@ -376,7 +381,7 @@ public class ModelLoader {
 
             return new Vector3f(x, y, z);
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
+            Exceptions.printStackTrace(e);
         }
 
         return null;   // means an error occurred
@@ -548,14 +553,14 @@ public class ModelLoader {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, ex);
+           Exceptions.printStackTrace(ex);
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, ex);
+                Exceptions.printStackTrace(ex);
             }
         }
     }
@@ -570,7 +575,7 @@ public class ModelLoader {
             float z = Float.parseFloat(tokens.nextToken());
             vert = new Vector3f(x, y, z);
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
+            Exceptions.printStackTrace(e);
         }
 
         if (vert != null) {
@@ -600,7 +605,7 @@ public class ModelLoader {
             computeFaceNormal(ind, polytype);
 
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
+            Exceptions.printStackTrace(e);
         }
 
     }

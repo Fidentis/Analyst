@@ -16,7 +16,9 @@ import cz.fidentis.utils.ListUtils;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.SortUtils;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.BufferedWriter;
@@ -33,10 +35,14 @@ import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLJPanel;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -93,7 +99,7 @@ public class ResultExports {
 
         ModelExporter me = new ModelExporter(face);
         File f = new File(filePath + File.separator + modelName + "_twoFaces_reg.obj");
-        me.exportModelToObj(f, false);
+        me.exportModelToObj(f, true);
     }
 
     /**
@@ -199,6 +205,7 @@ public class ResultExports {
 
                     p.finish();
                 } catch (Exception ex) {
+                    Exceptions.printStackTrace(ex);
                     p.finish();
                 }
             }
@@ -287,7 +294,7 @@ public class ResultExports {
      * @param width - max width of the picture
      * @param height - max height of the picture
      */
-    public void exportVisualResults(Component tc, GLEventListener canvas, int width, int height) {
+    public void exportVisualResults(Component tc, GLEventListener canvas, int width, int height, int originalWidth, int originalHeight) {
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
 
         if (filePath == null) {
@@ -295,11 +302,11 @@ public class ResultExports {
             return;
         }
 
-        savePicture(filePath, tc, canvas, width, height);
+        savePicture(filePath, tc, canvas, width, height, originalWidth, originalHeight);
 
     }
     
-    public void exportVisualResults(Component tc, GLEventListener canvas1, GLEventListener canvas2, int width, int height){
+    public void exportVisualResults(Component tc, GLEventListener canvas1, GLEventListener canvas2, int width, int height, int originalWidth, int originalHeight, int originalWidth2, int originalHeight2){
         String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
 
         if (filePath == null) {
@@ -310,8 +317,8 @@ public class ResultExports {
         String filePath_left = createCanvasSpecificName(filePath, "_left");   
         String filePath_right = createCanvasSpecificName(filePath, "_right");
         
-        savePicture(filePath_left, tc, canvas1, width, height);
-        savePicture(filePath_right, tc, canvas2, width, height);
+        savePicture(filePath_left, tc, canvas1, width, height, originalWidth, originalHeight);
+        savePicture(filePath_right, tc, canvas2, width, height, originalWidth2, originalHeight2);
     }
 
     private String createCanvasSpecificName(String filePath, String specificName) {
@@ -322,75 +329,10 @@ public class ResultExports {
         
         return filePath;
     }
-    
-     public void exportVisualResults(Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
-        String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "PNG images", FILE_EXTENSIONS_PIC, false);
-
-        if (filePath == null) {
-            //selection of folder wasn't approved, nothing happens
-            return;
-        }
-
-        savePicture(filePath, tc, canvas, gl, width, height);
-
-    }
-
-     private void savePicture(String path, Component tc, GLEventListener canvas, GL2 gl, int width, int height) {
-        if (path.contains(".png")) {
-        } else {
-            path = path + ".png";
-        }
-
-        int i = gl.glGetError();
-        
-        gl.glFinish();
-        gl.glReadBuffer(gl.GL_BACK); // or GL.GL_BACK
-
-        i = gl.glGetError();
-        
-        ByteBuffer glBB = ByteBuffer.allocate(3 * width * height);
-        gl.glReadPixels(0, 0, width, height, gl.GL_BGR, gl.GL_BYTE, glBB);
-        
-        i = gl.glGetError();
-        
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        int[] bd = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int b = 2 * glBB.get();
-                int g = 2 * glBB.get();
-                int r = 2 * glBB.get();
-
-                bd[(height - y - 1) * width + x] = (r << 16) | (g << 8) | b | 0xFF000000;
-            }
-        }
-
-        //bi.setRGB(0, 0, width, height, bd, 0, width);
-        
-        Graphics g;
-        JFrame newFrame = new JFrame();
-        GLJPanel picture = new GLJPanel();
-
-        newFrame.setSize(width, height);
-        newFrame.add(picture);
-        newFrame.setVisible(true);
-
-        picture.setSize(width, height);
-        picture.repaint();
-        g = bi.createGraphics();
-        picture.paint(g);
-
-        try {
-            ImageIO.write(bi, "png", new File(path));
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(tc, "Saving image failed.");
-        }
-    }
+   
     
     //saves picture as PNG file to given path, of given size
-    private void savePicture(String path, Component tc, GLEventListener canvas, int width, int height) {
+    private void savePicture(String path, Component tc, GLEventListener canvas, int width, int height, int originalWidth, int originalHeight) {
         if (path.contains(".png")) {
         } else {
             path = path + ".png";
@@ -399,22 +341,41 @@ public class ResultExports {
         BufferedImage bi;
         Graphics g;
         JFrame newFrame = new JFrame();
+        JLabel imageLabel = new JLabel();
+         
         GLJPanel picture = new GLJPanel();
         int[] size = new int[]{width, height};
 
         newFrame.setSize(size[0], size[1]);
         picture.addGLEventListener(canvas);
         newFrame.add(picture);
-        newFrame.setVisible(true);
         picture.setSize(size[0], size[1]);
         picture.repaint();
 
+        //Change size to desired size and let JPanel draw with resized picture
         bi = new BufferedImage(size[0], size[1], BufferedImage.TYPE_INT_RGB);
         g = bi.createGraphics();
         picture.paint(g);
-
+        
+       
         try {
             ImageIO.write(bi, "png", new File(path));
+            
+            //Set canvas size to original to avoid moving model in main application window 
+            picture.setSize(originalWidth, originalHeight);
+            BufferedImage bi2 = new BufferedImage(originalWidth, originalHeight, BufferedImage.TYPE_INT_RGB);
+            g = bi2.createGraphics();
+            picture.paint(g);
+
+            newFrame.remove(picture);
+            newFrame.setResizable(false);
+            
+            //Load enlarged image to show in new frame
+            ImageIcon img = new ImageIcon(bi.getScaledInstance(width, height, Image.SCALE_SMOOTH));
+            imageLabel.setIcon(img);
+            newFrame.add(imageLabel);        
+            
+            newFrame.setVisible(true);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(tc, "Saving image failed.");
         }
@@ -532,7 +493,7 @@ public class ResultExports {
     private void saveSingleModel(String path, Model mainF, String modelName, String mode) {
         ModelExporter me = new ModelExporter(mainF);
         File f = new File(path + File.separator + modelName + mode);
-        me.exportModelToObj(f, false);
+        me.exportModelToObj(f, true);
     }
 
     /**
@@ -566,6 +527,7 @@ public class ResultExports {
 
             p.finish();
         } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
             p.finish();
         }
     }

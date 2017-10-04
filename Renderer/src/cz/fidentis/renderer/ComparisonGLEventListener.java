@@ -123,6 +123,7 @@ import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import jv.object.PsDebug;
 import org.openide.awt.StatusDisplayer;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -2377,8 +2378,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             vertexFrangmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/vert.fs.glsl"));
 
         } catch (IOException ex) {
-            Logger.getLogger(ComparisonGLEventListener.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Exceptions.printStackTrace(ex);
         }
 
         int vertexShaderSMId = initShader(gl, GL_VERTEX_SHADER, SMvertexShaderList);

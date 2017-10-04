@@ -8,6 +8,7 @@ package cz.fidentis.utils;
 import cz.fidentis.validator.OSValidator;
 import java.net.URISyntaxException;
 import org.opencv.LoadOpenCV;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -26,6 +27,7 @@ public class LoadLibraries {
             }
             openCVLoaded = true;
         } catch (UnsatisfiedLinkError ex) {
+            Exceptions.printStackTrace(ex);
             openCVLoaded = false;
         }
         

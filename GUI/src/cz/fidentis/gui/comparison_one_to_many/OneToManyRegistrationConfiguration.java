@@ -36,6 +36,7 @@ import cz.fidentis.utilsException.FileManipulationException;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -871,6 +872,28 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     
                     FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
                     tc.getOneToManyViewerPanel().getListener1().getModel());
+                    
+                    HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
+                    List<FacialPoint> fpCopy;
+                    
+                    for(String key : res.getFacialPoints().keySet()){
+                        fpCopy = new ArrayList<>();
+                        for(FacialPoint fp : res.getFacialPoints().get(key)){
+                            fpCopy.add(fp.deepCopyFp());
+                        }
+                        
+                        resCopy.put(key, fpCopy);
+                    }
+                    
+                    fpCopy = new ArrayList<>();
+                    
+                    for(FacialPoint fp : res.getMainFfps()){
+                        fpCopy.add(fp.deepCopyFp());
+                    }
+                    
+                    resCopy.put(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), fpCopy);
+                    
+                    c.setOriginalFp(resCopy);
             
                     c.setFacialPoints(res.getFacialPoints());
                     c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
@@ -945,6 +968,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                             FileUtils.instance().createTMPmoduleFolder(new File("compF"));
                         } catch (FileManipulationException ex) {
                             //osefuj error
+                            Exceptions.printStackTrace(ex);
                             registerButton.setEnabled(true);
                         }
 
@@ -1049,7 +1073,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                             k.start();
 
-                            r.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.FALSE));
+                            r.add(ProcessingFileUtils.instance().saveModelToTMP(m, tmpModuleFile, i, -3, Boolean.TRUE));
                             k.finish();
                         }
 
@@ -1152,6 +1176,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             }
             
             c.addFacialPoints(model.getModelName(), model.getFacialPoints());
+            c.addOriginalFp(model.getModelName(), model.createListFp());
         }
         
         

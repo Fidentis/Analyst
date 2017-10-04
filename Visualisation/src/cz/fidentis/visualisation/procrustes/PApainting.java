@@ -9,8 +9,11 @@ package cz.fidentis.visualisation.procrustes;
 import Jama.Matrix;
 import com.jogamp.opengl.util.gl2.GLUT;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
+import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.FacialPointType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.vecmath.Vector3f;
@@ -37,7 +40,8 @@ public class PApainting {
         if (info.getType() < 2) {
             ProcrustesAnalysis pa1;
             ProcrustesAnalysis pa2;
-
+            
+            //1:1 and 1:N
             if (info.getType() == 0) {
                 /*pa1 = info.getGpa().getPA(0);
                 pa2 = info.getGpa().getPA(1);*/
@@ -48,52 +52,48 @@ public class PApainting {
                 pa2 = info.getGpa().countMeanConfig();
             }
 
-            List<Vector3f> newFp1 = new ArrayList();
-            List<Vector3f> newFp2 = new ArrayList();
-            
-            Matrix pa1VisMatrix = pa1.getVisualMatrix();
-            Matrix pa2VisMatrix = pa2.getVisualMatrix();
+            Map<Integer, FacialPoint> pa1VisMatrix = pa1.getConfig();
+            Map<Integer, FacialPoint> pa2VisMatrix = pa2.getConfig();
+            List<Integer> correspondence = pa1.getFPtypeCorrespondence(pa2);
 
-            for (int i = 0; i < pa1VisMatrix.getRowDimension(); i++) {
-                Vector3f vert1 = new Vector3f((float) pa1VisMatrix.get(i, 0),
-                        (float) pa1VisMatrix.get(i, 1), (float) pa1VisMatrix.get(i, 2));
-                Vector3f vert2 = new Vector3f((float) pa2VisMatrix.get(i, 0),
-                        (float) pa2VisMatrix.get(i, 1), (float) pa2VisMatrix.get(i, 2));
+            for (Integer i: correspondence) {
+                Vector3f vert1 = pa1VisMatrix.get(i).getPosition();
+                Vector3f vert2 = pa2VisMatrix.get(i).getPosition();
 
                 List<Vector3f> newVertices = this.enhanceVertices(vert1, vert2);
 
                 if (info.getType() == 1) {
                     this.drawVertex(vert2, info.getPointSize(), color2, gl, glut);
                     this.drawArrow(vert2, newVertices.get(0), color1, gl, glut);
-                    newFp1.add(vert2);
+ 
                 } else {
-                    newFp1.add(newVertices.get(0));
-                    newFp2.add(newVertices.get(1));
+
                     this.drawVertex(newVertices.get(1), info.getPointSize(), color2, gl, glut);
                     this.drawVertex(newVertices.get(0), info.getPointSize(), color1, gl, glut);
                 }
             }
 
             if (info.getType() == 0) {
-                this.drawFaceShape(newFp1, color1, gl, glut);
-                this.drawFaceShape(newFp2, color2, gl, glut);
+                this.drawFaceShape(correspondence, pa1VisMatrix, color1, gl, glut);
+                this.drawFaceShape(correspondence, pa2VisMatrix, color2, gl, glut);
             }
             if (info.getType() == 1) {
-                this.drawFaceShape(newFp1, color2, gl, glut);
+                this.drawFaceShape(correspondence, pa1VisMatrix, color2, gl, glut);
 
             }
         } else {
-            Matrix mean = info.getGpa().countMeanConfig().getVisualMatrix();
+            //batch
+            ProcrustesAnalysis meanAnalysis = info.getGpa().countMeanConfig();
+            Map<Integer, FacialPoint> mean = meanAnalysis.getConfig();
 
             for (int j = 0; j < info.getGpa().getConfigs().size(); j++) {
-                Matrix pa = info.getGpa().getPA(j).getVisualMatrix();
+                Map<Integer, FacialPoint> pa = info.getGpa().getPA(j).getConfig();
+                List<Integer> correspondence = info.getGpa().getPA(j).getFPtypeCorrespondence(meanAnalysis);
 
-                for (int i = 0; i < mean.getRowDimension(); i++) {
-                    Vector3f vert = new Vector3f((float) pa.get(i, 0),
-                            (float) pa.get(i, 1), (float) pa.get(i, 2));
+                for (Integer i : correspondence) {
+                    Vector3f vert = pa.get(i).getPosition();
 
-                    List<Vector3f> newVertices = this.enhanceVertices(vert, new Vector3f((float) mean.get(i, 0),
-                            (float) mean.get(i, 1), (float) mean.get(i, 2)));
+                    List<Vector3f> newVertices = this.enhanceVertices(vert, mean.get(i).getPosition());
                     if (info.getIndexOfSelectedConfig() == j) {
                         this.drawVertex(newVertices.get(0), info.getPointSize() / 2f, color1, gl, glut);
                     } else {
@@ -101,14 +101,12 @@ public class PApainting {
                     }
                 }
             }
-            List<Vector3f> meanVertices = new ArrayList();
-            for (int i = 0; i < mean.getRowDimension(); i++) {
-                Vector3f meanVert = new Vector3f((float) mean.get(i, 0),
-                        (float) mean.get(i, 1), (float) mean.get(i, 2));
+            
+            for (Integer i: mean.keySet()) {
+                Vector3f meanVert = mean.get(i).getPosition();
                 this.drawVertex(meanVert, info.getPointSize(), color2, gl, glut);
-                meanVertices.add(meanVert);
             }
-            this.drawFaceShape(meanVertices, color2, gl, glut);
+            this.drawFaceShape(null, mean, color2, gl, glut);
         }
     }
     
@@ -201,7 +199,8 @@ public class PApainting {
 
     }
     
-    private void drawFaceShape(List<Vector3f> fps, float[] color, GL2 gl, GLUT glut) {
+    
+    private void drawFaceShape(List<Integer> correspondence, Map<Integer, FacialPoint> fps, float[] color, GL2 gl, GLUT glut) {
 
         gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
         gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0);
@@ -213,42 +212,48 @@ public class PApainting {
         gl.glEnable(GL2.GL_LIGHTING);
         gl.glEnable(GL2.GL_NORMALIZE);
 
-        
         //celo nos
-        drawCylinder(fps.get(4), fps.get(8), gl, glut);
-        drawCylinder(fps.get(8), fps.get(9), gl, glut);
-        drawCylinder(fps.get(4), fps.get(10), gl, glut);
-
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.PRN.ordinal(), FacialPointType.N.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.N.ordinal(), FacialPointType.G.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.PRN.ordinal(), FacialPointType.LS.ordinal(), gl, glut);
+ 
         //brada
-        drawCylinder(fps.get(11), fps.get(12), gl, glut);
-        drawCylinder(fps.get(12), fps.get(13), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.LI.ordinal(), FacialPointType.SL.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.SL.ordinal(), FacialPointType.PG.ordinal(), gl, glut);
 
         //usta
-        drawCylinder(fps.get(6), fps.get(5), gl, glut);
-        drawCylinder(fps.get(5), fps.get(7), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.CH_R.ordinal(), FacialPointType.STO.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.STO.ordinal(), FacialPointType.CH_L.ordinal(), gl, glut);
 
-        drawCylinder(fps.get(6), fps.get(10), gl, glut);
-        drawCylinder(fps.get(10), fps.get(7), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.CH_R.ordinal(), FacialPointType.LS.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.LS.ordinal(), FacialPointType.CH_L.ordinal(), gl, glut);
 
-        drawCylinder(fps.get(6), fps.get(11), gl, glut);
-        drawCylinder(fps.get(11), fps.get(7), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.CH_R.ordinal(), FacialPointType.LI.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.LI.ordinal(), FacialPointType.CH_L.ordinal(), gl, glut);
 
-        drawCylinder(fps.get(10), fps.get(5), gl, glut);
-        drawCylinder(fps.get(5), fps.get(11), gl, glut);
-        //oci -- zanedbava nespecifikovane body v strede oka
-        /*drawCylinder(fps.get(1), fps.get(14), gl, glut);
-        drawCylinder(fps.get(14), fps.get(3), gl, glut);*/
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.LS.ordinal(), FacialPointType.STO.ordinal(), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.STO.ordinal(), FacialPointType.LI.ordinal(), gl, glut);
+
         
-        drawCylinder(fps.get(1), fps.get(3), gl, glut);
-        //drawCylinder(fps.get(3), fps.get(8), gl, glut);
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.EX_L.ordinal(), FacialPointType.EN_L.ordinal(), gl, glut);
+ 
+        checkAndDrawCylinder(correspondence, fps, FacialPointType.EX_R.ordinal(), FacialPointType.EN_R.ordinal(), gl, glut);
 
-        /*drawCylinder(fps.get(0), fps.get(15), gl, glut);
-        drawCylinder(fps.get(15), fps.get(2), gl, glut);*/
-        drawCylinder(fps.get(0), fps.get(2), gl, glut);
-        //drawCylinder(fps.get(2), fps.get(8), gl, glut);
 
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDisable(GL2.GL_LIGHTING);
         gl.glPopAttrib();
+    }
+
+    //check if both start and end point for cylinder are available and if so, draw cylinder
+    private void checkAndDrawCylinder(List<Integer> correspondence, Map<Integer, FacialPoint> fps, int cylStart, int cylEnd, GL2 gl, GLUT glut) {
+        
+        
+        if((correspondence != null && correspondence.contains(cylStart) && correspondence.contains(cylEnd)) ||
+                (correspondence == null && fps.containsKey(cylStart) && fps.containsKey(cylEnd))){
+            
+            drawCylinder(fps.get(cylStart).getPosition(), fps.get(cylEnd).getPosition(), gl, glut);
+        }
+            
     }
 }

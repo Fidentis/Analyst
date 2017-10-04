@@ -52,6 +52,8 @@ public class Comparison2Faces {
     private ArrayList<List<FacialPoint>> databaseFacialPoints = new ArrayList<List<FacialPoint>>();         //database of FPs is currently not used within the application
     private List<FacialPoint> mainFp = new ArrayList<>();
     private List<FacialPoint> secondaryFp = new ArrayList<>();
+    private List<FacialPoint> originalMainFp;
+    private List<FacialPoint> originalSecondaryFp;
     private boolean editPoints;         //DON'T need to save in project
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private boolean continueComparison = false;
@@ -337,6 +339,23 @@ public class Comparison2Faces {
     public void setValue(float value) {
         this.value = value;
     }
+
+    public List<FacialPoint> getOriginalMainFp() {
+        return originalMainFp;
+    }
+
+    public void setOriginalMainFp(List<FacialPoint> originalMainFp) {
+        this.originalMainFp = originalMainFp;
+    }
+
+    public List<FacialPoint> getOriginalSecondaryFp() {
+        return originalSecondaryFp;
+    }
+
+    public void setOriginalSecondaryFp(List<FacialPoint> originalSecondaryFp) {
+        this.originalSecondaryFp = originalSecondaryFp;
+    }
+    
 
     public List<FacialPoint> getMainFp() {
         return mainFp;

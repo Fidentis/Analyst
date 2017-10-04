@@ -46,6 +46,7 @@ public class OneToManyComparison {
     private Model primaryModel;                     //mainFace
     private Model avgFace;                          //avgFace
     private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<String, List<FacialPoint>>();         //feature points associated with the model of given name
+    private HashMap<String, List<FacialPoint>> originalFp = new HashMap<String, List<FacialPoint>>();
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private Node node;
     private Node node_primaryModel;
@@ -322,6 +323,19 @@ public class OneToManyComparison {
         this.facialPoints.clear();   
         this.facialPoints.putAll(facialPoints);
     }
+
+    public HashMap<String, List<FacialPoint>> getOriginalFp() {
+        return originalFp;
+    }
+
+    public void setOriginalFp(HashMap<String, List<FacialPoint>> originalFp) {
+        this.originalFp = originalFp;
+    }
+    
+    public void addOriginalFp(String modelName, List<FacialPoint> originalFp){
+        this.originalFp.put(name, originalFp);
+    }
+    
 
     public boolean isShowPointInfo() {
         return showPointInfo;

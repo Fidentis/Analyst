@@ -441,12 +441,12 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
         BatchComparison c = getContext();
         
         //get correct value for selected avg model
-        c.setTemplateIndex(c.getTemplateIndex() + 3);
+        if(c.getTemplateIndex() < c.getModels().size())
+            c.setTemplateIndex(c.getTemplateIndex() + 3);
         
-        Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
+        Model m = ModelLoader.instance().loadModel(getContext().getModel(0), true, true);
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getFacialPoints().clear();
-        c.getFacialPoints().clear();
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(c.getOriginalFp().get(m.getName()));
         
         c.setState(1);
         GUIController.getConfigurationTopComponent().addBatchRegistrationComponent();  

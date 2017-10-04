@@ -921,20 +921,22 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private void backRegistrationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backRegistrationButtonActionPerformed
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(false, 0);
         //if (GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getNumberOfModels() > 1) {
-            Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), false, true);
+            Model model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().getModel().getFile(), true, true);
 
+            Comparison2Faces c = getContext();
+            
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setModels(model);
             
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFacialPoints(null);
-            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFacialPoints(null);
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setFacialPoints(c.getOriginalSecondaryFp());
+            GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setFacialPoints(c.getOriginalMainFp());
             
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setProcrustes(false);
             
             
-            model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), false, true);
+            model = ModelLoader.instance().loadModel(GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getModel().getFile(), true, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setModels(model);
         //}
-        getContext().setState(1);
+        c.setState(1);
         GUIController.getConfigurationTopComponent().addRegistrationComponent();
 
     }//GEN-LAST:event_backRegistrationButtonActionPerformed

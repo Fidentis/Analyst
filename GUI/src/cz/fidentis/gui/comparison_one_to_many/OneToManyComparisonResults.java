@@ -25,6 +25,7 @@ import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
 import cz.fidentis.visualisation.surfaceComparison.VisualizationType;
+import cz.fidnetis.gui.windows.VisExportResizeWindow;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -218,7 +219,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        visResExportButton = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         density = new javax.swing.JSlider();
@@ -1153,10 +1154,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.jButton3.text")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(visResExportButton, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.visResExportButton.text")); // NOI18N
+        visResExportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                visResExportButtonActionPerformed(evt);
             }
         });
 
@@ -1271,7 +1272,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(alignParametersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(heatplotButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(heatplotButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1332,7 +1333,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 .addGap(10, 10, 10)
                 .addComponent(jButton6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1510,16 +1511,23 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void visResExportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visResExportButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        VisExportResizeWindow win = null;
         if (getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener2(), 1920, 1920);
+            win = new VisExportResizeWindow(tc.getOneToManyViewerPanel().getListener2(), null, tc,
+            tc.getOneToManyViewerPanel().getCanvas2().getSize().width, tc.getOneToManyViewerPanel().getCanvas2().getSize().height, 0, 0);
         } else if (getContext().getHdPaintingInfo() != null && getContext().getHdPaintingInfo().getvType() == VisualizationType.CROSSSECTION){
-            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener1(), tc.getOneToManyViewerPanel().getListener2(), 1920, 1920);
+            win = new VisExportResizeWindow(tc.getOneToManyViewerPanel().getListener1(), tc.getOneToManyViewerPanel().getListener2(), tc,
+            tc.getOneToManyViewerPanel().getCanvas1().getSize().width, tc.getOneToManyViewerPanel().getCanvas1().getSize().height,
+            tc.getOneToManyViewerPanel().getCanvas2().getSize().width, tc.getOneToManyViewerPanel().getCanvas2().getSize().height);
         }else {
-            ResultExports.instance().exportVisualResults(tc, tc.getOneToManyViewerPanel().getListener1(), 1920, 1920);
+            win = new VisExportResizeWindow(tc.getOneToManyViewerPanel().getListener1(), null, tc,
+            tc.getOneToManyViewerPanel().getCanvas1().getSize().width, tc.getOneToManyViewerPanel().getCanvas1().getSize().height, 0, 0);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+        
+        win.setVisible(true);
+    }//GEN-LAST:event_visResExportButtonActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
@@ -1971,8 +1979,12 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             models.add(c.getPrimaryModel());
 
             for (int i = 0; i < c.getRegisteredModels().size(); i++) {
-                //registered models will be null if ICP wasn't used
-                Model m = l.loadModel(c.getRegisteredModels().get(i), false, false);
+                Model m;
+                if(c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION)
+                    m = l.loadModel(c.getRegisteredModels().get(i), false, true);
+                else
+                    m = l.loadModel(c.getRegisteredModels().get(i), false, false);
+                
                 models.add(m);
             }
             tc.getOneToManyViewerPanel().getListener2().setModels(models);
@@ -2393,6 +2405,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         fpSizeSlider.setValue(c.getFpSize());
 
         VisualizationBox.removeItem(VisualizationType.TRANSPARENCY);
+        //Temporary for Fidentis2
+        VisualizationBox.removeItem(VisualizationType.VECTORS);
 
         if (c.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
             showProcrustesControls();
@@ -2482,7 +2496,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -2546,6 +2559,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel sizeLabel;
     private javax.swing.JPanel slicesPanel;
     private javax.swing.JComboBox valuesComboBox;
+    private javax.swing.JButton visResExportButton;
     private javax.swing.JSpinner xArbitrarySpinner;
     private javax.swing.JSpinner xPositionSpinner;
     private javax.swing.JRadioButton xyPlaneRadioButton;

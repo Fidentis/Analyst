@@ -161,7 +161,7 @@ public class SurfaceComparisonProcessing {
             List<ICPTransformation> trans = Icp.instance().icp(mainF, compF.getVerts(), samples, error, numberOfIterations, scale);
             data.addTrans(trans);
 
-            results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.FALSE));
+            results.add(ProcessingFileUtils.instance().saveModelToTMP(compF, new File(tmpLoc), -2, i, Boolean.TRUE));
 
             i++;
         }
@@ -276,7 +276,7 @@ public class SurfaceComparisonProcessing {
      */
     public String formatedNumResOneToMany(List<Float> hdDistance, List<File> models, String mainFace, float upperThreshold, float lowerThreshold, int varianceMethod) {
         StringBuilder strResults = new StringBuilder(SurfaceComparisonProcessing.instance().getNameOfVarianceMethod(varianceMethod) + " Upper: " + upperThreshold + 
-                "% Lower: " + lowerThreshold + "% treshold;");
+                "% Lower: " + lowerThreshold + "% threshold;");
         
         for(int i = 0; i < hdDistance.size(); i++){
             strResults.append(models.get(i).getName()).append(';');
@@ -847,7 +847,7 @@ public class SurfaceComparisonProcessing {
      * @return string representation of computed results
      */
     public String batchCompareNumericalResultsTable(ArrayList<ArrayList<Float>> results, int varianceMethod, List<File> originalModels, float upperTreshold, float lowerTreshold) {
-        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + " Lower: " + (lowerTreshold * 100) + "% Upper: " + (upperTreshold * 100) + "% treshold;");
+        StringBuilder strResults = new StringBuilder(getNameOfVarianceMethod(varianceMethod) + " Lower: " + (lowerTreshold * 100) + "% Upper: " + (upperTreshold * 100) + "% threshold;");
 
         for (int i = 0; i < results.size(); i++) {
             strResults.append(originalModels.get(i).getName()).append(';');
@@ -1258,7 +1258,7 @@ public class SurfaceComparisonProcessing {
                 + "Max;" + ComparisonMetrics.instance().findMaxDistance(hdDistance, useRelative) + "\n"
                 + "RMS;" + ComparisonMetrics.instance().rootMeanSqr(hdDistance, useRelative) + "\n"
                 + "Arithmetic Mean;" + ComparisonMetrics.instance().aritmeticMean(hdDistance, useRelative) + "\n"
-                + "Geomertic Mean;" + ComparisonMetrics.instance().geometricMean(hdDistance, useRelative)) + "\n"
+                + "Geometric Mean;" + ComparisonMetrics.instance().geometricMean(hdDistance, useRelative)) + "\n"
                 + "75 Percentile;" + ComparisonMetrics.instance().percentileSeventyFive(hdDistance, useRelative);
     }
 
@@ -1309,7 +1309,7 @@ public class SurfaceComparisonProcessing {
             Model m = ModelLoader.instance().loadModel(models.get(i), false, Boolean.TRUE);
             createSymetricModelNoCopy(m);
             
-            savedTo.add(ProcessingFileUtils.instance().saveModelToTMP(m, saveFolder, -2, i, false));
+            savedTo.add(ProcessingFileUtils.instance().saveModelToTMP(m, saveFolder, -2, i, Boolean.TRUE));
         }
         } catch (FileManipulationException ex) {
             Exceptions.printStackTrace(ex);
