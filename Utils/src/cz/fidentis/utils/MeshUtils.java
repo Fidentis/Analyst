@@ -85,8 +85,8 @@ public class MeshUtils {
         int currentIndex = pivot;
         int previousIndex = pivot;
         
-        Vector3f a = points.get(currentIndex);
-        vertexList.add(a);
+        Vector3f point = points.get(currentIndex);
+        vertexList.add(point);
 
         List<Integer> indexes = new ArrayList<>();
         
@@ -95,8 +95,8 @@ public class MeshUtils {
             int nextIndex = getMinimalAnglePoint(points, currentIndex, previousIndex, indexes);
             indexes.add(nextIndex);
             if (currentIndex != previousIndex){
-                a = points.get(currentIndex);
-                vertexList.add(a);
+                point = points.get(currentIndex);
+                vertexList.add(point);
                 
             }
             previousIndex = currentIndex;

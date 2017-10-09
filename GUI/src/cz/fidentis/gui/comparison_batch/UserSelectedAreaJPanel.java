@@ -111,8 +111,8 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
         }
         
         faceComparison = calculateFaceComparison(customArrayList, vertices, metricIndex, relative);
-        this.DifferentFace.setText(modelsName.get(SelectedAreas[0])+"");
-        this.SimilarFace.setText(modelsName.get(SelectedAreas[customArrayList.size()-1])+"");
+        this.DifferentFace.setText(modelsName.get(SelectedAreas[faceComparison.get(0)])+"");
+        this.SimilarFace.setText(modelsName.get(SelectedAreas[faceComparison.get(faceComparison.size()-1)])+"");
         this.MetricName.setText(metricName.get(metricIndex));
     }
     
@@ -395,6 +395,7 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setFont(new java.awt.Font("Trajan Pro", 2, 13)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/comparison_batch/if_help_49832 (1).png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jLabel2.text")); // NOI18N
         jLabel2.setToolTipText(org.openide.util.NbBundle.getMessage(UserSelectedAreaJPanel.class, "UserSelectedAreaJPanel.jLabel2.toolTipText")); // NOI18N
 
@@ -457,8 +458,8 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(labelAreaName11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, 0))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelAreaName6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -500,10 +501,11 @@ public class UserSelectedAreaJPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelAreaName6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelAreaName7)
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelAreaName11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labelAreaName7)
+                                .addGap(27, 27, 27)
+                                .addComponent(labelAreaName11))
                             .addComponent(jLabel2)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(GeoMean)
