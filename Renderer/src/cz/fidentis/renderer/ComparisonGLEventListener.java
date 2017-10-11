@@ -10,6 +10,9 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.texture.Texture;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
+import cz.fidentis.comparison.localAreas.Area;
+import cz.fidentis.comparison.localAreas.LocalAreas;
+import cz.fidentis.comparison.localAreas.PointsValues;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.composite.ModelSelector;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -132,6 +135,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private HDpaintingInfo hdInfo;
     private boolean paintHD = false;*/
     private ComparisonListenerInfo info;
+    private LocalAreasRender localAreaRender;
 
     private GLUT glut = new GLUT();
     private int[] viewport = new int[4];
@@ -162,6 +166,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private int FinalShadersId;
     private int ColorMapShadersId;
     private int ColorMapReductionShadersId;
+    private int VertexShadersId;
 
     /*private LinkedList<Vector3f> plane = new LinkedList<>();
     private ArrayList<LinkedList<LinkedList<Vector3f>>> lists = new ArrayList<>();
@@ -258,6 +263,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         models.add(null);*/
         info.getModels().add(null);
         info.getModels().add(null);
+        localAreaRender = new LocalAreasRender();
     }
 
     @Override
@@ -303,48 +309,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
         gl.glShadeModel(GL2.GL_SMOOTH);
 
-        if (info.isProcrustes()) {
-            gl.glPushAttrib(GL_ALL_ATTRIB_BITS);
-            info.getPaPainting().drawPointsAfterPA(gl, glut);
-            gl.glPopAttrib();
-        } else if (info.isPaintHD()) {
-            /**
-             * edited - 11.03.2015 Jakub Palenik multiple visualizations of
-             * HDpaint based on hdPaint attribute vType of ENUM
-             * VisualizationType
-             */
-            switch (info.getHdInfo().getvType()) {
-                case COLORMAP:
-                    paintHD();
-                    if (selectionCube[3] != null && !info.getHdInfo().isIsSelection()) {
-                        if (info.getHdInfo().getsType() == SelectionType.ELLIPSE) {
-                            paintSelectionEllipse();
-                        }
-                        if (info.getHdInfo().getsType() == SelectionType.RECTANGLE) {
-                            paintSelectionRectangle();
-                        }
-
-                    }
-                    break;
-                case TRANSPARENCY:
-                    trasparencyRender();
-                    break;
-                case VECTORS:
-                    info.getHdPaint().paintNormals(gl);
-                    break;
-                case CROSSSECTION:
-                    if (secondaryListener) {
-                        slicesAllRender();
-                    } else {
-                        sliceMainRender();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        } else if (info.getModels().size() == 2) {
-            trasparencyRender();
-        } else {
+        if(localAreaRender.IsSetUp()){
             for (int i = 0; i < info.getModels().size(); i++) {
                 if (info.getModels().get(i) != null) {
                     gl.glPushMatrix();
@@ -371,8 +336,82 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                     gl.glPopMatrix();
                 }
             }
+            
+            gl = localAreaRender.drawLocalAreas(gl, VertexShadersId, projectionMatrix,  modelViewMatrix);
+        } else {
+            if (info.isProcrustes()) {
+                gl.glPushAttrib(GL_ALL_ATTRIB_BITS);
+                info.getPaPainting().drawPointsAfterPA(gl, glut);
+                gl.glPopAttrib();
+            } else if (info.isPaintHD()) {
+                /**
+                 * edited - 11.03.2015 Jakub Palenik multiple visualizations of
+                 * HDpaint based on hdPaint attribute vType of ENUM
+                 * VisualizationType
+                 */
+                switch (info.getHdInfo().getvType()) {
+                    case COLORMAP:
+                        paintHD();
+                        if (selectionCube[3] != null && !info.getHdInfo().isIsSelection()) {
+                            if (info.getHdInfo().getsType() == SelectionType.ELLIPSE) {
+                                paintSelectionEllipse();
+                            }
+                            if (info.getHdInfo().getsType() == SelectionType.RECTANGLE) {
+                                paintSelectionRectangle();
+                            }
 
+                        }
+                        break;
+                    case TRANSPARENCY:
+                        trasparencyRender();
+                        break;
+                    case VECTORS:
+                        info.getHdPaint().paintNormals(gl);
+                        break;
+                    case CROSSSECTION:
+                        if (secondaryListener) {
+                            slicesAllRender();
+                        } else {
+                            sliceMainRender();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } else if (info.getModels().size() == 2) {
+                trasparencyRender();
+            } else {
+                for (int i = 0; i < info.getModels().size(); i++) {
+                    if (info.getModels().get(i) != null) {
+                        gl.glPushMatrix();
+                        float[] color = {0.8667f, 0.7176f, 0.6275f, 1f};
+                        float[] colorKs = {0, 0, 0, 1f};
+
+                        //  float[] color = {0.868f, 0.64f, 0.548f, 1f};
+                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
+                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0);
+                        gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 10);
+
+                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, colorKs, 0);
+                        if (drawTextures) {
+                            info.getModels().get(i).draw(gl);
+                        } else {
+
+                            info.getModels().get(i).drawWithoutTextures(gl);
+
+                        }
+                        if (info.getFacialPoints() != null) {
+                            drawFacialPoints(info.getFacialPoints());
+                        }
+                        gl.glDisable(GL.GL_BLEND);
+                        gl.glPopMatrix();
+                    }
+                }
+
+            }
         }
+        
+        
 
         gl.glPopMatrix();
         gl.glFlush();
@@ -2281,6 +2320,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
         gl.glActiveTexture(GL_TEXTURE0);
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        
+        gl = localAreaRender.init(gl, VertexShadersId);
     }
 
     private void initShaders() {
@@ -2294,6 +2335,8 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         String colorMapvertexShader = null;
         String colorMapfragmentShader = null;
         String colorMapShadeFragmentShader = null;
+        String vertexShader = null;
+        String vertexFrangmentShader = null;
 
         try {
             SMvertexShaderList = readFile(ComparisonGLEventListener.class
@@ -2330,6 +2373,9 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             colorMapShadeFragmentShader
                     = readFile(ComparisonGLEventListener.class
                             .getResourceAsStream("shaders/ColormapShadeFS.glsl"));
+            
+            vertexShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/vert.vs.glsl"));
+            vertexFrangmentShader = readFile(ComparisonGLEventListener.class.getResourceAsStream("shaders/vert.fs.glsl"));
 
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
@@ -2350,6 +2396,9 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         int colorMapfragmentShaderID = initShader(gl, GL_FRAGMENT_SHADER, colorMapfragmentShader);
 
         int colorMapShadeFragmentShaderID = initShader(gl, GL_FRAGMENT_SHADER, colorMapShadeFragmentShader);
+        
+        int vertexShaderShaderID = initShader(gl, GL_VERTEX_SHADER, vertexShader);
+        int vertexFragmentShaderShaderID = initShader(gl, GL_FRAGMENT_SHADER, vertexFrangmentShader);
 
         shadowMapShadersId = gl.glCreateProgram();
         listCreationShadersId = gl.glCreateProgram();
@@ -2357,6 +2406,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         FinalShadersId = gl.glCreateProgram();
         ColorMapShadersId = gl.glCreateProgram();
         ColorMapReductionShadersId = gl.glCreateProgram();
+        VertexShadersId = gl.glCreateProgram();
 
         gl.glAttachShader(shadowMapShadersId, vertexShaderSMId);
         gl.glAttachShader(shadowMapShadersId, fragmentShaderSMId);
@@ -2419,7 +2469,12 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         globalMinDistanceUniform = gl.glGetUniformLocation(ColorMapReductionShadersId, "minThreshDistance");
 
         checkProgramStatus(gl, ColorMapReductionShadersId, 3);
+        
+        gl.glAttachShader(VertexShadersId, vertexShaderShaderID);
+        gl.glAttachShader(VertexShadersId, vertexFragmentShaderShaderID);
+        gl.glLinkProgram(VertexShadersId);
 
+        checkProgramStatus(gl, VertexShadersId, 3);
     }
 
     /**
@@ -2703,6 +2758,53 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
 
     public GL2 getGLContext() {
         return gl;
+    }
+
+    public void SetUpLocalAreaRender(int[] indexesOfAreas, List<Area> area, Model model){
+        
+        localAreaRender.SetUp(indexesOfAreas, area, model);
+    }
+    
+    public void HideLocalAreaRender(){
+        
+        localAreaRender.HideLocalAreas();
+        localAreaRender.clearSelection();
+    }
+    
+    public LocalAreas getLocalAreas(){
+        return localAreaRender.getLocalAreasBoundary();
+    }
+    
+    public double[] getProjectionMatrix(){
+        return projectionMatrix;
+    }
+    
+    public double[] getModelViewMatrix(){
+        return modelViewMatrix;
+    }
+    
+    public int[] getViewPort(){
+        return viewport;
+    }
+    
+    public void setPointToDraw(Vector4f point){
+        localAreaRender.setPointToDraw(point);
+    }
+    
+    public void setPointsToDraw(List<Vector4f> points){
+        localAreaRender.setPointsToDraw(points);
+    }
+
+    public void hideSelectedPoints() {
+        localAreaRender.hideSelectedPoints();
+    }
+
+    public void drawSelectedArea(PointsValues points, Area area) {
+        localAreaRender.setLocalArea(points, area);
+    }
+
+    public void hideSelectedArea() {
+        localAreaRender.hideLocalArea();
     }
 
 }

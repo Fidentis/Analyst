@@ -71,6 +71,14 @@ public class histogramPanel extends JComponent {
     public List<Float> getValues() {
         return values;
     }
+    
+    public float getMax(){
+        return maxValue;
+    }
+    
+    public float getMin(){
+        return minValue;
+    }
 
     public void setValues(List<Float> values) {
         this.vl = new ArrayList<>(values);

@@ -386,6 +386,17 @@ public final class NavigatorTopComponent extends TopComponent {
                         
                         Model model = ModelLoader.instance().loadModel(file, true, true);
                         listener.setModels(model);
+                        
+                        if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel() != null){
+                            GUIController.getConfigurationTopComponent().getBatchComparisonResults().setCurrentModel(model, lastNodeIndex);
+                            if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().isLocalAreasSet()
+                                    && GUIController.getConfigurationTopComponent().getBatchComparisonResults().isVisibleLocalArea()){
+                                GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().updateModel(model);
+                                
+                            }
+                            
+                        }
+                        
                         if(batchComparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
                             List<FacialPoint> l = batchComparison.getFacialPoints(model.getName());
                             
@@ -403,11 +414,28 @@ public final class NavigatorTopComponent extends TopComponent {
                         Model model = ModelLoader.instance().loadModel(file, true, false);
                         listener.setModels(model);
                         
+                        if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel()!= null){
+                            GUIController.getConfigurationTopComponent().getBatchComparisonResults().setCurrentModel(model, lastNodeIndex);
+                            if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().isLocalAreasSet()
+                                    && GUIController.getConfigurationTopComponent().getBatchComparisonResults().isVisibleLocalArea()){
+                                GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().updateModel(model);
+                                
+                            }
+                        }
+                        
                         // display facial points of corresponding model (by index)
                         listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(lastNodeIndex).getName()));
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.averageModel"))) {
                         listener.setModels(batchComparison.getAverageFace());
+                        if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel()!= null){
+                            GUIController.getConfigurationTopComponent().getBatchComparisonResults().setCurrentModel(batchComparison.getAverageFace(), -1);
+                            if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().isLocalAreasSet() 
+                                    && GUIController.getConfigurationTopComponent().getBatchComparisonResults().isVisibleLocalArea()){
+                                GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().updateModel(batchComparison.getAverageFace());
+                                
+                            }
+                        }
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.results"))) {
                         if(batchComparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {

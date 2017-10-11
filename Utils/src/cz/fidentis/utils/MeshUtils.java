@@ -8,7 +8,9 @@ package cz.fidentis.utils;
 
 
 import cz.fidentis.model.Model;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point3D;
 import javax.vecmath.Vector3f;
 
 /**
@@ -67,4 +69,125 @@ public class MeshUtils {
         return mirroredModel;
     }
     
+    
+    /**
+     * Slight modification of 2D algorithm
+     * @param verticesIndexes indexes
+     * @param model model
+     * @return 
+     */
+    public static List<Vector3f> giftWrapping(List<Vector3f> points){
+        
+        //getting pivot
+        List<Vector3f> vertexList = new ArrayList<>();
+        
+        int pivot = smallestX(points);
+        int currentIndex = pivot;
+        int previousIndex = pivot;
+        
+        Vector3f point = points.get(currentIndex);
+        vertexList.add(point);
+
+        List<Integer> indexes = new ArrayList<>();
+        
+        //going around all points to make a wrapping
+        do {
+            int nextIndex = getMinimalAnglePoint(points, currentIndex, previousIndex, indexes);
+            indexes.add(nextIndex);
+            if (currentIndex != previousIndex){
+                point = points.get(currentIndex);
+                vertexList.add(point);
+                
+            }
+            previousIndex = currentIndex;
+            currentIndex = nextIndex;
+            
+        } while (pivot != currentIndex);
+        
+        
+        return vertexList;
+    }
+    
+    private static int smallestX(List<Vector3f> points){
+        int index = -1;
+        int pomIndex = -1;
+        float smallestX = 5000.0f;
+        
+        for (Vector3f point : points){
+            pomIndex++;
+            if (point.getX()<smallestX){
+                smallestX = point.x;
+                index = pomIndex;
+            }
+        }
+        return index;
+    }
+    
+    /**
+     * Finding the next point that have minimal angle to the two previous points
+     * @param points
+     * @param currentIndex
+     * @param previousIndex
+     * @param usedIndexes modification - prevents from cycling (3D is not 2D :D)
+     * @return 
+     */
+    private static int getMinimalAnglePoint(List<Vector3f> points, int currentIndex, int previousIndex, List<Integer> usedIndexes){
+        Vector3f currentPoint = points.get(currentIndex) ; 
+        Vector3f previousPoint = points.get(previousIndex);
+        
+        //setting inicial line
+        if (currentIndex == previousIndex){
+            previousPoint = new Vector3f(previousPoint.getX(), previousPoint.getY()+100, previousPoint.getZ());
+        }
+        
+        float[] line1 =   {previousPoint.getX(), 
+                            previousPoint.getY(),
+                            previousPoint.getZ(),
+                            currentPoint.getX(),
+                            currentPoint.getY(),
+                            currentPoint.getZ()};
+
+        //inicializing loop
+        int index = -1;
+        int tempIndex = -1;
+        float minimalAngle = 5000.0f;
+        
+        //looking for point that have minimal angle to the two previous points
+        for (Vector3f point : points){
+            tempIndex++;
+            
+            if (tempIndex != currentIndex && tempIndex != previousIndex && !usedIndexes.contains(tempIndex)){
+                
+                float[] line2 =   {currentPoint.getX(),
+                                    currentPoint.getY(),
+                                    currentPoint.getZ(),
+                                    point.getX(),
+                                    point.getY(),
+                                    point.getZ()};
+
+                float pomMinimalAngle = angleBetween2Lines(line1, line2);
+
+                if (pomMinimalAngle<minimalAngle){
+                    minimalAngle = pomMinimalAngle;
+                    index = tempIndex;
+                }
+            }
+        }
+        return index;
+    }
+    
+    private static float angleBetween2Lines(float[] line1, float[] line2){
+        
+        Vector3f a = new Vector3f(line1[0] - line1[3], 
+                                line1[1] - line1[4],
+                                line1[2] - line1[5]);
+        a.normalize();
+        
+        Vector3f b = new Vector3f(line2[0] - line2[3], 
+                                line2[1] - line2[4],
+                                line2[2] - line2[5]);
+        b.normalize();
+
+        return (float)Math.abs(Math.toDegrees(Math.acos(a.dot(b))));
+    }
 }
