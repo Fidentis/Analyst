@@ -7,7 +7,10 @@ package cz.fidentis.gui.actions.analysis;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.landmarks.Landmark;
+import cz.fidentis.featurepoints.landmarks.Methods;
 import cz.fidentis.featurepoints.TableData;
+import cz.fidentis.utils.LandmarkUtils;
 import cz.fidentis.utils.MathUtils;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -32,13 +35,15 @@ public final class AnalysisResults extends TopComponent {
     private List<FpModel> selectedFiles;
     private List<FpModel> selectedFilesSecond;
     private Map<String, List<Double>> computeResults = new HashMap<>();
+    private static final int DISSMIS_WAIT_TIME = 99999999;
 
-    public AnalysisResults(List<FpModel> inSelFiles, List<FpModel> inSelFilesOthers, int index) {
+    public AnalysisResults(List<FpModel> inSelFiles, List<FpModel> inSelFilesOthers, Methods method) {
         this.selectedFiles = inSelFiles;
         this.selectedFilesSecond = inSelFilesOthers;
         initComponents();
         notMatchTextArea.setEditable(false);
-        notMatchTextArea.setText(computeFp(index));
+        computeResults = LandmarkUtils.computeFp(method, selectedFiles, selectedFilesSecond);
+        notMatchTextArea.setText(LandmarkUtils.getNotIn());
         fillTable();
     }
 
@@ -55,8 +60,8 @@ public final class AnalysisResults extends TopComponent {
         notMatchTextArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         resultTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        label1 = new java.awt.Label();
+        boxPlotButton = new javax.swing.JButton();
+        unpairedLabel = new java.awt.Label();
 
         notMatchTextArea.setColumns(20);
         notMatchTextArea.setRows(5);
@@ -75,16 +80,16 @@ public final class AnalysisResults extends TopComponent {
         ));
         jScrollPane2.setViewportView(resultTable);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AnalysisResults.class, "AnalysisResults.jButton1.text")); // NOI18N
-        jButton1.setActionCommand(org.openide.util.NbBundle.getMessage(AnalysisResults.class, "AnalysisResults.jButton1.actionCommand")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(boxPlotButton, org.openide.util.NbBundle.getMessage(AnalysisResults.class, "AnalysisResults.boxPlotButton.text")); // NOI18N
+        boxPlotButton.setActionCommand(org.openide.util.NbBundle.getMessage(AnalysisResults.class, "AnalysisResults.boxPlotButton.actionCommand")); // NOI18N
+        boxPlotButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                boxPlotButtonActionPerformed(evt);
             }
         });
 
-        label1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label1.setText(org.openide.util.NbBundle.getMessage(AnalysisResults.class, "AnalysisResults.label1.text")); // NOI18N
+        unpairedLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        unpairedLabel.setText(org.openide.util.NbBundle.getMessage(AnalysisResults.class, "AnalysisResults.unpairedLabel.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -95,22 +100,22 @@ public final class AnalysisResults extends TopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(unpairedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(boxPlotButton)
                 .addGap(181, 181, 181))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                .addComponent(boxPlotButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(unpairedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
@@ -134,27 +139,16 @@ public final class AnalysisResults extends TopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void boxPlotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxPlotButtonActionPerformed
         // TODO add your handling code here:
 
         final BoxAndWhiskerCategoryDataset dataset = createSampleDataset();
-
-      //  final CategoryAxis xAxis = new CategoryAxis("Type");
-        //xAxis.setTickLabelsVisible(false);
-       // final NumberAxis yAxis = new NumberAxis("Value");
-      //  yAxis.setAutoRangeIncludesZero(true);
-       // final BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
-       // renderer.setMeanVisible(true);
-        //renderer.setSeriesItemLabelGenerator(0,new StandardCategoryItemLabelGenerator("{2}",NumberFormat.getCurrencyInstance(Locale.US)));
-        //renderer.setSeriesItemLabelsVisible(0, true);
-
-        //final CategoryPlot plot = new CategoryPlot(dataset, xAxis, yAxis, renderer);
         
         final JFreeChart chart = ChartFactory.createBoxAndWhiskerChart("Box and Whisker Chart ", " Type", " Value", dataset, true);
         
         ChartPanel panel = new ChartPanel(chart);
         panel.setDisplayToolTips(true);
-        panel.setDismissDelay(9999999);
+        panel.setDismissDelay(DISSMIS_WAIT_TIME);
         
         JPanel jPanel4 = new JPanel(new BorderLayout());
         
@@ -164,16 +158,16 @@ public final class AnalysisResults extends TopComponent {
         frame.pack();
         frame.setVisible(true);
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_boxPlotButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton boxPlotButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private java.awt.Label label1;
     private javax.swing.JTextArea notMatchTextArea;
     private javax.swing.JTable resultTable;
+    private java.awt.Label unpairedLabel;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -183,18 +177,6 @@ public final class AnalysisResults extends TopComponent {
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
-    }
-
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
     }
 
     /**
@@ -228,58 +210,9 @@ public final class AnalysisResults extends TopComponent {
                 values.getHeader()
         ));
     }
-
-    /**
-     * Compute analysis results
-     *
-     * @param index what method is used, 1 for euclid, 2 for NRMSE
-     * @return string of files which have not match
-     */
-    private String computeFp(int index) {
-        StringBuilder result = new StringBuilder();
-        int helpCounter = 0;
-
-        //try to find match, if there is not write to the given text field
-        for (int i = 0; i < selectedFiles.size(); i++) {
-            for (int j = 0; j < selectedFilesSecond.size(); j++) {
-                if (selectedFiles.get(i).getModelName().equals(selectedFilesSecond.get(j).getModelName())) {
-                    computeResults.put(selectedFiles.get(i).getModelName(), computeDistances(selectedFiles.get(i).getFacialPoints(), selectedFilesSecond.get(j).getFacialPoints(), index));
-                    helpCounter++;
-                }
-            }
-
-            //if helpCounter is equal 0 means that is no match for given file
-            if (helpCounter == 0) {
-                result.append(selectedFiles.get(i).getModelName()).append(", ");
-            }
-
-            helpCounter = 0;
-        }
-
-        return result.toString();
-    }
-
-    /**
-     * Compute distances Euclid or Normalized Root Mean Square Error
-     *
-     * @param one first element for computation
-     * @param two second element
-     * @param index what method is used, 1 for euclid, 2 for NRMSE
-     * @return list of distances
-     */
-    private List<Double> computeDistances(List<FacialPoint> one, List<FacialPoint> two, int index) {
-        MathUtils math = MathUtils.instance();
-        List<Double> results = new ArrayList<>();
-
-        for (int i = 0; i < one.size(); i++) {
-            if (index == 0) {
-                results.add(math.distancePoints(one.get(i).getPosition(), two.get(i).getPosition()));
-            } else {
-                results.add(math.distancePoints(one.get(i).getPosition(), two.get(i).getPosition()) / math.distancePoints(one.get(3).getPosition(), one.get(4).getPosition()));
-            }
-        }
-
-        return results;
+    
+    public void resultsAdd(String str, List<Double> listDo){
+        computeResults.put(str, listDo);
     }
 
     private BoxAndWhiskerCategoryDataset createSampleDataset() {

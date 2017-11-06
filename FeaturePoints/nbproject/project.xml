@@ -43,6 +43,7 @@
             <public-packages>
                 <package>cz.fidentis.featurepoints</package>
                 <package>cz.fidentis.featurepoints.curvature</package>
+                <package>cz.fidentis.featurepoints.landmarks</package>
                 <package>cz.fidentis.featurepoints.pca</package>
                 <package>cz.fidentis.featurepoints.results</package>
                 <package>cz.fidentis.featurepoints.symmetryplane</package>

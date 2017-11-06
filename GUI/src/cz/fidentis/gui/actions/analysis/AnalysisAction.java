@@ -25,7 +25,7 @@ import org.openide.util.NbBundle;
 @ActionRegistration(
         displayName = "#CTL_AnalysisAction"
 )
-@ActionReference(path = "Menu/Analysis", position = -100)
+@ActionReference(path = "Menu/Landmarks", position = -100)
 @NbBundle.Messages("CTL_AnalysisAction=Landmark analysis")
 public class AnalysisAction implements ActionListener {
     

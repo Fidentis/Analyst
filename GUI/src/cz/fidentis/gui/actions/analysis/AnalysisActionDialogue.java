@@ -9,8 +9,10 @@ import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.procrustes.Procrustes2Models;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.landmarks.Methods;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.actions.Landmarks;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -29,9 +31,11 @@ public final class AnalysisActionDialogue extends TopComponent {
     
     private List<FpModel> selectedFiles;
     private List<FpModel> selectedFilesSecond;
+    private Landmarks landmarks;
     private static final String[] FP_EXTENSIONS = new String[]{"pp", "PP", "fp", "FP", "csv", "CSV", "pts", "PTS", "dta", "DTA"};
 
     public AnalysisActionDialogue() {
+        this.landmarks = new Landmarks();
         this.selectedFiles = new ArrayList<>();
         this.selectedFilesSecond = new ArrayList<>();
         initComponents();
@@ -50,17 +54,17 @@ public final class AnalysisActionDialogue extends TopComponent {
         removeGroundTButton = new javax.swing.JButton();
         addComparisonDataButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jListCD = new javax.swing.JList<>();
+        CDlist = new javax.swing.JList<>();
         removeComprButton = new javax.swing.JButton();
         computeComboBox = new javax.swing.JComboBox<>();
         computeButton = new javax.swing.JButton();
         addGroundThruthButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jListGT = new javax.swing.JList<>();
-        label1 = new java.awt.Label();
-        label2 = new java.awt.Label();
-        label3 = new java.awt.Label();
-        label4 = new java.awt.Label();
+        GTlist = new javax.swing.JList<>();
+        methodLabel = new java.awt.Label();
+        GTsetsLabel = new java.awt.Label();
+        ComparisonDataSetLabel = new java.awt.Label();
+        LandmarkAnlaysisLabel = new java.awt.Label();
 
         setMinimumSize(new java.awt.Dimension(670, 500));
 
@@ -80,7 +84,7 @@ public final class AnalysisActionDialogue extends TopComponent {
             }
         });
 
-        jScrollPane2.setViewportView(jListCD);
+        jScrollPane2.setViewportView(CDlist);
 
         org.openide.awt.Mnemonics.setLocalizedText(removeComprButton, org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.removeComprButton.text")); // NOI18N
         removeComprButton.addActionListener(new java.awt.event.ActionListener() {
@@ -90,11 +94,6 @@ public final class AnalysisActionDialogue extends TopComponent {
         });
 
         computeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Euclid", "NRMSE" }));
-        computeComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                computeComboBoxActionPerformed(evt);
-            }
-        });
 
         org.openide.awt.Mnemonics.setLocalizedText(computeButton, org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.computeButton.text")); // NOI18N
         computeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -110,19 +109,19 @@ public final class AnalysisActionDialogue extends TopComponent {
             }
         });
 
-        jScrollPane1.setViewportView(jListGT);
+        jScrollPane1.setViewportView(GTlist);
 
-        label1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label1.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.label1.text")); // NOI18N
+        methodLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        methodLabel.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.methodLabel.text")); // NOI18N
 
-        label2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label2.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.label2.text")); // NOI18N
+        GTsetsLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        GTsetsLabel.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.GTsetsLabel.text")); // NOI18N
 
-        label3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label3.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.label3.text")); // NOI18N
+        ComparisonDataSetLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        ComparisonDataSetLabel.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.ComparisonDataSetLabel.text")); // NOI18N
 
-        label4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        label4.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.label4.text")); // NOI18N
+        LandmarkAnlaysisLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        LandmarkAnlaysisLabel.setText(org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.LandmarkAnlaysisLabel.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -130,7 +129,7 @@ public final class AnalysisActionDialogue extends TopComponent {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(252, 252, 252)
-                .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LandmarkAnlaysisLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -140,7 +139,7 @@ public final class AnalysisActionDialogue extends TopComponent {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(computeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(methodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(computeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(203, Short.MAX_VALUE))
@@ -149,27 +148,27 @@ public final class AnalysisActionDialogue extends TopComponent {
                             .addComponent(removeGroundTButton)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addGroundThruthButton)
-                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(GTsetsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(removeComprButton)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addComparisonDataButton)
-                            .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ComparisonDataSetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LandmarkAnlaysisLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addGroundThruthButton)
                     .addComponent(addComparisonDataButton))
                 .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GTsetsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComparisonDataSetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2)
@@ -180,7 +179,7 @@ public final class AnalysisActionDialogue extends TopComponent {
                     .addComponent(removeGroundTButton))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(methodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(computeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(computeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,15 +209,17 @@ public final class AnalysisActionDialogue extends TopComponent {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<FpModel> fpPoints = FPImportExport.instance().importPoints(tc, true);
         
-        addFilesHandler(fpPoints, selectedFiles, jListGT);
+        if(fpPoints != null){
+            landmarks.addFilesHandler(fpPoints, selectedFiles, GTlist);
+        }
     }//GEN-LAST:event_addGroundThruthButtonActionPerformed
     
     private void removeGroundTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeGroundTButtonActionPerformed
-        DefaultListModel model = (DefaultListModel) jListGT.getModel();
+        DefaultListModel model = (DefaultListModel) GTlist.getModel();
         
-        if(jListGT.getSelectedIndex() != -1){
-            selectedFiles.remove(jListGT.getSelectedIndex());
-            model.remove(jListGT.getSelectedIndex());
+        if(GTlist.getSelectedIndex() != -1){
+            selectedFiles.remove(GTlist.getSelectedIndex());
+            model.remove(GTlist.getSelectedIndex());
         }
     }//GEN-LAST:event_removeGroundTButtonActionPerformed
 
@@ -226,47 +227,51 @@ public final class AnalysisActionDialogue extends TopComponent {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<FpModel> fpPoints = FPImportExport.instance().importPoints(tc, true);
         
-        addFilesHandler(fpPoints, selectedFilesSecond, jListCD);
+        if(fpPoints != null){
+            landmarks.addFilesHandler(fpPoints, selectedFilesSecond, CDlist);
+        }
     }//GEN-LAST:event_addComparisonDataButtonActionPerformed
 
     private void removeComprButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeComprButtonActionPerformed
-        DefaultListModel model = (DefaultListModel) jListCD.getModel();
+        DefaultListModel model = (DefaultListModel) CDlist.getModel();
         
-        if(jListCD.getSelectedIndex() != -1){
-            selectedFilesSecond.remove(jListCD.getSelectedIndex());
-            model.remove(jListCD.getSelectedIndex());
+        if(CDlist.getSelectedIndex() != -1){
+            selectedFilesSecond.remove(CDlist.getSelectedIndex());
+            model.remove(CDlist.getSelectedIndex());
         }
     }//GEN-LAST:event_removeComprButtonActionPerformed
 
     private void computeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_computeButtonActionPerformed
 
+        Methods selectedMethod = Methods.EUCLID;
+        
+        if(computeComboBox.getSelectedIndex() == 1){
+            selectedMethod = Methods.NRMSE;
+        }
+        
         //make new window for computation
-        final AnalysisResults dialog = new AnalysisResults(selectedFiles, selectedFilesSecond, computeComboBox.getSelectedIndex());
+        final AnalysisResults dialog = new AnalysisResults(selectedFiles, selectedFilesSecond, selectedMethod);
         JFrame frame = new JFrame();
         frame.add(dialog);
         frame.setSize(dialog.getPreferredSize());
         frame.setVisible(true); 
     }//GEN-LAST:event_computeButtonActionPerformed
 
-    private void computeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_computeComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_computeComboBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> CDlist;
+    private java.awt.Label ComparisonDataSetLabel;
+    private javax.swing.JList<String> GTlist;
+    private java.awt.Label GTsetsLabel;
+    private java.awt.Label LandmarkAnlaysisLabel;
     private javax.swing.JButton addComparisonDataButton;
     private javax.swing.JButton addGroundThruthButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton computeButton;
     private javax.swing.JComboBox<String> computeComboBox;
-    private javax.swing.JList<String> jListCD;
-    private javax.swing.JList<String> jListGT;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private java.awt.Label label1;
-    private java.awt.Label label2;
-    private java.awt.Label label3;
-    private java.awt.Label label4;
+    private java.awt.Label methodLabel;
     private javax.swing.JButton removeComprButton;
     private javax.swing.JButton removeGroundTButton;
     // End of variables declaration//GEN-END:variables
@@ -278,59 +283,5 @@ public final class AnalysisActionDialogue extends TopComponent {
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
-    }
-
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
-    }
-    
-    /**
-     * Handle adding files for comparison
-     * 
-     * @param fpPoints list of selected files
-     * @param selected list of all selected files
-     * @param jList jList for window selection
-     */
-    private void addFilesHandler(List<FpModel> fpPoints, List<FpModel> selected, javax.swing.JList<String> jList){
-        
-        //adding all selected file fp points to list
-        for (FpModel fp : fpPoints) {
-                if (!fpContains(fp.getModelName(), selected)) {
-                    selected.add(fp);
-                } 
-            }
-        
-        //data for window list
-        DefaultListModel tmp = new DefaultListModel();
-        
-        for (FpModel fp : selected){
-                tmp.addElement(fp.getModelName());
-            }
-        
-        jList.setModel(tmp);
-    }
-    
-    /**
-     * Method check if selected list contain model
-     * 
-     * @param input Input model for checking
-     * @param selected list of selected files
-     * @return true if contain, false if not
-     */
-    private boolean fpContains(String input, List<FpModel> selected){
-        for (FpModel model : selected ){
-            if(model.getModelName().equals(input)){
-                return true;
-            }
-        }
-        return false;
     }
 }

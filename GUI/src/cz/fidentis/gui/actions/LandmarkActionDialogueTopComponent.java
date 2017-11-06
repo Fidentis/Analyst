@@ -10,17 +10,18 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
+import static java.io.File.separatorChar;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 
 public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
     public LandmarkActionDialogueTopComponent() {
         initComponents();
-        //setName(Bundle.CTL_LandmarkActionDialogueTopComponent());
-        //setToolTipText(Bundle.HINT_LandmarkActionDialogueTopComponent());
-
     }
 
     /**
@@ -33,18 +34,18 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        label3 = new java.awt.Label();
-        label1 = new java.awt.Label();
-        jTextActual = new javax.swing.JTextField();
+        trainingModelLabel = new java.awt.Label();
+        actualModelLabel = new java.awt.Label();
+        actualTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        label2 = new java.awt.Label();
-        label4 = new java.awt.Label();
-        jButton1 = new javax.swing.JButton();
-        label5 = new java.awt.Label();
+        infoTextArea = new javax.swing.JTextArea();
+        infoLabel = new java.awt.Label();
+        loadFromButton = new java.awt.Label();
+        loadButton = new javax.swing.JButton();
+        useDefaultButton = new java.awt.Label();
         DefaultButton = new javax.swing.JButton();
-        label6 = new java.awt.Label();
-        Train = new javax.swing.JButton();
+        trainNewLabel = new java.awt.Label();
+        trainButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -57,36 +58,36 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        label3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        label3.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.label3.text")); // NOI18N
+        trainingModelLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        trainingModelLabel.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.trainingModelLabel.text")); // NOI18N
 
-        label1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label1.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.label1.text")); // NOI18N
+        actualModelLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        actualModelLabel.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.actualModelLabel.text")); // NOI18N
 
-        jTextActual.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.jTextActual.text")); // NOI18N
-        jTextActual.setEnabled(false);
+        actualTextField.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.actualTextField.text")); // NOI18N
+        actualTextField.setEnabled(false);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        infoTextArea.setEditable(false);
+        infoTextArea.setColumns(20);
+        infoTextArea.setRows(5);
+        jScrollPane1.setViewportView(infoTextArea);
 
-        label2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label2.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.label2.text")); // NOI18N
+        infoLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        infoLabel.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.infoLabel.text")); // NOI18N
 
-        label4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label4.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.label4.text")); // NOI18N
+        loadFromButton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        loadFromButton.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.loadFromButton.text")); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        loadButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(loadButton, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.loadButton.text")); // NOI18N
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                loadButtonActionPerformed(evt);
             }
         });
 
-        label5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label5.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.label5.text")); // NOI18N
+        useDefaultButton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        useDefaultButton.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.useDefaultButton.text")); // NOI18N
 
         DefaultButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(DefaultButton, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.DefaultButton.text")); // NOI18N
@@ -96,14 +97,15 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
             }
         });
 
-        label6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        label6.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.label6.text")); // NOI18N
+        trainNewLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        trainNewLabel.setText(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.trainNewLabel.text")); // NOI18N
 
-        Train.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(Train, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.Train.text")); // NOI18N
-        Train.addActionListener(new java.awt.event.ActionListener() {
+        trainButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(trainButton, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.trainButton.text")); // NOI18N
+        trainButton.setActionCommand(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.trainButton.actionCommand")); // NOI18N
+        trainButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TrainActionPerformed(evt);
+                trainButtonActionPerformed(evt);
             }
         });
 
@@ -117,52 +119,54 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextActual)
-                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(actualTextField)
+                                .addComponent(actualModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(infoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(loadFromButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(DefaultButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Train, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(trainNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(useDefaultButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(220, 220, 220)
-                        .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(trainingModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(36, 36, 36))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(trainingModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(actualModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loadFromButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextActual, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(actualTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(19, 19, 19)
-                        .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(infoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(useDefaultButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(DefaultButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
-                        .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(trainNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Train, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(109, Short.MAX_VALUE))
         );
+
+        trainButton.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.trainButton.AccessibleContext.accessibleName")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -182,56 +186,58 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         List<FpModel> fpPointModel = FPImportExport.instance().importPoints(tc, false);
 
-        jTextActual.setText(fpPointModel.get(0).getModelName());
+        actualTextField.setText(fpPointModel.get(0).getModelName());
 
-        String infoText = "";
-        infoText += "Model name: " + fpPointModel.get(0).getModelName() + "\n";
-        infoText += "Points number: " + fpPointModel.get(0).getPointsNumber();
-        jTextArea1.setText(infoText);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        StringBuilder infoText = new StringBuilder();
+        infoText.append("Model name: ").append(fpPointModel.get(0).getModelName()).append("\n");
+        infoText.append("Points number: ").append(fpPointModel.get(0).getPointsNumber());
+        infoTextArea.setText(infoText.toString());
+    }//GEN-LAST:event_loadButtonActionPerformed
 
     private void DefaultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DefaultButtonActionPerformed
-        // TODO add your handling code here:
-        List<FpModel> newTmp = CSVparser.load("C:\\Rasto\\School\\Bakalarka\\default.csv");
 
-        jTextActual.setText(newTmp.get(0).getModelName());
+        List<FpModel> newTmp = new ArrayList<FpModel>();
+        try {
+            newTmp = CSVparser.load((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "default.csv"));
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
 
-        String infoText = "";
-        infoText += "Model name: " + newTmp.get(0).getModelName() + "\n";
-        infoText += "Points number: " + newTmp.get(0).getPointsNumber();
-        jTextArea1.setText(infoText);
+        actualTextField.setText(newTmp.get(0).getModelName());
+
+        StringBuilder infoText = new StringBuilder();
+        infoText.append("Model name: ").append(newTmp.get(0).getModelName()).append("\n");
+        infoText.append("Points number: ").append(newTmp.get(0).getPointsNumber());
+        infoTextArea.setText(infoText.toString());
     }//GEN-LAST:event_DefaultButtonActionPerformed
 
-    private void TrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TrainActionPerformed
-        // TODO add your handling code here:
-
+    private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
         final LandmarkTrainDialogueTopComponent dialog = new LandmarkTrainDialogueTopComponent();
         JFrame frame = new JFrame();
         frame.add(dialog);
         frame.setSize(dialog.getPreferredSize());
         frame.setVisible(true);
-    }//GEN-LAST:event_TrainActionPerformed
+    }//GEN-LAST:event_trainButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DefaultButton;
-    private javax.swing.JButton Train;
-    private javax.swing.JButton jButton1;
+    private java.awt.Label actualModelLabel;
+    private javax.swing.JTextField actualTextField;
+    private java.awt.Label infoLabel;
+    private javax.swing.JTextArea infoTextArea;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextActual;
-    private javax.swing.JTextArea jTextArea1;
-    private java.awt.Label label1;
-    private java.awt.Label label2;
-    private java.awt.Label label3;
-    private java.awt.Label label4;
-    private java.awt.Label label5;
-    private java.awt.Label label6;
+    private javax.swing.JButton loadButton;
+    private java.awt.Label loadFromButton;
+    private javax.swing.JButton trainButton;
+    private java.awt.Label trainNewLabel;
+    private java.awt.Label trainingModelLabel;
+    private java.awt.Label useDefaultButton;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -241,17 +247,5 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
-    }
-
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
     }
 }
