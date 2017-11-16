@@ -1850,6 +1850,9 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
+        if(getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES)
+            return;
+        
         VisualizationType vt = (VisualizationType) VisualizationBox.getSelectedItem();
 
         if (vt == VisualizationType.COLORMAP) {

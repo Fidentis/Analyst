@@ -621,7 +621,6 @@
                           <Component id="jButton7" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButtonLocalAreas" max="32767" attributes="0"/>
                           <Component id="exportLandmarksButton" max="32767" attributes="0"/>
-
                       </Group>
                       <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
                   </Group>
@@ -1877,7 +1876,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportLandmarksButtonActionPerformed"/>
-
               </Events>
             </Component>
           </SubComponents>
