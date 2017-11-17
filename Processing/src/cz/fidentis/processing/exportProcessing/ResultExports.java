@@ -40,6 +40,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Exceptions;
@@ -341,7 +342,7 @@ public class ResultExports {
         BufferedImage bi;
         Graphics g;
         JFrame newFrame = new JFrame();
-        JLabel imageLabel = new JLabel();
+        JLabel imageLabel = new JLabel("", SwingConstants.CENTER);
          
         GLJPanel picture = new GLJPanel();
         int[] size = new int[]{width, height};
@@ -368,12 +369,12 @@ public class ResultExports {
             picture.paint(g);
 
             newFrame.remove(picture);
-            newFrame.setResizable(false);
+            newFrame.setResizable(true);
             
             //Load enlarged image to show in new frame
-            ImageIcon img = new ImageIcon(bi.getScaledInstance(width, height, Image.SCALE_SMOOTH));
+            ImageIcon img = new ImageIcon(bi.getScaledInstance((int) (width * 0.6), (int) (height * 0.6), Image.SCALE_SMOOTH));
             imageLabel.setIcon(img);
-            newFrame.add(imageLabel);        
+            newFrame.add(imageLabel); 
             
             newFrame.setVisible(true);
         } catch (IOException e) {
