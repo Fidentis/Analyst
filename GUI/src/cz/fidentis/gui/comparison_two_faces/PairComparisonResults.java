@@ -1169,6 +1169,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
                     info.setDistance(hdDistance);
                     info.setUseRelative(c.getValuesTypeIndex() == 0);
                     c.setNumericalResults(res);
+                    c.setLowerHDTreshold(c.getHausdorfMinTreshold() / 100f);
+                    c.setUpperHDTreshold(c.getHausdorfMaxTreshold() / 100f);
                     p.finish();
 
                     /*if (GUIController.getSelectedProjectTopComponent() == tc) {
