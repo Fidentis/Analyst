@@ -1862,6 +1862,9 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             }
     
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
+        if(getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES)
+            return;
+        
         if (VisualizationBox.getSelectedItem() == VisualizationType.COLORMAP) {
             densLabel.setVisible(false);
             density.setVisible(false);
