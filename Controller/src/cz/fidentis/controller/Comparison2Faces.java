@@ -61,8 +61,8 @@ public class Comparison2Faces {
     private boolean showPointInfo = true;           //whether to show description of the feature points
     private Color pointColor = Color.red;           //color for displayed feature points
     
-    private float lowerHDTreshold;
-    private float upperHDTreshold;
+    private float lowerHDTreshold;          //safes lower threhsold for HD, from which the numerical results are currently computed
+    private float upperHDTreshold;           //safes upper threhsold for HD, from which the numerical results are currently computed
     private boolean fpScaling;          //whether feature points are scaled or not  
     private int useDatabase;        //0 - dont use, 1 - default, 2 - data file, 3 - create  -- database currently not used in software
     private ArrayList<File> databaseFiles;      //database of feature points stored on disk -- database currently not used in software 
