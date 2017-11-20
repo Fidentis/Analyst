@@ -975,10 +975,18 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (getContext().getNumericalResults() != null) {
-            String[][] values = TableProcessing.instance().parseTableAddHeader(getContext().getNumericalResults(), new String[]{
+            
+            String[] header = null;
+            
+            if(getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES)
+                header = new String[]{"", getContext().getModel2().getName()};
+            else
+                header = new String[]{
                 "Lower: " + getContext().getLowerHDTreshold() * 100 + "% Upper: "
-                + getContext().getUpperHDTreshold() * 100 + "% treshold",
-                getContext().getModel2().getName()});
+                + getContext().getUpperHDTreshold() * 100 + "% threshold",
+                getContext().getModel2().getName()};
+            
+            String[][] values = TableProcessing.instance().parseTableAddHeader(getContext().getNumericalResults(), header);
 
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                     values,
