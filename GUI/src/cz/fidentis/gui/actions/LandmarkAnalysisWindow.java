@@ -23,12 +23,12 @@ import org.openide.util.NbBundle;
 
 @ActionID(
         category = "Mode",
-        id = "cz.fidentis.gui.actions.Landmarks")
+        id = "cz.fidentis.gui.actions.LandmarkAnalysisWindow")
 @ActionRegistration(
 displayName = "#CTL_Landmarks")
 @ActionReference(path = "Menu/Landmarks", position = -100)
 @NbBundle.Messages("CTL_Landmarks=Landmarks")
-public class Landmarks implements ActionListener {
+public class LandmarkAnalysisWindow implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {

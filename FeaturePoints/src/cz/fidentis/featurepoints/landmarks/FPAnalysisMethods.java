@@ -9,7 +9,7 @@ package cz.fidentis.featurepoints.landmarks;
  *
  * @author Rasto1
  */
-public enum Methods {
+public enum FPAnalysisMethods {
     EUCLID,
     NRMSE,
     NONE

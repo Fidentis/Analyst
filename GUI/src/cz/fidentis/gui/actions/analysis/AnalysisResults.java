@@ -7,8 +7,8 @@ package cz.fidentis.gui.actions.analysis;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.landmarks.Landmark;
-import cz.fidentis.featurepoints.landmarks.Methods;
+import cz.fidentis.featurepoints.landmarks.PDM;
+import cz.fidentis.featurepoints.landmarks.FPAnalysisMethods;
 import cz.fidentis.featurepoints.TableData;
 import cz.fidentis.utils.LandmarkUtils;
 import cz.fidentis.utils.MathUtils;
@@ -37,7 +37,7 @@ public final class AnalysisResults extends TopComponent {
     private Map<String, List<Double>> computeResults = new HashMap<>();
     private static final int DISSMIS_WAIT_TIME = 99999999;
 
-    public AnalysisResults(List<FpModel> inSelFiles, List<FpModel> inSelFilesOthers, Methods method) {
+    public AnalysisResults(List<FpModel> inSelFiles, List<FpModel> inSelFilesOthers, FPAnalysisMethods method) {
         this.selectedFiles = inSelFiles;
         this.selectedFilesSecond = inSelFilesOthers;
         initComponents();

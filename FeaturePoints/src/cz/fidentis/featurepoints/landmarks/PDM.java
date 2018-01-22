@@ -6,35 +6,26 @@
 package cz.fidentis.featurepoints.landmarks;
 
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.FpModel;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JProgressBar;
 import javax.vecmath.Vector3f;
 
 /**
  *
  * @author Rasto1
  */
-public class Landmark {
-    public Landmark(){
+public class PDM {
+    public PDM(){
         
     }
     
     // create mean model from training shapes on input
-    public static FpModel trainigModel(List<FpModel> trainingShapes, JProgressBar progressBar) {
+    public static FpModel trainigModel(List<FpModel> trainingShapes) {
 
         FpModel meanShape;
         meanShape = trainingShapes.get(0);
-        progressBar.setValue(0);
         
-        int progress = 100/trainingShapes.size();
-        int current = progress;
         for (int i = 1; i < trainingShapes.size(); i++) {
-            current += progress;
-            progressBar.setValue(current);
             
             List<FacialPoint> values = trainingShapes.get(i).getFacialPoints();
 
@@ -57,7 +48,6 @@ public class Landmark {
 
             meanShape.getFacialPoints().get(j).setCoords(point);
         }
-        progressBar.setValue(100);
 
         return meanShape;
     }

@@ -7,7 +7,7 @@ package cz.fidentis.gui.actions;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.landmarks.Landmark;
+import cz.fidentis.featurepoints.landmarks.PDM;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.landmarkParser.CSVparser;
@@ -25,10 +25,10 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private List<FpModel> selectedFiles;
     
     private FpModel newTrainingModel;
-    private Landmarks landmarks;
+    private LandmarkAnalysisWindow landmarks;
     
     public LandmarkTrainDialogueTopComponent() {
-        this.landmarks = new Landmarks();
+        this.landmarks = new LandmarkAnalysisWindow();
         this.selectedFiles = new ArrayList<>();
         initComponents();
         trainingModelTextField.setText("undefined");
@@ -226,8 +226,12 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void useButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useButtonActionPerformed
-        newTrainingModel = Landmark.trainigModel(selectedFiles, progressBar);
+        progressBar.setValue(0);
+        
+        newTrainingModel = PDM.trainigModel(selectedFiles);
 
+        progressBar.setValue(100);
+        
         List<FpModel> tmp = new ArrayList<>();
 
         newTrainingModel.setModelName(trainingModelTextField.getText());

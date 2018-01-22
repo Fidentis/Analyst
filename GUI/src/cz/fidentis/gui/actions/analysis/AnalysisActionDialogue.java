@@ -9,10 +9,10 @@ import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.procrustes.Procrustes2Models;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.landmarks.Methods;
+import cz.fidentis.featurepoints.landmarks.FPAnalysisMethods;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.gui.actions.Landmarks;
+import cz.fidentis.gui.actions.LandmarkAnalysisWindow;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -31,11 +31,11 @@ public final class AnalysisActionDialogue extends TopComponent {
     
     private List<FpModel> selectedFiles;
     private List<FpModel> selectedFilesSecond;
-    private Landmarks landmarks;
+    private LandmarkAnalysisWindow landmarks;
     private static final String[] FP_EXTENSIONS = new String[]{"pp", "PP", "fp", "FP", "csv", "CSV", "pts", "PTS", "dta", "DTA"};
 
     public AnalysisActionDialogue() {
-        this.landmarks = new Landmarks();
+        this.landmarks = new LandmarkAnalysisWindow();
         this.selectedFiles = new ArrayList<>();
         this.selectedFilesSecond = new ArrayList<>();
         initComponents();
@@ -243,10 +243,10 @@ public final class AnalysisActionDialogue extends TopComponent {
 
     private void computeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_computeButtonActionPerformed
 
-        Methods selectedMethod = Methods.EUCLID;
+        FPAnalysisMethods selectedMethod = FPAnalysisMethods.EUCLID;
         
         if(computeComboBox.getSelectedIndex() == 1){
-            selectedMethod = Methods.NRMSE;
+            selectedMethod = FPAnalysisMethods.NRMSE;
         }
         
         //make new window for computation

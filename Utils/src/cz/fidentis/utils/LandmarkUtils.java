@@ -7,7 +7,7 @@ package cz.fidentis.utils;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.landmarks.Methods;
+import cz.fidentis.featurepoints.landmarks.FPAnalysisMethods;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class LandmarkUtils {
      * @param method what method is used, true for euclid, false for NRMSE
      * @return string of files which have not match
      */
-    public static Map<String, List<Double>> computeFp(Methods method, List<FpModel> selectedFiles, List<FpModel> selectedFilesSecond) {
+    public static Map<String, List<Double>> computeFp(FPAnalysisMethods method, List<FpModel> selectedFiles, List<FpModel> selectedFilesSecond) {
         boolean isIn = false;
         Map<String, List<Double>> results = new HashMap<>();
         
@@ -65,7 +65,7 @@ public class LandmarkUtils {
      * @return list of distances
      */
     public static List<Double> computeDistances(List<FacialPoint> one, List<FacialPoint> two,  
-        Methods method) {
+        FPAnalysisMethods method) {
         MathUtils math = MathUtils.instance();
         List<Double> results = new ArrayList<>();
 
