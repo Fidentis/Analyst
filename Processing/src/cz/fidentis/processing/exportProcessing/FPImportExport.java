@@ -72,16 +72,28 @@ public class FPImportExport {
     public List<FpModel> importPoints(Component tc, boolean allowMultiple) {
         //pick files to load
         File[] loadedFiles = DialogUtils.instance().openDialogueLoadFiles(tc, "Feature Points file", IMPORT_FP_EXTENSIONS, allowMultiple);
-
-        if (loadedFiles == null) {
-            //nothing was loaded
+        
+        // import the selected files
+        return importPoints(loadedFiles);
+    }
+    
+    /**
+     * See importPoints(Component tc, boolean allowMultiple) for more info.
+     *
+     * @param files - files that contain feature points to import.
+     * @return - list of loaded points as FPModel class, where each FPModel
+     * corresponds to one model and its FP, or null if no files were picked to
+     * load
+     */
+    public List<FpModel> importPoints(File[] files) {
+        if(files == null) {
             return null;
         }
-
-        List<FpModel> points = new ArrayList<FpModel>(loadedFiles.length);
+        
+        List<FpModel> points = new ArrayList<FpModel>(files.length);
 
         //parse files, based on file extension
-        for (File loadedFile : loadedFiles) {
+        for (File loadedFile : files) {
             FileExtensions fe = FileUtils.instance().getFileExtension(loadedFile.getName());
             if (fe == FileExtensions.PP) {
                 points.add(PPparser.load(loadedFile.getPath()));
