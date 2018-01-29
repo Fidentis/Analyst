@@ -1716,7 +1716,7 @@
                                   <Component id="jButton12" min="-2" pref="85" max="-2" attributes="0"/>
                               </Group>
                               <Component id="histogram1" pref="434" max="32767" attributes="0"/>
-                              <Component id="jButton11" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jButton11" alignment="0" pref="434" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

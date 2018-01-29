@@ -101,6 +101,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         comparisonButton.setVisible(false);
         heatplotButton1.setVisible(false);
         heatplotButton.setVisible(false);
+        jButtonLocalAreas.setVisible(false);
     }
 
     public void showHausdorfControls() {
@@ -122,6 +123,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         comparisonButton.setVisible(true);
         heatplotButton1.setVisible(true);
         heatplotButton.setVisible(true);
+        jButtonLocalAreas.setVisible(true);
         setupVisualizationControls(getContext().getVisualization());
 
     }
