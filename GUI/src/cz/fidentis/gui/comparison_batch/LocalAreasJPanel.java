@@ -169,7 +169,7 @@ public class LocalAreasJPanel extends javax.swing.JPanel {
     
     public void isVisible(boolean value){
         this.isVisible = value;
-        if (!value){
+        if (!value && LocalAreaFrame != null){
             LocalAreaFrame.setVisible(false);
             hideSelectedAreaInfo();
         }
