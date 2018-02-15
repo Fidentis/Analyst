@@ -553,6 +553,10 @@ public final class ImportFromImage implements ActionListener {
         //set.add(FacialPointType.EU2_L);//Euryon II l
         set.add(FacialPointType.RM_R);//Ramus mandibulae r
         set.add(FacialPointType.RM_L);//Ramus mandibulae l
+        set.add(FacialPointType.values()[52]);
+        set.add(FacialPointType.values()[43]);
+        set.add(FacialPointType.values()[44]);
+        set.add(FacialPointType.values()[53]);
         return set;
     }
 
