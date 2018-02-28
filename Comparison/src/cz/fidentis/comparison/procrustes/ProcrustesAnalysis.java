@@ -542,6 +542,59 @@ public class ProcrustesAnalysis implements Serializable {
         
         return new ICPTransformation(null, 1.0f, null, 0.0f, r);
     }
+    
+    /**
+     * Method for PDM computation, works same as normal rotate
+     * http://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem
+     *
+     * @param pa2 another configuration
+     */
+    public ICPTransformation rotatePDM(ProcrustesAnalysis pa2) {
+        Matrix transConf2;
+        Matrix origConf1;
+        Matrix landmarkConf;
+        Matrix svdMat;
+        Matrix u;
+        Matrix v;
+        Matrix r;
+        Matrix transU;
+        List<Integer> cor = getFPtypeCorrespondence(pa2);
+        
+        /// VYTVORENIE LISTU INTOV LANDMARKOV
+        List<Integer> cor2 = getFPtypeCorrespondence(this);
+        
+        if(cor.size() < 3){     //need at least 3 points to perform PA
+            return null;
+        }
+
+        transConf2 = pa2.createCorespondingMatrix(cor).transpose();
+        origConf1 = this.createCorespondingMatrix(cor);
+        /// VYTVORENIE MATICE ODPOVEDAJUCEJ INTOM
+        landmarkConf = this.createCorespondingMatrix(cor2);
+
+        svdMat = transConf2.times(origConf1);
+
+        SingularValueDecomposition svd = new SingularValueDecomposition(svdMat);
+        u = svd.getU();
+        v = svd.getV();
+        transU = u.transpose();
+        r = v.times(transU);
+
+        origConf1 = origConf1.times(r);
+        /// PRENASOBENIE MATICE ROTACIOU
+        landmarkConf = landmarkConf.times(r);
+        
+        for (int i = 0; i < cor2.size(); i++) {
+            FacialPoint newPoint = new FacialPoint(cor2.get(i), new Vector3f((float) landmarkConf.get(i, 0), (float) landmarkConf.get(i, 1), (float) landmarkConf.get(i, 2)));
+            config.put(cor2.get(i), newPoint);
+        }
+
+        if (vertices != null) {
+            vertices = vertices.times(r);
+        }
+        
+        return new ICPTransformation(null, 1.0f, null, 0.0f, r);
+    }
 
     /**
      * This method superimpose this and another configuration
@@ -556,6 +609,18 @@ public class ProcrustesAnalysis implements Serializable {
        pa2.normalize(scaling);
 
        trans.add(pa2.rotate(this));
+       
+       return trans;
+    }
+    
+    // superimpose for PDM computation
+    private List<ICPTransformation> superimposePDM(ProcrustesAnalysis pa2, boolean scaling) {
+       List<ICPTransformation> trans = new LinkedList<>();
+        
+       trans.add(this.normalize(scaling));
+       trans.add(pa2.normalize(scaling));
+
+       trans.add(pa2.rotatePDM(this));
        
        return trans;
     }
@@ -630,7 +695,7 @@ public class ProcrustesAnalysis implements Serializable {
      * @return distance Procrustes distance
      */
     public List<ICPTransformation> doProcrustesAnalysis(ProcrustesAnalysis config2, boolean scaling) {
-        List<ICPTransformation> trans = this.superimpose(config2, scaling);
+        List<ICPTransformation> trans = this.superimposePDM(config2, scaling);
         if(trans == null)       //no transformation performed
             return null;
 

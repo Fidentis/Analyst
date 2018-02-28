@@ -22,6 +22,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utils.MeshUtils;
+import java.awt.Component;
 import java.io.File;
 import static java.io.File.separatorChar;
 import java.io.IOException;
@@ -31,8 +32,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.vecmath.Vector3f;
 import jv.object.PsDebug;
+import jv.vecmath.PdVector;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
@@ -144,7 +147,7 @@ public class FpProcessing {
         p.progress("Registering model" + faceNumber + " to generic face", 0);
 
         //register face to generic model
-        trans = faceRegistration(model);
+        //trans = faceRegistration(model);
         if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {      //if thread was interrupted by user during computation finish here
             return true;
         }
@@ -152,7 +155,7 @@ public class FpProcessing {
         p.progress("Getting center of face " + faceNumber, 0);
 
         //compute center of the face
-        centerPoints = getCenterOfFace(model, true);
+       // centerPoints = getCenterOfFace(model, true);
         if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {
             return true;
         }
@@ -160,8 +163,19 @@ public class FpProcessing {
         p.progress("Computing feature points of face " + faceNumber, 100);
         p.switchToIndeterminate();
 
+        ///////
+        
+        LandmarkLocalization localization = new LandmarkLocalization();
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+        Component modalToComponent = null;
+        if (fileChooser.showSaveDialog(modalToComponent) == JFileChooser.APPROVE_OPTION) {
+            computedPoints.addAll(localization.makeArea(model, fileChooser.getSelectedFiles()));
+        }
         //compute all facial points
-        computedPoints.addAll(computeAllFacialPoints(centerPoints, model, trans));
+        
+        //computedPoints.addAll(computeAllFacialPoints(centerPoints, model, trans));
         if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {
             return true;
         }

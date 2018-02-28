@@ -5,6 +5,13 @@
         <file name="Edit_hidden"/>
         <file name="File_hidden"/>
         <file name="Help_hidden"/>
+        <folder name="Mode">
+            <file name="cz-fidentis-gui-actions-LandmarkAnalysisWindow.instance">
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+            <file name="cz-fidentis-gui-actions-Landmarks.instance_hidden"/>
+        </folder>
         <file name="Profile_hidden"/>
         <file name="System_hidden"/>
         <file name="Tools_hidden"/>
