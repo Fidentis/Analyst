@@ -543,10 +543,10 @@ public final class ImportFromImage implements ActionListener {
         set.add(FacialPointType.GNA);//gnathion
         set.add(FacialPointType.GO2_R);//gonion2 r
         set.add(FacialPointType.GO2_L);//goinon2 l
-        set.add(FacialPointType.T_R);
-        set.add(FacialPointType.T_L);
-        set.add(FacialPointType.V);//vertex
-        set.add(FacialPointType.O);//Ophryon
+        set.add(FacialPointType.PRN);
+        set.add(FacialPointType.SN);
+        set.add(FacialPointType.SL);
+        set.add(FacialPointType.G);
         set.add(FacialPointType.RN_R);//radix nasi r
         set.add(FacialPointType.RN_L);//radix nasi l
         //set.add(FacialPointType.EU2_R);//Euryon II r
