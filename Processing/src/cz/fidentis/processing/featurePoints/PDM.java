@@ -3,10 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.featurepoints.landmarks;
+package cz.fidentis.processing.featurePoints;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.landmarkParser.CSVparser;
+import static java.io.File.separatorChar;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Vector3f;
 
@@ -20,7 +24,7 @@ public class PDM {
     }
     
     // create mean model from training shapes on input
-    public static FpModel trainigModel(List<FpModel> trainingShapes) {
+    public static FpModel trainigModel(List<FpModel> trainingShapes, String name) throws IOException {
 
         FpModel meanShape;
         meanShape = trainingShapes.get(0);
@@ -48,6 +52,18 @@ public class PDM {
 
             meanShape.getFacialPoints().get(j).setCoords(point);
         }
+        
+        CSVparser pars = new CSVparser();
+        
+        List<FpModel> fpModels = new ArrayList<>();
+        
+        fpModels.add(meanShape);
+        
+        for(int i = 0; i < trainingShapes.size(); i++){
+            fpModels.add(trainingShapes.get(i));
+        }
+        
+        pars.save(fpModels,new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + name + ".csv");
 
         return meanShape;
     }

@@ -13,12 +13,12 @@ import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.pdm.TrainingModel;
-import cz.fidentis.featurepoints.pdm.CSVparsers;
-import cz.fidentis.featurepoints.pdm.AreasSearch;
+import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.corner_table.CornerTable;
 import java.io.File;
+import static java.io.File.separatorChar;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Vector3f;
@@ -32,23 +32,32 @@ public class LandmarkLocalization {
     
     private static final int[] FPTYPES = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
     
+    private static File choosedTrainingModel = null;
+    
+    public LandmarkLocalization() throws IOException{
+        choosedTrainingModel = new File(new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + "default.csv");
+    }
+    
     /**
      * Landmark localization method, compute landmarks
      * @param model model for localization
      * @param trainingShapesFiles .csv shapes for training model
      * @return List of 14 landmarks
      */
-    public List<FacialPoint> makeArea(Model model, File[] trainingShapesFiles) {
+    public List<FacialPoint> localizationOfLandmarks(Model model) {
 
         TrainingModel train = new TrainingModel();
 
-        CSVparsers parser = new CSVparsers();
-        List trainingShapes = parser.load3(trainingShapesFiles);
-
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
-
-        // creation of mean shape
-        FpModel meanShape = train.trainigModel(trainingShapes, model);
+        
+        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel});
+        
+        FpModel meanShape = landmarksModels.get(0);
+        List trainingShapes = new ArrayList<>();
+        
+        for(int i = 1; i < landmarksModels.size(); i++){
+            trainingShapes.add(landmarksModels.get(i));
+        }
         
         // static mean shape
         FpModel meanShapeStatic = new FpModel();
@@ -150,7 +159,7 @@ public class LandmarkLocalization {
                     ProcrustesAnalysis proc2 = new ProcrustesAnalysis(listOfFacials);
 
                     // application of transforms on models
-                    transMatrix = proc2.doProcrustesAnalysis(proc, false);
+                    transMatrix = proc2.superimposePDM(proc, false);
 
                     // change mean shape to default
                     meanShape.getFacialPoints().clear();
@@ -298,5 +307,34 @@ public class LandmarkLocalization {
         }
 
         return newVerts;
+    }
+    
+    //method for loading sets of models for training purposes
+    public static List<FpModel> loadTrainingSets(File[] listOfFiles) {
+        List<FpModel> trainingShapes = new ArrayList<>();
+       
+        CSVparser pars = new CSVparser();
+                
+        List<FpModel> models = pars.load(listOfFiles[0].getPath());
+                
+        for(int i = 0; i < models.size(); i++){
+            FpModel tmp = new FpModel();
+                
+            for(int j = 0; j < 14; j++){
+                    tmp.addFacialPoint(models.get(i).getFacialPoint(FPTYPES[j]));
+            }
+            
+            trainingShapes.add(tmp);
+        }
+               
+        return trainingShapes;
+    }
+    
+    public static void setTrainingModel(String str) throws IOException{
+        choosedTrainingModel = new File(new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + str);
+    }
+    
+    public File getTrainingModel(){
+        return choosedTrainingModel;
     }
 }

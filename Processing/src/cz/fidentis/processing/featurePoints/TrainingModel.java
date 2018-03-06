@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.featurepoints.pdm;
+package cz.fidentis.processing.featurePoints;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
+import cz.fidentis.utils.SortUtils;
 import java.util.List;
 import javax.vecmath.Vector3f;
 
@@ -18,10 +19,6 @@ import javax.vecmath.Vector3f;
  * @author Rasto1
  */
 public class TrainingModel {
-    
-    private double array[];
-    private double array2[][];
-    private int length;
    
     /**
      * compute mean shape from .csv shapes
@@ -127,7 +124,7 @@ public class TrainingModel {
         Matrix[] matr = new Matrix[2];
         double[] values = eigen.getRealEigenvalues();
         double[][] values2 = eigen.getV().transpose().getArray();
-        sort(values, values2);
+        SortUtils.instance().quickSort(values, values2);
 
         double[][] eigenValues = new double[1][i];
         double[][] eigenVectors = new double[i][values2[0].length];
@@ -150,68 +147,6 @@ public class TrainingModel {
         matr[1] = new Matrix(eigenVectors);
 
         return matr;
-    }
-
-    /////// help sorting methods
-    
-    public double distancePoints(Vector3f point1, Vector3f point2) {
-        float x = point1.x - point2.x;
-        float y = point1.y - point2.y;
-        float z = point1.z - point2.z;
-
-        return Math.sqrt(x * x + y * y + z * z);
-    }
-
-    public void sort(double[] inputArr, double[][] inputArr2) {
-
-        if (inputArr == null || inputArr.length == 0) {
-            return;
-        }
-        array = inputArr;
-        array2 = inputArr2;
-        length = inputArr.length;
-        quickSort(0, length - 1);
-    }
-
-    private void quickSort(int lowerIndex, int higherIndex) {
-
-        int i = lowerIndex;
-        int j = higherIndex;
-        // calculate pivot number, I am taking pivot as middle index number
-        double pivot = array[lowerIndex + (higherIndex - lowerIndex) / 2];
-        // Divide into two arrays
-        while (i <= j) {
-
-            while (array[i] < pivot) {
-                i++;
-            }
-            while (array[j] > pivot) {
-                j--;
-            }
-            if (i <= j) {
-                exchangeNumbers(i, j);
-                //move index to next position on both sides
-                i++;
-                j--;
-            }
-        }
-        // call quickSort() method recursively
-        if (lowerIndex < j) {
-            quickSort(lowerIndex, j);
-        }
-        if (i < higherIndex) {
-            quickSort(i, higherIndex);
-        }
-    }
-
-    private void exchangeNumbers(int i, int j) {
-        double temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-
-        double[] temp2 = array2[i];
-        array2[i] = array2[j];
-        array2[j] = temp2;
     }
 
 }

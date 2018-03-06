@@ -544,7 +544,7 @@ public class FeaturePointsUniverse {
     }
     
     public Set<Set<Integer>> findNoseTipArea(boolean notUsed) {
-        return thresArea.findNoseTip2(thresholdFaces, notUsed);
+        return thresArea.findAllNoseTipAreas(thresholdFaces, notUsed);
     }
 
     public ArrayList<Vector3f> getVerts() {

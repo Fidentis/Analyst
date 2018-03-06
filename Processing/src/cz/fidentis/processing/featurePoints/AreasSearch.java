@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.featurepoints.pdm;
+package cz.fidentis.processing.featurePoints;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
@@ -11,6 +11,8 @@ import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.model.Dimensions;
 import cz.fidentis.model.corner_table.CornerTable;
+import cz.fidentis.featurepoints.pdm.CurvatureMaps;
+import cz.fidentis.utils.MathUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +76,7 @@ public class AreasSearch {
         
         //Filter out points using distance between PRN and eye corners and Shape Index for eyes
         for (int i = 0; i < simplifiedModel.size(); i++) {
-            float distToNose = (float) sphereDistancePoints(prn, simplifiedModel.get(i));
+            float distToNose = (float) MathUtils.instance().distancePoints(prn, simplifiedModel.get(i));
             if (distToNose < meanPrnEyedist + meanPrnEyedistVar && distToNose > meanPrnEyedist - meanPrnEyedistVar) {
                 float shapeIndex = curvMaps.shapeIndex((float) minCurv[i], (float) maxCurv[i]);
                 float curvadness = curvMaps.curvedness((float) minCurv[i], (float) maxCurv[i]);
@@ -100,7 +102,7 @@ public class AreasSearch {
                 }
 
                 Vector3f center = findCenterOfArea(verts);
-                float dist = (float) sphereDistancePoints(center, centerFace);
+                float dist = (float) MathUtils.instance().distancePoints(center, centerFace);
                 
                 if(dist < minDist){
                     theArea = a;
@@ -109,6 +111,7 @@ public class AreasSearch {
                 }
             }
         
+        //TO DO REFACTOR
         
         //This is same as for the nose, refactor, use same method
         //Sphere fitting -- kinda
@@ -126,7 +129,7 @@ public class AreasSearch {
                     continue;
                 }
 
-                if (sphereDistancePoints(simplifiedModel.get(k), simplifiedModel.get(j)) <= sphereRadius) {
+                if (MathUtils.instance().distancePoints(simplifiedModel.get(k), simplifiedModel.get(j)) <= sphereRadius) {
                     pointsInRadius++;
                 }
             }
@@ -154,7 +157,7 @@ public class AreasSearch {
                 }
 
                 Vector3f center = findCenterOfArea(verts);
-                float dist = (float) Math.abs(eyeDist - sphereDistancePoints(center, centerArea));
+                float dist = (float) Math.abs(eyeDist - MathUtils.instance().distancePoints(center, centerArea));
                 
                 if(dist < minDist){
                     theArea = a;
@@ -174,7 +177,7 @@ public class AreasSearch {
                     continue;
                 }
 
-                if (sphereDistancePoints(simplifiedModel.get(k), simplifiedModel.get(j)) <= sphereRadius) {
+                if (MathUtils.instance().distancePoints(simplifiedModel.get(k), simplifiedModel.get(j)) <= sphereRadius) {
                     pointsInRadius++;
                 }
             }
@@ -267,7 +270,7 @@ public class AreasSearch {
                     continue;
                 }
 
-                if (sphereDistancePoints(simpModelVertices.get(k), simpModelVertices.get(j)) <= sphereRadius) {
+                if (MathUtils.instance().distancePoints(simpModelVertices.get(k), simpModelVertices.get(j)) <= sphereRadius) {
                     pointsInRadius++;
                 }
             }
@@ -286,14 +289,6 @@ public class AreasSearch {
     }
     
     /////// Help methods for search
-    
-    private double sphereDistancePoints(Vector3f point1, Vector3f point2) {
-        float x = point1.x - point2.x;
-        float y = point1.y - point2.y;
-        float z = point1.z - point2.z;
-
-        return Math.sqrt(x * x + y * y + z * z);
-    }
     
     //Find continual region from given indices
     private Set<Set<Integer>> findAreas(Set<Integer> vertices, CornerTable ct, boolean discardBoundries, int minAreaSize) {

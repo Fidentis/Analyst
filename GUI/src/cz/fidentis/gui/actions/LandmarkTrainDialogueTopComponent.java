@@ -5,17 +5,16 @@
  */
 package cz.fidentis.gui.actions;
 
-import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.landmarks.PDM;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
+import cz.fidentis.processing.featurePoints.PDM;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.vecmath.Vector3f;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 
 
@@ -228,8 +227,12 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private void useButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useButtonActionPerformed
         progressBar.setValue(0);
         
-        newTrainingModel = PDM.trainigModel(selectedFiles);
-
+        try {
+            newTrainingModel = PDM.trainigModel(selectedFiles, trainingModelTextField.getText());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        
         progressBar.setValue(100);
         
         List<FpModel> tmp = new ArrayList<>();

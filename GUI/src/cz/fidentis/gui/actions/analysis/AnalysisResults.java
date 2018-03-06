@@ -7,7 +7,6 @@ package cz.fidentis.gui.actions.analysis;
 
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.featurepoints.landmarks.PDM;
 import cz.fidentis.featurepoints.landmarks.FPAnalysisMethods;
 import cz.fidentis.featurepoints.TableData;
 import cz.fidentis.utils.LandmarkUtils;

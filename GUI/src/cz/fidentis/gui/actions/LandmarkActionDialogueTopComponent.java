@@ -202,7 +202,7 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
         List<FpModel> newTmp = new ArrayList<FpModel>();
         try {
-            newTmp = CSVparser.load((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "default.csv"));
+            newTmp = CSVparser.load((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + "default.csv"));
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }

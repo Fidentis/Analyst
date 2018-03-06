@@ -262,7 +262,9 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>cz.fidentis.gui.trainingModel</package>
+            </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/jcommon-1.0.23.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jcommon-1.0.23.jar</binary-origin>

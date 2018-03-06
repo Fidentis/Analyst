@@ -26,6 +26,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.featurePoints.FpProcessing;
+import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -33,6 +34,8 @@ import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
 import java.awt.Dimension;
 import java.io.File;
+import static java.io.File.separatorChar;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -68,6 +71,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             }
         };
         initComponents();
+        setNamesForComboBox();
         //jComboBox2ActionPerformed(null);
     }
 
@@ -149,6 +153,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         fpScaleCheckBox = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        trainingModelSelection = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -692,6 +698,14 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel13.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel17.text")); // NOI18N
+
+        trainingModelSelection.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                trainingModelSelectionItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -703,12 +717,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fpSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fpColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(loadFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -729,6 +737,20 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         .addComponent(fpScaleCheckBox)
                         .addGap(189, 189, 189))
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(trainingModelSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -738,6 +760,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1338,6 +1364,14 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private void continueComparisonCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueComparisonCheckBoxActionPerformed
        getContext().setContinueComparison(continueComparisonCheckBox.isSelected());
     }//GEN-LAST:event_continueComparisonCheckBoxActionPerformed
+
+    private void trainingModelSelectionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_trainingModelSelectionItemStateChanged
+        try {
+            LandmarkLocalization.setTrainingModel(trainingModelSelection.getSelectedItem().toString());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }//GEN-LAST:event_trainingModelSelectionItemStateChanged
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         getContext().setPointColor(fpColorPanel.getBackground());
@@ -1460,6 +1494,24 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             exportFpButton.setEnabled(true);
         }
     }
+    
+    private void setNamesForComboBox(){
+        try {
+            File folder = new File((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels"));
+            File[] listOfFiles = folder.listFiles();
+            String[] namesOfFiles = new String[listOfFiles.length];
+            
+            for (int i = 0; i < listOfFiles.length; i++) {
+                
+                namesOfFiles[i] = listOfFiles[i].getName();
+            
+            }
+            
+            trainingModelSelection.setModel(new javax.swing.DefaultComboBoxModel(namesOfFiles));
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1506,6 +1558,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1534,6 +1587,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JComboBox registrationMethodComboBox;
     private javax.swing.JToggleButton removeFpButton;
     private javax.swing.JCheckBox symModelsCheckbox;
+    private javax.swing.JComboBox<String> trainingModelSelection;
     private javax.swing.JComboBox<cz.fidentis.undersampling.Methods> undersamplingComboBox;
     // End of variables declaration//GEN-END:variables
 }

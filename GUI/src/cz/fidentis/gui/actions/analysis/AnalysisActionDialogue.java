@@ -94,6 +94,11 @@ public final class AnalysisActionDialogue extends TopComponent {
         });
 
         computeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Euclid", "NRMSE" }));
+        computeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                computeComboBoxActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(computeButton, org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.computeButton.text")); // NOI18N
         computeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -256,6 +261,10 @@ public final class AnalysisActionDialogue extends TopComponent {
         frame.setSize(dialog.getPreferredSize());
         frame.setVisible(true); 
     }//GEN-LAST:event_computeButtonActionPerformed
+
+    private void computeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_computeComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_computeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> CDlist;

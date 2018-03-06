@@ -157,7 +157,7 @@ public class GPA implements Serializable {
         ProcrustesAnalysis mean = this.countMeanConfig();
         
         for(int i = 0; i < this.getConfigs().size(); i++){
-           rotations.add(configs.get(i).rotate(mean));                    
+           rotations.add(configs.get(i).rotate(mean, false));                    
         }
         
         return rotations;
@@ -181,7 +181,7 @@ public class GPA implements Serializable {
         double newDistance = 0;
         
         for(int i = 0; i < configs.size(); i++){
-            ICPTransformation tran = configs.get(i).rotate(oldMean);  
+            ICPTransformation tran = configs.get(i).rotate(oldMean, false);  
             
             if(tran == null)
                 return null;        //couldn't rotate

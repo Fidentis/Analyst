@@ -28,6 +28,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.featurePoints.FpProcessing;
+import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.processing.fileUtils.ProcessingFileUtils;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
@@ -35,6 +36,8 @@ import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utilsException.FileManipulationException;
 import java.awt.Dimension;
 import java.io.File;
+import static java.io.File.separatorChar;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -59,6 +62,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
      */
     public OneToManyRegistrationConfiguration() {
         initComponents();
+        setNamesForComboBox();
         //regMethodComboBoxActionPerformed(null);
     }
 
@@ -136,6 +140,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         fpScaleCheckBox = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
         fpThresholdSlider = new javax.swing.JSlider();
+        jLabel15 = new javax.swing.JLabel();
+        trainingModelSelection = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -642,6 +648,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel15.text")); // NOI18N
+
+        trainingModelSelection.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                trainingModelSelectionItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout fpPanelLayout = new javax.swing.GroupLayout(fpPanel);
         fpPanel.setLayout(fpPanelLayout);
         fpPanelLayout.setHorizontalGroup(
@@ -653,12 +667,6 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fpSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fpColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(fpPanelLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(calculateFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -678,6 +686,19 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(fpScaleCheckBox)
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(fpPanelLayout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(fpPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(trainingModelSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(fpPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         fpPanelLayout.setVerticalGroup(
             fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -687,6 +708,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculateFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1308,6 +1333,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private void radiusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radiusSliderStateChanged
         getContext().setValue(radiusSlider.getValue());
     }//GEN-LAST:event_radiusSliderStateChanged
+
+    private void trainingModelSelectionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_trainingModelSelectionItemStateChanged
+        try {
+            LandmarkLocalization.setTrainingModel(trainingModelSelection.getSelectedItem().toString());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }//GEN-LAST:event_trainingModelSelectionItemStateChanged
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1408,6 +1441,24 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             exportFPButton.setEnabled(true);
         }
     }
+    
+    private void setNamesForComboBox(){
+        try {
+            File folder = new File((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels"));
+            File[] listOfFiles = folder.listFiles();
+            String[] namesOfFiles = new String[listOfFiles.length];
+            
+            for (int i = 0; i < listOfFiles.length; i++) {
+                
+                namesOfFiles[i] = listOfFiles[i].getName();
+            
+            }
+            
+            trainingModelSelection.setModel(new javax.swing.DefaultComboBoxModel(namesOfFiles));
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton addFPButton;
@@ -1450,6 +1501,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1476,6 +1528,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JButton registerButton;
     private javax.swing.JToggleButton removeFPButton;
     private javax.swing.JCheckBox symModelsCheckbox;
+    private javax.swing.JComboBox<String> trainingModelSelection;
     private javax.swing.JComboBox<cz.fidentis.undersampling.Methods> undersamplingComboBox;
     private javax.swing.JButton validateFPButton;
     // End of variables declaration//GEN-END:variables

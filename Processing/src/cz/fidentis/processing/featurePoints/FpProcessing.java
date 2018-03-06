@@ -163,16 +163,16 @@ public class FpProcessing {
         p.progress("Computing feature points of face " + faceNumber, 100);
         p.switchToIndeterminate();
 
-        ///////
+        // TO DO REFACTOR
         
-        LandmarkLocalization localization = new LandmarkLocalization();
-        
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setMultiSelectionEnabled(true);
-        Component modalToComponent = null;
-        if (fileChooser.showSaveDialog(modalToComponent) == JFileChooser.APPROVE_OPTION) {
-            computedPoints.addAll(localization.makeArea(model, fileChooser.getSelectedFiles()));
+        LandmarkLocalization localization;
+        try {
+            localization = new LandmarkLocalization();
+            computedPoints.addAll(localization.localizationOfLandmarks(model));
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
         }
+        
         //compute all facial points
         
         //computedPoints.addAll(computeAllFacialPoints(centerPoints, model, trans));

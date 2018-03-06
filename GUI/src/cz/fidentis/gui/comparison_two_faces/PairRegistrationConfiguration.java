@@ -28,11 +28,14 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.featurePoints.FpProcessing;
+import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
 import java.awt.Dimension;
 import java.io.File;
+import static java.io.File.separatorChar;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -65,6 +68,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     public PairRegistrationConfiguration() {
         initComponents();
         undersamplingComboboxActionPerformed(null);
+        setNamesForComboBox();
     }
 
     /**
@@ -141,6 +145,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         fpScaleCheckBox = new javax.swing.JCheckBox();
+        trainingModelSelection = new javax.swing.JComboBox();
+        jLabel15 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckbox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -651,6 +657,18 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        trainingModelSelection.setModel(new DefaultComboBoxModel<>(RegistrationMethod.values()));
+        trainingModelSelection.setMaximumSize(new java.awt.Dimension(115, 25));
+        trainingModelSelection.setMinimumSize(new java.awt.Dimension(115, 20));
+        trainingModelSelection.setPreferredSize(new java.awt.Dimension(115, 20));
+        trainingModelSelection.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                trainingModelSelectionItemStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel15.text")); // NOI18N
+
         javax.swing.GroupLayout procrustesPanelLayout = new javax.swing.GroupLayout(procrustesPanel);
         procrustesPanel.setLayout(procrustesPanelLayout);
         procrustesPanelLayout.setHorizontalGroup(
@@ -663,17 +681,22 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     .addGroup(procrustesPanelLayout.createSequentialGroup()
                         .addComponent(fpColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
+            .addComponent(calculatePointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(loadPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(exportPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(saveStencilButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(procrustesPanelLayout.createSequentialGroup()
+                .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(showFpInfoCheckbox))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(procrustesPanelLayout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(calculatePointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(loadPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(exportPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(saveStencilButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(procrustesPanelLayout.createSequentialGroup()
                 .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(procrustesPanelLayout.createSequentialGroup()
@@ -689,11 +712,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jSeparator1))
                 .addContainerGap())
-            .addGroup(procrustesPanelLayout.createSequentialGroup()
-                .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(showFpInfoCheckbox))
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         procrustesPanelLayout.setVerticalGroup(
             procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -703,6 +725,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculatePointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -743,6 +769,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         tresholdTable.put(new Integer(80), new JLabel("0,8"));
         tresholdTable.put(new Integer(100), new JLabel("1"));
         fpThresholdSlider.setLabelTable(tresholdTable);
+        jLabel15.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel15.AccessibleContext.accessibleName")); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel2.text")); // NOI18N
@@ -768,7 +795,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(continueComparisonCheckbox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                             .addComponent(registerButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(icpPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 16, Short.MAX_VALUE))
+                        .addGap(0, 58, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(procrustesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -806,7 +833,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1280,6 +1307,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }//GEN-LAST:event_numberSpinnerStateChanged
 
     private void undersamplingComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undersamplingComboboxActionPerformed
+        
         switch ((Methods) undersamplingCombobox.getSelectedItem()) {
             case Curvature:
             case Random: //Random
@@ -1318,6 +1346,14 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
         getContext().setFpScaling(fpScaleCheckBox.isSelected());
     }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
+
+    private void trainingModelSelectionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_trainingModelSelectionItemStateChanged
+        try {
+            LandmarkLocalization.setTrainingModel(trainingModelSelection.getSelectedItem().toString());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }//GEN-LAST:event_trainingModelSelectionItemStateChanged
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1434,6 +1470,23 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         }
     }
 
+    private void setNamesForComboBox(){
+        try {
+            File folder = new File((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels"));
+            File[] listOfFiles = folder.listFiles();
+            String[] namesOfFiles = new String[listOfFiles.length];
+            
+            for (int i = 0; i < listOfFiles.length; i++) {
+                
+                namesOfFiles[i] = listOfFiles[i].getName();
+            
+            }
+            
+            trainingModelSelection.setModel(new javax.swing.DefaultComboBoxModel(namesOfFiles));
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton addPointButton;
@@ -1470,6 +1523,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1501,6 +1555,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JButton saveStencilButton;
     private javax.swing.JCheckBox showFpInfoCheckbox;
     private javax.swing.JCheckBox symModCheckbox;
+    private javax.swing.JComboBox trainingModelSelection;
     private javax.swing.JComboBox<cz.fidentis.undersampling.Methods> undersamplingCombobox;
     private javax.swing.JSlider undersamplingRadiusSlider;
     private javax.swing.JButton validateButton;
