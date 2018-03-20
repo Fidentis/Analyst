@@ -10,6 +10,7 @@ import cz.fidentis.comparison.procrustes.Procrustes1ToMany;
 import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
+import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdgeId;
@@ -22,6 +23,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.model.corner_table.Corner;
 import cz.fidentis.model.corner_table.CornerTable;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
+import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.utils.MathUtils;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -182,17 +184,28 @@ public final class ImportFromImage implements ActionListener {
      * @return a mesh reconstructed from the given image
      */
     public Model importFromImage(File imageFile, Gender targetGender, AgeCategories targetAge, List<FacialPoint> points, int numOfVerts, int numOfClosestDepthMaps) {
+        // make sure the points don't contain any point that does not appear in depth maps
+        TreeSet<FacialPointType> availablePoints = getUsedPoints();
+        ArrayList<FacialPoint> onlyAvailablePoints = new ArrayList<>(points.size());
+        for(FacialPoint p : points) {
+            FacialPointType currentPointType = FacialPointType.values()[p.getType()];
+            
+            // remove the point if it does not appear in available points
+            if(availablePoints.contains(currentPointType)) {
+                onlyAvailablePoints.add(p);
+            }
+        }
         // 1. load suitable gem models
-        ArrayList<Model> gems = getSuitableGems(targetGender, targetAge, points, numOfClosestDepthMaps);
+        ArrayList<Model> gems = getSuitableGems(targetGender, targetAge, onlyAvailablePoints, numOfClosestDepthMaps);
         // 2. initialize models for computation
         Model model = new Model();
-        initializeModels(model, gems, imageFile, points);
+        initializeModels(model, gems, imageFile, onlyAvailablePoints);
         // 3. prepare delaunay meshes
         initializeDelaunayMeshes(model, gems);
         // 4. subdivide to reach desired detail
         subdivideUntilSatisfied(model, gems, numOfVerts);
         // 5. finally, assign depth to model using gems
-        assignDepth(model, gems, imageFile, points);
+        assignDepth(model, gems, imageFile, onlyAvailablePoints);
         // 6. adjust model to some reasonable proportions
         adjustProportions(model);
         // 7. postprocess model to be ready to use in application
@@ -419,13 +432,12 @@ public final class ImportFromImage implements ActionListener {
                     AgeCategories currentAge = AgeCategories.valueOf(parts[1]);
                     if (currentGender == gender && (age == AgeCategories.ALL || currentAge == age)) {
                         // include this model to GEM computation
-                        System.out.println("Gender " + currentGender + " Age " + currentAge);
                         Model gem = new Model();
                         String gemDir = pathBase + parts[2];
                         gem.setDirectoryPath(gemDir);
 
                         // load its points
-                        List<FacialPoint> gemPoints = loadFidoCsv(new File(gemDir + File.separator + "pts.csv"));
+                        List<FacialPoint> gemPoints = loadCsv(new File(gemDir + File.separator + "pts.csv"));
                         List<FacialPoint> pointsCopy = new ArrayList<>(gemPoints.size());
                         for (FacialPoint p : gemPoints) {
                             pointsCopy.add(new FacialPoint(p));
@@ -463,7 +475,12 @@ public final class ImportFromImage implements ActionListener {
             return gems;
         }
         // otherwise limit the selected depth maps by procrustes distance:
-        Procrustes1ToMany procrustes = new Procrustes1ToMany(points, fps, true);
+        // NOTE: points have to be copied because procrustes modifies them
+        ArrayList<FacialPoint> pointsCopy = new ArrayList<>(points.size());
+        for(FacialPoint p : points) {
+            pointsCopy.add(new FacialPoint(p));
+        }
+        Procrustes1ToMany procrustes = new Procrustes1ToMany(pointsCopy, fps, true);
         // register the considered depth maps to the input feature points
         procrustes.align1withN();
         // compute the procrustes distances of depth models to the input face
@@ -488,100 +505,13 @@ public final class ImportFromImage implements ActionListener {
         return result;
     }
 
-    public static ArrayList<FacialPoint> loadFidoCsv(File csvFile) {
-        ArrayList<FacialPoint> pts = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
-            float x = 0;
-            float y = 0;
-
-            String wholeLine = reader.readLine();
-            String[] numbers = wholeLine.split(";");
-            for (int i = 0; i < 58; i++) { // only take 58 numbers (29 pairs)
-                float val = Float.parseFloat(numbers[i].replace(',', '.'));
-                if (i % 2 == 0) {
-                    x = val;
-                } else {
-                    y = val;
-                    FacialPoint p = new FacialPoint(getFpTypeFromFido(i / 2), new Vector3f(x, y, 0));
-                    //if (p.getType() != FacialPointType.unspecified) {
-                        pts.add(p);
-                    //}
-                }
-            }
-        } catch (IOException | NumberFormatException e) {
-            Exceptions.printStackTrace(e);
-        }
-
-        return pts;
-    }
-
-    public static Integer getFpTypeFromFido(int i) {
-        switch (i) {
-            case 0:
-                return FacialPointType.EX_R.ordinal();
-            case 1:
-                return FacialPointType.PUP_R.ordinal();//pupila r
-            case 2:
-                return FacialPointType.EN_R.ordinal();
-            case 3:
-                return FacialPointType.EN_L.ordinal();
-            case 4:
-                return FacialPointType.PUP_L.ordinal();//pupila l
-            case 5:
-                return FacialPointType.EX_L.ordinal();
-            case 6:
-                return FacialPointType.N.ordinal();
-            case 7:
-                return FacialPointType.AL_R.ordinal();
-            case 8:
-                return FacialPointType.AL_L.ordinal();
-            case 9:
-                return FacialPointType.LS.ordinal();
-            case 10:
-                return FacialPointType.STO.ordinal();
-            case 11:
-                return FacialPointType.LI.ordinal();
-            case 12:
-                return FacialPointType.CH_R.ordinal();
-            case 13:
-                return FacialPointType.CH_L.ordinal();
-            case 14:
-                return FacialPointType.ZY_R.ordinal();
-            case 15:
-                return FacialPointType.ZY_L.ordinal();
-            case 16:
-                return FacialPointType.GNA.ordinal();//gnathion
-            case 17:
-                return FacialPointType.GO2_R.ordinal();//gonion2 r
-            case 18:
-                return FacialPointType.GO2_L.ordinal();//goinon2 l
-            case 19:
-                return FacialPointType.T_R.ordinal();
-            case 20:
-                return FacialPointType.T_L.ordinal();
-            case 21:
-                return FacialPointType.V.ordinal();//vertex
-            case 22:
-                return FacialPointType.O.ordinal();//Ophryon
-            case 23:
-                return FacialPointType.RN_R.ordinal();//radix nasi r
-            case 24:
-                return FacialPointType.RN_L.ordinal();//radix nasi l
-            case 25:
-                return FacialPointType.EU2_R.ordinal();//Euryon II r
-            case 26:
-                return FacialPointType.EU2_L.ordinal();//Euryon II l
-            case 27:
-                return FacialPointType.RM_R.ordinal();//Ramus mandibulae r
-            case 28:
-                return FacialPointType.RM_L.ordinal();//Ramus mandibulae l
-            case 29:
-                return -1;//Lobulus auriculae r
-            case 30:
-                return -1;//Lobulus auriculae l
-            default:
-                return -1;
+    public static ArrayList<FacialPoint> loadCsv(File csvFile) {
+        List<FpModel> loadedFp = FPImportExport.instance().importPoints(new File[]{csvFile});
+        
+        if(loadedFp.size() > 0) {
+            return new ArrayList<FacialPoint>(loadedFp.get(0).getFacialPoints());
+        } else {
+            return new ArrayList<FacialPoint>();
         }
     }
     
@@ -595,39 +525,39 @@ public final class ImportFromImage implements ActionListener {
     public static TreeSet<FacialPointType> getUsedPoints() {
         TreeSet<FacialPointType> set = new TreeSet<>();
         set.add(FacialPointType.EX_R);
-        set.add(FacialPointType.PUP_R);//pupila r
         set.add(FacialPointType.EN_R);
         set.add(FacialPointType.EN_L);
-        set.add(FacialPointType.PUP_L);//pupila l
         set.add(FacialPointType.EX_L);
         set.add(FacialPointType.N);
         set.add(FacialPointType.AL_R);
         set.add(FacialPointType.AL_L);
-        set.add(FacialPointType.LS);
         set.add(FacialPointType.STO);
         set.add(FacialPointType.LI);
         set.add(FacialPointType.CH_R);
         set.add(FacialPointType.CH_L);
         set.add(FacialPointType.ZY_R);
         set.add(FacialPointType.ZY_L);
-        set.add(FacialPointType.GNA);//gnathion
-        set.add(FacialPointType.GO2_R);//gonion2 r
-        set.add(FacialPointType.GO2_L);//goinon2 l
-        set.add(FacialPointType.T_R);
-        set.add(FacialPointType.T_L);
-        set.add(FacialPointType.V);//vertex
-        set.add(FacialPointType.O);//Ophryon
-        set.add(FacialPointType.RN_R);//radix nasi r
-        set.add(FacialPointType.RN_L);//radix nasi l
-        set.add(FacialPointType.EU2_R);//Euryon II r
-        set.add(FacialPointType.EU2_L);//Euryon II l
-        set.add(FacialPointType.RM_R);//Ramus mandibulae r
-        set.add(FacialPointType.RM_L);//Ramus mandibulae l
+        set.add(FacialPointType.GNA);
+        set.add(FacialPointType.GO2_R);
+        set.add(FacialPointType.GO2_L);
+        set.add(FacialPointType.PRN);
+        set.add(FacialPointType.SN);
+        set.add(FacialPointType.SL);
+        set.add(FacialPointType.G);
+        set.add(FacialPointType.RN_R);
+        set.add(FacialPointType.RN_L);
+        set.add(FacialPointType.RM_R);
+        set.add(FacialPointType.RM_L);
+        set.add(FacialPointType.SUL_L);
+        set.add(FacialPointType.SUM_L);
+        set.add(FacialPointType.SUM_R);
+        set.add(FacialPointType.SUL_R);
         return set;
     }
 
     private void initializeModels(Model model, ArrayList<Model> gems, File imageFile, List<FacialPoint> points) {
         model.setName(imageFile.getName().substring(0, imageFile.getName().lastIndexOf(".")) + ".obj");
+        
         for (FacialPoint p : points) {
             if (p.isActive()) {
                 model.getVerts().add(p.getPosition());
@@ -725,7 +655,7 @@ public final class ImportFromImage implements ActionListener {
                 Model gem = gems.get(j);
                 
                 Vector3f position = gem.getVerts().get(i);
-                Color color = new Color(gemImg.getRGB((int) position.getX(), (int) (gemImg.getHeight() - position.getY())));
+                Color color = new Color(gemImg.getRGB((int) position.getX(), (int) position.getY()));
                 summedDepth += color.getRed();
             }
             float averageDepth = ((float)summedDepth)/gems.size();
@@ -734,7 +664,7 @@ public final class ImportFromImage implements ActionListener {
             // compute and assign texture coordinate of point
             Vector3f texCoord = new Vector3f();
             texCoord.x = model.getVerts().get(i).x / texImg.getWidth();
-            texCoord.y = 1 - (model.getVerts().get(i).y / texImg.getHeight());
+            texCoord.y = 1.0f - (model.getVerts().get(i).y / texImg.getHeight());
             texCoord.z = 0;
             model.getTexCoords().add(texCoord);
             

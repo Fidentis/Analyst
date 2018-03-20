@@ -31,8 +31,8 @@ Type;Name;Info
 30;Tragion L;The point located at the upper margin of tragus in the little notch where the cartilage is attached with the head positioned in the Frankfurt horizontal place. The point is bilateral.
 31;Superaurale R;The most superior point located at the upper margin of the auricle with the head positioned in the Frankfurt horizontal plane. The point is bilateral.
 32;Superaurale L;The most superior point located at the upper margin of the auricle with the head positioned in the Frankfurt horizontal plane. The point is bilateral.
-33;Subaurale R;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the â€œattached earlobeâ€? appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
-34;Subaurale L;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the â€œattached earlobeâ€? appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
+33;Subaurale R;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the "attached earlobe" appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
+34;Subaurale L;The most inferior point located at the lower margin of the earlobe with the head positioned in the Frankfurt horizontal plane. If the "attached earlobe" appearance is present the point is identical to the Otobasion inferius point. The point is bilateral.
 35;Postaurale R;The most posterior point of the posterior margin of the auricle (when the head is positioned in the Frankfurt horizontal plane). The point is bilateral.
 36;Postaurale L;The most posterior point of the posterior margin of the auricle (when the head is positioned in the Frankfurt horizontal plane). The point is bilateral.
 37;Otobasion superius R;The point where the upper margin of the auricle attaches to the head. The point is bilateral.
@@ -56,3 +56,7 @@ Type;Name;Info
 55;Ramus mandibulae L;No information
 56;P_L;No information
 57;P_R;No information
+58;Supercilium Lateralis R;No information
+59;Supercilium Lateralis L;No information
+60;Supercilium Medialis R;No information
+61;Supercilium Medialis L;No information

@@ -11,12 +11,11 @@ package cz.fidentis.gui.actions.importfromimage;
  */
 public enum AgeCategories {
     ALL("All"),
-    //UNDER_18("Under 18"),
-    //FROM_18_TO_29("18-29"),
-    //FROM_30_TO_49("30-49"),
-    //OVER_50("Over 50");
-    CHILD("Child"),
-    ADULT("Adult");
+    UNDER20("Under 20"),
+    FROM20TO29("20-29"),
+    FROM30TO39("30-39"),
+    FROM40TO49("40-49"),
+    ABOVE50("Over 50");
 
     private final String displayName;
     
