@@ -63,5 +63,9 @@ public enum FacialPointType {
     RM_R,
     RM_L,
     P_L,
-    P_R
+    P_R,
+    SUL_R,
+    SUL_L,
+    SUM_R,
+    SUM_L
 }

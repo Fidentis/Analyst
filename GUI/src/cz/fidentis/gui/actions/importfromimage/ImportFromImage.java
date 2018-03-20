@@ -525,38 +525,33 @@ public final class ImportFromImage implements ActionListener {
     public static TreeSet<FacialPointType> getUsedPoints() {
         TreeSet<FacialPointType> set = new TreeSet<>();
         set.add(FacialPointType.EX_R);
-        //set.add(FacialPointType.PUP_R);//pupila r
         set.add(FacialPointType.EN_R);
         set.add(FacialPointType.EN_L);
-        //set.add(FacialPointType.PUP_L);//pupila l
         set.add(FacialPointType.EX_L);
         set.add(FacialPointType.N);
         set.add(FacialPointType.AL_R);
         set.add(FacialPointType.AL_L);
-        //set.add(FacialPointType.LS);
         set.add(FacialPointType.STO);
         set.add(FacialPointType.LI);
         set.add(FacialPointType.CH_R);
         set.add(FacialPointType.CH_L);
         set.add(FacialPointType.ZY_R);
         set.add(FacialPointType.ZY_L);
-        set.add(FacialPointType.GNA);//gnathion
-        set.add(FacialPointType.GO2_R);//gonion2 r
-        set.add(FacialPointType.GO2_L);//goinon2 l
+        set.add(FacialPointType.GNA);
+        set.add(FacialPointType.GO2_R);
+        set.add(FacialPointType.GO2_L);
         set.add(FacialPointType.PRN);
         set.add(FacialPointType.SN);
         set.add(FacialPointType.SL);
         set.add(FacialPointType.G);
-        set.add(FacialPointType.RN_R);//radix nasi r
-        set.add(FacialPointType.RN_L);//radix nasi l
-        //set.add(FacialPointType.EU2_R);//Euryon II r
-        //set.add(FacialPointType.EU2_L);//Euryon II l
-        set.add(FacialPointType.RM_R);//Ramus mandibulae r
-        set.add(FacialPointType.RM_L);//Ramus mandibulae l
-        set.add(FacialPointType.values()[52]);
-        set.add(FacialPointType.values()[43]);
-        set.add(FacialPointType.values()[44]);
-        set.add(FacialPointType.values()[53]);
+        set.add(FacialPointType.RN_R);
+        set.add(FacialPointType.RN_L);
+        set.add(FacialPointType.RM_R);
+        set.add(FacialPointType.RM_L);
+        set.add(FacialPointType.SUL_L);
+        set.add(FacialPointType.SUM_L);
+        set.add(FacialPointType.SUM_R);
+        set.add(FacialPointType.SUL_R);
         return set;
     }
 
