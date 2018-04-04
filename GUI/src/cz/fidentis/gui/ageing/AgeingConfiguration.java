@@ -14,17 +14,23 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
+import cz.fidentis.gui.trainingModel.PointsToCalculateTopComponent;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelExporter;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.featurePoints.FpProcessing;
+import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import java.io.File;
+import static java.io.File.separatorChar;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import org.openide.util.Cancellable;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -32,11 +38,14 @@ import org.openide.util.Cancellable;
  */
 public class AgeingConfiguration extends javax.swing.JPanel {
 
+    private PointsToCalculateTopComponent dialog = new PointsToCalculateTopComponent();
+    
     /**
      * Creates new form AgeingConfiguration
      */
     public AgeingConfiguration() {
         initComponents();
+        setNamesForComboBox();
     }
     
     public void setConfiguration() {
@@ -81,8 +90,11 @@ public class AgeingConfiguration extends javax.swing.JPanel {
         fpRemoveButton = new javax.swing.JButton();
         fpEditButton = new javax.swing.JToggleButton();
         fpValidateButton = new javax.swing.JButton();
-        fpInfoCheck = new javax.swing.JCheckBox();
         exportPointsButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        trainingModelSelection = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        choosePointsButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         loadModelButton = new javax.swing.JButton();
         genderSelect = new JComboBox<Gender>(Gender.values());
@@ -94,6 +106,7 @@ public class AgeingConfiguration extends javax.swing.JPanel {
         computeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         exportButton = new javax.swing.JButton();
+        fpInfoCheck = new javax.swing.JCheckBox();
 
         jPanel2.setPreferredSize(new java.awt.Dimension(260, 500));
 
@@ -133,17 +146,27 @@ public class AgeingConfiguration extends javax.swing.JPanel {
         fpValidateButton.setEnabled(false);
         jPanel3.add(fpValidateButton);
 
-        org.openide.awt.Mnemonics.setLocalizedText(fpInfoCheck, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.fpInfoCheck.text")); // NOI18N
-        fpInfoCheck.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fpInfoCheckActionPerformed(evt);
-            }
-        });
-
         org.openide.awt.Mnemonics.setLocalizedText(exportPointsButton, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.exportPointsButton.text")); // NOI18N
         exportPointsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportPointsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.jLabel5.text")); // NOI18N
+
+        trainingModelSelection.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                trainingModelSelectionItemStateChanged(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.jLabel6.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(choosePointsButton, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.choosePointsButton.text")); // NOI18N
+        choosePointsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                choosePointsButtonActionPerformed(evt);
             }
         });
 
@@ -156,26 +179,37 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(loadPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(computePointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(computePointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                    .addComponent(exportPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(fpInfoCheck)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(exportPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(trainingModelSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(choosePointsButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(loadPointsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(choosePointsButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(computePointsButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportPointsButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fpInfoCheck))
+                .addGap(28, 28, 28))
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.jLabel2.text")); // NOI18N
@@ -242,7 +276,7 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                     .addComponent(exportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addComponent(targetAgeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -259,6 +293,13 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                 .addComponent(exportButton)
                 .addContainerGap())
         );
+
+        org.openide.awt.Mnemonics.setLocalizedText(fpInfoCheck, org.openide.util.NbBundle.getMessage(AgeingConfiguration.class, "AgeingConfiguration.fpInfoCheck.text")); // NOI18N
+        fpInfoCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fpInfoCheckActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -277,10 +318,12 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(originAgeSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                             .addComponent(genderSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fpInfoCheck)
+                            .addComponent(jLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -298,11 +341,13 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                     .addComponent(genderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(loadModelButton)
-                .addGap(21, 21, 21)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fpInfoCheck)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         scroller.setViewportView(jPanel2);
@@ -315,7 +360,7 @@ public class AgeingConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scroller)
+            .addComponent(scroller, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -377,7 +422,7 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                 };
                 ArrayList<File> models = new ArrayList<>(1);
                 models.add(ageing.getOriginModel().getFile());
-                FpResultsBatch result = FpProcessing.instance().calculatePointsBatch(cancelTask, models);
+                FpResultsBatch result = FpProcessing.instance().calculatePointsBatch(cancelTask, models, dialog.getPointsArray());
                 Model registered = ModelLoader.instance().loadModel(ageing.getOriginModel().getFile(), Boolean.TRUE, Boolean.TRUE);
 
                 List<FacialPoint> pts = result.getFps().get(ageing.getOriginModel().getName());
@@ -434,8 +479,42 @@ public class AgeingConfiguration extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getProject().getSelectedAgeing().setGender(genderSelect.getItemAt(genderSelect.getSelectedIndex()));
     }//GEN-LAST:event_genderSelectActionPerformed
 
+    private void trainingModelSelectionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_trainingModelSelectionItemStateChanged
+        try {
+            LandmarkLocalization.setTrainingModel(trainingModelSelection.getSelectedItem().toString());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }//GEN-LAST:event_trainingModelSelectionItemStateChanged
+
+    private void choosePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choosePointsButtonActionPerformed
+        JFrame frame = new JFrame();
+        frame.add(dialog);
+        frame.setSize(dialog.getPreferredSize());
+        frame.setVisible(true);
+    }//GEN-LAST:event_choosePointsButtonActionPerformed
+
+    private void setNamesForComboBox(){
+        try {
+            File folder = new File((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels"));
+            File[] listOfFiles = folder.listFiles();
+            String[] namesOfFiles = new String[listOfFiles.length];
+            
+            for (int i = 0; i < listOfFiles.length; i++) {
+                
+                namesOfFiles[i] = listOfFiles[i].getName();
+            
+            }
+            
+            trainingModelSelection.setModel(new javax.swing.DefaultComboBoxModel(namesOfFiles));
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton choosePointsButton;
     private javax.swing.JButton computeButton;
     private javax.swing.JButton computePointsButton;
     private javax.swing.JButton exportButton;
@@ -450,6 +529,8 @@ public class AgeingConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -459,5 +540,6 @@ public class AgeingConfiguration extends javax.swing.JPanel {
     private javax.swing.JSpinner originAgeSpinner;
     private javax.swing.JScrollPane scroller;
     private javax.swing.JSpinner targetAgeSpinner;
+    private javax.swing.JComboBox<String> trainingModelSelection;
     // End of variables declaration//GEN-END:variables
 }

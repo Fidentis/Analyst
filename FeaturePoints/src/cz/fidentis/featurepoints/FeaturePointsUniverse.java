@@ -540,11 +540,11 @@ public class FeaturePointsUniverse {
         calculateCurvature(CurvatureType.Minimum);
         thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);
         calculateThresholdFaces(15);
-        return findNoseTipArea(notUsed);
+        return findNoseTipAreaPDM();
     }
     
-    public Set<Set<Integer>> findNoseTipArea(boolean notUsed) {
-        return thresArea.findAllNoseTipAreas(thresholdFaces, notUsed);
+    public Set<Set<Integer>> findNoseTipAreaPDM() {
+        return thresArea.findAllNoseTipAreas(thresholdFaces);
     }
 
     public ArrayList<Vector3f> getVerts() {

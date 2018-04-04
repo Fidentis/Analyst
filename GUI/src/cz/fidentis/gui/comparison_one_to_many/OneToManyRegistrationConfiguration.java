@@ -23,6 +23,7 @@ import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.gui.observer.RegisterFPButtonObserver;
+import cz.fidentis.gui.trainingModel.PointsToCalculateTopComponent;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -44,6 +45,7 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.vecmath.Vector3f;
@@ -56,6 +58,8 @@ import org.openide.util.Exceptions;
  * @author Katka
  */
 public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
+    
+    private PointsToCalculateTopComponent dialog = new PointsToCalculateTopComponent();
     
     /**
      * Creates new form RegistrationConfiguration
@@ -142,6 +146,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         fpThresholdSlider = new javax.swing.JSlider();
         jLabel15 = new javax.swing.JLabel();
         trainingModelSelection = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        choosePointsButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -656,6 +662,15 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel16.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(choosePointsButton, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.choosePointsButton.text")); // NOI18N
+        choosePointsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                choosePointsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout fpPanelLayout = new javax.swing.GroupLayout(fpPanel);
         fpPanel.setLayout(fpPanelLayout);
         fpPanelLayout.setHorizontalGroup(
@@ -680,25 +695,30 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fpScaleCheckBox)
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(fpPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(trainingModelSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(choosePointsButton)
+                        .addContainerGap())
                     .addGroup(fpPanelLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(fpPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(trainingModelSelection, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         fpPanelLayout.setVerticalGroup(
             fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -712,6 +732,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(choosePointsButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculateFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -896,7 +920,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 public void run() {
                     
                     FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
-                    tc.getOneToManyViewerPanel().getListener1().getModel());
+                    tc.getOneToManyViewerPanel().getListener1().getModel(), dialog.getPointsArray());
                     
                     HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
                     List<FacialPoint> fpCopy;
@@ -1341,6 +1365,13 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_trainingModelSelectionItemStateChanged
+
+    private void choosePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choosePointsButtonActionPerformed
+        JFrame frame = new JFrame();
+        frame.add(dialog);
+        frame.setSize(dialog.getPreferredSize());
+        frame.setVisible(true);
+    }//GEN-LAST:event_choosePointsButtonActionPerformed
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1465,6 +1496,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton calculateFPButton;
+    private javax.swing.JButton choosePointsButton;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JCheckBox continueComparisonCheckBox;
     private javax.swing.JPanel discPanel;
@@ -1502,6 +1534,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -919,7 +919,7 @@ public class ThresholdArea {
     
     //PDM methods
     
-    public Set<Set<Integer>> findAllNoseTipAreas(Set<Integer> thresholdFaces, boolean notUsed) {
+    public Set<Set<Integer>> findAllNoseTipAreas(Set<Integer> thresholdFaces) {
 
         Set<Set<Integer>> allRegions = new HashSet<>();
         

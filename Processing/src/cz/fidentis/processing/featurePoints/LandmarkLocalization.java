@@ -29,11 +29,9 @@ import jv.vecmath.PdVector;
  * @author Rasto1
  */
 public class LandmarkLocalization {
-    
-    private static final int[] FPTYPES = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
-    
+
     private static File choosedTrainingModel = null;
-    
+       
     public LandmarkLocalization() throws IOException{
         choosedTrainingModel = new File(new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + "default.csv");
     }
@@ -44,13 +42,13 @@ public class LandmarkLocalization {
      * @param trainingShapesFiles .csv shapes for training model
      * @return List of 14 landmarks
      */
-    public List<FacialPoint> localizationOfLandmarks(Model model) {
-
+    public List<FacialPoint> localizationOfLandmarks(Model model, int[] fpTypes) {
+        
         TrainingModel train = new TrainingModel();
 
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
         
-        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel});
+        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel}, fpTypes);
         
         FpModel meanShape = landmarksModels.get(0);
         List trainingShapes = new ArrayList<>();
@@ -246,7 +244,7 @@ public class LandmarkLocalization {
         
         // set final vertices
         for (int i = 0; i < finalVertices.getRowDimension(); i++) {
-            landmarks.add(new FacialPoint(FPTYPES[currentType], kdCko.nearestNeighbour(new Vector3f((float) finalVertices.get(i, 0), (float) finalVertices.get(i, 1), (float) finalVertices.get(i, 2)))));
+            landmarks.add(new FacialPoint(fpTypes[currentType], kdCko.nearestNeighbour(new Vector3f((float) finalVertices.get(i, 0), (float) finalVertices.get(i, 1), (float) finalVertices.get(i, 2)))));
             currentType++;
         }
 
@@ -310,7 +308,7 @@ public class LandmarkLocalization {
     }
     
     //method for loading sets of models for training purposes
-    public static List<FpModel> loadTrainingSets(File[] listOfFiles) {
+    public static List<FpModel> loadTrainingSets(File[] listOfFiles, int[] fpTypes) {
         List<FpModel> trainingShapes = new ArrayList<>();
        
         CSVparser pars = new CSVparser();
@@ -320,8 +318,8 @@ public class LandmarkLocalization {
         for(int i = 0; i < models.size(); i++){
             FpModel tmp = new FpModel();
                 
-            for(int j = 0; j < 14; j++){
-                    tmp.addFacialPoint(models.get(i).getFacialPoint(FPTYPES[j]));
+            for(int j = 0; j < fpTypes.length; j++){
+                    tmp.addFacialPoint(models.get(i).getFacialPoint(fpTypes[j]));
             }
             
             trainingShapes.add(tmp);

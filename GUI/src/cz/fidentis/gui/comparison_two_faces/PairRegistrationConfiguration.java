@@ -23,6 +23,7 @@ import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
 import cz.fidentis.gui.observer.RegisterFPButtonObserver;
+import cz.fidentis.gui.trainingModel.PointsToCalculateTopComponent;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.processing.comparison.surfaceComparison.SurfaceComparisonProcessing;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import org.netbeans.api.progress.ProgressHandle;
@@ -61,6 +63,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             return true;
         }
     };
+    
+    private PointsToCalculateTopComponent dialog = new PointsToCalculateTopComponent();
 
     /**
      * Creates new form RegistrationConfiguration
@@ -147,6 +151,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         fpScaleCheckBox = new javax.swing.JCheckBox();
         trainingModelSelection = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
+        choosePointsButton = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckbox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -669,6 +675,15 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel15.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(choosePointsButton, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.choosePointsButton.text")); // NOI18N
+        choosePointsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                choosePointsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel16.text")); // NOI18N
+
         javax.swing.GroupLayout procrustesPanelLayout = new javax.swing.GroupLayout(procrustesPanel);
         procrustesPanel.setLayout(procrustesPanelLayout);
         procrustesPanelLayout.setHorizontalGroup(
@@ -697,6 +712,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(procrustesPanelLayout.createSequentialGroup()
                 .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(procrustesPanelLayout.createSequentialGroup()
@@ -710,12 +729,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(fpScaleCheckBox)
                             .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(choosePointsButton)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         procrustesPanelLayout.setVerticalGroup(
             procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -729,6 +748,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(trainingModelSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(choosePointsButton)
+                    .addComponent(jLabel16))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculatePointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -883,82 +906,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
     }//GEN-LAST:event_methodComboboxActionPerformed
 
-    private void showFpInfoCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFpInfoCheckboxActionPerformed
-        //change listener to take info from Comparison2Faces where showInfo was used!
-        
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().showInfo(showFpInfoCheckbox.isSelected());
-        getContext().setShowPointInfo(showFpInfoCheckbox.isSelected());
-    }//GEN-LAST:event_showFpInfoCheckboxActionPerformed
-
-    private void fpColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fpColorPanelMouseClicked
-        jColorChooser1.setColor(fpColorPanel.getBackground());
-        colorDialog.setVisible(true);
-        setColor();
-    }//GEN-LAST:event_fpColorPanelMouseClicked
-
-    private void fpSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpSizeSliderStateChanged
-        setFacialPointRadius();
-    }//GEN-LAST:event_fpSizeSliderStateChanged
-
-
-    private void calculatePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculatePointsButtonActionPerformed
-        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        final Comparison2Faces c = getContext();
-        if (areModelsLoaded(tc)) {
-            Runnable run = new Runnable() {
-
-                @Override
-                public void run() {
-                    
-                    
-                    calculatePointsButton.setEnabled(false);
-                    FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
-                            registerButton, exportPointsButton, calculatePointsButton);
-
-                    List<FacialPoint> mainCopy = new ArrayList<>();
-                    List<FacialPoint> secondaryCopy = new ArrayList<>();
-                    
-                    for(FacialPoint fp : res.getMainFps()){
-                        mainCopy.add(fp.deepCopyFp());
-                    }
-                    
-                    for(FacialPoint fp : res.getSecondaryFps()){
-                        secondaryCopy.add(fp.deepCopyFp());
-                    }
-                    
-                    tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
-                    tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
-                    
-                    c.setOriginalMainFp(mainCopy);
-                    c.setOriginalSecondaryFp(secondaryCopy);                   
-                     
-                    
-                    c.setMainFp(res.getMainFps());
-                    c.setSecondaryFp(res.getSecondaryFps());
-                }
-            };
-
-            currentTask = new Thread(run);
-            currentTask.start();
-
-        }
-    }//GEN-LAST:event_calculatePointsButtonActionPerformed
-
-    private void removePointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePointButtonActionPerformed
-        //make sure canvas takes info from Comparison2Faces
- 
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setRemovePoints(removePointButton.isSelected());
-        addPointButton.setSelected(false);
-        editPointButton.setSelected(false);
-    }//GEN-LAST:event_removePointButtonActionPerformed
-
-    private void addPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPointButtonActionPerformed
-        //make sure canvas takes info from Comparison2Faces
-        
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setAddPoints(addPointButton.isSelected());
-        removePointButton.setSelected(false);
-        editPointButton.setSelected(false);
-    }//GEN-LAST:event_addPointButtonActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
        //don't need to refactor elsewhere?
@@ -970,13 +917,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         colorDialog.setVisible(false);
         fpColorPanel.setBackground(jColorChooser1.getColor());
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void editPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPointButtonActionPerformed
-        //make sure canvas takes info from Comparison2Faces
-        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
-        removePointButton.setSelected(false);
-        addPointButton.setSelected(false);
-    }//GEN-LAST:event_editPointButtonActionPerformed
 
     private void areaComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaComboboxActionPerformed
         //not functional atm
@@ -1184,51 +1124,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
         return -1;
     }
-
-    private void loadPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPointsButtonActionPerformed
-        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        List<FpModel> loaded = FPImportExport.instance().importPoints(tc, true);
-
-        if (loaded == null || loaded.isEmpty()) {
-            //nothing loaded
-            return;
-        }
-
-        tc.getViewerPanel_2Faces().getListener1().setTransformations(null);
-        tc.getViewerPanel_2Faces().getListener2().setTransformations(null);
-
-        List<File> models = new ArrayList<>();
-        if (tc.getViewerPanel_2Faces().getListener1().getModel() != null) {
-            models.add(tc.getViewerPanel_2Faces().getListener1().getModel().getFile());
-        }
-
-        if (tc.getViewerPanel_2Faces().getListener2().getModel() != null) {
-            models.add(tc.getViewerPanel_2Faces().getListener2().getModel().getFile());
-        }
-
-        FPImportExport.instance().alignPointsToModels(loaded, models);
-
-        for (FpModel model : loaded) {
-            if (tc.getViewerPanel_2Faces().getListener1().getModel() != null
-                    && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())) {
-                tc.getViewerPanel_2Faces().getListener1().initFpUniverse(model.getFacialPoints());
-                getContext().setMainFp(model.getFacialPoints());
-                getContext().setOriginalMainFp(model.createListFp());
-            }
-
-            if (tc.getViewerPanel_2Faces().getListener2().getModel() != null
-                    && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())) {
-                tc.getViewerPanel_2Faces().getListener2().initFpUniverse(model.getFacialPoints());
-                getContext().setSecondaryFp(model.getFacialPoints());
-                getContext().setOriginalSecondaryFp(model.createListFp());
-            }
-        }
-
-        registerButton.setEnabled(areFPCalculated(tc));
-        exportPointsButton.setEnabled(areFPCalculated(tc));
-
-
-    }//GEN-LAST:event_loadPointsButtonActionPerformed
     
     public Boolean validate(ImportPanel p) {
         String path = p.getFileName();
@@ -1247,25 +1142,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     }
 
 
-    private void exportPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPointsButtonActionPerformed
-        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        Comparison2Faces c = getContext();
-        FPImportExport.instance().exportTwoFaces(tc,
-                c.getMainFp(),
-                c.getModel1(),
-                c.getSecondaryFp(),
-                c.getModel2());
-
-    }//GEN-LAST:event_exportPointsButtonActionPerformed
-
-    private void saveStencilButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveStencilButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_saveStencilButtonActionPerformed
-
-    private void validateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_validateButtonActionPerformed
-
     private void errorSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_errorSpinnerStateChanged
         getContext().setICPerrorRate((float) errorSpinner.getValue());
 
@@ -1279,10 +1155,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void icpScaleCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icpScaleCheckboxActionPerformed
         getContext().setScaleEnabled(icpScaleCheckbox.isSelected());
     }//GEN-LAST:event_icpScaleCheckboxActionPerformed
-
-    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
-        getContext().setFpTreshold(fpThresholdSlider.getValue());
-    }//GEN-LAST:event_fpThresholdSliderStateChanged
 
     private void percentageJRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percentageJRadioActionPerformed
         percentageSpinner.setEnabled(true);
@@ -1343,10 +1215,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         getContext().setContinueComparison(continueComparisonCheckbox.isSelected());
     }//GEN-LAST:event_continueComparisonCheckboxActionPerformed
 
-    private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
-        getContext().setFpScaling(fpScaleCheckBox.isSelected());
-    }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
-
     private void trainingModelSelectionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_trainingModelSelectionItemStateChanged
         try {
             LandmarkLocalization.setTrainingModel(trainingModelSelection.getSelectedItem().toString());
@@ -1354,6 +1222,166 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_trainingModelSelectionItemStateChanged
+
+    private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
+        getContext().setFpScaling(fpScaleCheckBox.isSelected());
+    }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
+
+    private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged
+        getContext().setFpTreshold(fpThresholdSlider.getValue());
+    }//GEN-LAST:event_fpThresholdSliderStateChanged
+
+    private void saveStencilButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveStencilButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveStencilButtonActionPerformed
+
+    private void exportPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPointsButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        Comparison2Faces c = getContext();
+        FPImportExport.instance().exportTwoFaces(tc,
+            c.getMainFp(),
+            c.getModel1(),
+            c.getSecondaryFp(),
+            c.getModel2());
+    }//GEN-LAST:event_exportPointsButtonActionPerformed
+
+    private void loadPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPointsButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        List<FpModel> loaded = FPImportExport.instance().importPoints(tc, true);
+
+        if (loaded == null || loaded.isEmpty()) {
+            //nothing loaded
+            return;
+        }
+
+        tc.getViewerPanel_2Faces().getListener1().setTransformations(null);
+        tc.getViewerPanel_2Faces().getListener2().setTransformations(null);
+
+        List<File> models = new ArrayList<>();
+        if (tc.getViewerPanel_2Faces().getListener1().getModel() != null) {
+            models.add(tc.getViewerPanel_2Faces().getListener1().getModel().getFile());
+        }
+
+        if (tc.getViewerPanel_2Faces().getListener2().getModel() != null) {
+            models.add(tc.getViewerPanel_2Faces().getListener2().getModel().getFile());
+        }
+
+        FPImportExport.instance().alignPointsToModels(loaded, models);
+
+        for (FpModel model : loaded) {
+            if (tc.getViewerPanel_2Faces().getListener1().getModel() != null
+                && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener1().getModel().getName())) {
+                tc.getViewerPanel_2Faces().getListener1().initFpUniverse(model.getFacialPoints());
+                getContext().setMainFp(model.getFacialPoints());
+                getContext().setOriginalMainFp(model.createListFp());
+            }
+
+            if (tc.getViewerPanel_2Faces().getListener2().getModel() != null
+                && model.getModelName().equals(tc.getViewerPanel_2Faces().getListener2().getModel().getName())) {
+                tc.getViewerPanel_2Faces().getListener2().initFpUniverse(model.getFacialPoints());
+                getContext().setSecondaryFp(model.getFacialPoints());
+                getContext().setOriginalSecondaryFp(model.createListFp());
+            }
+        }
+
+        registerButton.setEnabled(areFPCalculated(tc));
+        exportPointsButton.setEnabled(areFPCalculated(tc));
+
+    }//GEN-LAST:event_loadPointsButtonActionPerformed
+
+    private void validateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_validateButtonActionPerformed
+
+    private void editPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPointButtonActionPerformed
+        //make sure canvas takes info from Comparison2Faces
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setEditablePoints(editPointButton.isSelected());
+        removePointButton.setSelected(false);
+        addPointButton.setSelected(false);
+    }//GEN-LAST:event_editPointButtonActionPerformed
+
+    private void removePointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePointButtonActionPerformed
+        //make sure canvas takes info from Comparison2Faces
+
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setRemovePoints(removePointButton.isSelected());
+        addPointButton.setSelected(false);
+        editPointButton.setSelected(false);
+    }//GEN-LAST:event_removePointButtonActionPerformed
+
+    private void addPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPointButtonActionPerformed
+        //make sure canvas takes info from Comparison2Faces
+
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setAddPoints(addPointButton.isSelected());
+        removePointButton.setSelected(false);
+        editPointButton.setSelected(false);
+    }//GEN-LAST:event_addPointButtonActionPerformed
+
+    private void calculatePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculatePointsButtonActionPerformed
+        
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        final Comparison2Faces c = getContext();
+        if (areModelsLoaded(tc)) {
+            Runnable run = new Runnable() {
+
+                @Override
+                public void run() {
+                    
+                    calculatePointsButton.setEnabled(false);
+                    FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
+                        registerButton, exportPointsButton, calculatePointsButton, dialog.getPointsArray());
+
+                    List<FacialPoint> mainCopy = new ArrayList<>();
+                    List<FacialPoint> secondaryCopy = new ArrayList<>();
+
+                    for(FacialPoint fp : res.getMainFps()){
+                        mainCopy.add(fp.deepCopyFp());
+                    }
+
+                    for(FacialPoint fp : res.getSecondaryFps()){
+                        secondaryCopy.add(fp.deepCopyFp());
+                    }
+
+                    tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
+                    tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
+
+                    c.setOriginalMainFp(mainCopy);
+                    c.setOriginalSecondaryFp(secondaryCopy);
+
+                    c.setMainFp(res.getMainFps());
+                    c.setSecondaryFp(res.getSecondaryFps());
+                }
+            };
+
+            currentTask = new Thread(run);
+            currentTask.start();
+
+        }
+    }//GEN-LAST:event_calculatePointsButtonActionPerformed
+
+    private void fpSizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpSizeSliderStateChanged
+        setFacialPointRadius();
+    }//GEN-LAST:event_fpSizeSliderStateChanged
+
+    private void fpColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fpColorPanelMouseClicked
+        jColorChooser1.setColor(fpColorPanel.getBackground());
+        colorDialog.setVisible(true);
+        setColor();
+    }//GEN-LAST:event_fpColorPanelMouseClicked
+
+    private void showFpInfoCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFpInfoCheckboxActionPerformed
+        //change listener to take info from Comparison2Faces where showInfo was used!
+
+        GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().showInfo(showFpInfoCheckbox.isSelected());
+        getContext().setShowPointInfo(showFpInfoCheckbox.isSelected());
+    }//GEN-LAST:event_showFpInfoCheckboxActionPerformed
+
+    private void choosePointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choosePointsButtonActionPerformed
+        JFrame frame = new JFrame();
+        frame.add(dialog);
+        frame.setSize(dialog.getPreferredSize());
+        frame.setVisible(true);
+    }//GEN-LAST:event_choosePointsButtonActionPerformed
+    
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1495,6 +1523,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton calculatePointsButton;
     private javax.swing.JCheckBox chinCheckbox;
+    private javax.swing.JButton choosePointsButton;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JCheckBox continueComparisonCheckbox;
     private javax.swing.JPanel discPanel;
@@ -1524,6 +1553,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
