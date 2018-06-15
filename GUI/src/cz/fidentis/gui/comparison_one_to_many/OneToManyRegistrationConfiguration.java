@@ -869,41 +869,41 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
-                    
-                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
-                    tc.getOneToManyViewerPanel().getListener1().getModel());
-                    
-                    HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
-                    List<FacialPoint> fpCopy;
-                    
-                    for(String key : res.getFacialPoints().keySet()){
-                        fpCopy = new ArrayList<>();
-                        for(FacialPoint fp : res.getFacialPoints().get(key)){
-                            fpCopy.add(fp.deepCopyFp());
-                        }
-                        
-                        resCopy.put(key, fpCopy);
-                    }
-                    
-                    fpCopy = new ArrayList<>();
-                    
-                    for(FacialPoint fp : res.getMainFfps()){
-                        fpCopy.add(fp.deepCopyFp());
-                    }
-                    
-                    resCopy.put(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), fpCopy);
-                    
-                    c.setOriginalFp(resCopy);
-            
-                    c.setFacialPoints(res.getFacialPoints());
-                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
-                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
-                    
-                    tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
-                        c.getFacialPoints(
-                                tc.getOneToManyViewerPanel().getListener2().getModel().getName()
-                        ));
-            
+                    //TODO: add new method
+//                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
+//                    tc.getOneToManyViewerPanel().getListener1().getModel());
+//                    
+//                    HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
+//                    List<FacialPoint> fpCopy;
+//                    
+//                    for(String key : res.getFacialPoints().keySet()){
+//                        fpCopy = new ArrayList<>();
+//                        for(FacialPoint fp : res.getFacialPoints().get(key)){
+//                            fpCopy.add(fp.deepCopyFp());
+//                        }
+//                        
+//                        resCopy.put(key, fpCopy);
+//                    }
+//                    
+//                    fpCopy = new ArrayList<>();
+//                    
+//                    for(FacialPoint fp : res.getMainFfps()){
+//                        fpCopy.add(fp.deepCopyFp());
+//                    }
+//                    
+//                    resCopy.put(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), fpCopy);
+//                    
+//                    c.setOriginalFp(resCopy);
+//            
+//                    c.setFacialPoints(res.getFacialPoints());
+//                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
+//                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
+//                    
+//                    tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
+//                        c.getFacialPoints(
+//                                tc.getOneToManyViewerPanel().getListener2().getModel().getName()
+//                        ));
+//            
             
                     //move to GUI manipulation eventually
                     registerButton.setEnabled(areFPCalculated(tc));

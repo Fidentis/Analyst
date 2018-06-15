@@ -456,7 +456,7 @@ public class FeaturePointsUniverse {
     //MESH SIMPLIFY
     public void computeSimplify() {
         // Ak je pocet polygonov vacsi ako 12000 tak zmensit
-        if (elementSet.getNumElements() > 12000) {
+        if (elementSet.getNumElements() > 7000) {
             computeSimplify(false, false, false, false, true, 10000);
         }
     
@@ -523,5 +523,31 @@ public class FeaturePointsUniverse {
     public List<FacialPoint> getAllPoints() {
         return facialPoints;
 }
+    
+    //PDM methods
+    
+    public double[] calculateCurvature(CurvatureType curveType, boolean f) {
+        curveControl = new CurvatureControl(boundaryVertices, elementSet);
+        return curveControl.computeCurvature(curveType);
+    }
+    
+    public CornerTable getCornerTable() {
+        return this.cornerTable;
+    }
+    
+    public Set<Set<Integer>> findNose(boolean notUsed) {  
+        calculateAnisotropicDenoise(10, PwSmooth.METHOD_ANISOTROPIC, 2.0, true);
+        calculateCurvature(CurvatureType.Minimum);
+        thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);
+        calculateThresholdFaces(15);
+        return findNoseTipAreaPDM();
+    }
+    
+    public Set<Set<Integer>> findNoseTipAreaPDM() {
+        return thresArea.findAllNoseTipAreas(thresholdFaces);
+    }
 
+    public ArrayList<Vector3f> getVerts() {
+        return verts;
+    }
 }

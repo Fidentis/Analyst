@@ -913,26 +913,27 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
+                    //TODO: add new landmark detection
                     final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-                    BatchComparison c = getContext();
-                    
-                    FpResultsBatch res = FpProcessing.instance().calculatePointsBatch(cancelTask,
-                            c.getModels());
-                    
-                    for(String key : res.getFps().keySet()){
-                        List<FacialPoint> originalFps = new ArrayList<>();
-                        for(FacialPoint fp : res.getFps().get(key))
-                            originalFps.add(fp.deepCopyFp());
-                        
-                        c.addOriginalFp(key, originalFps);
-                    }                    
-
-                    //move to GUI manipulation eventually
-                    c.setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
-                    tc.getViewerPanel_Batch().getListener().setFacialPoints(
-                             c.getFacialPoints(
-                                    tc.getViewerPanel_Batch().getListener().getModel().getName()
-                            ));
+//                    BatchComparison c = getContext();
+//                    
+//                    FpResultsBatch res = FpProcessing.instance().calculatePointsBatch(cancelTask,
+//                            c.getModels());
+//                    
+//                    for(String key : res.getFps().keySet()){
+//                        List<FacialPoint> originalFps = new ArrayList<>();
+//                        for(FacialPoint fp : res.getFps().get(key))
+//                            originalFps.add(fp.deepCopyFp());
+//                        
+//                        c.addOriginalFp(key, originalFps);
+//                    }                    
+//
+//                    //move to GUI manipulation eventually
+//                    c.setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
+//                    tc.getViewerPanel_Batch().getListener().setFacialPoints(
+//                             c.getFacialPoints(
+//                                    tc.getViewerPanel_Batch().getListener().getModel().getName()
+//                            ));
 
                     registerButton.setEnabled(areFPCalculated(tc));
                     exportFpButton.setEnabled(areFPCalculated(tc));

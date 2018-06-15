@@ -192,5 +192,62 @@ public class SortUtils {
         return sorted;
     }
     
+    // quick sort utils
     
+    private double array[];
+    private double array2[][];
+    private int length;
+    
+    public void quickSort(double[] inputArr, double[][] inputArr2) {
+
+        if (inputArr == null || inputArr.length == 0) {
+            return;
+        }
+        array = inputArr;
+        array2 = inputArr2;
+        length = inputArr.length;
+        quickSortMethod(0, length - 1);
+    }
+
+    private void quickSortMethod(int lowerIndex, int higherIndex) {
+
+        int i = lowerIndex;
+        int j = higherIndex;
+        // calculate pivot number, I am taking pivot as middle index number
+        double pivot = array[lowerIndex + (higherIndex - lowerIndex) / 2];
+        // Divide into two arrays
+        while (i <= j) {
+
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                exchangeNumbers(i, j);
+                //move index to next position on both sides
+                i++;
+                j--;
+            }
+        }
+        // call quickSort() method recursively
+        if (lowerIndex < j) {
+            quickSortMethod(lowerIndex, j);
+        }
+        if (i < higherIndex) {
+            quickSortMethod(i, higherIndex);
+        }
+    }
+
+    private void exchangeNumbers(int i, int j) {
+        double temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+
+        double[] temp2 = array2[i];
+        array2[i] = array2[j];
+        array2[j] = temp2;
+    }
+
 }

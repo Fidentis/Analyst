@@ -377,14 +377,16 @@ public class AgeingConfiguration extends javax.swing.JPanel {
                 };
                 ArrayList<File> models = new ArrayList<>(1);
                 models.add(ageing.getOriginModel().getFile());
-                FpResultsBatch result = FpProcessing.instance().calculatePointsBatch(cancelTask, models);
-                Model registered = ModelLoader.instance().loadModel(ageing.getOriginModel().getFile(), Boolean.TRUE, Boolean.TRUE);
-
-                List<FacialPoint> pts = result.getFps().get(ageing.getOriginModel().getName());
-                tc.getAgeingViewerPanel().getListenerOrigin().setModels(registered);
-                tc.getAgeingViewerPanel().getListenerOrigin().setFacialPoints(pts);
-                ageing.setOriginFacialPoints(pts);
-                ageing.setOriginModel(registered);
+                
+                //TODO: add new landmark detection
+//                FpResultsBatch result = FpProcessing.instance().calculatePointsBatch(cancelTask, models);
+//                Model registered = ModelLoader.instance().loadModel(ageing.getOriginModel().getFile(), Boolean.TRUE, Boolean.TRUE);
+//
+//                List<FacialPoint> pts = result.getFps().get(ageing.getOriginModel().getName());
+//                tc.getAgeingViewerPanel().getListenerOrigin().setModels(registered);
+//                tc.getAgeingViewerPanel().getListenerOrigin().setFacialPoints(pts);
+//                ageing.setOriginFacialPoints(pts);
+//                ageing.setOriginModel(registered);
                 computeButton.setEnabled(true);
             }
         };

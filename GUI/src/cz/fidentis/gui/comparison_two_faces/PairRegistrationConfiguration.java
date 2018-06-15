@@ -883,31 +883,31 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     
-                    
-                    calculatePointsButton.setEnabled(false);
-                    FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
-                            registerButton, exportPointsButton, calculatePointsButton);
-
-                    List<FacialPoint> mainCopy = new ArrayList<>();
-                    List<FacialPoint> secondaryCopy = new ArrayList<>();
-                    
-                    for(FacialPoint fp : res.getMainFps()){
-                        mainCopy.add(fp.deepCopyFp());
-                    }
-                    
-                    for(FacialPoint fp : res.getSecondaryFps()){
-                        secondaryCopy.add(fp.deepCopyFp());
-                    }
-                    
-                    tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
-                    tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
-                    
-                    c.setOriginalMainFp(mainCopy);
-                    c.setOriginalSecondaryFp(secondaryCopy);                   
-                     
-                    
-                    c.setMainFp(res.getMainFps());
-                    c.setSecondaryFp(res.getSecondaryFps());
+                    //TODO: add new landmark detection
+//                    calculatePointsButton.setEnabled(false);
+//                    FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
+//                            registerButton, exportPointsButton, calculatePointsButton);
+//
+//                    List<FacialPoint> mainCopy = new ArrayList<>();
+//                    List<FacialPoint> secondaryCopy = new ArrayList<>();
+//                    
+//                    for(FacialPoint fp : res.getMainFps()){
+//                        mainCopy.add(fp.deepCopyFp());
+//                    }
+//                    
+//                    for(FacialPoint fp : res.getSecondaryFps()){
+//                        secondaryCopy.add(fp.deepCopyFp());
+//                    }
+//                    
+//                    tc.getViewerPanel_2Faces().getListener1().initFpUniverse(res.getMainFps());
+//                    tc.getViewerPanel_2Faces().getListener2().initFpUniverse(res.getSecondaryFps());
+//                    
+//                    c.setOriginalMainFp(mainCopy);
+//                    c.setOriginalSecondaryFp(secondaryCopy);                   
+//                     
+//                    
+//                    c.setMainFp(res.getMainFps());
+//                    c.setSecondaryFp(res.getSecondaryFps());
                 }
             };
 

@@ -11,6 +11,7 @@
                 <package>Jama.examples</package>
                 <package>Jama.test</package>
                 <package>Jama.util</package>
+                <package>com.keypoint</package>
                 <package>javax.vecmath</package>
                 <package>jv.anim</package>
                 <package>jv.function</package>
@@ -40,6 +41,70 @@
                 <package>jvx.thirdParty.fonts</package>
                 <package>jvx.util</package>
                 <package>jvx.vector</package>
+                <package>org.jfree</package>
+                <package>org.jfree.base</package>
+                <package>org.jfree.base.config</package>
+                <package>org.jfree.base.log</package>
+                <package>org.jfree.base.modules</package>
+                <package>org.jfree.chart</package>
+                <package>org.jfree.chart.annotations</package>
+                <package>org.jfree.chart.axis</package>
+                <package>org.jfree.chart.block</package>
+                <package>org.jfree.chart.demo</package>
+                <package>org.jfree.chart.editor</package>
+                <package>org.jfree.chart.encoders</package>
+                <package>org.jfree.chart.entity</package>
+                <package>org.jfree.chart.event</package>
+                <package>org.jfree.chart.imagemap</package>
+                <package>org.jfree.chart.labels</package>
+                <package>org.jfree.chart.needle</package>
+                <package>org.jfree.chart.panel</package>
+                <package>org.jfree.chart.plot</package>
+                <package>org.jfree.chart.plot.dial</package>
+                <package>org.jfree.chart.renderer</package>
+                <package>org.jfree.chart.renderer.category</package>
+                <package>org.jfree.chart.renderer.xy</package>
+                <package>org.jfree.chart.resources</package>
+                <package>org.jfree.chart.servlet</package>
+                <package>org.jfree.chart.title</package>
+                <package>org.jfree.chart.urls</package>
+                <package>org.jfree.chart.util</package>
+                <package>org.jfree.data</package>
+                <package>org.jfree.data.category</package>
+                <package>org.jfree.data.contour</package>
+                <package>org.jfree.data.function</package>
+                <package>org.jfree.data.gantt</package>
+                <package>org.jfree.data.general</package>
+                <package>org.jfree.data.io</package>
+                <package>org.jfree.data.jdbc</package>
+                <package>org.jfree.data.resources</package>
+                <package>org.jfree.data.statistics</package>
+                <package>org.jfree.data.time</package>
+                <package>org.jfree.data.time.ohlc</package>
+                <package>org.jfree.data.xml</package>
+                <package>org.jfree.data.xy</package>
+                <package>org.jfree.date</package>
+                <package>org.jfree.experimental.chart.demo</package>
+                <package>org.jfree.experimental.chart.plot</package>
+                <package>org.jfree.experimental.chart.renderer.xy</package>
+                <package>org.jfree.experimental.chart.swt</package>
+                <package>org.jfree.experimental.chart.swt.demo</package>
+                <package>org.jfree.experimental.chart.swt.editor</package>
+                <package>org.jfree.experimental.swt</package>
+                <package>org.jfree.graphics2d</package>
+                <package>org.jfree.graphics2d.canvas</package>
+                <package>org.jfree.graphics2d.svg</package>
+                <package>org.jfree.io</package>
+                <package>org.jfree.layout</package>
+                <package>org.jfree.resources</package>
+                <package>org.jfree.text</package>
+                <package>org.jfree.threads</package>
+                <package>org.jfree.ui</package>
+                <package>org.jfree.ui.about</package>
+                <package>org.jfree.ui.about.resources</package>
+                <package>org.jfree.ui.action</package>
+                <package>org.jfree.ui.tabbedui</package>
+                <package>org.jfree.util</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/Jama-1.0.3.jar</runtime-relative-path>
@@ -50,12 +115,32 @@
                 <binary-origin>release/modules/ext/vecmath-1.5.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/jfreesvg-2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jfreesvg-2.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jfreechart-1.0.19-swt.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jfreechart-1.0.19-swt.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jcommon-1.0.23.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jcommon-1.0.23.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/jvx.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jvx.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/javaview.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/javaview.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jfreechart-1.0.19.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jfreechart-1.0.19.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jfreechart-1.0.19-experimental.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jfreechart-1.0.19-experimental.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

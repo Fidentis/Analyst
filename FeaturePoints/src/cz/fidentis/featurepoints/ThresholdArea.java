@@ -915,4 +915,64 @@ public class ThresholdArea {
         
         return thresholdFaces;
     }    
+    
+    
+    //PDM methods
+    
+    public Set<Set<Integer>> findAllNoseTipAreas(Set<Integer> thresholdFaces) {
+
+        Set<Set<Integer>> allRegions = new HashSet<>();
+        
+        thresholdBigestRegion.clear();
+        //tmpThresholdBigestRegion.clear();
+        visitedVertices.clear();
+
+        Set<SimpleEdge> thresholdEdges = getThresholdEdges(thresholdFaces);
+        Set<Integer> thresholdVertices = getThresholdVertices(thresholdFaces);
+        Corner actualCorner;
+
+        for (Corner corner : cornerTable.corners()) {
+            if (visitedVertices.add(corner.vertex) && visitedVertices.contains(corner.vertex)) {
+
+                Set<Integer> tmpArea = new HashSet<>();
+                
+                actualCorner = corner;
+                PdVector tmpPronasale = elementSet.getVertex(actualCorner.vertex);
+                tmpArea.add(actualCorner.vertex);
+
+                boolean continueFlag = true;
+                HashSet<Corner> nextCorners = new HashSet<Corner>();
+
+                while (continueFlag) {
+                    for (Corner corner2 : actualCorner.vertexNeighbors()) {
+                        if (thresholdVertices.contains(corner2.vertex) && tmpArea.add(corner2.vertex)
+                                && thresholdEdges.contains(new SimpleEdge(actualCorner.vertex, corner2.vertex))
+                                && visitedVertices.add(corner2.vertex)) {
+
+                            if (elementSet.getVertex(corner2.vertex).getEntry(2) > tmpPronasale.getEntry(2)) {
+                                tmpPronasale = elementSet.getVertex(corner2.vertex);
+                            }
+
+                            nextCorners.add(corner2);
+
+                        }
+                    }
+
+                    if (!nextCorners.isEmpty()) {
+                        actualCorner = nextCorners.iterator().next();
+                        nextCorners.remove(actualCorner);
+                    } else {
+                        continueFlag = false;
+                    }
+
+                }
+                
+                if(tmpArea.size() > 10)
+                    allRegions.add(tmpArea);
+
+                //tmpThresholdBigestRegion.clear();
+            }
+        }
+        return allRegions;
+    }
 }

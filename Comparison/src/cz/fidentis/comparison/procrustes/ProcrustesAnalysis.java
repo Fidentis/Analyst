@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.vecmath.Vector3f;
 
 /**
@@ -183,6 +184,10 @@ public class ProcrustesAnalysis implements Serializable {
         }
         
         return config.get(ft).getPosition();
+    }
+    
+    public FacialPoint getFP(Integer ix){
+        return config.get(ix);
     }
     
     public List<Integer> getFPtypeCorrespondence(ProcrustesAnalysis pa){
@@ -502,9 +507,10 @@ public class ProcrustesAnalysis implements Serializable {
      *
      * @param pa2 another configuration
      */
-    public ICPTransformation rotate(ProcrustesAnalysis pa2) {
+    public ICPTransformation rotate(ProcrustesAnalysis pa2, boolean PDM) {
         Matrix transConf2;
         Matrix origConf1;
+        Matrix landmarkConf;
         Matrix svdMat;
         Matrix u;
         Matrix v;
@@ -530,6 +536,14 @@ public class ProcrustesAnalysis implements Serializable {
         //config = config.times(r);
         origConf1 = origConf1.times(r);
         
+        if(PDM){
+            cor.clear();
+            cor.addAll(this.config.keySet());
+            
+            landmarkConf = this.createCorespondingMatrix(cor);
+            
+            origConf1 = landmarkConf.times(r);
+        }
         
         for(int i = 0; i < cor.size(); i++){
             FacialPoint newPoint = new FacialPoint(cor.get(i), new Vector3f((float) origConf1.get(i, 0), (float) origConf1.get(i, 1), (float) origConf1.get(i, 2)));
@@ -555,7 +569,19 @@ public class ProcrustesAnalysis implements Serializable {
        trans.add(this.normalize(scaling));
        pa2.normalize(scaling);
 
-       trans.add(pa2.rotate(this));
+       trans.add(pa2.rotate(this, false));
+       
+       return trans;
+    }
+    
+    // superimpose for PDM computation
+    public List<ICPTransformation> superimposePDM(ProcrustesAnalysis pa2, boolean scaling) {
+       List<ICPTransformation> trans = new LinkedList<>();
+        
+       trans.add(this.normalize(scaling));
+       trans.add(pa2.normalize(scaling));
+
+       trans.add(pa2.rotate(this, true));
        
        return trans;
     }
