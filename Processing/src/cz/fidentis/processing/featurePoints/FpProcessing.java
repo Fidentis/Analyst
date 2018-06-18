@@ -167,13 +167,9 @@ public class FpProcessing {
         // TODO REFACTOR
       
         
-        LandmarkLocalization localization;
-        try {
-            localization = new LandmarkLocalization();
-            computedPoints.addAll(localization.localizationOfLandmarks(model, fpTypes));
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+        LandmarkLocalization localization = LandmarkLocalization.instance();
+        computedPoints.addAll(localization.localizationOfLandmarks(model, fpTypes, null));
+
         
         //compute all facial points
         
@@ -348,15 +344,10 @@ public class FpProcessing {
         // TODO REFACTOR
       
         
-        LandmarkLocalization localization;
-        try {
-            localization = new LandmarkLocalization();
-            fps = localization.localizationOfLandmarks(model, fpTypes);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-            
-            fps = null;
-        }
+        LandmarkLocalization localization = LandmarkLocalization.instance();
+
+        fps = localization.localizationOfLandmarks(model, fpTypes, null);
+       
         
         //compute all facial points
         //fps = computeAllFacialPoints(centerPoints, model, trans);

@@ -19,6 +19,7 @@ import cz.fidentis.featurepoints.results.FpResultsPair;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
@@ -36,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -141,6 +143,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         fpScaleCheckBox = new javax.swing.JCheckBox();
+        pdmComboBox = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckbox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -651,6 +655,15 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        pdmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
+        pdmComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pdmComboBoxMouseClicked(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel15.text")); // NOI18N
+
         javax.swing.GroupLayout procrustesPanelLayout = new javax.swing.GroupLayout(procrustesPanel);
         procrustesPanel.setLayout(procrustesPanelLayout);
         procrustesPanelLayout.setHorizontalGroup(
@@ -694,6 +707,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(showFpInfoCheckbox))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         procrustesPanelLayout.setVerticalGroup(
             procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -706,6 +724,10 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculatePointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(loadPointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -797,7 +819,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(continueComparisonCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel5);
@@ -810,7 +832,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1318,6 +1340,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
         getContext().setFpScaling(fpScaleCheckBox.isSelected());
     }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
+
+    private void pdmComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pdmComboBoxMouseClicked
+        //refresh values
+        if(PDMList.instance().addedNewName())
+            pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
+    }//GEN-LAST:event_pdmComboBoxMouseClicked
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1366,6 +1394,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
        showFpInfoCheckbox.setSelected(c.isShowPointInfo());
        fpColorPanel.setBackground(c.getPointColor());
        fpSizeSlider.setValue(c.getFpSize());
+       
+       
        
        //ICP
        icpMetricComboBox.setSelectedIndex(c.getIcpMetric().ordinal());
@@ -1470,6 +1500,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1492,6 +1523,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JCheckBox noseCheckbox;
     private javax.swing.JRadioButton numberJRadio;
     private javax.swing.JSpinner numberSpinner;
+    private javax.swing.JComboBox<String> pdmComboBox;
     private javax.swing.JRadioButton percentageJRadio;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel procrustesPanel;

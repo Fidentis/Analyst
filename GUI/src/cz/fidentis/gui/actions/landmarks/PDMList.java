@@ -20,6 +20,7 @@ public class PDMList {
     private List<PDM> pdms;
     private static PDMList instance;
     private List<String> pdmNames = new LinkedList<>();
+    private boolean addedNewName = false;       //whether new values were added since list of PDM names was shown last time
     
     public static PDMList instance(){
         if(instance == null)
@@ -54,6 +55,15 @@ public class PDMList {
         return pdmNames;
     }
     
+    public String[] getPdmNamesArray(){
+        String[] list = new String[pdmNames.size()];
+        list = pdmNames.toArray(list);
+        
+        addedNewName = false;
+        
+        return list;
+    }
+    
     public void addPdm(PDM pdm) {
         //TODO: better checking than just reference?
         if(pdms.contains(pdm))
@@ -61,5 +71,12 @@ public class PDMList {
         
         this.pdms.add(pdm);
         this.pdmNames.add(pdm.getModelName());
+        addedNewName = true;
     }
+
+    public boolean addedNewName() {
+        return addedNewName;
+    }
+    
+    
 }
