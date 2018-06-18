@@ -19,6 +19,7 @@ import org.openide.util.Exceptions;
 public class PDMList {
     private List<PDM> pdms;
     private static PDMList instance;
+    private List<String> pdmNames = new LinkedList<>();
     
     public static PDMList instance(){
         if(instance == null)
@@ -27,7 +28,6 @@ public class PDMList {
         return instance;
     }
     
-
 
     private PDMList() {
         //load default model into options
@@ -43,11 +43,23 @@ public class PDMList {
         return pdms;
     }
     
+    public PDM getPdm(int index){
+        if(pdms.size() >= index)
+            return null;
+        
+        return pdms.get(index);
+    }
+    
+    public List<String> getPdmNames(){
+        return pdmNames;
+    }
+    
     public void addPdm(PDM pdm) {
         //TODO: better checking than just reference?
         if(pdms.contains(pdm))
             return;
         
         this.pdms.add(pdm);
+        this.pdmNames.add(pdm.getModelName());
     }
 }
