@@ -10,6 +10,7 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
+import cz.fidentis.processing.featurePoints.PDM;
 import static java.io.File.separatorChar;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -188,33 +189,37 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        List<FpModel> fpPointModel = FPImportExport.instance().importPoints(tc, false);
+        PDM pdm = FPImportExport.instance().importPDM(tc);
 
-        if(fpPointModel == null || fpPointModel.isEmpty())
+        if(pdm == null || pdm.getMeanShape().getFacialPoints().isEmpty())
             return;
         
-        actualTextField.setText(fpPointModel.get(0).getModelName());
+        //TODO make PDM accessible from other modules
+        actualTextField.setText(pdm.getModelName());
 
         StringBuilder infoText = new StringBuilder();
-        infoText.append("Model name: ").append(fpPointModel.get(0).getModelName()).append("\n");
-        infoText.append("Points number: ").append(fpPointModel.get(0).getPointsNumber());
+        infoText.append("Model name: ").append(pdm.getModelName()).append("\n");
+        infoText.append("Points number: ").append(pdm.getMeanShape().getPointsNumber());
         infoTextArea.setText(infoText.toString());
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void DefaultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DefaultButtonActionPerformed
 
-        List<FpModel> newTmp = new ArrayList<FpModel>();
+        PDM newTmp = null;
         try {
-            newTmp = CSVparser.load((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + "default.csv"));
+            newTmp = PDM.loadPDM((new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + "default.pdm"));
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
+        
+        if(newTmp == null)
+            return;
 
-        actualTextField.setText(newTmp.get(0).getModelName());
+        actualTextField.setText(newTmp.getModelName());
 
         StringBuilder infoText = new StringBuilder();
-        infoText.append("Model name: ").append(newTmp.get(0).getModelName()).append("\n");
-        infoText.append("Points number: ").append(newTmp.get(0).getPointsNumber());
+        infoText.append("Model name: ").append(newTmp.getModelName()).append("\n");
+        infoText.append("Points number: ").append(newTmp.getMeanShape().getPointsNumber());
         infoTextArea.setText(infoText.toString());
     }//GEN-LAST:event_DefaultButtonActionPerformed
 
