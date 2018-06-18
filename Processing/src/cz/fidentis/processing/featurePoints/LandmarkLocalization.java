@@ -22,10 +22,12 @@ import java.io.File;
 import static java.io.File.separatorChar;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.vecmath.Vector3f;
 import jv.geom.PgElementSet;
 import jv.vecmath.PdVector;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -34,10 +36,21 @@ import jv.vecmath.PdVector;
 public class LandmarkLocalization {
 
     private static File choosedTrainingModel = null;
-       
-    public LandmarkLocalization() throws IOException{
-        choosedTrainingModel = new File("D:\\Documents\\SVN\\Analyst2\\models\\resources\\trainingModels\\default.csv");
+    private static LandmarkLocalization instance = null;
+          
+    private LandmarkLocalization(){
+
     }
+    
+    public static LandmarkLocalization instance(){
+        if(instance == null)
+            instance = new LandmarkLocalization();
+        
+        return instance;
+    }
+
+    
+    
     
     /**
      * Landmark localization method, compute landmarks

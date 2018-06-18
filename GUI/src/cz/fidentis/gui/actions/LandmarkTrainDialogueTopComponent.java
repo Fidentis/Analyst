@@ -8,7 +8,9 @@ package cz.fidentis.gui.actions;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
+import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.processing.featurePoints.PDM;
 import cz.fidentis.processing.featurePoints.TrainingModel;
 import java.io.IOException;
@@ -233,15 +235,14 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles);
         
         progressBar.setValue(100);
-        
-        List<PDM> tmp = new ArrayList<>();
 
         newTrainingModel.setModelName(trainingModelTextField.getText());
-        tmp.add(newTrainingModel);
         
         if(newTrainingModel != null){
             saveButton.setEnabled(true);
         }
+        
+        PDMList.instance().addPdm(newTrainingModel);
     }//GEN-LAST:event_useButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed

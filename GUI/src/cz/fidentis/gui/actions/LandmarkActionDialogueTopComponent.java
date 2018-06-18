@@ -8,9 +8,12 @@ package cz.fidentis.gui.actions;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
+import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
+import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.processing.featurePoints.PDM;
+import cz.fidentis.processing.featurePoints.TrainingModel;
 import static java.io.File.separatorChar;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -193,14 +196,15 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
         if(pdm == null || pdm.getMeanShape().getFacialPoints().isEmpty())
             return;
-        
-        //TODO make PDM accessible from other modules
+
         actualTextField.setText(pdm.getModelName());
 
         StringBuilder infoText = new StringBuilder();
         infoText.append("Model name: ").append(pdm.getModelName()).append("\n");
         infoText.append("Points number: ").append(pdm.getMeanShape().getPointsNumber());
         infoTextArea.setText(infoText.toString());
+        
+        PDMList.instance().addPdm(pdm);
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void DefaultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DefaultButtonActionPerformed
@@ -221,6 +225,8 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
         infoText.append("Model name: ").append(newTmp.getModelName()).append("\n");
         infoText.append("Points number: ").append(newTmp.getMeanShape().getPointsNumber());
         infoTextArea.setText(infoText.toString());
+        
+        PDMList.instance().addPdm(newTmp);
     }//GEN-LAST:event_DefaultButtonActionPerformed
 
     private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed

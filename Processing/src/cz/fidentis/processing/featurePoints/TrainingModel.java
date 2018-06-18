@@ -25,7 +25,7 @@ import javax.vecmath.Vector3f;
 public class TrainingModel {
 
     private static TrainingModel instance = null;
-    
+
     private TrainingModel() {
     }
 
@@ -36,6 +36,7 @@ public class TrainingModel {
         
         return instance;
     }
+    
    
     /**
      * compute mean shape from .csv shapes
