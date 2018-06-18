@@ -7,6 +7,8 @@ package cz.fidentis.processing.featurePoints;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
+import cz.fidentis.comparison.procrustes.Procrustes2Models;
+import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.comparison.procrustes.ProcrustesBatchProcessing;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FpModel;
@@ -21,6 +23,19 @@ import javax.vecmath.Vector3f;
  * @author Rasto1
  */
 public class TrainingModel {
+
+    private static TrainingModel instance = null;
+    
+    private TrainingModel() {
+    }
+
+    public static TrainingModel instance(){
+        if(instance == null){
+            instance = new TrainingModel();
+        }
+        
+        return instance;
+    }
    
     /**
      * compute mean shape from .csv shapes
@@ -28,37 +43,82 @@ public class TrainingModel {
      * @param m model
      * @return mean shape as FpModel
      */
-    public FpModel trainigModel(List trainingShapes, Model m) {
+    public PDM trainigModel(List<FpModel> trainingShapes, Model m) {
 
+        
         FpModel meanShape = (FpModel) trainingShapes.get(0);
 
         meanShape.centralizeToModel(m);
+        
+        // MEAN SHAPE
         for (int i = 1; i < trainingShapes.size(); i++) {
 
-            FpModel values = (FpModel) trainingShapes.get(i);
+            FpModel values = trainingShapes.get(i);
 
             values.centralizeToModel(m);
 
-            for (int j = 0; j < values.getPointsNumber(); j++) {
-                FacialPoint point = meanShape.getFacialPoints().get(j);
-
-                meanShape.getFacialPoints().get(j).setCoords(new Vector3f(point.getPosition().x + values.getFacialPoints().get(j).getPosition().x,
-                        point.getPosition().y + values.getFacialPoints().get(j).getPosition().y,
-                        point.getPosition().z + values.getFacialPoints().get(j).getPosition().z));
-            }
-
+            addToMeanModel(values.getPointsNumber(), meanShape, values);
         }
 
-        for (int j = 0; j < meanShape.getPointsNumber(); j++) {
+        computeAverage(meanShape, trainingShapes.size());
+        
+        Matrix covarianceMatrix = covarianceMatrixFromData(meanShape, trainingShapes);
 
-            FacialPoint point = meanShape.getFacialPoints().get(j);
+        // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
+        int vals = (int) (meanShape.getPointsNumber() * 0.98);
+        Matrix[] eigenValues = getEigenValues(vals, covarianceMatrix);
+        Matrix eigenVectors = eigenValues[1];
+        
+        PDM pdm = new PDM(meanShape, eigenValues[0], eigenVectors);
 
-            meanShape.getFacialPoints().get(j).setCoords(new Vector3f(point.getPosition().x / trainingShapes.size(),
-                    point.getPosition().y / trainingShapes.size(),
-                    point.getPosition().z / trainingShapes.size()));
+        return pdm;
+    }
+
+    private Matrix covarianceMatrixFromData(FpModel meanShape, List<FpModel> trainingShapes) {
+        //EIGENVALUES AND EIGENVECTORS
+        
+        // creation of mean shape as matrix
+        Matrix meanShapeMatrix = new Matrix(meanShape.getPointsNumber(), 3);
+        for (int i = 0; i < meanShape.getPointsNumber(); i++) {
+            meanShapeMatrix.set(i, 0, meanShape.getFacialPoints().get(i).getPosition().x);
+            meanShapeMatrix.set(i, 1, meanShape.getFacialPoints().get(i).getPosition().y);
+            meanShapeMatrix.set(i, 2, meanShape.getFacialPoints().get(i).getPosition().z);
         }
+        // creation of covariance matrix 
+        Matrix covarianceMatrix = covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
+        return covarianceMatrix;
+    }
+    
+    public PDM trainingModel(List<FpModel> trainingShapes){
+        FpModel meanShape = trainingShapes.get(0);
+        FpModel meanShapeStatic = new FpModel(meanShape.getModelName());
+        meanShapeStatic.setFacialpoints(meanShape.createListFp());
+        
+        for(int i = 1; i < trainingShapes.size(); i++){
+            FpModel trainingShape = trainingShapes.get(i);
+            
+            ProcrustesAnalysis main = new ProcrustesAnalysis(meanShapeStatic.createListFp());
+            ProcrustesAnalysis comp = new ProcrustesAnalysis(trainingShape.getFacialPoints());
+            
+            comp.doProcrustesAnalysis(main, false);
+            
+            //TODO check if training model fp change after procrustes
+            addToMeanModel(trainingShape.getPointsNumber(), meanShape, trainingShape);
+            
+        }
+        
+        computeAverage(meanShape, trainingShapes.size());
+        
+        Matrix covarianceMatrix = covarianceMatrixFromData(meanShape, trainingShapes);
 
-        return meanShape;
+        // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
+        int vals = (int) (meanShape.getPointsNumber() * 0.98);
+        Matrix[] eigenValues = getEigenValues(vals, covarianceMatrix);
+        Matrix eigenVectors = eigenValues[1];
+        
+        PDM pdm = new PDM(meanShape, eigenValues[0], eigenVectors);
+
+        return pdm;
     }
     
     public List<FpModel> trainigModel(List<List<FacialPoint>> trainingShapes, List<ArrayList<Vector3f>> trainingVerts) {
@@ -79,6 +139,29 @@ public class TrainingModel {
 
         return meanShape;
     }
+    
+    private void addToMeanModel(int numberOfLandmarks, FpModel meanShape, FpModel trainingShape) {
+
+        for (int j = 0; j < numberOfLandmarks; j++) {
+            FacialPoint point = meanShape.getFacialPoints().get(j);
+
+            meanShape.getFacialPoints().get(j).getPosition().x += trainingShape.getFacialPoints().get(j).getPosition().x;
+            meanShape.getFacialPoints().get(j).getPosition().y += trainingShape.getFacialPoints().get(j).getPosition().y;
+            meanShape.getFacialPoints().get(j).getPosition().z += trainingShape.getFacialPoints().get(j).getPosition().z;
+        }
+    }
+    
+    private void computeAverage(FpModel meanShape, int numOfTrainingShapes){
+        
+        for (int j = 0; j < meanShape.getPointsNumber(); j++) {
+
+            FacialPoint point = meanShape.getFacialPoints().get(j);
+
+            meanShape.getFacialPoints().get(j).getPosition().x /= numOfTrainingShapes;
+            meanShape.getFacialPoints().get(j).getPosition().y /= numOfTrainingShapes;
+            meanShape.getFacialPoints().get(j).getPosition().z /= numOfTrainingShapes;
+        }
+    }
 
     /**
      * construct covariance matrix from mean shape and training shapes
@@ -87,7 +170,7 @@ public class TrainingModel {
      * @param m model
      * @return covariance matrix
      */
-    public Matrix covarianceMatrixCalculation(Matrix meanShape, List trainingShapes, Model m) {
+    public Matrix covarianceMatrixCalculation(Matrix meanShape, List trainingShapes) {
 
         Matrix covariance = new Matrix(meanShape.getRowDimension(), meanShape.getRowDimension());
 

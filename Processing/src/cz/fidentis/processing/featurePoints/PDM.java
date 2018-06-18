@@ -5,67 +5,102 @@
  */
 package cz.fidentis.processing.featurePoints;
 
-import cz.fidentis.featurepoints.FacialPoint;
+import Jama.Matrix;
 import cz.fidentis.featurepoints.FpModel;
-import cz.fidentis.landmarkParser.CSVparser;
-import static java.io.File.separatorChar;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.vecmath.Vector3f;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import org.openide.util.Exceptions;
 
 /**
  *
  * @author Rasto1
  */
-public class PDM {
-    public PDM(){
-        
+public class PDM implements Serializable{
+    private FpModel meanShape;
+    private Matrix eigenVectors;
+    private Matrix eigenValues;
+    private String modelName;
+
+    public PDM(FpModel meanShape, Matrix eigenVectors, Matrix eigenValues) {
+        this.meanShape = meanShape;
+        this.eigenVectors = eigenVectors;
+        this.eigenValues = eigenValues;
     }
-    
-    // create mean model from training shapes on input
-    public static FpModel trainigModel(List<FpModel> trainingShapes, String name) throws IOException {
 
-        FpModel meanShape;
-        meanShape = trainingShapes.get(0);
-        
-        for (int i = 1; i < trainingShapes.size(); i++) {
-            
-            List<FacialPoint> values = trainingShapes.get(i).getFacialPoints();
+    public PDM(FpModel meanShape, Matrix eigenVectors, Matrix eigenValues, String modelName) {
+        this.meanShape = meanShape;
+        this.eigenVectors = eigenVectors;
+        this.eigenValues = eigenValues;
+        this.modelName = modelName;
+    }
 
-            for (int j = 0; j < values.size(); j++) {
-                Vector3f point = meanShape.getFacialPoints().get(j).getPosition();
-                point.x += values.get(j).getPosition().x;
-                point.y += values.get(j).getPosition().y;
-                point.z += values.get(j).getPosition().z;
-
-                meanShape.getFacialPoints().get(j).setCoords(point);
-            }
-
-        }
-
-        for (int j = 0; j < meanShape.getPointsNumber(); j++) {
-            Vector3f point = meanShape.getFacialPoints().get(j).getPosition();
-            point.x /= trainingShapes.size();
-            point.y /= trainingShapes.size();
-            point.z /= trainingShapes.size();
-
-            meanShape.getFacialPoints().get(j).setCoords(point);
-        }
-        
-        CSVparser pars = new CSVparser();
-        
-        List<FpModel> fpModels = new ArrayList<>();
-        
-        fpModels.add(meanShape);
-        
-        for(int i = 0; i < trainingShapes.size(); i++){
-            fpModels.add(trainingShapes.get(i));
-        }
-        
-        pars.save(fpModels,new java.io.File(".").getCanonicalPath() + separatorChar + "models" + separatorChar + "resources" + separatorChar + "trainingModels" + separatorChar + name + ".csv");
-
+    public FpModel getMeanShape() {
         return meanShape;
     }
 
+    public Matrix getEigenVectors() {
+        return eigenVectors;
+    }
+
+    public Matrix getEigenValues() {
+        return eigenValues;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+    
+    public void savePDM(String savePath) {
+        ObjectOutputStream out;
+        try {
+            out = new ObjectOutputStream(
+                    new FileOutputStream(savePath + "_" + modelName + ".pdm")
+            );
+            
+            out.writeObject(this);
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException ex ) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        
+    }
+    
+    public static PDM loadPDM(String filePath){
+        ObjectInputStream in = null;
+        PDM pdm = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream(filePath));
+            pdm = (PDM) in.readObject();
+            in.close();
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ClassNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+        
+        return pdm;
+    }
+    
+   
 }

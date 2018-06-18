@@ -10,6 +10,7 @@ import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.processing.featurePoints.PDM;
+import cz.fidentis.processing.featurePoints.TrainingModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
 
     private List<FpModel> selectedFiles;
     
-    private FpModel newTrainingModel;
+    private PDM newTrainingModel;
     private LandmarkAnalysisWindow landmarks;
     
     public LandmarkTrainDialogueTopComponent() {
@@ -81,6 +82,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
 
         saveButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(saveButton, org.openide.util.NbBundle.getMessage(LandmarkTrainDialogueTopComponent.class, "LandmarkTrainDialogueTopComponent.saveButton.text")); // NOI18N
+        saveButton.setEnabled(false);
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -147,7 +149,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                                 .addComponent(loadModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(53, Short.MAX_VALUE))))
+                        .addContainerGap(55, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -217,28 +219,29 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
 
-        List<FpModel> tmp = new ArrayList<>();
+        List<PDM> tmp = new ArrayList<>();
 
         newTrainingModel.setModelName(trainingModelTextField.getText());
         tmp.add(newTrainingModel);
-        FPImportExport.instance().exportPoints(tc, tmp);
+        
+        FPImportExport.instance().exportPDM(tc, newTrainingModel);
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void useButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useButtonActionPerformed
         progressBar.setValue(0);
         
-        try {
-            newTrainingModel = PDM.trainigModel(selectedFiles, trainingModelTextField.getText());
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+        newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles);
         
         progressBar.setValue(100);
         
-        List<FpModel> tmp = new ArrayList<>();
+        List<PDM> tmp = new ArrayList<>();
 
         newTrainingModel.setModelName(trainingModelTextField.getText());
         tmp.add(newTrainingModel);
+        
+        if(newTrainingModel != null){
+            saveButton.setEnabled(true);
+        }
     }//GEN-LAST:event_useButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed

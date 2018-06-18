@@ -47,7 +47,7 @@ public class LandmarkLocalization {
      */
     public List<FacialPoint> localizationOfLandmarks(Model model, int[] fpTypes) {
         
-        TrainingModel train = new TrainingModel();
+        TrainingModel train = TrainingModel.instance();
 
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
         
@@ -75,7 +75,7 @@ public class LandmarkLocalization {
         }
 
         // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes, model);
+        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
 
         // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
         Matrix[] eigenValues = train.getEigenValues(9, covarianceMatrix);
@@ -291,7 +291,7 @@ public class LandmarkLocalization {
     
     public List<FacialPoint> localizationOfLandmarks(Model model, int[] fpTypes, Vector3f enl, Vector3f enr) {
         
-        TrainingModel train = new TrainingModel();
+        TrainingModel train = TrainingModel.instance();
 
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
         
@@ -319,7 +319,7 @@ public class LandmarkLocalization {
         }
 
         // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes, model);
+        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
 
         // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
         int vals = (int) (meanShape.getPointsNumber() * 0.98);
@@ -502,7 +502,7 @@ public class LandmarkLocalization {
     
     public List<FacialPoint> localizationOfLandmarks2(Model model, int[] fpTypes) {
         
-        TrainingModel train = new TrainingModel();
+        TrainingModel train = TrainingModel.instance();
 
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
         
@@ -530,7 +530,7 @@ public class LandmarkLocalization {
         }
 
         // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes, model);
+        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
 
         // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
         int vals = (int) (meanShape.getPointsNumber() * 0.98);
@@ -723,7 +723,7 @@ public class LandmarkLocalization {
     
     public List<FacialPoint> localizationOfLandmarks2(Model model, int[] fpTypes, Vector3f enl, Vector3f enr) {
         
-        TrainingModel train = new TrainingModel();
+        TrainingModel train = TrainingModel.instance();
 
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
         
@@ -751,7 +751,7 @@ public class LandmarkLocalization {
         }
 
         // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes, model);
+        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
 
         // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
         Matrix[] eigenValues = train.getEigenValues(9, covarianceMatrix);
