@@ -221,10 +221,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
 
-        List<PDM> tmp = new ArrayList<>();
-
         newTrainingModel.setModelName(trainingModelTextField.getText());
-        tmp.add(newTrainingModel);
         
         FPImportExport.instance().exportPDM(tc, newTrainingModel);
     }//GEN-LAST:event_saveButtonActionPerformed
