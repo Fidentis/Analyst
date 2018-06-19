@@ -17,6 +17,7 @@ import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.gui.guisetup.BatchGUIsetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
@@ -149,6 +150,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         fpScaleCheckBox = new javax.swing.JCheckBox();
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        pdmComboBox = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -692,6 +695,14 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel13.text")); // NOI18N
 
+        pdmComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pdmComboBoxMouseClicked(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel17.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -729,6 +740,11 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         .addComponent(fpScaleCheckBox)
                         .addGap(189, 189, 189))
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -741,6 +757,10 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addGap(7, 7, 7)
                 .addComponent(loadFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1339,6 +1359,12 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private void continueComparisonCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueComparisonCheckBoxActionPerformed
        getContext().setContinueComparison(continueComparisonCheckBox.isSelected());
     }//GEN-LAST:event_continueComparisonCheckBoxActionPerformed
+
+    private void pdmComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pdmComboBoxMouseClicked
+        //refresh values
+        if(PDMList.instance().addedNewName())
+        pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
+    }//GEN-LAST:event_pdmComboBoxMouseClicked
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         getContext().setPointColor(fpColorPanel.getBackground());
@@ -1377,6 +1403,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         fpPointInfoCheckBox.setSelected(c.isShowPointInfo());
         fpColorPanel.setBackground(c.getPointColor());
         fpSizeSlider.setValue(c.getFpSize());
+        pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
         
         //ICP
         icpMetricComboBox.setSelectedItem(c.getIcpMetric());
@@ -1507,6 +1534,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1527,6 +1555,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JButton loadFPButton;
     private javax.swing.JRadioButton numberRadioButton;
     private javax.swing.JSpinner numberSpinner;
+    private javax.swing.JComboBox<String> pdmComboBox;
     private javax.swing.JRadioButton percentageRadioButton;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JSlider radiusSlider;

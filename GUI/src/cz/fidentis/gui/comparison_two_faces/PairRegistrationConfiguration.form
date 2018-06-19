@@ -1053,11 +1053,6 @@
                   </Events>
                 </Component>
                 <Component class="javax.swing.JComboBox" name="pdmComboBox">
-                  <Properties>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(PDMList.instance().getPdmNamesArray())" type="code"/>
-                    </Property>
-                  </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pdmComboBoxMouseClicked"/>
                   </Events>

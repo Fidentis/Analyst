@@ -655,7 +655,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
-        pdmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
         pdmComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pdmComboBoxMouseClicked(evt);
@@ -1394,6 +1393,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
        showFpInfoCheckbox.setSelected(c.isShowPointInfo());
        fpColorPanel.setBackground(c.getPointColor());
        fpSizeSlider.setValue(c.getFpSize());
+       pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
        
        
        
