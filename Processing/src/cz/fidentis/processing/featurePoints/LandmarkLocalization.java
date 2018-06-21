@@ -50,27 +50,30 @@ public class LandmarkLocalization {
     }
 
     
-    public List<FacialPoint> localizationOfLandmarks(Model model, int[] fpTypes, PDM usedPdm) {
+    public List<FacialPoint> localizationOfLandmarks(Model model, PDM usedPdm) {
         
-        TrainingModel train = TrainingModel.instance();
-
+//        TrainingModel train = TrainingModel.instance();
+//
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
-        
-        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel}, fpTypes);
-        
-        FpModel meanShape = landmarksModels.get(0);
-        List trainingShapes = new ArrayList<>();
-        
-        for(int i = 1; i < landmarksModels.size(); i++){
-            trainingShapes.add(landmarksModels.get(i));
-        }
+//        
+//        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel}, fpTypes);
+//        
+//        FpModel meanShape = landmarksModels.get(0);
+//        List trainingShapes = new ArrayList<>();
+//        
+//        for(int i = 1; i < landmarksModels.size(); i++){
+//            trainingShapes.add(landmarksModels.get(i));
+//        }
         
         // static mean shape
         FpModel meanShapeStatic = new FpModel();
+        FpModel meanShape = new FpModel();
+        meanShape.setFacialpoints(usedPdm.getMeanShape().createListFp());
+        meanShapeStatic.setFacialpoints(usedPdm.getMeanShape().createListFp());
+        
+        Matrix eigenVectors = usedPdm.getEigenVectors();
 
-        meanShapeStatic.setFacialpoints(meanShape.createListFp());
-
-        // creation of mean shape as matrix
+//        // creation of mean shape as matrix
         Matrix meanShapeMatrix = new Matrix(meanShape.getPointsNumber(), 3);
 
         for (int i = 0; i < meanShape.getPointsNumber(); i++) {
@@ -78,14 +81,14 @@ public class LandmarkLocalization {
             meanShapeMatrix.set(i, 1, meanShape.getFacialPoints().get(i).getPosition().y);
             meanShapeMatrix.set(i, 2, meanShape.getFacialPoints().get(i).getPosition().z);
         }
-
-        // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
-
-        // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
-        int vals = (int) (meanShape.getPointsNumber() * 0.98);
-        Matrix[] eigenValues = train.getEigenValues(vals, covarianceMatrix);
-        Matrix eigenVectors = eigenValues[1];
+//
+//        // creation of covariance matrix 
+//        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
+//
+//        // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
+//        int vals = (int) (meanShape.getPointsNumber() * 0.98);
+//        Matrix[] eigenValues = train.getEigenValues(vals, covarianceMatrix);
+//        Matrix eigenVectors = eigenValues[1];
 
         FeaturePointsUniverse fpUni = new FeaturePointsUniverse(model);
         
@@ -129,21 +132,21 @@ public class LandmarkLocalization {
         List<Vector3f> eyeL = findAreaCandidates(left, kdCko, fpUni, simplifiedModel);
         List<Vector3f> eyeR = findAreaCandidates(right, kdCko, fpUni, simplifiedModel);
         
-        List<FacialPoint> listOfFacials = new ArrayList<FacialPoint>();
-        FacialPoint rCanFacial = new FacialPoint(3, new PdVector());
-        FacialPoint lCanFacial = new FacialPoint(4, new PdVector());
-        FacialPoint nCanFacial = new FacialPoint(14, new PdVector());
+        List<FacialPoint> listOfFacials;
+        FacialPoint rCanFacial = new FacialPoint(FacialPointType.EN_R.ordinal(), new PdVector());
+        FacialPoint lCanFacial = new FacialPoint(FacialPointType.EN_L.ordinal(), new PdVector());
+        FacialPoint nCanFacial = new FacialPoint(FacialPointType.PRN.ordinal(), new PdVector());
 
-        List<Vector3f> newVertices = new ArrayList<>();
-        List<Vector3f> newVerticesTmp = new ArrayList<>();
+        List<Vector3f> newVertices;
+        List<Vector3f> newVerticesTmp;
 
         // kd tree
         float bMinimum = 9999;
 
         Matrix finalBVector = null;
 
-        List<ICPTransformation> transMatrix = new ArrayList<ICPTransformation>();
-        List<ICPTransformation> finalTransMatrix = new ArrayList<ICPTransformation>();
+        List<ICPTransformation> transMatrix;
+        List<ICPTransformation> finalTransMatrix = new ArrayList<>();
 
         // procrustes analysis on mean shape
         ProcrustesAnalysis proc = new ProcrustesAnalysis(meanShape.getFacialPoints());
@@ -159,7 +162,7 @@ public class LandmarkLocalization {
                     
                     newVertices = new ArrayList<>();
                     newVerticesTmp = new ArrayList<>();
-                    listOfFacials = new ArrayList<FacialPoint>();
+                    listOfFacials = new ArrayList<>();
 
                     // candidates conversion to facial points
                     rCanFacial.setCoords(rCan);
@@ -260,10 +263,11 @@ public class LandmarkLocalization {
         }
 
         int currentType = 0;
+        List<FacialPoint> usedLandmarks = usedPdm.getMeanShape().getFacialPoints();
         
         // set final vertices
         for (int i = 0; i < finalVertices.getRowDimension(); i++) {
-            landmarks.add(new FacialPoint(fpTypes[currentType], kdCko.nearestNeighbour(new Vector3f((float) finalVertices.get(i, 0), (float) finalVertices.get(i, 1), (float) finalVertices.get(i, 2)))));
+            landmarks.add(new FacialPoint(usedLandmarks.get(i).getType(), kdCko.nearestNeighbour(new Vector3f((float) finalVertices.get(i, 0), (float) finalVertices.get(i, 1), (float) finalVertices.get(i, 2)))));
             currentType++;
         }
 
@@ -301,7 +305,7 @@ public class LandmarkLocalization {
         }
 
         // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
+        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes, fpTypes);
 
         // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
         Matrix[] eigenValues = train.getEigenValues(9, covarianceMatrix);

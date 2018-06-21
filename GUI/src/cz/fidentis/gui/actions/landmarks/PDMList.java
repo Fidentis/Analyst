@@ -45,7 +45,7 @@ public class PDMList {
     }
     
     public PDM getPdm(int index){
-        if(pdms.size() >= index)
+        if(pdms.size() <= index)
             return null;
         
         return pdms.get(index);

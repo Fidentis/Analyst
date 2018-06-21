@@ -74,6 +74,8 @@ public class FPImportExport {
     public List<FpModel> importPoints(Component tc, boolean allowMultiple) {
         //pick files to load
         File[] loadedFiles = DialogUtils.instance().openDialogueLoadFiles(tc, "Feature Points file", IMPORT_FP_EXTENSIONS, allowMultiple);
+        File f = new File("D:\\Documents\\SVN\\Analyst2\\models\\resources\\trainingModels\\default.csv");
+        loadedFiles[0] = f;
         
         // import the selected files
         return importPoints(loadedFiles);

@@ -5,6 +5,7 @@
  */
 package cz.fidentis.gui.actions;
 
+import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
@@ -232,7 +233,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private void useButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useButtonActionPerformed
         progressBar.setValue(0);
         
-        newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles);
+        newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles, null);
         
         progressBar.setValue(100);
 

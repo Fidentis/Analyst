@@ -110,7 +110,7 @@ public class FpProcessing {
      * secondary face
      */
     public FpResultsPair calculatePointsPair(Cancellable cancelTask, Model mainModel, Model secondaryModel,
-            JButton registerButton, JButton exportFpButton, JButton calculateAutoButton, int[] fpTypes) {
+            JButton registerButton, JButton exportFpButton, JButton calculateAutoButton, PDM pdm) {
         List<FacialPoint> mainFP = new ArrayList<>();
         List<FacialPoint> secondaryFP = new ArrayList<>();
         FpResultsPair res = null;
@@ -121,12 +121,12 @@ public class FpProcessing {
         Icp.instance().setP(p);
 
         //compute FPs for main face
-        if (computePointsForSingleFace(p, mainModel, mainFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, 1, fpTypes)) {
+        if (computePointsForSingleFace(p, mainModel, mainFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, 1, pdm)) {
             return res;
         }
 
         //compute FPs for secondary face
-        if (computePointsForSingleFace(p, secondaryModel, secondaryFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, 2, fpTypes)) {
+        if (computePointsForSingleFace(p, secondaryModel, secondaryFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, 2, pdm)) {
             return res;
         }
 
@@ -140,7 +140,7 @@ public class FpProcessing {
     //computes points for single face, returns false if all computations were performed correctly, true otherwise
     private boolean computePointsForSingleFace(ProgressHandle p, Model model, List<FacialPoint> computedPoints,
             JButton registerButton, JButton exportFpButton, JButton calculateAutoButton,
-            List<FacialPoint> mainFP, List<FacialPoint> secondaryFP, int faceNumber, int[] fpTypes) {
+            List<FacialPoint> mainFP, List<FacialPoint> secondaryFP, int faceNumber, PDM pdm) {
         List<ICPTransformation> trans;
         ArrayList<Vector3f> centerPoints;
 
@@ -168,7 +168,7 @@ public class FpProcessing {
       
         
         LandmarkLocalization localization = LandmarkLocalization.instance();
-        computedPoints.addAll(localization.localizationOfLandmarks(model, fpTypes, null));
+        computedPoints.addAll(localization.localizationOfLandmarks(model, pdm));
 
         
         //compute all facial points
@@ -282,7 +282,7 @@ public class FpProcessing {
      * @return feature points for N models and main face, along with list of
      * registered models
      */
-    public FpResultsOneToMany calculatePointsOneToMany(List<File> models, Model mainF,int[] fpTypes) {
+    public FpResultsOneToMany calculatePointsOneToMany(List<File> models, Model mainF, PDM pdm) {
         ProgressHandle p;
         FpResultsOneToMany results = null;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...");
@@ -300,13 +300,13 @@ public class FpProcessing {
             for (int i = 0; i < size; i++) {
                 model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
-                facialPoints = computePointsForSingleFace(p, model, fpTypes);
+                facialPoints = computePointsForSingleFace(p, model, pdm);
                 allFPs.put(model.getName(), facialPoints);
 
                 //p.progress(i * 100 / size);
             }
 
-            facialPoints = computePointsForSingleFace(p, mainF, fpTypes);
+            facialPoints = computePointsForSingleFace(p, mainF, pdm);
 
             results = new FpResultsOneToMany(facialPoints, (HashMap<String, List<FacialPoint>>) allFPs);
 
@@ -321,7 +321,7 @@ public class FpProcessing {
     }
 
     //computes points for single face
-    private List<FacialPoint> computePointsForSingleFace(ProgressHandle p, Model model, int[] fpTypes) {
+    private List<FacialPoint> computePointsForSingleFace(ProgressHandle p, Model model, PDM pdm) {
         List<ICPTransformation> trans;
         ArrayList<Vector3f> centerPoints;
         List<FacialPoint> fps;
@@ -346,7 +346,7 @@ public class FpProcessing {
         
         LandmarkLocalization localization = LandmarkLocalization.instance();
 
-        fps = localization.localizationOfLandmarks(model, fpTypes, null);
+        fps = localization.localizationOfLandmarks(model, pdm);
        
         
         //compute all facial points
@@ -366,7 +366,7 @@ public class FpProcessing {
      * disk
      * @return feature points for N models, along with list of registered models
      */
-    public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models, int[] fpTypes) {
+    public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models, PDM pdm) {
         int size = models.size();
 
         ProgressHandle p;
@@ -385,7 +385,7 @@ public class FpProcessing {
             }
             model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
-            facialPoints = computePointsForSingleFace(p, model, fpTypes);
+            facialPoints = computePointsForSingleFace(p, model, pdm);
             allFPs.put(model.getName(), facialPoints);
 
             //p.progress((int) (unit * (i + 1)));
