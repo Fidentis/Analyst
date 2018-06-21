@@ -139,6 +139,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         fpThresholdSlider = new javax.swing.JSlider();
         pdmComboBox = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel16 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel17 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -653,6 +657,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel15.text")); // NOI18N
 
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel16.text")); // NOI18N
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel17.text")); // NOI18N
+
         javax.swing.GroupLayout fpPanelLayout = new javax.swing.GroupLayout(fpPanel);
         fpPanel.setLayout(fpPanelLayout);
         fpPanelLayout.setHorizontalGroup(
@@ -673,13 +685,21 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             .addComponent(calculateFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(exportFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fpPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jSeparator3)
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(fpShowInfoCheckBox))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(exportFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -688,12 +708,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fpScaleCheckBox)
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fpPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         fpPanelLayout.setVerticalGroup(
             fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -704,14 +720,22 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(calculateFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(calculateFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -780,7 +804,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(regMethodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(fpPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(26, Short.MAX_VALUE))))
+                        .addContainerGap(14, Short.MAX_VALUE))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -890,40 +914,40 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 @Override
                 public void run() {
                     //TODO: add new method
-//                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
-//                    tc.getOneToManyViewerPanel().getListener1().getModel());
-//                    
-//                    HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
-//                    List<FacialPoint> fpCopy;
-//                    
-//                    for(String key : res.getFacialPoints().keySet()){
-//                        fpCopy = new ArrayList<>();
-//                        for(FacialPoint fp : res.getFacialPoints().get(key)){
-//                            fpCopy.add(fp.deepCopyFp());
-//                        }
-//                        
-//                        resCopy.put(key, fpCopy);
-//                    }
-//                    
-//                    fpCopy = new ArrayList<>();
-//                    
-//                    for(FacialPoint fp : res.getMainFfps()){
-//                        fpCopy.add(fp.deepCopyFp());
-//                    }
-//                    
-//                    resCopy.put(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), fpCopy);
-//                    
-//                    c.setOriginalFp(resCopy);
-//            
-//                    c.setFacialPoints(res.getFacialPoints());
-//                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
-//                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
-//                    
-//                    tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
-//                        c.getFacialPoints(
-//                                tc.getOneToManyViewerPanel().getListener2().getModel().getName()
-//                        ));
-//            
+                    FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
+                    tc.getOneToManyViewerPanel().getListener1().getModel(), PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
+                    
+                    HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
+                    List<FacialPoint> fpCopy;
+                    
+                    for(String key : res.getFacialPoints().keySet()){
+                        fpCopy = new ArrayList<>();
+                        for(FacialPoint fp : res.getFacialPoints().get(key)){
+                            fpCopy.add(fp.deepCopyFp());
+                        }
+                        
+                        resCopy.put(key, fpCopy);
+                    }
+                    
+                    fpCopy = new ArrayList<>();
+                    
+                    for(FacialPoint fp : res.getMainFfps()){
+                        fpCopy.add(fp.deepCopyFp());
+                    }
+                    
+                    resCopy.put(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), fpCopy);
+                    
+                    c.setOriginalFp(resCopy);
+            
+                    c.setFacialPoints(res.getFacialPoints());
+                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
+                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
+                    
+                    tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
+                        c.getFacialPoints(
+                                tc.getOneToManyViewerPanel().getListener2().getModel().getName()
+                        ));
+            
             
                     //move to GUI manipulation eventually
                     registerButton.setEnabled(areFPCalculated(tc));
@@ -1478,6 +1502,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1492,6 +1518,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JSpinner maxIterationSpinner;
     private javax.swing.JRadioButton numberRadioButton;

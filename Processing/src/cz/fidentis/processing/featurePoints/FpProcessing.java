@@ -141,38 +141,13 @@ public class FpProcessing {
     private boolean computePointsForSingleFace(ProgressHandle p, Model model, List<FacialPoint> computedPoints,
             JButton registerButton, JButton exportFpButton, JButton calculateAutoButton,
             List<FacialPoint> mainFP, List<FacialPoint> secondaryFP, int faceNumber, PDM pdm) {
-        List<ICPTransformation> trans;
-        ArrayList<Vector3f> centerPoints;
-
-        p.switchToDeterminate(100);
-        p.progress("Registering model" + faceNumber + " to generic face", 0);
-
-        //register face to generic model
-        //trans = faceRegistration(model);
-        if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {      //if thread was interrupted by user during computation finish here
-            return true;
-        }
-        p.switchToDeterminate(100);
-        p.progress("Getting center of face " + faceNumber, 0);
-
-        //compute center of the face
-       // centerPoints = getCenterOfFace(model, true);
-        if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {
-            return true;
-        }
-
+       
         p.progress("Computing feature points of face " + faceNumber, 100);
         p.switchToIndeterminate();
 
-        // TODO REFACTOR
-      
-        
         LandmarkLocalization localization = LandmarkLocalization.instance();
         computedPoints.addAll(localization.localizationOfLandmarks(model, pdm));
-
-        
-        //compute all facial points
-        
+  
         //computedPoints.addAll(computeAllFacialPoints(centerPoints, model, trans));
         if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {
             return true;
@@ -199,17 +174,6 @@ public class FpProcessing {
         return true;
     }
 
-    //checks if FPs were calculated for 1:N mode
-    private Boolean areFPCalculated(Map<String, List<FacialPoint>> allFPs, List<FacialPoint> mainFp, List<File> models) {
-        for (File f : models) {
-            List<FacialPoint> fp = allFPs.get(f.getName());            //??
-            if (fp == null || fp.isEmpty()) {
-                return false;
-            }
-        }
-
-        return !(mainFp == null || mainFp.isEmpty());
-    }
 
     //set up buttons appropriatelly, if all FPs were computed, enable export and registre button
     private void finish(JButton registerButton, JButton exportFpButton, JButton calculateAutoButton, ProgressHandle p,
@@ -220,55 +184,6 @@ public class FpProcessing {
         calculateAutoButton.setEnabled(true);
     }
 
-    //computes all facial points that software is currently capable of computing and reverts ICP transformations performed during FP computation
-    private List<FacialPoint> computeAllFacialPoints(ArrayList<Vector3f> centerPoints, Model m, List<ICPTransformation> transformations) {    
-
-        FpDetector fpDetector = new FpDetector(m);
-        List<FacialPoint> facialPoints = fpDetector.computeAllFPs(centerPoints);
-
-        revertPerformedTransformations(facialPoints, m, transformations);
-
-        return facialPoints;
-    }
-
-    private void revertPerformedTransformations(List<FacialPoint> facialPoints, Model m, List<ICPTransformation> transformations) {
-        //revert transformations computed during computing FP
-        FpModel model = FPImportExport.instance().getFpModelFromFP(facialPoints,
-                m.getName());
-
-        if (model != null) {          //if there was no problem with creating FP mode
-
-            //apply reverse ICP transformation to computed FP
-            List<Vector3f> modelFP = model.listOfFP();
-            Icp.instance().reverseAllTransformations(transformations, modelFP, true);
-            Icp.instance().reverseAllTransformations(transformations, m.getVerts(), true);
-        }
-
-        //return facialPoints;
-    }
-
-    //computes all points from fpUniverse
-    private List<FacialPoint> computePointsFromFpUniverse(FeaturePointsUniverse fpUniverse, ArrayList<Vector3f> centerPoints) {
-        List<FacialPoint> facialPoints;
-        fpUniverse.findNose();
-        fpUniverse.findMouth();
-        fpUniverse.findEyes();
-        facialPoints = fpUniverse.getFacialPoints();
-
-        if (centerPoints != null) {
-            facialPoints = fpUniverse.getSymmetryPlaneFPs(centerPoints);
-        }
-        return facialPoints;
-    }
-
-    //sets up Java View console so that it doesn't pop up
-    private void setUpJavaViewConsole() {
-        PsDebug.setDebug(false);
-        PsDebug.setError(false);
-        PsDebug.setWarning(false);
-        PsDebug.setMessage(false);
-        PsDebug.getConsole().setVisible(false);
-    }
 
     /**
      * Computes and returns feature points for all loaded faces in 1:N mode.
@@ -302,8 +217,6 @@ public class FpProcessing {
 
                 facialPoints = computePointsForSingleFace(p, model, pdm);
                 allFPs.put(model.getName(), facialPoints);
-
-                //p.progress(i * 100 / size);
             }
 
             facialPoints = computePointsForSingleFace(p, mainF, pdm);
@@ -322,35 +235,15 @@ public class FpProcessing {
 
     //computes points for single face
     private List<FacialPoint> computePointsForSingleFace(ProgressHandle p, Model model, PDM pdm) {
-        List<ICPTransformation> trans;
-        ArrayList<Vector3f> centerPoints;
+
         List<FacialPoint> fps;
-
-        p.switchToDeterminate(100);
-        p.progress("Registering model" + model.getName() + " to generic face", 0);
-
-        //register face to generic model
-        trans = faceRegistration(model);
-
-        p.switchToDeterminate(100);
-        p.progress("Getting center of face " + model.getName(), 0);
-
-        //compute center of the face
-        centerPoints = getCenterOfFace(model, true);
 
         p.progress("Computing feature points of face " + model.getName(), 100);
         p.switchToIndeterminate();
 
-        // TODO REFACTOR
-      
-        
         LandmarkLocalization localization = LandmarkLocalization.instance();
 
         fps = localization.localizationOfLandmarks(model, pdm);
-       
-        
-        //compute all facial points
-        //fps = computeAllFacialPoints(centerPoints, model, trans);
 
         return fps;
     }

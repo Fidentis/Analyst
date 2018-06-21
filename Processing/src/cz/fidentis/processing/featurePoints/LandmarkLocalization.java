@@ -52,19 +52,8 @@ public class LandmarkLocalization {
     
     public List<FacialPoint> localizationOfLandmarks(Model model, PDM usedPdm) {
         
-//        TrainingModel train = TrainingModel.instance();
-//
         List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
-//        
-//        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel}, fpTypes);
-//        
-//        FpModel meanShape = landmarksModels.get(0);
-//        List trainingShapes = new ArrayList<>();
-//        
-//        for(int i = 1; i < landmarksModels.size(); i++){
-//            trainingShapes.add(landmarksModels.get(i));
-//        }
-        
+
         // static mean shape
         FpModel meanShapeStatic = new FpModel();
         FpModel meanShape = new FpModel();
@@ -81,14 +70,6 @@ public class LandmarkLocalization {
             meanShapeMatrix.set(i, 1, meanShape.getFacialPoints().get(i).getPosition().y);
             meanShapeMatrix.set(i, 2, meanShape.getFacialPoints().get(i).getPosition().z);
         }
-//
-//        // creation of covariance matrix 
-//        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes);
-//
-//        // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
-//        int vals = (int) (meanShape.getPointsNumber() * 0.98);
-//        Matrix[] eigenValues = train.getEigenValues(vals, covarianceMatrix);
-//        Matrix eigenVectors = eigenValues[1];
 
         FeaturePointsUniverse fpUni = new FeaturePointsUniverse(model);
         
@@ -199,8 +180,6 @@ public class LandmarkLocalization {
 
                         newVerticesTmp.add(new Vector3f((float) newVertex.get(0, 0) - transMatrix.get(1).getTranslation().x , (float) newVertex.get(1, 0) - transMatrix.get(1).getTranslation().y , (float) newVertex.get(2, 0) - transMatrix.get(1).getTranslation().z ));
                     }
-
-                    //Quaternion q = new Quaternion().setFromMatrix(floats);
 
                     // b vector computation
                     Matrix newVerticesMatrix = new Matrix(newVerticesTmp.size(), 3);
