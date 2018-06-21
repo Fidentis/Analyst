@@ -56,22 +56,31 @@ public class PDMList {
     }
     
     public String[] getPdmNamesArray(){
-        String[] list = new String[pdmNames.size()];
-        list = pdmNames.toArray(list);
+        String[] names = getPdmNamesArrayNoRefresh();
         
         addedNewName = false;
+
+        return names;       
+    }
+    
+    public String[] getPdmNamesArrayNoRefresh(){
+        String[] list = new String[pdmNames.size()];
+        list = pdmNames.toArray(list);
         
         return list;
     }
     
-    public void addPdm(PDM pdm) {
+    //Returns whether item was successfull added
+    public boolean addPdm(PDM pdm) {
         //TODO: better checking than just reference?
         if(pdms.contains(pdm))
-            return;
+            return false;
         
         this.pdms.add(pdm);
         this.pdmNames.add(pdm.getModelName());
         addedNewName = true;
+        
+        return true;
     }
 
     public boolean addedNewName() {

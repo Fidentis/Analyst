@@ -28,12 +28,15 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     
     private PDM newTrainingModel;
     private LandmarkAnalysisWindow landmarks;
+    private LandmarkActionDialogueTopComponent parent;
     
-    public LandmarkTrainDialogueTopComponent() {
+    public LandmarkTrainDialogueTopComponent(LandmarkActionDialogueTopComponent parent) {
         this.landmarks = new LandmarkAnalysisWindow();
         this.selectedFiles = new ArrayList<>();
+        this.parent = parent;
         initComponents();
         trainingModelTextField.setText("undefined");
+
     }
 
     /**
@@ -239,7 +242,9 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
             saveButton.setEnabled(true);
         }
         
-        PDMList.instance().addPdm(newTrainingModel);
+        boolean added = PDMList.instance().addPdm(newTrainingModel);
+        if(added)
+            parent.addItemToPDMBox(newTrainingModel.getModelName());
     }//GEN-LAST:event_useButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
