@@ -403,6 +403,9 @@ public class FPImportExport {
     public PDM importPDM(final Component tc){
         File[] loadedFiles = DialogUtils.instance().openDialogueLoadFiles(tc, "Point Distribution Model (.pdm)", PDM_EXTENSION, false);
         
+        if(loadedFiles == null || loadedFiles.length == 0)
+            return null;
+        
         PDM pdm = PDM.loadPDM(loadedFiles[0].getAbsolutePath());
         
         return pdm;
