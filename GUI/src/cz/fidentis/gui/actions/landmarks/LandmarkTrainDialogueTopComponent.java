@@ -5,6 +5,7 @@
  */
 package cz.fidentis.gui.actions.landmarks;
 
+import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
@@ -16,6 +17,10 @@ import cz.fidentis.processing.featurePoints.PDM;
 import cz.fidentis.processing.featurePoints.TrainingModel;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import org.openide.util.Exceptions;
@@ -30,11 +35,13 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private PDM newTrainingModel;
     private LandmarkAnalysisWindow landmarks;
     private LandmarkActionDialogueTopComponent parent;
+    private HashMap<Integer, Boolean> landmarksUsage;
     
     public LandmarkTrainDialogueTopComponent(LandmarkActionDialogueTopComponent parent) {
         this.landmarks = new LandmarkAnalysisWindow();
         this.selectedFiles = new ArrayList<>();
         this.parent = parent;
+        landmarksUsage = new HashMap<>();
         initComponents();
         trainingModelTextField.setText("undefined");
 
@@ -52,7 +59,6 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         removeButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         modelList = new javax.swing.JList<>();
-        progressBar = new javax.swing.JProgressBar();
         useButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         saveModelLabel = new java.awt.Label();
@@ -62,6 +68,9 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         modelsForTrainingLabel = new java.awt.Label();
         trainingModelTextField = new javax.swing.JTextField();
         trainingModelLabel = new java.awt.Label();
+        chooseLandmarksButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
 
         jPanel1.setPreferredSize(new java.awt.Dimension(576, 420));
 
@@ -75,8 +84,6 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         });
 
         jScrollPane1.setViewportView(modelList);
-
-        progressBar.setStringPainted(true);
 
         useButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(useButton, org.openide.util.NbBundle.getMessage(LandmarkTrainDialogueTopComponent.class, "LandmarkTrainDialogueTopComponent.useButton.text")); // NOI18N
@@ -120,6 +127,13 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         trainingModelLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         trainingModelLabel.setText(org.openide.util.NbBundle.getMessage(LandmarkTrainDialogueTopComponent.class, "LandmarkTrainDialogueTopComponent.trainingModelLabel.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(chooseLandmarksButton, org.openide.util.NbBundle.getMessage(LandmarkTrainDialogueTopComponent.class, "LandmarkTrainDialogueTopComponent.chooseLandmarksButton.text")); // NOI18N
+        chooseLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseLandmarksButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,35 +145,41 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                     .addComponent(modelsForTrainingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(removeButton))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(trainingModelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(trainingModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(82, 82, 82))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(generateNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(35, 35, 35)
-                                        .addComponent(useButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(52, 52, 52)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(saveModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(loadModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(55, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(loadModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(chooseLandmarksButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(trainingModelTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(trainingModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator2)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(generateNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(useButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(59, 59, 59)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(saveModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,7 +189,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 86, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -178,11 +198,17 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
                 .addComponent(trainingModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(trainingModelTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(88, 88, 88)
+                .addGap(18, 18, 18)
+                .addComponent(chooseLandmarksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(generateNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -190,9 +216,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(useButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -207,7 +231,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -215,10 +239,15 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
 
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        List<FpModel> fpPoints = FPImportExport.instance().importPoints(tc, true);
+        List<FpModel> fpPoints = FPImportExport.instance().importPoints(tc, Boolean.TRUE);
 
         if(fpPoints != null){
             landmarks.addFilesHandler(fpPoints, selectedFiles, modelList);
+            
+            landmarksUsage.clear();
+            for(FacialPoint fp : fpPoints.get(0).getFacialPoints()){
+                landmarksUsage.put(fp.getType(), Boolean.TRUE);
+            }
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
@@ -231,11 +260,9 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void useButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useButtonActionPerformed
-        progressBar.setValue(0);
+        Integer[] usedFp = createSortedActiveFpArray();
         
-        newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles, null);
-        
-        progressBar.setValue(100);
+        newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles, usedFp);
 
         newTrainingModel.setModelName(trainingModelTextField.getText());
         
@@ -257,15 +284,41 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         }
     }//GEN-LAST:event_removeButtonActionPerformed
 
+    private void chooseLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseLandmarksButtonActionPerformed
+        PickTrainingLandmarkDialog choosePoints = new PickTrainingLandmarkDialog(this, landmarksUsage);
+        choosePoints.setVisible(true);
+    }//GEN-LAST:event_chooseLandmarksButtonActionPerformed
+
+    public void setUsedLandmarks(HashMap<Integer, Boolean> usedLandmarks){
+        landmarksUsage = usedLandmarks;
+    }
+    
+    private Integer[] createSortedActiveFpArray(){
+        List<Integer> activeFp = new LinkedList<>();
+        
+        for(Integer i : landmarksUsage.keySet())
+            if(landmarksUsage.get(i))
+                activeFp.add(i);
+        
+        Collections.sort(activeFp);
+        
+        Integer[] sorted = new Integer[activeFp.size()];
+        sorted = activeFp.toArray(sorted);
+        
+        return sorted;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton chooseLandmarksButton;
     private java.awt.Label generateNewLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton loadButton;
     private java.awt.Label loadModelLabel;
     private javax.swing.JList<String> modelList;
     private java.awt.Label modelsForTrainingLabel;
-    private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton removeButton;
     private javax.swing.JButton saveButton;
     private java.awt.Label saveModelLabel;

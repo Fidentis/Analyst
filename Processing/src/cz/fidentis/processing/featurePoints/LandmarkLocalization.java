@@ -254,27 +254,19 @@ public class LandmarkLocalization {
      }
         
     
-    public List<FacialPoint> localizationOfLandmarks2(Model model, int[] fpTypes, PDM usedPdm, Vector3f enl, Vector3f enr) {
+    public List<FacialPoint> localizationOfLandmarks2(Model model, Integer[] fpTypes, PDM usedPdm, Vector3f enl, Vector3f enr) {
         
-        TrainingModel train = TrainingModel.instance();
+    List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
 
-        List<FacialPoint> landmarks = new ArrayList<FacialPoint>();
-        
-        List<FpModel> landmarksModels = loadTrainingSets(new File[]{choosedTrainingModel}, fpTypes);
-        
-        FpModel meanShape = landmarksModels.get(0);
-        List trainingShapes = new ArrayList<>();
-        
-        for(int i = 1; i < landmarksModels.size(); i++){
-            trainingShapes.add(landmarksModels.get(i));
-        }
-        
         // static mean shape
         FpModel meanShapeStatic = new FpModel();
+        FpModel meanShape = new FpModel();
+        meanShape.setFacialpoints(usedPdm.getMeanShape().createListFp());
+        meanShapeStatic.setFacialpoints(usedPdm.getMeanShape().createListFp());
+        
+        Matrix eigenVectors = usedPdm.getEigenVectors();
 
-        meanShapeStatic.setFacialpoints(meanShape.createListFp());
-
-        // creation of mean shape as matrix
+//        // creation of mean shape as matrix
         Matrix meanShapeMatrix = new Matrix(meanShape.getPointsNumber(), 3);
 
         for (int i = 0; i < meanShape.getPointsNumber(); i++) {
@@ -282,13 +274,6 @@ public class LandmarkLocalization {
             meanShapeMatrix.set(i, 1, meanShape.getFacialPoints().get(i).getPosition().y);
             meanShapeMatrix.set(i, 2, meanShape.getFacialPoints().get(i).getPosition().z);
         }
-
-        // creation of covariance matrix 
-        Matrix covarianceMatrix = train.covarianceMatrixCalculation(meanShapeMatrix, trainingShapes, fpTypes);
-
-        // construction of eigen values and eigen vectors, sort by size, eigenValues[i] > eigenValues[i+1]
-        Matrix[] eigenValues = train.getEigenValues(9, covarianceMatrix);
-        Matrix eigenVectors = eigenValues[1];
 
         FeaturePointsUniverse fpUni = new FeaturePointsUniverse(model);
 

@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.print.Collation;
 import javax.swing.JOptionPane;
 
 /**
@@ -155,6 +156,15 @@ public class FpTexter {
     
     public int getNumberOfLandmarks(){
         return fpTexts.size();
+    }
+    
+    public int getTypeFromName(String name){
+        for(Integer i : fpTexts.keySet()){
+            if(getFPname(i).equals(name))
+                return i;
+        }
+        
+        return FacialPointType.undefined.ordinal();
     }
     
     /**

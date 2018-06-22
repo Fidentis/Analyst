@@ -26,7 +26,7 @@ import javax.vecmath.Vector3f;
 public class TrainingModel {
 
     private static TrainingModel instance = null;
-    private int[] USED_LM = new int[]{FacialPointType.EX_R.ordinal(), FacialPointType.EX_L.ordinal(), FacialPointType.EN_R.ordinal(), FacialPointType.EN_L.ordinal(), 
+    private Integer[] USED_LM = new Integer[]{FacialPointType.EX_R.ordinal(), FacialPointType.EX_L.ordinal(), FacialPointType.EN_R.ordinal(), FacialPointType.EN_L.ordinal(), 
         FacialPointType.PAS_R.ordinal(), FacialPointType.PAS_L.ordinal(), FacialPointType.PAI_R.ordinal(), FacialPointType.PAI_L.ordinal(), FacialPointType.G.ordinal(),
         FacialPointType.SN.ordinal(),FacialPointType.AL_L.ordinal(), FacialPointType.AL_R.ordinal(), FacialPointType.N.ordinal(), FacialPointType.PRN.ordinal()
      }; //USED LM HAVE TO BE SORTED BY INDEX RIGHT NOW!! (probably won't work if some index is skipped)
@@ -49,7 +49,7 @@ public class TrainingModel {
      * @param m model
      * @return mean shape as FpModel
      */
-    public PDM trainigModel(List<FpModel> trainingShapes, Model m, int[] fpTypes) {
+    public PDM trainigModel(List<FpModel> trainingShapes, Model m, Integer[] fpTypes) {
         if(fpTypes == null)
             fpTypes = USED_LM;
         
@@ -82,7 +82,7 @@ public class TrainingModel {
     }
     
     //TODO check for missing landmarks
-    private FpModel createMeanModel(FpModel base, int[] fpTypes){
+    private FpModel createMeanModel(FpModel base, Integer[] fpTypes){
         FpModel mean = new FpModel();
         List<FacialPoint> fps = new ArrayList<>(fpTypes.length);
         
@@ -95,7 +95,7 @@ public class TrainingModel {
         return mean;
     }
 
-    private Matrix covarianceMatrixFromData(FpModel meanShape, List<FpModel> trainingShapes, int[] fpTypes) {
+    private Matrix covarianceMatrixFromData(FpModel meanShape, List<FpModel> trainingShapes, Integer[] fpTypes) {
         //EIGENVALUES AND EIGENVECTORS
         
         // creation of mean shape as matrix
@@ -110,7 +110,7 @@ public class TrainingModel {
         return covarianceMatrix;
     }
     
-    public PDM trainingModel(List<FpModel> trainingShapes, int[] fpTypes){
+    public PDM trainingModel(List<FpModel> trainingShapes, Integer[] fpTypes){
         if(fpTypes == null)
             fpTypes = USED_LM;
         
@@ -164,7 +164,7 @@ public class TrainingModel {
         return meanShape;
     }
     
-    private void addToMeanModel(FpModel meanShape, FpModel trainingShape, int[] fpTypes) {
+    private void addToMeanModel(FpModel meanShape, FpModel trainingShape, Integer[] fpTypes) {
 
         for (Integer j : fpTypes) {
             FacialPoint point = meanShape.getFacialPoint(j);
@@ -194,7 +194,7 @@ public class TrainingModel {
      * @param m model
      * @return covariance matrix
      */
-    public Matrix covarianceMatrixCalculation(Matrix meanShape, List trainingShapes, int[] fpTypes) {
+    public Matrix covarianceMatrixCalculation(Matrix meanShape, List trainingShapes, Integer[] fpTypes) {
 
         Matrix covariance = new Matrix(meanShape.getRowDimension(), meanShape.getRowDimension());
 

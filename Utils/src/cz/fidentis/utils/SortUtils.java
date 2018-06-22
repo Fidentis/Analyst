@@ -7,6 +7,7 @@
 package cz.fidentis.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -248,6 +249,12 @@ public class SortUtils {
         double[] temp2 = array2[i];
         array2[i] = array2[j];
         array2[j] = temp2;
+    }
+    
+    public <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
+        List<T> list = new ArrayList<>(c);
+        java.util.Collections.sort(list);
+        return list;
     }
 
 }
