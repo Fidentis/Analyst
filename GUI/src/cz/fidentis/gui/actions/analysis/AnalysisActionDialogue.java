@@ -12,7 +12,7 @@ import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.featurepoints.landmarks.FPAnalysisMethods;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.gui.actions.LandmarkAnalysisWindow;
+import cz.fidentis.gui.actions.landmarks.LandmarkAnalysisWindow;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

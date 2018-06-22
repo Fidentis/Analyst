@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.fidentis.gui.actions;
+package cz.fidentis.gui.actions.landmarks;
 
 import cz.fidentis.featurepoints.FpModel;
 import java.awt.event.ActionEvent;
