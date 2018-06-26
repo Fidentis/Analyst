@@ -81,6 +81,12 @@ public class Faces {
         this.texCoords = texCoords;
     }
 
+    public ArrayList<int[]> getFacesTexIdxs() {
+        return facesTexIdxs;
+    }
+    
+    
+
     /**
      * Add face by parsing line from obj file. Indexing of vertex, normal and
      * texture coordinates strats with 1(comes from obj format). A correction of

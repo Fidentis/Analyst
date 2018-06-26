@@ -116,11 +116,6 @@ public class FeaturePointsUniverse {
     public void calculateCurvature(CurvatureType curveType) {
         curveControl = new CurvatureControl(boundaryVertices, elementSet);
         curvatureValues = curveControl.computeCurvature(curveType);
-//        if (colorType == ColorType.NoColors) {
-//            colorType = ColorType.Deviation;
-//        }
-
-        //setCurvatureColors(colorType);
     }
 
     public PgElementSet setCurvatureColors(ColorType colorType) {
@@ -535,7 +530,7 @@ public class FeaturePointsUniverse {
         return this.cornerTable;
     }
     
-    public Set<Set<Integer>> findNose(boolean notUsed) {  
+    public Set<Set<Integer>> findAllNoses() {  
         calculateAnisotropicDenoise(10, PwSmooth.METHOD_ANISOTROPIC, 2.0, true);
         calculateCurvature(CurvatureType.Minimum);
         thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);

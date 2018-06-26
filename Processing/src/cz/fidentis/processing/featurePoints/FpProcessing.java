@@ -5,36 +5,22 @@
  */
 package cz.fidentis.processing.featurePoints;
 
-import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
-import cz.fidentis.comparison.kdTree.KDTreeIndexed;
-import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FeaturePointsUniverse;
-import cz.fidentis.featurepoints.FpDetector;
 import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.featurepoints.results.FpResultsPair;
-import cz.fidentis.featurepoints.symmetryplane.MirroredModel;
-import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
-import cz.fidentis.processing.exportProcessing.FPImportExport;
-import cz.fidentis.utils.MeshUtils;
 import java.io.File;
-import static java.io.File.separatorChar;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
-import javax.vecmath.Vector3f;
-import jv.object.PsDebug;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -43,13 +29,7 @@ import org.openide.util.Exceptions;
 public class FpProcessing {
 
     private static FpProcessing instance;
-    private static KdTree mainF;
 
-    private List arrL = new ArrayList<>();
-    
-    public void removelol(List i){
-        arrL = i;
-    }
     
     public static FpProcessing instance() {
         if (instance == null) {
@@ -60,41 +40,6 @@ public class FpProcessing {
     }
 
     private FpProcessing() {
-        String genericFacePath = "";
-        try {
-            genericFacePath = new java.io.File(".").getCanonicalPath();
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-        if (!genericFacePath.equals("")) {
-            genericFacePath = genericFacePath + separatorChar + "models" + separatorChar + "resources" + separatorChar + "average_face.obj";
-            Model genericFace = ModelLoader.instance().loadModel(new File(genericFacePath), false, true);
-            mainF = new KDTreeIndexed(genericFace.getVerts());
-        }
-    }
-
-    //register face to generic face in frankfurt position, returns transformations performed during ICP process
-    public List<ICPTransformation> faceRegistration(Model compareFace) {
-        if (mainF == null) {
-            //error
-            return null;
-        }
-
-        List<ICPTransformation> trans = Icp.instance().icp(mainF, compareFace.getVerts(), compareFace.getVerts(), 0.f, 20, true);
-        return trans;
-
-    }
-
-    //computes center of the given face and its mirror
-    private ArrayList<Vector3f> getCenterOfFace(Model model, boolean registrate) {
-        Model mirroredModel = MeshUtils.instance().getMirroredModel(model);
-
-        if (registrate) {
-            //KdTree mainF = new KdTreeIndexed(model.getVerts());
-            Icp.instance().icp(mainF, mirroredModel.getVerts(), mirroredModel.getVerts(), 0.f, 20, true);
-        }
-
-        return MirroredModel.getCenterPoints(model, mirroredModel);
     }
 
     /**
@@ -121,12 +66,12 @@ public class FpProcessing {
         Icp.instance().setP(p);
 
         //compute FPs for main face
-        if (computePointsForSingleFace(p, mainModel, mainFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, 1, pdm)) {
+        if (computePointsForSingleFace(p, mainModel, mainFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, pdm)) {
             return res;
         }
 
         //compute FPs for secondary face
-        if (computePointsForSingleFace(p, secondaryModel, secondaryFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, 2, pdm)) {
+        if (computePointsForSingleFace(p, secondaryModel, secondaryFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, pdm)) {
             return res;
         }
 
@@ -140,13 +85,12 @@ public class FpProcessing {
     //computes points for single face, returns false if all computations were performed correctly, true otherwise
     private boolean computePointsForSingleFace(ProgressHandle p, Model model, List<FacialPoint> computedPoints,
             JButton registerButton, JButton exportFpButton, JButton calculateAutoButton,
-            List<FacialPoint> mainFP, List<FacialPoint> secondaryFP, int faceNumber, PDM pdm) {
+            List<FacialPoint> mainFP, List<FacialPoint> secondaryFP, PDM pdm) {
        
-        p.progress("Computing feature points of face " + faceNumber, 100);
+        p.progress("Computing feature points of face " + model.getName(), 100);
         p.switchToIndeterminate();
-
-        LandmarkLocalization localization = LandmarkLocalization.instance();
-        computedPoints.addAll(localization.localizationOfLandmarks(model, pdm));
+        
+        computedPoints.addAll(computePointsForSingleFace(p, model, pdm));
   
         //computedPoints.addAll(computeAllFacialPoints(centerPoints, model, trans));
         if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {
@@ -243,8 +187,12 @@ public class FpProcessing {
 
         LandmarkLocalization localization = LandmarkLocalization.instance();
 
-        fps = localization.localizationOfLandmarks(model, pdm);
-
+        if(model.getMatrials() != null){
+            fps = localization.landmarkDetectionTexture(model, pdm);
+        }else{
+           fps = localization.localizationOfLandmarks(model, pdm); 
+        }
+      
         return fps;
     }
 
@@ -280,6 +228,7 @@ public class FpProcessing {
 
             facialPoints = computePointsForSingleFace(p, model, pdm);
             allFPs.put(model.getName(), facialPoints);
+
 
             //p.progress((int) (unit * (i + 1)));
         }

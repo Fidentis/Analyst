@@ -218,7 +218,7 @@ public class AreasSearch {
             simpModelVertices.add(v);
         }
 
-        Set<Set<Integer>> allRegions = fpUniverse.findNose(false);
+        Set<Set<Integer>> allRegions = fpUniverse.findAllNoses();
 
         //Get min and max curvature for shape and curvedness computation
         double[] minCurv = fpUniverse.calculateCurvature(CurvatureType.Minimum, true);
