@@ -102,10 +102,16 @@ public class LandmarkLocalization {
         List<Vector3f> simplifiedModel = new ArrayList<>();
         PgElementSet set = fpUni.getElementSet();
 
-        for (int j = 0; j < set.getVertices().length; j++) {
-
+        for (int j = 0; j < set.getNumElements(); j++) {
+            if(set.getVertex(j) == null){
+                //this occurs when meshes have too few vertices to simplify
+                //no data should be lost
+                break;
+            }
+            
             Vector3f v = new Vector3f((float) set.getVertex(j).getEntry(0), (float) set.getVertex(j).getEntry(1), (float) set.getVertex(j).getEntry(2));
             simplifiedModel.add(v);
+
         }
 
 

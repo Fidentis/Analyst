@@ -450,11 +450,11 @@ public class FeaturePointsUniverse {
     
     //MESH SIMPLIFY
     public void computeSimplify() {
-        // Ak je pocet polygonov vacsi ako 12000 tak zmensit
+        // Ak je pocet polygonov vacsi ako 7000 tak zmensit
         if (elementSet.getNumElements() > 7000) {
             computeSimplify(false, false, false, false, true, 10000);
         }
-    
+        
         JavaViewBoundary jVboundary = new JavaViewBoundary(elementSet);
         boundaryEdges = jVboundary.getBoundaryEdges();
         boundaryVertices = jVboundary.getBoundaryVertices();
