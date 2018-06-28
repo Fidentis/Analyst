@@ -91,8 +91,41 @@ public class AreasSearch {
         
         //Continual areas
         Set<Set<Integer>> areas = findAreas(possiblePoints, fpUniverse.getCornerTable(), false, 20);
+        Set<Integer> theArea = findAreaClosestToCenter(areas, simplifiedModel, centerFace);         
+        List<Vector3f> verts = new ArrayList<>();  
+        
+        //Find area, that has center closest to the center of the face
+        for (Integer v : theArea) {
+            verts.add(simplifiedModel.get(v));
+        }
+        
+        Vector3f centerArea = findCenterOfArea(verts);
+
+        //This is same as for the nose, refactor, use same method
+        //Sphere fitting -- kinda
+        //Find which point in area contains the most other points
+        //In area, if we place sphere to the center of it with sphereRadius
+        int eye = sphereFit(theArea, simplifiedModel, 15.0f);
+        
+        Vector3f eyeCornerProbably = simplifiedModel.get(eye);
+        fps.add(new FacialPoint(eye, eyeCornerProbably));
+
+        //remove the area that you found, and do the rest one the rest of areas
+        areas.remove(theArea);
+        
+        //Find area which center is closest to the measured distance between two eye corners
+        theArea = findAreaClosestToCenter(areas, simplifiedModel, centerArea);
+
+        eye = sphereFit(theArea, simplifiedModel, eyeDist);        
+        
+        eyeCornerProbably = simplifiedModel.get(eye);
+        fps.add(new FacialPoint(eye, eyeCornerProbably));
+   
+        return fps;
+    }
+    
+    private Set<Integer> findAreaClosestToCenter(Set<Set<Integer>> areas, List<Vector3f> simplifiedModel, Vector3f centerFace){
         Set<Integer> theArea = null;
-        Vector3f centerArea = null;
         float minDist = Float.MAX_VALUE;
         
         //Find area, that has center closest to the center of the face
@@ -109,93 +142,10 @@ public class AreasSearch {
                 if(dist < minDist){
                     theArea = a;
                     minDist = dist;
-                    centerArea = center;
-                }
-            }
-        
-        //TO DO REFACTOR
-        
-        //This is same as for the nose, refactor, use same method
-        //Sphere fitting -- kinda
-        //Find which point in area contains the most other points
-        //In area, if we place sphere to the center of it with sphereRadius
-        int eye = 0;
-        int numOfPoints = 0;
-        float sphereRadius = 15.0f;
-
-        for (Integer k : theArea) {
-            int pointsInRadius = 0;
-
-            for (Integer j : theArea) {
-                if (k == j) {
-                    continue;
-                }
-
-                if (MathUtils.instance().distancePoints(simplifiedModel.get(k), simplifiedModel.get(j)) <= sphereRadius) {
-                    pointsInRadius++;
-                }
-            }
-
-            if (numOfPoints < pointsInRadius) {
-                eye = k;
-                numOfPoints = pointsInRadius;
-            }
+                 }
         }
-
-
-        Vector3f eyeCornerProbably = simplifiedModel.get(eye);
-        fps.add(new FacialPoint(eye, eyeCornerProbably));
-
-        //remove the area that you found, and do the rest one the rest of areas
-        areas.remove(theArea);
-        minDist = Float.MAX_VALUE;
         
-        //Find area which center is closest to the measured distance between two eye corners
-        for (Set<Integer> a : areas) {
-                List<Vector3f> verts = new ArrayList<>();
-
-                for (Integer i : a) {
-                    verts.add(simplifiedModel.get(i));
-                }
-
-                Vector3f center = findCenterOfArea(verts);
-                float dist = (float) Math.abs(eyeDist - MathUtils.instance().distancePoints(center, centerArea));
-                
-                if(dist < minDist){
-                    theArea = a;
-                    minDist = dist;
-                }
-            }
-        
-        eye = 0;        
-        numOfPoints = 0;
-
-        //Sphere fitting again
-        for (Integer k : theArea) {
-            int pointsInRadius = 0;
-
-            for (Integer j : theArea) {
-                if (k == j) {
-                    continue;
-                }
-
-                if (MathUtils.instance().distancePoints(simplifiedModel.get(k), simplifiedModel.get(j)) <= sphereRadius) {
-                    pointsInRadius++;
-                }
-            }
-
-            if (numOfPoints < pointsInRadius) {
-                eye = k;
-                numOfPoints = pointsInRadius;
-            }
-        }
-
-
-        eyeCornerProbably = simplifiedModel.get(eye);
-        fps.add(new FacialPoint(eye, eyeCornerProbably));
-
-        
-        return fps;
+        return theArea;
     }
     
     /**
@@ -257,13 +207,22 @@ public class AreasSearch {
             }
         }
 
+        int nose = sphereFit(area, simpModelVertices, 10.0f);
+
+        Vector3f noseTipProbably = simpModelVertices.get(nose);
+        fps.clear();
+        fps.add(new FacialPoint(FacialPointType.PRN.ordinal(), noseTipProbably));
+
+        return fps;
+    }
+
+    //Returns index of the vertex with best sphere fit
+    private int sphereFit(Set<Integer> area, List<Vector3f> simpModelVertices, float sphereRadius) {
         //Sphere fitting -- kinda
         //Find which point in area contains the most other points
-        //In area, if we place sphere to the center of it with sphereRadius
-        int nose = 0;
+        //from the area, if we place sphere to the center of it with sphereRadius
+        int ix = 0;
         int numOfPoints = 0;
-        float sphereRadius = 10.0f;
-
         for (Integer k : area) {
             int pointsInRadius = 0;
 
@@ -278,16 +237,11 @@ public class AreasSearch {
             }
 
             if (numOfPoints < pointsInRadius) {
-                nose = k;
+                ix = k;
                 numOfPoints = pointsInRadius;
             }
         }
-
-        Vector3f noseTipProbably = simpModelVertices.get(nose);
-        fps.clear();
-        fps.add(new FacialPoint(FacialPointType.PRN.ordinal(), noseTipProbably));
-
-        return fps;
+        return ix;
     }
     
     /////// Help methods for search

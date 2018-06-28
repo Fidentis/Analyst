@@ -186,7 +186,7 @@ public class FpProcessing {
 
         LandmarkLocalization localization = LandmarkLocalization.instance();
 
-        if(model.getMatrials() != null){
+        if(model.getMatrials() == null){
             fps = localization.landmarkDetectionTexture(model, pdm);
         }else{
            fps = localization.localizationOfLandmarks(model, pdm); 
