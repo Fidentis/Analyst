@@ -11,6 +11,5 @@ package cz.fidentis.featurepoints.landmarks;
  */
 public enum FPAnalysisMethods {
     EUCLID,
-    NRMSE,
-    NONE
+    NRMSE
 }

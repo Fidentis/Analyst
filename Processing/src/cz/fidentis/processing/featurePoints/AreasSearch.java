@@ -26,6 +26,8 @@ import jv.geom.PgElementSet;
  */
 public class AreasSearch {
     
+    private static final int MIN_NOSE_AREA_SIZE = 10;
+    
     /**
      * Method which finds eye corners of model
      * @param set model set
@@ -218,7 +220,7 @@ public class AreasSearch {
             simpModelVertices.add(v);
         }
 
-        Set<Set<Integer>> allRegions = fpUniverse.findAllNoses();
+        Set<Set<Integer>> allRegions = fpUniverse.findAllNoses(MIN_NOSE_AREA_SIZE);
 
         //Get min and max curvature for shape and curvedness computation
         double[] minCurv = fpUniverse.calculateCurvature(CurvatureType.Minimum, true);
@@ -299,7 +301,7 @@ public class AreasSearch {
         vv.addAll(vertices);
 
         for (Integer i : vertices) {
-            if (discardBoundries && ct.getVertexCorner(i, ct).isBoundary()) {
+            if (discardBoundries && ct.getVertexCorner(i).isBoundary()) {
                 continue;
             }
 

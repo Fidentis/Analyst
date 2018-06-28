@@ -1965,39 +1965,6 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         info.initFpUniverse(points);
     }
 
-    public void /*List<FacialPoint>*/ computeAllFacialPoints(ArrayList<Vector3f> centerPoints) {
-        PsDebug.setDebug(false);
-        PsDebug.setError(false);
-        PsDebug.setWarning(false);
-        PsDebug.setMessage(false);
-        FeaturePointsUniverse fpu = info.getFpUniverse();
-        fpu.findNose();
-        //facialPoints = fpUniverse.getFacialPoints();
-        fpu.findMouth();
-        //facialPoints = fpUniverse.getFacialPoints();
-        fpu.findEyes();
-        //facialPoints = fpUniverse.getFacialPoints();
-        PsDebug.getConsole().setVisible(false);
-
-        if (centerPoints != null) {
-            info.setFacialPoints(fpu.getSymmetryPlaneFPs(centerPoints));
-        }
-
-        //revert transformations computed during computing FP
-        FpModel model = FPImportExport.instance().getFpModelFromFP(info.getFacialPoints(),
-                info.getModels().get(0).getName());
-
-        if (model != null) {          //if there was no problem with creating FP mode
-
-            //apply reverse ICP transformation to computed FP
-            List<Vector3f> modelFP = model.listOfFP();
-            Icp.instance().reverseAllTransformations(info.getTransformations(), modelFP, true);
-            Icp.instance().reverseAllTransformations(info.getTransformations(), info.getModels().get(0).getVerts(), true);
-
-        }
-
-        //return facialPoints;
-    }
 
     public int getIndexOfSelectedPoint() {
         return info.getIndexOfSelectedPoint();

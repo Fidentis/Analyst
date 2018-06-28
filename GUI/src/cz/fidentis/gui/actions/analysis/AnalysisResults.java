@@ -42,7 +42,7 @@ public final class AnalysisResults extends TopComponent {
         initComponents();
         notMatchTextArea.setEditable(false);
         computeResults = LandmarkUtils.computeFp(method, selectedFiles, selectedFilesSecond);
-        notMatchTextArea.setText(LandmarkUtils.getNotIn());
+        notMatchTextArea.setText(LandmarkUtils.getUnpairedModels());
         fillTable();
     }
 
@@ -149,11 +149,11 @@ public final class AnalysisResults extends TopComponent {
         panel.setDisplayToolTips(true);
         panel.setDismissDelay(DISSMIS_WAIT_TIME);
         
-        JPanel jPanel4 = new JPanel(new BorderLayout());
+        JPanel boxplotPanel = new JPanel(new BorderLayout());
         
-        jPanel4.add(panel);
+        boxplotPanel.add(panel);
         JFrame frame = new JFrame();
-        frame.add(jPanel4);
+        frame.add(boxplotPanel);
         frame.pack();
         frame.setVisible(true);
 

@@ -6,24 +6,18 @@
 package cz.fidentis.gui.actions.landmarks;
 
 import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
-import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.processing.featurePoints.PDM;
 import cz.fidentis.processing.featurePoints.TrainingModel;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 
 
@@ -59,7 +53,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         removeButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         modelList = new javax.swing.JList<>();
-        useButton = new javax.swing.JButton();
+        trainButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         saveModelLabel = new java.awt.Label();
         generateNewLabel = new java.awt.Label();
@@ -88,11 +82,11 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
 
         jScrollPane1.setViewportView(modelList);
 
-        useButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(useButton, org.openide.util.NbBundle.getMessage(LandmarkTrainDialogueTopComponent.class, "LandmarkTrainDialogueTopComponent.useButton.text")); // NOI18N
-        useButton.addActionListener(new java.awt.event.ActionListener() {
+        trainButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(trainButton, org.openide.util.NbBundle.getMessage(LandmarkTrainDialogueTopComponent.class, "LandmarkTrainDialogueTopComponent.trainButton.text")); // NOI18N
+        trainButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                useButtonActionPerformed(evt);
+                trainButtonActionPerformed(evt);
             }
         });
 
@@ -166,7 +160,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                                     .addComponent(generateNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(35, 35, 35)
-                                        .addComponent(useButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(59, 59, 59)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(saveModelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,7 +201,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(useButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         statsuLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -232,7 +226,7 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statsuLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -259,24 +253,40 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
         FPImportExport.instance().exportPDM(tc, newTrainingModel);
     }//GEN-LAST:event_saveButtonActionPerformed
 
-    private void useButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useButtonActionPerformed
-        setStatusLabel("Training model " + trainingModelTextField.getText());
-        Integer[] usedFp = createSortedActiveFpArray();
-        
-        newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles, usedFp);
+    private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                trainButton.setEnabled(false);
+                saveButton.setEnabled(false);
+                
+                setStatusLabel("Training model " + trainingModelTextField.getText());
+                Integer[] usedFp = createSortedActiveFpArray();
 
-        newTrainingModel.setModelName(trainingModelTextField.getText());
+                newTrainingModel = TrainingModel.instance().trainingModel(selectedFiles, usedFp);
+
+                newTrainingModel.setModelName(trainingModelTextField.getText());
+
+                boolean added = PDMList.instance().addPdm(newTrainingModel);
+                if (added) {
+                    parent.addItemToPDMBox(newTrainingModel.getModelName());
+                }
+
+                setStatusLabel("Finished training model " + trainingModelTextField.getText());
+                
+                //Check: added should be true every time new model is created
+                // but might change if PDM equals method changes
+                if (added) {
+                    saveButton.setEnabled(true);
+                }
+                
+                trainButton.setEnabled(true);
+            }
+        };
         
-        if(newTrainingModel != null){
-            saveButton.setEnabled(true);
-        }
+        run.run();
         
-        boolean added = PDMList.instance().addPdm(newTrainingModel);
-        if(added)
-            parent.addItemToPDMBox(newTrainingModel.getModelName());
-        
-        setStatusLabel("Finished training model " + trainingModelTextField.getText());
-    }//GEN-LAST:event_useButtonActionPerformed
+    }//GEN-LAST:event_trainButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         DefaultListModel model = (DefaultListModel) modelList.getModel();
@@ -330,9 +340,9 @@ public final class LandmarkTrainDialogueTopComponent extends TopComponent {
     private javax.swing.JButton saveButton;
     private java.awt.Label saveModelLabel;
     private javax.swing.JLabel statsuLabel;
+    private javax.swing.JButton trainButton;
     private java.awt.Label trainingModelLabel;
     private javax.swing.JTextField trainingModelTextField;
-    private javax.swing.JButton useButton;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {

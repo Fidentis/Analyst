@@ -907,13 +907,11 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         if (areModelsLoaded(GUIController.getSelectedProjectTopComponent())) {
             final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
             final OneToManyComparison c = getContext();
-            
-            //calculatePoints();
+
             Runnable run = new Runnable() {
 
                 @Override
                 public void run() {
-                    //TODO: add new method
                     FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
                     tc.getOneToManyViewerPanel().getListener1().getModel(), PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
                     

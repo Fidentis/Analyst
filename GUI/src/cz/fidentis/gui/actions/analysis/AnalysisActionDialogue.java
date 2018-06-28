@@ -32,7 +32,6 @@ public final class AnalysisActionDialogue extends TopComponent {
     private List<FpModel> selectedFiles;
     private List<FpModel> selectedFilesSecond;
     private LandmarkAnalysisWindow landmarks;
-    private static final String[] FP_EXTENSIONS = new String[]{"pp", "PP", "fp", "FP", "csv", "CSV", "pts", "PTS", "dta", "DTA"};
 
     public AnalysisActionDialogue() {
         this.landmarks = new LandmarkAnalysisWindow();
@@ -93,12 +92,7 @@ public final class AnalysisActionDialogue extends TopComponent {
             }
         });
 
-        computeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Euclid", "NRMSE" }));
-        computeComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                computeComboBoxActionPerformed(evt);
-            }
-        });
+        computeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(FPAnalysisMethods.values()));
 
         org.openide.awt.Mnemonics.setLocalizedText(computeButton, org.openide.util.NbBundle.getMessage(AnalysisActionDialogue.class, "AnalysisActionDialogue.computeButton.text")); // NOI18N
         computeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -147,7 +141,7 @@ public final class AnalysisActionDialogue extends TopComponent {
                                 .addComponent(methodLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(computeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(203, Short.MAX_VALUE))
+                        .addContainerGap(208, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(removeGroundTButton)
@@ -197,7 +191,7 @@ public final class AnalysisActionDialogue extends TopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -247,13 +241,9 @@ public final class AnalysisActionDialogue extends TopComponent {
     }//GEN-LAST:event_removeComprButtonActionPerformed
 
     private void computeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_computeButtonActionPerformed
-
-        FPAnalysisMethods selectedMethod = FPAnalysisMethods.EUCLID;
-        
-        if(computeComboBox.getSelectedIndex() == 1){
-            selectedMethod = FPAnalysisMethods.NRMSE;
-        }
-        
+              
+        FPAnalysisMethods selectedMethod = (FPAnalysisMethods) computeComboBox.getSelectedItem();
+       
         //make new window for computation
         final AnalysisResults dialog = new AnalysisResults(selectedFiles, selectedFilesSecond, selectedMethod);
         JFrame frame = new JFrame();
@@ -261,10 +251,6 @@ public final class AnalysisActionDialogue extends TopComponent {
         frame.setSize(dialog.getPreferredSize());
         frame.setVisible(true); 
     }//GEN-LAST:event_computeButtonActionPerformed
-
-    private void computeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_computeComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_computeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> CDlist;
@@ -276,7 +262,7 @@ public final class AnalysisActionDialogue extends TopComponent {
     private javax.swing.JButton addGroundThruthButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton computeButton;
-    private javax.swing.JComboBox<String> computeComboBox;
+    private javax.swing.JComboBox<FPAnalysisMethods> computeComboBox;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

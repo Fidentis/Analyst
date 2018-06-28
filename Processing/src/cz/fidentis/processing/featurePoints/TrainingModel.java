@@ -7,7 +7,6 @@ package cz.fidentis.processing.featurePoints;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
-import cz.fidentis.comparison.procrustes.Procrustes2Models;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.comparison.procrustes.ProcrustesBatchProcessing;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -26,7 +25,7 @@ import javax.vecmath.Vector3f;
 public class TrainingModel {
 
     private static TrainingModel instance = null;
-    private Integer[] USED_LM = new Integer[]{FacialPointType.EX_R.ordinal(), FacialPointType.EX_L.ordinal(), FacialPointType.EN_R.ordinal(), FacialPointType.EN_L.ordinal(), 
+    private static final Integer[] USED_LM = new Integer[]{FacialPointType.EX_R.ordinal(), FacialPointType.EX_L.ordinal(), FacialPointType.EN_R.ordinal(), FacialPointType.EN_L.ordinal(), 
         FacialPointType.PAS_R.ordinal(), FacialPointType.PAS_L.ordinal(), FacialPointType.PAI_R.ordinal(), FacialPointType.PAI_L.ordinal(), FacialPointType.G.ordinal(),
         FacialPointType.SN.ordinal(),FacialPointType.AL_L.ordinal(), FacialPointType.AL_R.ordinal(), FacialPointType.N.ordinal(), FacialPointType.PRN.ordinal()
      }; //USED LM HAVE TO BE SORTED BY INDEX RIGHT NOW!! (probably won't work if some index is skipped)

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class LandmarkUtils {
 
-    private static StringBuilder notIn = new StringBuilder();
+    private static StringBuilder unpairedModels = new StringBuilder();
     
     /**
      * Compute analysis results
@@ -44,7 +44,7 @@ public class LandmarkUtils {
 
             //if helpCounter is equal 0 means that is no match for given file
             if (!isIn) {
-                notIn.append(selectedFiles.get(i).getModelName()).append(", ");
+                unpairedModels.append(selectedFiles.get(i).getModelName()).append(", ");
             }
 
             isIn = false;
@@ -53,8 +53,9 @@ public class LandmarkUtils {
         return results;
     }
     
-    public static String getNotIn(){
-        return notIn.toString();
+    //Returns names of models that were unpaired during analysis
+    public static String getUnpairedModels(){
+        return unpairedModels.toString();
     }
     
     /**

@@ -91,8 +91,7 @@ public class FpProcessing {
         p.switchToIndeterminate();
         
         computedPoints.addAll(computePointsForSingleFace(p, model, pdm));
-  
-        //computedPoints.addAll(computeAllFacialPoints(centerPoints, model, trans));
+
         if (checkThreadInteruption(registerButton, exportFpButton, calculateAutoButton, p, mainFP, secondaryFP)) {
             return true;
         }
@@ -182,7 +181,7 @@ public class FpProcessing {
 
         List<FacialPoint> fps;
 
-        p.progress("Computing feature points of face " + model.getName(), 100);
+        p.progress("Computing feature points of face " + model.getName());
         p.switchToIndeterminate();
 
         LandmarkLocalization localization = LandmarkLocalization.instance();
@@ -229,8 +228,6 @@ public class FpProcessing {
             facialPoints = computePointsForSingleFace(p, model, pdm);
             allFPs.put(model.getName(), facialPoints);
 
-
-            //p.progress((int) (unit * (i + 1)));
         }
 
         res = new FpResultsBatch(allFPs);

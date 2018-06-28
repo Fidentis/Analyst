@@ -39,6 +39,7 @@ public class LandmarkAnalysisWindow implements ActionListener {
         frame.setVisible(true);  
     }
     
+    //Adds names of files to passed JList to display them
     public void addFilesHandler(List<FpModel> fpPoints, List<FpModel> selected, javax.swing.JList<String> jList){
         
         //adding all selected file fp points to list

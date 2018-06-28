@@ -5,26 +5,14 @@
  */
 package cz.fidentis.gui.actions.landmarks;
 
-import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
-import cz.fidentis.gui.actions.landmarks.PDMList;
-import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
-import cz.fidentis.processing.featurePoints.LandmarkLocalization;
 import cz.fidentis.processing.featurePoints.PDM;
-import cz.fidentis.processing.featurePoints.TrainingModel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import static java.io.File.separatorChar;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 
 public final class LandmarkActionDialogueTopComponent extends TopComponent {
@@ -55,7 +43,7 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
         trainNewLabel = new java.awt.Label();
         trainButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        loadButton1 = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         loadFromButton1 = new java.awt.Label();
         trainingModelLabel1 = new java.awt.Label();
         trainingModelLabel2 = new java.awt.Label();
@@ -115,11 +103,11 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        loadButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(loadButton1, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.loadButton1.text")); // NOI18N
-        loadButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(saveButton, org.openide.util.NbBundle.getMessage(LandmarkActionDialogueTopComponent.class, "LandmarkActionDialogueTopComponent.saveButton.text")); // NOI18N
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadButton1ActionPerformed(evt);
+                saveButtonActionPerformed(evt);
             }
         });
 
@@ -159,7 +147,7 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
                             .addComponent(infoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(loadButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addComponent(actualModelLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -209,7 +197,7 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                         .addComponent(loadFromButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(loadButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -240,13 +228,13 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButton1ActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
 
         PDM selectedPdm = PDMList.instance().getPdm(pdmsComboBox.getSelectedIndex());
         
         FPImportExport.instance().exportPDM(tc, selectedPdm);
-    }//GEN-LAST:event_loadButton1ActionPerformed
+    }//GEN-LAST:event_saveButtonActionPerformed
 
     private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
         final LandmarkTrainDialogueTopComponent dialog = new LandmarkTrainDialogueTopComponent(this);
@@ -261,7 +249,7 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
         PDM pdm = FPImportExport.instance().importPDM(tc);
 
         if(pdm == null || pdm.getMeanShape().getFacialPoints().isEmpty())
-        return;
+            return;
 
         pdmInfo(pdm);
 
@@ -305,10 +293,10 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton loadButton;
-    private javax.swing.JButton loadButton1;
     private java.awt.Label loadFromButton;
     private java.awt.Label loadFromButton1;
     private javax.swing.JComboBox<String> pdmsComboBox;
+    private javax.swing.JButton saveButton;
     private javax.swing.JButton trainButton;
     private java.awt.Label trainNewLabel;
     private java.awt.Label trainingModelLabel;
@@ -322,6 +310,6 @@ public final class LandmarkActionDialogueTopComponent extends TopComponent {
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        this.close();
     }
 }

@@ -85,7 +85,7 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="loadButton1" min="-2" pref="134" max="-2" attributes="0"/>
+                              <Component id="saveButton" min="-2" pref="134" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="actualModelLabel" max="32767" attributes="0"/>
@@ -148,7 +148,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="loadFromButton1" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="loadButton1" min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="saveButton" min="-2" pref="50" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -272,17 +272,17 @@
             <Property name="orientation" type="int" value="1"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="loadButton1">
+        <Component class="javax.swing.JButton" name="saveButton">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/fidentis/gui/actions/landmarks/Bundle.properties" key="LandmarkActionDialogueTopComponent.loadButton1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/fidentis/gui/actions/landmarks/Bundle.properties" key="LandmarkActionDialogueTopComponent.saveButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
           </Events>
         </Component>
         <Component class="java.awt.Label" name="loadFromButton1">

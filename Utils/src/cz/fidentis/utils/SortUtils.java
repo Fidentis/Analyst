@@ -194,23 +194,19 @@ public class SortUtils {
     }
     
     // quick sort utils
-    
-    private double array[];
-    private double array2[][];
-    private int length;
-    
+
     public void quickSort(double[] inputArr, double[][] inputArr2) {
 
         if (inputArr == null || inputArr.length == 0) {
             return;
         }
-        array = inputArr;
-        array2 = inputArr2;
-        length = inputArr.length;
-        quickSortMethod(0, length - 1);
+        double array[] = inputArr;
+        double array2[][] = inputArr2;
+        int length = inputArr.length;
+        quickSortMethod(0, length - 1, array,array2);
     }
 
-    private void quickSortMethod(int lowerIndex, int higherIndex) {
+    private void quickSortMethod(int lowerIndex, int higherIndex, double array[], double array2[][]) {
 
         int i = lowerIndex;
         int j = higherIndex;
@@ -226,7 +222,7 @@ public class SortUtils {
                 j--;
             }
             if (i <= j) {
-                exchangeNumbers(i, j);
+                exchangeNumbers(i, j, array, array2);
                 //move index to next position on both sides
                 i++;
                 j--;
@@ -234,14 +230,14 @@ public class SortUtils {
         }
         // call quickSort() method recursively
         if (lowerIndex < j) {
-            quickSortMethod(lowerIndex, j);
+            quickSortMethod(lowerIndex, j, array, array2);
         }
         if (i < higherIndex) {
-            quickSortMethod(i, higherIndex);
+            quickSortMethod(i, higherIndex, array, array2);
         }
     }
 
-    private void exchangeNumbers(int i, int j) {
+    private void exchangeNumbers(int i, int j, double array[], double array2[][]) {
         double temp = array[i];
         array[i] = array[j];
         array[j] = temp;

@@ -249,8 +249,8 @@ public class FeaturePointsUniverse {
     
     //FEATURE POINTS EXTRACTION
     
-    public void findNoseTipArea() {
-        noseTip = thresArea.findNoseTip(thresholdFaces);
+    public void findNoseTipArea(int minSize) {
+        noseTip = thresArea.findNoseTip(thresholdFaces, minSize);
         setFacialPoint(thresArea.getPronasaleFP());
         pronasale = thresArea.getPronasale();
     }
@@ -355,12 +355,12 @@ public class FeaturePointsUniverse {
  
     //CONTROL METHODS
     
-    public void findNose() {  
+    public void findNose(int minSize) {  
         calculateAnisotropicDenoise(10, PwSmooth.METHOD_ANISOTROPIC, 2.0, false);
         calculateCurvature(CurvatureType.Minimum);
         thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);
         calculateThresholdFaces(15);
-        findNoseTipArea();
+        findNoseTipArea(minSize);
     }
 
     public void findMouth() {
@@ -401,12 +401,12 @@ public class FeaturePointsUniverse {
         return eyesRegion;
     }
     
-    public Set<Integer> findNoseRegion() {
+    public Set<Integer> findNoseRegion(int minSize) {
         calculateAnisotropicDenoise(10, PwSmooth.METHOD_ANISOTROPIC, 2.0, false);
         calculateCurvature(CurvatureType.Minimum);
         thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);
         calculateThresholdFaces(15);
-        return thresArea.findNoseTip(thresholdFaces);
+        return thresArea.findNoseTip(thresholdFaces, minSize);
     }
     
     //MATH MORPHOLOGY
@@ -530,16 +530,16 @@ public class FeaturePointsUniverse {
         return this.cornerTable;
     }
     
-    public Set<Set<Integer>> findAllNoses() {  
+    public Set<Set<Integer>> findAllNoses(int minSize) {  
         calculateAnisotropicDenoise(10, PwSmooth.METHOD_ANISOTROPIC, 2.0, true);
         calculateCurvature(CurvatureType.Minimum);
         thresArea = new ThresholdArea(elementSet, cornerTable, boundaryVertices);
         calculateThresholdFaces(15);
-        return findNoseTipAreaPDM();
+        return findNoseTipAreaPDM(minSize);
     }
     
-    public Set<Set<Integer>> findNoseTipAreaPDM() {
-        return thresArea.findAllNoseTipAreas(thresholdFaces);
+    public Set<Set<Integer>> findNoseTipAreaPDM(int minSize) {
+        return thresArea.findAllNoseTipAreas(thresholdFaces, minSize);
     }
 
     public ArrayList<Vector3f> getVerts() {

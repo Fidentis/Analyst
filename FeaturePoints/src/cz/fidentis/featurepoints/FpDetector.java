@@ -36,19 +36,10 @@ public class FpDetector {
     private final String modelName;
     private boolean decentralize;
     private Mat analyzedImage;
+    
+    private static final int MIN_NOSE_AREA_SIZE = 0;
 
-    private static final float[] FP_COLOR_MODEL = new float[]{1f, 1f, 0f, 1.0f};
-    private static final float[] FP_COLOR_MIDLINE = new float[]{1f, 0f, 1f, 1.0f};
-    private static final float[] FP_COLOR_TEXTURE = new float[]{0f, 1f, 1f, 1.0f};
 
-//    static {
-//        try {
-//            LoadOpenCV.loadOSXlib();
-//            LoadOpenCV.loadWindowsLib();
-//        } catch (URISyntaxException ex) {
-//            Logger.getLogger(FpDetector.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     public FpDetector(String modelName) {
         this.modelName = modelName;
     }
@@ -103,7 +94,7 @@ public class FpDetector {
 
         fpUniverse.computeSimplify();
 
-        fpUniverse.findNose();
+        fpUniverse.findNose(MIN_NOSE_AREA_SIZE);
         fpUniverse.findMouth();
         fpUniverse.findEyes();
         modelFacialPoints = fpUniverse.getFacialPoints();

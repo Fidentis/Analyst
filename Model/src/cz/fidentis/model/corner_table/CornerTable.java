@@ -272,16 +272,14 @@ public class CornerTable {
     
     //PDM methods
     
-    public Corner getVertexCorner(int index, CornerTable ct) {
-        boolean finished = false;
-        int cornerIndex = -1;
+    public Corner getVertexCorner(int index) {
+
         Corner main = null;
         
-        while(!finished) {
-            cornerIndex++;
-            if(index == ct.corners.get(cornerIndex).vertex) {
-                main = ct.corners.get(cornerIndex);
-                finished = true;
+        for(Corner c : corners){
+            if(index == c.vertex) {
+                main = c;
+                break;
             }
             
         }
@@ -299,7 +297,7 @@ public class CornerTable {
     public int[] getIndexNeighbors(int index) {
         int[] result;
         
-        Corner main = getVertexCorner(index, this);
+        Corner main = getVertexCorner(index);
         
         if(main == null)
             return null;
