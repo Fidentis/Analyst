@@ -269,92 +269,26 @@ public class ThresholdArea {
     }
 
     @SuppressWarnings("unchecked")
-    public Set<Integer> findNoseTip(Set<Integer> thresholdFaces) {
+    public Set<Integer> findNoseTip(Set<Integer> thresholdFaces, int minSize) {
 
-        thresholdBigestRegion.clear();
-        tmpThresholdBigestRegion.clear();
-        visitedVertices.clear();
+        Set<Integer> biggestRegion = null;
 
         pronasale = new PdVector(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE);
         double maxArea = 0.0;
 
-        Set<SimpleEdge> thresholdEdges = getThresholdEdges(thresholdFaces);
-        Set<Integer> thresholdVertices = getThresholdVertices(thresholdFaces);
-        Corner actualCorner;
+        Set<Set<Integer>> allNoseAreas = findAllNoseTipAreas(thresholdFaces, minSize);
 
-        for (Corner corner : cornerTable.corners()) {
-            if (visitedVertices.add(corner.vertex) && visitedVertices.contains(corner.vertex)) {
+        for (Set<Integer> area : allNoseAreas) {
 
-                actualCorner = corner;
-                PdVector tmpPronasale = elementSet.getVertex(actualCorner.vertex);
-                tmpThresholdBigestRegion.add(actualCorner.vertex);
-
-// variables for find biggest square area                
-//                double minX = Double.MAX_VALUE;
-//                double maxX = Double.MIN_VALUE;
-//                double minY = Double.MAX_VALUE;
-//                double maxY = Double.MIN_VALUE;
-
-                boolean continueFlag = true;
-                HashSet<Corner> nextCorners = new HashSet<Corner>();
-
-                while (continueFlag) {
-                    for (Corner corner2 : actualCorner.vertexNeighbors()) {
-                        if (thresholdVertices.contains(corner2.vertex) && tmpThresholdBigestRegion.add(corner2.vertex)
-                                && thresholdEdges.contains(new SimpleEdge(actualCorner.vertex, corner2.vertex))
-                                && visitedVertices.add(corner2.vertex)) {
-
-                            if (elementSet.getVertex(corner2.vertex).getEntry(2) > tmpPronasale.getEntry(2)) {
-                                tmpPronasale = elementSet.getVertex(corner2.vertex);
-                            }
-
-// find values for biggest square area                             
-//                            if (elementSet.getVertex(corner2.vertex).getEntry(0) < minX) {
-//                                minX = elementSet.getVertex(corner2.vertex).getEntry(0);
-//                            }
-//
-//                            if (elementSet.getVertex(corner2.vertex).getEntry(0) > maxX) {
-//                                maxX = elementSet.getVertex(corner2.vertex).getEntry(0);
-//                            }
-//
-//                            if (elementSet.getVertex(corner2.vertex).getEntry(1) < minY) {
-//                                minY = elementSet.getVertex(corner2.vertex).getEntry(1);
-//                            }
-//
-//                            if (elementSet.getVertex(corner2.vertex).getEntry(1) > maxY) {
-//                                maxY = elementSet.getVertex(corner2.vertex).getEntry(1);
-//                            }
-
-                            nextCorners.add(corner2);
-
-                        }
-                    }
-
-                    if (!nextCorners.isEmpty()) {
-                        actualCorner = nextCorners.iterator().next();
-                        nextCorners.remove(actualCorner);
-                    } else {
-                        continueFlag = false;
-                    }
-
-                }
-
-                if (tmpThresholdBigestRegion.size() > thresholdBigestRegion.size()) {
-                    /*(Math.abs(minX - maxX) * Math.abs(minY - maxY)) > maxArea)
-                     * (tmpPronasale.getEntry(2) > pronasale.getEntry(2))
-                     * maxArea = Math.abs(minX - maxX) * Math.abs(minY - maxY); */
-
-                    if (tmpPronasale.getEntry(2) > pronasale.getEntry(2)) {
-                        pronasale = tmpPronasale;
-                    }
-                    thresholdBigestRegion = (HashSet<Integer>) tmpThresholdBigestRegion.clone();
-                }
-
-                tmpThresholdBigestRegion.clear();
+            if (area.size() > maxArea) {
+                biggestRegion = area;
+                maxArea = area.size();
             }
+
         }
-        findPronasale(thresholdBigestRegion);
-        return thresholdBigestRegion;
+
+        findPronasale(biggestRegion);
+        return biggestRegion;
     }
     
     public void findPronasale(Set<Integer> thresholdVertices) {
@@ -915,4 +849,63 @@ public class ThresholdArea {
         
         return thresholdFaces;
     }    
+    
+    
+    //PDM methods
+    
+    public Set<Set<Integer>> findAllNoseTipAreas(Set<Integer> thresholdFaces, int minSize) {
+
+        Set<Set<Integer>> allRegions = new HashSet<>();
+        
+        thresholdBigestRegion.clear();
+        //tmpThresholdBigestRegion.clear();
+        visitedVertices.clear();
+
+        Set<SimpleEdge> thresholdEdges = getThresholdEdges(thresholdFaces);
+        Set<Integer> thresholdVertices = getThresholdVertices(thresholdFaces);
+        Corner actualCorner;
+
+        for (Corner corner : cornerTable.corners()) {
+            if (visitedVertices.add(corner.vertex) && visitedVertices.contains(corner.vertex)) {
+
+                Set<Integer> tmpArea = new HashSet<>();
+                
+                actualCorner = corner;
+                PdVector tmpPronasale = elementSet.getVertex(actualCorner.vertex);
+                tmpArea.add(actualCorner.vertex);
+
+                boolean continueFlag = true;
+                HashSet<Corner> nextCorners = new HashSet<Corner>();
+
+                while (continueFlag) {
+                    for (Corner corner2 : actualCorner.vertexNeighbors()) {
+                        if (thresholdVertices.contains(corner2.vertex) && tmpArea.add(corner2.vertex)
+                                && thresholdEdges.contains(new SimpleEdge(actualCorner.vertex, corner2.vertex))
+                                && visitedVertices.add(corner2.vertex)) {
+
+                            if (elementSet.getVertex(corner2.vertex).getEntry(2) > tmpPronasale.getEntry(2)) {
+                                tmpPronasale = elementSet.getVertex(corner2.vertex);
+                            }
+
+                            nextCorners.add(corner2);
+
+                        }
+                    }
+
+                    if (!nextCorners.isEmpty()) {
+                        actualCorner = nextCorners.iterator().next();
+                        nextCorners.remove(actualCorner);
+                    } else {
+                        continueFlag = false;
+                    }
+
+                }
+                
+                if(tmpArea.size() > minSize)
+                    allRegions.add(tmpArea);
+
+            }
+        }
+        return allRegions;
+    }
 }

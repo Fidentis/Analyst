@@ -16,8 +16,6 @@ import cz.fidentis.comparison.kdTree.KDTreeIndexed;
 import cz.fidentis.comparison.kdTree.KdTree;
 import cz.fidentis.comparison.procrustes.Procrustes2Models;
 import cz.fidentis.controller.Comparison2Faces;
-import cz.fidentis.featurepoints.FacialPoint;
-import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.curvature.CurvatureType;
 import cz.fidentis.featurepoints.curvature.Curvature_jv;
 import cz.fidentis.gui.GUIController;
@@ -36,19 +34,15 @@ import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.color.ColorSpace;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.vecmath.Vector3f;
-import jv.object.PsDebug;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Exceptions;
@@ -96,13 +90,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         compMethodComboBox = new javax.swing.JComboBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel1 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        useDatabaseCheckbox = new javax.swing.JCheckBox();
-        deafultDatabaseRadioButton = new javax.swing.JRadioButton();
-        chooseDatabaseRadioButton = new javax.swing.JRadioButton();
-        createDatabaseRadioButton = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         fpThresholdSlider = new javax.swing.JSlider();
         jLabel12 = new javax.swing.JLabel();
         backRegistrationButton = new javax.swing.JButton();
@@ -200,53 +187,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
         jPanel1.setVisible(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jLabel7.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(useDatabaseCheckbox, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.useDatabaseCheckbox.text")); // NOI18N
-        useDatabaseCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                useDatabaseCheckboxActionPerformed(evt);
-            }
-        });
-
-        deafultDatabaseRadioButton.setVisible(false);
-        buttonGroup2.add(deafultDatabaseRadioButton);
-        org.openide.awt.Mnemonics.setLocalizedText(deafultDatabaseRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.deafultDatabaseRadioButton.text")); // NOI18N
-        deafultDatabaseRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deafultDatabaseRadioButtonActionPerformed(evt);
-            }
-        });
-
-        chooseDatabaseRadioButton.setVisible(false);
-        buttonGroup2.add(chooseDatabaseRadioButton);
-        org.openide.awt.Mnemonics.setLocalizedText(chooseDatabaseRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.chooseDatabaseRadioButton.text")); // NOI18N
-        chooseDatabaseRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chooseDatabaseRadioButtonActionPerformed(evt);
-            }
-        });
-
-        createDatabaseRadioButton.setVisible(false);
-        buttonGroup2.add(createDatabaseRadioButton);
-        org.openide.awt.Mnemonics.setLocalizedText(createDatabaseRadioButton, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.createDatabaseRadioButton.text")); // NOI18N
-        createDatabaseRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createDatabaseRadioButtonActionPerformed(evt);
-            }
-        });
-
-        jTextField1.setVisible(false);
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jTextField1.text")); // NOI18N
-
-        jButton1.setVisible(false);
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(PairComparisonConfiguration.class, "PairComparisonConfiguration.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         fpThresholdSlider.setMajorTickSpacing(20);
         fpThresholdSlider.setMinorTickSpacing(5);
         fpThresholdSlider.setPaintLabels(true);
@@ -265,46 +205,15 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(fpThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(useDatabaseCheckbox))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(createDatabaseRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(chooseDatabaseRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(deafultDatabaseRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fpThresholdSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(useDatabaseCheckbox))
-                .addGap(1, 1, 1)
-                .addComponent(deafultDatabaseRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chooseDatabaseRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(createDatabaseRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -642,7 +551,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 .addComponent(exportLandmarksButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backRegistrationButton)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(217, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(jPanel3);
@@ -777,39 +686,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                         tc.getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                     } else {
-                        //starting Procrustes analysis
-
-                        //Procrustes Analysis with database
-                        if (createDatabaseRadioButton.isSelected()) {
-                            //creating database
-                            p.setDisplayName("Processing database...");
-                            File[] files = chooser.getSelectedFiles();
-                            
-                            Model model;
-                            List<FacialPoint> facialPoints;
-                            FeaturePointsUniverse fpUniverse;
-                            for (File file : files) {
-                                model = ModelLoader.instance().loadModel(file, false, true);
-
-                                fpUniverse = new FeaturePointsUniverse(model);
-                                facialPoints = new ArrayList<FacialPoint>();
-
-                                PsDebug.setDebug(false);
-                                PsDebug.setError(false);
-                                PsDebug.setWarning(false);
-                                PsDebug.setMessage(false);
-                                fpUniverse.findNose();
-                                facialPoints = fpUniverse.getFacialPoints();
-                                fpUniverse.findMouth();
-                                facialPoints = fpUniverse.getFacialPoints();
-                                fpUniverse.findEyes();
-                                facialPoints = fpUniverse.getFacialPoints();
-                                PsDebug.getConsole().setVisible(false);
-
-                                c.addFacialPoints(facialPoints);
-                            }
-
-                        }
 
                         p.setDisplayName("Computing coparison...");
 
@@ -827,61 +703,23 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                         tc.getViewerPanel_2Faces().getListener1().setProcrustes(true);
 
+                        //Procrustes analysis without using database
+                        try {
+                            Procrustes2Models procrustes = new Procrustes2Models(c.getMainFp(),
+                                    c.getSecondaryFp(), c.isFpScaling());
 
-                        //choosing type of used database -- currently unavalable
-                        if (useDatabaseCheckbox.isSelected()) {
-                            Procrustes2Models procrustes = null;
-                            try {
-                                if (deafultDatabaseRadioButton.isSelected()) {
-                                    procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), c.isFpScaling());
+                            String result = procrustes.compare2Models(c.getFpTreshold() / 100f);
+                            c.setNumericalResults(result);
 
-                                } else if (chooseDatabaseRadioButton.isSelected()) {
-                                    if (!jTextField1.getText().endsWith(".txt")) {
-                                        throw new IllegalArgumentException("Cannot be used as database.");
-                                    } else {
-                                        procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                                tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), jTextField1.getText(), c.isFpScaling());
-                                    }
-                                } else {
-                                    List<List<FacialPoint>> list = c.getDatabasePoints();
-                                    procrustes = new Procrustes2Models(tc.getViewerPanel_2Faces().getListener1().getFpUniverse().getFacialPoints(),
-                                            tc.getViewerPanel_2Faces().getListener2().getFpUniverse().getFacialPoints(), list, c.isFpScaling());
-                                }
+                            paInfo.setPa(procrustes.getPa());
+                            paInfo.setPa2(procrustes.getPa2());
+                            paInfo.setGpa(procrustes.getGpa());
 
-                                String result = procrustes.compare2ModelsWithDatabase(fpThresholdSlider.getValue() / 100f);
-  
-                                c.setNumericalResults(result);
-
-                                paInfo.setGpa(procrustes.getGpa());
-   
-
-                            } catch (FileNotFoundException ex) {
-                                Exceptions.printStackTrace(ex);
-                                p.finish();
-                                processComparisonButton.setEnabled(true);
-                                tc.getProject().getSelectedComparison2Faces().setCompareButtonEnabled(true);
-                            }
-
-                        } else {
-                            //Procrustes analysis without using database
-                            try {
-                                Procrustes2Models procrustes = new Procrustes2Models(c.getMainFp(),
-                                        c.getSecondaryFp(), c.isFpScaling());
-
-                                String result = procrustes.compare2Models(c.getFpTreshold() / 100f);
-                                c.setNumericalResults(result);
-
-                                paInfo.setPa(procrustes.getPa());
-                                paInfo.setPa2(procrustes.getPa2());
-                                paInfo.setGpa(procrustes.getGpa());
-
-                            } catch (FileNotFoundException ex) {
-                                Exceptions.printStackTrace(ex);
-                                p.finish();
-                                processComparisonButton.setEnabled(true);
-                                c.setCompareButtonEnabled(true);
-                            }
+                        } catch (FileNotFoundException ex) {
+                            Exceptions.printStackTrace(ex);
+                            p.finish();
+                            processComparisonButton.setEnabled(true);
+                            c.setCompareButtonEnabled(true);
                         }
 
                         tc.getViewerPanel_2Faces().getListener1().setPaInfo(paInfo);
@@ -896,10 +734,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
 
                     p.finish();
                 } catch (Exception ex) {
-                   Exceptions.printStackTrace(ex);
-                   processComparisonButton.setEnabled(true);
-                }finally{
-                     p.finish();
+                    Exceptions.printStackTrace(ex);
+                    processComparisonButton.setEnabled(true);
+                } finally {
+                    p.finish();
                 }
                 
                 TwoFacesGUISetup.setUpComparisonResultDefaultData(c);
@@ -1054,85 +892,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         getContext().setFpTreshold(fpThresholdSlider.getValue());
     }//GEN-LAST:event_fpThresholdSliderStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //currently unavailable
-
-        if (chooseDatabaseRadioButton.isSelected()) {
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT files", "txt");
-            chooser.setFileFilter(filter);
-            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            chooser.setMultiSelectionEnabled(false);
-
-            int returnVal = chooser.showOpenDialog(GUIController.getSelectedProjectTopComponent());
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                jTextField1.setText(chooser.getSelectedFile().getPath());
-
-            }
-        } else if (this.createDatabaseRadioButton.isSelected()) {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "OBJ files", "obj");
-            chooser.setFileFilter(filter);
-            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            chooser.setMultiSelectionEnabled(true);
-
-            int returnVal = chooser.showOpenDialog(GUIController.getSelectedProjectTopComponent());
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                String names = "";
-                for (int i = 0; i < chooser.getSelectedFiles().length; i++) {
-                    names += chooser.getSelectedFiles()[i].getName() + ";";
-                }
-                jTextField1.setText(names);
-            }
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void createDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDatabaseRadioButtonActionPerformed
-        jTextField1.setVisible(true);
-        jButton1.setVisible(true);
-    }//GEN-LAST:event_createDatabaseRadioButtonActionPerformed
-
-    private void chooseDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseDatabaseRadioButtonActionPerformed
-        jTextField1.setVisible(true);
-        jButton1.setVisible(true);
-    }//GEN-LAST:event_chooseDatabaseRadioButtonActionPerformed
-
-    private void deafultDatabaseRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deafultDatabaseRadioButtonActionPerformed
-        jTextField1.setVisible(false);
-        jButton1.setVisible(false);
-    }//GEN-LAST:event_deafultDatabaseRadioButtonActionPerformed
-
-    private void useDatabaseCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useDatabaseCheckboxActionPerformed
-        //currently unavailable
-
-        if (useDatabaseCheckbox.isSelected()) {
-            deafultDatabaseRadioButton.setVisible(true);
-            chooseDatabaseRadioButton.setVisible(true);
-            createDatabaseRadioButton.setVisible(true);
-            if (chooseDatabaseRadioButton.isSelected() || createDatabaseRadioButton.isSelected()) {
-                jTextField1.setVisible(true);
-                jButton1.setVisible(true);
-                if (chooseDatabaseRadioButton.isSelected()) {
-                    getContext().setUseDatabase(2);
-                } else {
-                    getContext().setUseDatabase(3);
-                }
-            }
-            if (!chooseDatabaseRadioButton.isSelected() && !createDatabaseRadioButton.isSelected()) {
-                deafultDatabaseRadioButton.setSelected(true);
-                getContext().setUseDatabase(1);
-            }
-        } else {
-            deafultDatabaseRadioButton.setVisible(false);
-            chooseDatabaseRadioButton.setVisible(false);
-            createDatabaseRadioButton.setVisible(false);
-            jTextField1.setVisible(false);
-            jButton1.setVisible(false);
-            getContext().setUseDatabase(0);
-        }
-    }//GEN-LAST:event_useDatabaseCheckboxActionPerformed
-
     private void transpSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_transpSpinnerStateChanged
         if (!transpTresholdValueChanged) {
             transpTresholdValueChanged = true;
@@ -1167,15 +926,9 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
         //because some items need to be dynamically added/removed
         compMethodComboBox.setModel(new DefaultComboBoxModel(ComparisonMethod.values()));
  
-        
-        //use database currently unavailable
-        useDatabaseCheckbox.setVisible(false);
-        jLabel7.setVisible(false);
-        
        compMethodComboBox.setSelectedItem(c.getComparisonMethod());
        
        //FP
-       useDatabaseCheckbox.setSelected(c.getUseDatabase() != 0);
        fpThresholdSlider.setValue(c.getFpTreshold());
        
        //overlay
@@ -1213,43 +966,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
             compMethodComboBox.removeItem(ComparisonMethod.PROCRUSTES);
         }
 
-        switch (c.getUseDatabase()) {
-            case 0:
-                useDatabaseCheckbox.setSelected(false);
-                deafultDatabaseRadioButton.setVisible(false);
-                chooseDatabaseRadioButton.setVisible(false);
-                createDatabaseRadioButton.setVisible(false);
-                jTextField1.setVisible(false);
-                jButton1.setVisible(false);
-                break;
-            case 1:
-                useDatabaseCheckbox.setSelected(true);
-                deafultDatabaseRadioButton.setVisible(true);
-                chooseDatabaseRadioButton.setVisible(true);
-                createDatabaseRadioButton.setVisible(true);
-                jTextField1.setVisible(false);
-                jButton1.setVisible(false);
-                deafultDatabaseRadioButton.setSelected(true);
-                break;
-            case 2:
-                useDatabaseCheckbox.setSelected(true);
-                deafultDatabaseRadioButton.setVisible(true);
-                chooseDatabaseRadioButton.setVisible(true);
-                createDatabaseRadioButton.setVisible(true);
-                jTextField1.setVisible(true);
-                jButton1.setVisible(true);
-                chooseDatabaseRadioButton.setSelected(true);
-                break;
-            case 3:
-                useDatabaseCheckbox.setSelected(true);
-                deafultDatabaseRadioButton.setVisible(true);
-                chooseDatabaseRadioButton.setVisible(true);
-                createDatabaseRadioButton.setVisible(true);
-                jTextField1.setVisible(true);
-                jButton1.setVisible(true);
-                createDatabaseRadioButton.setSelected(true);
-                break;
-        }
         setColors();
         
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setContours(c.isUseContours());
@@ -1293,13 +1009,10 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
-    private javax.swing.JRadioButton chooseDatabaseRadioButton;
     private javax.swing.JFileChooser chooser;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JRadioButton colorOverlayRadioButton;
     private javax.swing.JComboBox compMethodComboBox;
-    private javax.swing.JRadioButton createDatabaseRadioButton;
-    private javax.swing.JRadioButton deafultDatabaseRadioButton;
     private javax.swing.JButton exportFacesButton;
     private javax.swing.JButton exportLandmarksButton;
     private javax.swing.Box.Filler filler1;
@@ -1307,7 +1020,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JSlider fpThresholdSlider;
     private javax.swing.JCheckBox innerSurfaceSolidCheckbox;
     private javax.swing.JRadioButton innerSurfaceSolidRadioButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JColorChooser jColorChooser1;
@@ -1318,14 +1030,12 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JRadioButton noneRadioButton;
     private javax.swing.JPanel primaryColorPanel;
     private javax.swing.JCheckBox primarySolidCheckbox;
@@ -1336,7 +1046,6 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JRadioButton transparencyMappingRadioButton;
     private javax.swing.JSlider transparencySlider;
     private javax.swing.JCheckBox useContoursCheckbox;
-    private javax.swing.JCheckBox useDatabaseCheckbox;
     private javax.swing.JCheckBox useGlyphsCheckbox;
     private javax.swing.JPanel visualizationPanel;
     // End of variables declaration//GEN-END:variables

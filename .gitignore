@@ -4,3 +4,4 @@
 **/test
 /Logs/
 *.log
+**/__pycache__

@@ -320,7 +320,7 @@ public class FeaturePointsConfiguration extends javax.swing.JPanel {
 
                     jButton1.setEnabled(false);
                     GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.initComputation();
-                    GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.getAllPoints();
+                    GUIController.getSelectedProjectTopComponent().getFeaturePointsPanel().listener2.getAllPoints(0);
                     jButton1.setEnabled(true);
                     jCheckBox1.setEnabled(true);
                     jCheckBox2.setEnabled(true);

@@ -269,4 +269,45 @@ public class CornerTable {
         
         return result;
     }
+    
+    //PDM methods
+    
+    public Corner getVertexCorner(int index) {
+
+        Corner main = null;
+        
+        for(Corner c : corners){
+            if(index == c.vertex) {
+                main = c;
+                break;
+            }
+            
+        }
+        return main;
+    }
+    
+    /**
+     * 
+     * Find index neighbors by vertex
+     * 
+     * @param index primary vertex
+     * @param model model
+     * @return array of indexes of neighbors
+     */
+    public int[] getIndexNeighbors(int index) {
+        int[] result;
+        
+        Corner main = getVertexCorner(index);
+        
+        if(main == null)
+            return null;
+        
+        result = new int[main.vertexNeighbors().length];
+        
+        for(int i = 0; i < main.vertexNeighbors().length; i++){
+            result[i] = main.vertexNeighbors()[i].vertex;
+        }
+        
+        return result;
+    }
 }

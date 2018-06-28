@@ -19,6 +19,7 @@ import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
@@ -136,6 +137,12 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         fpScaleCheckBox = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
         fpThresholdSlider = new javax.swing.JSlider();
+        pdmComboBox = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel16 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel17 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -642,6 +649,22 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        pdmComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pdmComboBoxMouseClicked(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel15.text")); // NOI18N
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel16.text")); // NOI18N
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel17.text")); // NOI18N
+
         javax.swing.GroupLayout fpPanelLayout = new javax.swing.GroupLayout(fpPanel);
         fpPanel.setLayout(fpPanelLayout);
         fpPanelLayout.setHorizontalGroup(
@@ -662,13 +685,21 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             .addComponent(calculateFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(exportFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fpPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jSeparator3)
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(fpShowInfoCheckBox))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(exportFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -677,7 +708,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fpScaleCheckBox)
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         fpPanelLayout.setVerticalGroup(
             fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -688,10 +720,22 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculateFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -760,7 +804,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(regMethodComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(fpPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(26, Short.MAX_VALUE))))
+                        .addContainerGap(14, Short.MAX_VALUE))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -863,15 +907,13 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         if (areModelsLoaded(GUIController.getSelectedProjectTopComponent())) {
             final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
             final OneToManyComparison c = getContext();
-            
-            //calculatePoints();
+
             Runnable run = new Runnable() {
 
                 @Override
                 public void run() {
-                    
                     FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
-                    tc.getOneToManyViewerPanel().getListener1().getModel());
+                    tc.getOneToManyViewerPanel().getListener1().getModel(), PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
                     
                     HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
                     List<FacialPoint> fpCopy;
@@ -1308,6 +1350,12 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private void radiusSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radiusSliderStateChanged
         getContext().setValue(radiusSlider.getValue());
     }//GEN-LAST:event_radiusSliderStateChanged
+
+    private void pdmComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pdmComboBoxMouseClicked
+        //refresh values
+        if(PDMList.instance().addedNewName())
+        pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
+    }//GEN-LAST:event_pdmComboBoxMouseClicked
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1347,6 +1395,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
        fpShowInfoCheckBox.setSelected(c.isShowPointInfo());
        fpColorPanel.setBackground(c.getPointColor());
        fpSizeSlider.setValue(c.getFpSize());
+       pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
        
        //ICP
        icpMetricComboBox.setSelectedItem(c.getIcpMetric());
@@ -1450,6 +1499,9 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1464,10 +1516,13 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JSpinner maxIterationSpinner;
     private javax.swing.JRadioButton numberRadioButton;
     private javax.swing.JSpinner numberSpinner;
+    private javax.swing.JComboBox<String> pdmComboBox;
     private javax.swing.JRadioButton percentageRadioButton;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JSlider radiusSlider;

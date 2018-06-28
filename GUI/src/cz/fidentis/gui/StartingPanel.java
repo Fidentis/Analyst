@@ -97,7 +97,7 @@ public class StartingPanel extends javax.swing.JPanel {
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/composite.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/logo.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(StartingPanel.class, "StartingPanel.jLabel1.text")); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -256,8 +256,10 @@ public class StartingPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void compositeCreationPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compositeCreationPanelMouseEntered
-        jLabel4.setText("Create Composite");jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/composite-hover.png")));
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><FONT SIZE = 3>Create composite by selecting various facial parts and adding them to face. </FONT></html>");
+//Disabled for Fidnetis v2 release
+
+//        jLabel4.setText("Create Composite");jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/composite-hover.png")));
+//        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><FONT SIZE = 3>Create composite by selecting various facial parts and adding them to face. </FONT></html>");
     }//GEN-LAST:event_compositeCreationPanelMouseEntered
 
     private void compare2facesPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compare2facesPanelMouseEntered
@@ -265,7 +267,7 @@ public class StartingPanel extends javax.swing.JPanel {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/2faces-hover.png")));
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><FONT SIZE = 3>Compare two faces. "
                 + "<ul>\n"
-                + "<li>Registration methods: Feature ponits alignment, ICP</li>\n"
+                + "<li>Registration methods: Feature points alignment, ICP</li>\n"
                 + "<li>Compariosn methods: Procrustes analysis, Hausdroff distance</li>\n"
                 + "</ul></FONT></html>");
     }//GEN-LAST:event_compare2facesPanelMouseEntered
@@ -275,7 +277,7 @@ public class StartingPanel extends javax.swing.JPanel {
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/database-hover.png")));
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><FONT SIZE = 3>Compare one model with database or set of faces."
                 + "<ul>\n"
-                + "<li>Registration methods: Feature ponits alignment, ICP</li>\n"
+                + "<li>Registration methods: Feature points alignment, ICP</li>\n"
                 + "<li>Compariosn methods: Procrustes analysis, Hausdroff distance</li>\n"
                 + "</ul></FONT></html>");
     }//GEN-LAST:event_oneToManyComparisonPanelMouseEntered
@@ -285,7 +287,7 @@ public class StartingPanel extends javax.swing.JPanel {
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/batch-hover.png")));
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><FONT SIZE = 3>Compare a set of faces. \n"
                 + "<ul>\n"
-                + "<li>Registration methods: Feature ponits alignment, ICP</li>\n"
+                + "<li>Registration methods: Feature points alignment, ICP</li>\n"
                 + "<li>Compariosn methods: Procrustes analysis, Hausdroff distance</li>\n"
                 + "</ul></FONT></html>");
     }//GEN-LAST:event_batchComparisonPanelMouseEntered
@@ -318,29 +320,31 @@ public class StartingPanel extends javax.swing.JPanel {
     }
 
     private void compositeCreationPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compositeCreationPanelMouseClicked
-        createNewProject();
-        ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        ButtonHelper.setCompositeEnabled(true);
-        ButtonHelper.setViewerEnabled(true);
-        //    ButtonHelper.setFeaturePointsEnabled(true);
-        //   ButtonHelper.setAgeingEnabled(true);
-        //   ButtonHelper.setComparisonEnabled(true);
-        ButtonHelper.setTexturesEnabled(true);
-        ButtonHelper.getTexturesMenuItem().setSelected(true);
-        tc.getProject().addComposite(NbBundle.getMessage(Controller.class, "tree.node.composite"));
-        //TODO chcek for existing compoites and name acordingly
-        
-        tc.getProject().setSelectedPart(1);
+//Disabled for Fidentis v2 release
 
-        //tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
-        GUIController.getNavigatorTopComponent().update();
-        GUIController.selectComposite();
-        
-        tc.getCompositePanel().setCompositeData(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComposite());
-        tc.getCompositePanel().selectTemplates();
-        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
-        
-        tc.requestActive();
+//        createNewProject();
+//        ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+//        ButtonHelper.setCompositeEnabled(true);
+//        ButtonHelper.setViewerEnabled(true);
+//        //    ButtonHelper.setFeaturePointsEnabled(true);
+//        //   ButtonHelper.setAgeingEnabled(true);
+//        //   ButtonHelper.setComparisonEnabled(true);
+//        ButtonHelper.setTexturesEnabled(true);
+//        ButtonHelper.getTexturesMenuItem().setSelected(true);
+//        tc.getProject().addComposite(NbBundle.getMessage(Controller.class, "tree.node.composite"));
+//        //TODO chcek for existing compoites and name acordingly
+//        
+//        tc.getProject().setSelectedPart(1);
+//
+//        //tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+//        GUIController.getNavigatorTopComponent().update();
+//        GUIController.selectComposite();
+//        
+//        tc.getCompositePanel().setCompositeData(GUIController.getSelectedProjectTopComponent().getProject().getSelectedComposite());
+//        tc.getCompositePanel().selectTemplates();
+//        tc.setTextureRendering(ButtonHelper.getTexturesMenuItem().isSelected());
+//        
+//        tc.requestActive();
     }//GEN-LAST:event_compositeCreationPanelMouseClicked
 
     private void compare2facesPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compare2facesPanelMouseClicked
@@ -386,7 +390,8 @@ public class StartingPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_oneToManyComparisonPanelMouseClicked
 
     private void compositeCreationPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compositeCreationPanelMouseExited
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/composite.png")));
+ //Disabled for Fidentis v2       
+ //jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/fidentis/gui/resources/composite.png")));
     }//GEN-LAST:event_compositeCreationPanelMouseExited
 
     private void compare2facesPanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_compare2facesPanelMouseExited

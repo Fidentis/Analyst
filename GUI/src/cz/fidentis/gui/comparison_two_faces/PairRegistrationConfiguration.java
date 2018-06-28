@@ -19,6 +19,7 @@ import cz.fidentis.featurepoints.results.FpResultsPair;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
 import cz.fidentis.gui.observer.ObservableMaster;
@@ -36,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -141,6 +143,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         fpScaleCheckBox = new javax.swing.JCheckBox();
+        pdmComboBox = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel16 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel17 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckbox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -651,6 +659,22 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
             }
         });
 
+        pdmComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pdmComboBoxMouseClicked(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel15.text")); // NOI18N
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel16.text")); // NOI18N
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(PairRegistrationConfiguration.class, "PairRegistrationConfiguration.jLabel17.text")); // NOI18N
+
         javax.swing.GroupLayout procrustesPanelLayout = new javax.swing.GroupLayout(procrustesPanel);
         procrustesPanel.setLayout(procrustesPanelLayout);
         procrustesPanelLayout.setHorizontalGroup(
@@ -663,12 +687,6 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     .addGroup(procrustesPanelLayout.createSequentialGroup()
                         .addComponent(fpColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
-            .addGroup(procrustesPanelLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(calculatePointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(loadPointsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -680,7 +698,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                         .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(procrustesPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 20, Short.MAX_VALUE))
                             .addGroup(procrustesPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(10, 10, 10)))
@@ -689,11 +707,33 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jSeparator1))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(procrustesPanelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procrustesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSeparator3))
+            .addGroup(procrustesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(procrustesPanelLayout.createSequentialGroup()
                 .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(showFpInfoCheckbox))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(procrustesPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         procrustesPanelLayout.setVerticalGroup(
             procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -704,10 +744,22 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(procrustesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pdmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calculatePointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(loadPointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel17)
+                .addGap(8, 8, 8)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportPointsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -768,7 +820,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             .addComponent(continueComparisonCheckbox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                             .addComponent(registerButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(icpPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 16, Short.MAX_VALUE))
+                        .addGap(0, 24, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(procrustesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -797,7 +849,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(continueComparisonCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel5);
@@ -806,11 +858,11 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -882,11 +934,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
-                    
-                    
                     calculatePointsButton.setEnabled(false);
                     FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
-                            registerButton, exportPointsButton, calculatePointsButton);
+                            registerButton, exportPointsButton, calculatePointsButton, PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
 
                     List<FacialPoint> mainCopy = new ArrayList<>();
                     List<FacialPoint> secondaryCopy = new ArrayList<>();
@@ -1318,6 +1368,12 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private void fpScaleCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpScaleCheckBoxActionPerformed
         getContext().setFpScaling(fpScaleCheckBox.isSelected());
     }//GEN-LAST:event_fpScaleCheckBoxActionPerformed
+
+    private void pdmComboBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pdmComboBoxMouseClicked
+        //refresh values
+        if(PDMList.instance().addedNewName())
+            pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
+    }//GEN-LAST:event_pdmComboBoxMouseClicked
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener2().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1366,6 +1422,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
        showFpInfoCheckbox.setSelected(c.isShowPointInfo());
        fpColorPanel.setBackground(c.getPointColor());
        fpSizeSlider.setValue(c.getFpSize());
+       pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
+       
+       
        
        //ICP
        icpMetricComboBox.setSelectedIndex(c.getIcpMetric().ordinal());
@@ -1470,6 +1529,9 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1484,6 +1546,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton loadPointsButton;
     private javax.swing.JSpinner maxIterSpinner;
@@ -1492,6 +1556,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JCheckBox noseCheckbox;
     private javax.swing.JRadioButton numberJRadio;
     private javax.swing.JSpinner numberSpinner;
+    private javax.swing.JComboBox<String> pdmComboBox;
     private javax.swing.JRadioButton percentageJRadio;
     private javax.swing.JSpinner percentageSpinner;
     private javax.swing.JPanel procrustesPanel;

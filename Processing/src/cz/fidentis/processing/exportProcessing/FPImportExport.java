@@ -19,6 +19,7 @@ import cz.fidentis.landmarkParser.PPparser;
 import cz.fidentis.landmarkParser.PTSparser;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
+import cz.fidentis.processing.featurePoints.PDM;
 import cz.fidentis.utils.DialogUtils;
 import cz.fidentis.utils.FileUtils;
 import java.awt.Component;
@@ -45,6 +46,7 @@ public class FPImportExport {
     private static FPImportExport instance;
 
     private static final String[] IMPORT_FP_EXTENSIONS = new String[]{"pp", "fp", "csv", "pts", "dta"};
+    private static final String[] PDM_EXTENSION = new String[]{"pdm"};
 
     private FPImportExport() {
     }
@@ -385,5 +387,27 @@ public class FPImportExport {
 
         Thread t = new Thread(r);
         t.start();
+    }
+    
+    public void exportPDM(final Component tc, PDM pdm){
+        String filePath = DialogUtils.instance().openDialogueSaveFile(tc, "Point Distribution Model (.pdm)", PDM_EXTENSION, false);
+
+        if (filePath == null) {
+            //save folder wasn't picked
+            return;
+        }
+        
+        pdm.savePDM(filePath);
+    }
+    
+    public PDM importPDM(final Component tc){
+        File[] loadedFiles = DialogUtils.instance().openDialogueLoadFiles(tc, "Point Distribution Model (.pdm)", PDM_EXTENSION, false);
+        
+        if(loadedFiles == null || loadedFiles.length == 0)
+            return null;
+        
+        PDM pdm = PDM.loadPDM(loadedFiles[0].getAbsolutePath());
+        
+        return pdm;
     }
 }

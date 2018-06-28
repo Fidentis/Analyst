@@ -7,6 +7,7 @@
 package cz.fidentis.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -192,5 +193,64 @@ public class SortUtils {
         return sorted;
     }
     
+    // quick sort utils
+
+    public void quickSort(double[] inputArr, double[][] inputArr2) {
+
+        if (inputArr == null || inputArr.length == 0) {
+            return;
+        }
+        double array[] = inputArr;
+        double array2[][] = inputArr2;
+        int length = inputArr.length;
+        quickSortMethod(0, length - 1, array,array2);
+    }
+
+    private void quickSortMethod(int lowerIndex, int higherIndex, double array[], double array2[][]) {
+
+        int i = lowerIndex;
+        int j = higherIndex;
+        // calculate pivot number, I am taking pivot as middle index number
+        double pivot = array[lowerIndex + (higherIndex - lowerIndex) / 2];
+        // Divide into two arrays
+        while (i <= j) {
+
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                exchangeNumbers(i, j, array, array2);
+                //move index to next position on both sides
+                i++;
+                j--;
+            }
+        }
+        // call quickSort() method recursively
+        if (lowerIndex < j) {
+            quickSortMethod(lowerIndex, j, array, array2);
+        }
+        if (i < higherIndex) {
+            quickSortMethod(i, higherIndex, array, array2);
+        }
+    }
+
+    private void exchangeNumbers(int i, int j, double array[], double array2[][]) {
+        double temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+
+        double[] temp2 = array2[i];
+        array2[i] = array2[j];
+        array2[j] = temp2;
+    }
     
+    public <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
+        List<T> list = new ArrayList<>(c);
+        java.util.Collections.sort(list);
+        return list;
+    }
+
 }

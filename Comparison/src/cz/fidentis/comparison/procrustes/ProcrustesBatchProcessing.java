@@ -46,8 +46,15 @@ public class ProcrustesBatchProcessing {
         }
         
         this.gpa = new GPA();
-        for(int i = 0; i < fps.size(); i++){
-            this.gpa.addPA(new ProcrustesAnalysis(fps.get(i),modelsVerts.get(i)));
+
+        if (modelsVerts != null) {
+            for (int i = 0; i < fps.size(); i++) {
+                this.gpa.addPA(new ProcrustesAnalysis(fps.get(i), modelsVerts.get(i)));
+            }
+        }else{
+            for (int i = 0; i < fps.size(); i++) {
+                this.gpa.addPA(new ProcrustesAnalysis(fps.get(i), null));
+            }
         }
         this.scaling = scaling;
         System.out.println(this.scaling);

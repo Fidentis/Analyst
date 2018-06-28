@@ -3,6 +3,7 @@ package cz.fidentis.featurepoints;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import javax.vecmath.Vector3f;
  *
  * @author Galvanizze
  */
-public class FpModel {
+public class FpModel implements Serializable{
     private List<FacialPoint> facialPoints;
     private Map<Integer, Integer> typeIndexes;      //id of landmark, index in facialPoints
     private String modelName;

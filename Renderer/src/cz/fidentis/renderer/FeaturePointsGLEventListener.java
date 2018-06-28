@@ -258,12 +258,12 @@ public class FeaturePointsGLEventListener extends GeneralGLEventListener {
         facialPoints = new ArrayList<FacialPoint>();
     }
     
-    public void /*List<FacialPoint>*/ getAllPoints() {
+    public void /*List<FacialPoint>*/ getAllPoints(int minSize) {
         PsDebug.setDebug(false);
         PsDebug.setError(false);
         PsDebug.setWarning(false);
         PsDebug.setMessage(false);
-        fpUniverse.findNose();
+        fpUniverse.findNose(minSize);
         facialPoints = fpUniverse.getFacialPoints();
         fpUniverse.findMouth();
         facialPoints = fpUniverse.getFacialPoints();
