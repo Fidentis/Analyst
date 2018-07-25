@@ -885,7 +885,7 @@ public class PairComparisonConfiguration extends javax.swing.JPanel {
                 tc.getViewerPanel_2Faces().getListener1().getFacialPoints(),
                 tc.getViewerPanel_2Faces().getListener1().getModel(),
                 tc.getViewerPanel_2Faces().getListener2().getFacialPoints(),
-                tc.getViewerPanel_2Faces().getListener2().getModel());
+                tc.getViewerPanel_2Faces().getListener2().getModel(), false);
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
     private void fpThresholdSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpThresholdSliderStateChanged

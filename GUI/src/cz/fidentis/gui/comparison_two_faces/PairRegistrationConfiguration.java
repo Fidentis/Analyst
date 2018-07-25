@@ -862,7 +862,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1109, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1125,8 +1125,8 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                             tc.getViewerPanel_2Faces().getListener2().setFacialPointRadius(fpSizeSlider.getValue() / 1000f);
                         }
 
-                        procrustes.getPa().updateFacialPoints(c.getMainFp());
-                        procrustes.getPa2().updateFacialPoints(c.getSecondaryFp());
+                        /*procrustes.getPa().updateFacialPoints(c.getMainFp());
+                        procrustes.getPa2().updateFacialPoints(c.getSecondaryFp());*/
 
                         c.setCompFTransformations(trans);
 
@@ -1277,7 +1277,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 c.getMainFp(),
                 c.getModel1(),
                 c.getSecondaryFp(),
-                c.getModel2());
+                c.getModel2(), true);
 
     }//GEN-LAST:event_exportPointsButtonActionPerformed
 
