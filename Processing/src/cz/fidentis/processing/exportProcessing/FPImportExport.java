@@ -236,17 +236,18 @@ public class FPImportExport {
      * @param mainModel - main model
      * @param compFP - Feature points for secondary model
      * @param secondaryModel - secondary model
+     * @param decentralize - should points be decentralize to corresponding model?
      */
     public void exportTwoFaces(Component tc, List<FacialPoint> mainFP, Model mainModel,
-            List<FacialPoint> compFP, Model secondaryModel) {
+            List<FacialPoint> compFP, Model secondaryModel, boolean decentralize) {
         List<FpModel> points = new ArrayList<>(2);
 
-        FpModel model = prepareFPforExport(mainFP, mainModel);
+        FpModel model = prepareFPforExport(mainFP, mainModel, decentralize);
         if (model != null) {
             points.add(model);
         }
 
-        model = prepareFPforExport(compFP, secondaryModel);
+        model = prepareFPforExport(compFP, secondaryModel, decentralize);
         if (model != null) {
             points.add(model);
         }
@@ -254,15 +255,15 @@ public class FPImportExport {
         FPImportExport.instance().exportPoints(tc, points);
     }
 
-    //creates FpModel and decentralize FPs to model they were computed on
-    private FpModel prepareFPforExport(List<FacialPoint> fp, Model m) {
+    //creates FpModel and decentralize FPs to model they were computed on if chosen
+    private FpModel prepareFPforExport(List<FacialPoint> fp, Model m, boolean decentralize) {
         if(fp == null || fp.isEmpty() || m == null){
             return null;        //don't export fps if there are none
         }
         
         FpModel model = FPImportExport.instance().getFpModelFromFP(fp, m.getName());
 
-        if (model != null) {
+        if (model != null && decentralize) {
             model.decentralizeToModel(m);
         }
 
@@ -321,7 +322,7 @@ public class FPImportExport {
                     }
 
                     //transform and store FpModel for main face        
-                    FpModel model = prepareFPforExport(mainFP, mainModel);
+                    FpModel model = prepareFPforExport(mainFP, mainModel, true);
 
                     if (model != null) {
                         points.add(model);
