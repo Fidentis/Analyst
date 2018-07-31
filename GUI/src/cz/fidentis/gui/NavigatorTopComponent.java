@@ -18,6 +18,7 @@ import cz.fidentis.controller.Project;
 import cz.fidentis.controller.ProjectTree;
 import cz.fidentis.controller.ProjectTree.Node;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.gui.comparison_batch.BatchComparisonResults;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
 import cz.fidentis.renderer.ComparisonGLEventListener;
@@ -376,6 +377,7 @@ public final class NavigatorTopComponent extends TopComponent {
                 case "Batch comparison":
                     project.setSelectedPart(4);
                     BatchComparison batchComparison = project.getSelectedBatchComparison();
+                    BatchComparisonResults batchResults = GUIController.getConfigurationTopComponent().getBatchComparisonResults();
                     ComparisonGLEventListener listener = tc.getViewerPanel_Batch().getListener();
                     listener.drawHD(false);
                     listener.setProcrustes(false);
@@ -387,14 +389,12 @@ public final class NavigatorTopComponent extends TopComponent {
                         Model model = ModelLoader.instance().loadModel(file, true, true);
                         listener.setModels(model);
                         
-                        if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel() != null){
-                            GUIController.getConfigurationTopComponent().getBatchComparisonResults().setCurrentModel(model, lastNodeIndex);
-                            if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().isLocalAreasSet()
-                                    && GUIController.getConfigurationTopComponent().getBatchComparisonResults().isVisibleLocalArea()){
-                                GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().updateModel(model);
-                                
+                        if (batchResults != null && batchResults.getLocalAreasJPanel() != null){
+                            batchResults.setCurrentModel(model, lastNodeIndex);
+                            if (batchResults.getLocalAreasJPanel().isLocalAreasSet()
+                                    && batchResults.isVisibleLocalArea()){
+                                batchResults.getLocalAreasJPanel().updateModel(model);
                             }
-                            
                         }
                         
                         if(batchComparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
@@ -414,12 +414,11 @@ public final class NavigatorTopComponent extends TopComponent {
                         Model model = ModelLoader.instance().loadModel(file, true, false);
                         listener.setModels(model);
                         
-                        if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel()!= null){
-                            GUIController.getConfigurationTopComponent().getBatchComparisonResults().setCurrentModel(model, lastNodeIndex);
-                            if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().isLocalAreasSet()
-                                    && GUIController.getConfigurationTopComponent().getBatchComparisonResults().isVisibleLocalArea()){
-                                GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().updateModel(model);
-                                
+                        if (batchResults != null && batchResults.getLocalAreasJPanel()!= null){
+                            batchResults.setCurrentModel(model, lastNodeIndex);
+                            if (batchResults.getLocalAreasJPanel().isLocalAreasSet()
+                                    && batchResults.isVisibleLocalArea()){
+                                batchResults.getLocalAreasJPanel().updateModel(model);
                             }
                         }
                         
@@ -428,11 +427,11 @@ public final class NavigatorTopComponent extends TopComponent {
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.averageModel"))) {
                         listener.setModels(batchComparison.getAverageFace());
-                        if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel()!= null){
-                            GUIController.getConfigurationTopComponent().getBatchComparisonResults().setCurrentModel(batchComparison.getAverageFace(), -1);
-                            if (GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().isLocalAreasSet() 
-                                    && GUIController.getConfigurationTopComponent().getBatchComparisonResults().isVisibleLocalArea()){
-                                GUIController.getConfigurationTopComponent().getBatchComparisonResults().getLocalAreasJPanel().updateModel(batchComparison.getAverageFace());
+                        if (batchResults != null && batchResults.getLocalAreasJPanel()!= null){
+                            batchResults.setCurrentModel(batchComparison.getAverageFace(), -1);
+                            if (batchResults.getLocalAreasJPanel().isLocalAreasSet() 
+                                    && batchResults.isVisibleLocalArea()){
+                                batchResults.getLocalAreasJPanel().updateModel(batchComparison.getAverageFace());
                                 
                             }
                         }
