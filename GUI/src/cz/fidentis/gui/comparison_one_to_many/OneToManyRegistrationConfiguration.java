@@ -1252,7 +1252,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         FPImportExport.instance().exportOneToMany(tc,
                 getContext(),
-                tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel());
+                tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel(), true);
 
     }//GEN-LAST:event_exportFPButtonActionPerformed
 

@@ -466,7 +466,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
 
     private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        FPImportExport.instance().exportBatch(tc, getContext());
+        FPImportExport.instance().exportBatch(tc, getContext(), false);
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
     public void setProcessComparisonEnabled(boolean en) {

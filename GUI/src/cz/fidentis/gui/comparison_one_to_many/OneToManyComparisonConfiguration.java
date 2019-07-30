@@ -504,7 +504,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
      final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         FPImportExport.instance().exportOneToMany(tc,
                 getContext(),
-                tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel());
+                tc.getOneToManyViewerPanel().getListener1().getFacialPoints(), tc.getOneToManyViewerPanel().getListener1().getModel(), false);
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
     private void createAvgCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAvgCheckBoxActionPerformed

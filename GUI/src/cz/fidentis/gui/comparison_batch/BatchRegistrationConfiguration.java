@@ -1282,7 +1282,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
     private void exportFpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportFpButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        FPImportExport.instance().exportBatch(tc, getContext());
+        FPImportExport.instance().exportBatch(tc, getContext(), true);
 
     }//GEN-LAST:event_exportFpButtonActionPerformed
 

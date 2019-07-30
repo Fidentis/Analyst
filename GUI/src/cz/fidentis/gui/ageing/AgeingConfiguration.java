@@ -420,7 +420,7 @@ public class AgeingConfiguration extends javax.swing.JPanel {
 
     private void exportPointsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPointsButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
-        FPImportExport.instance().exportBatch(tc, tc.getProject().getSelectedBatchComparison());
+        FPImportExport.instance().exportBatch(tc, tc.getProject().getSelectedBatchComparison(), true);
         //FPImportExport.instance().
     }//GEN-LAST:event_exportPointsButtonActionPerformed
 

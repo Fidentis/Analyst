@@ -271,10 +271,10 @@ public class FPImportExport {
     }
 
     //creates FpModel and decentralize FPs to model they were computed on
-    private FpModel prepareFPforExport(List<FacialPoint> fp, File f) {
+    private FpModel prepareFPforExport(List<FacialPoint> fp, File f, boolean decentralize) {
         FpModel model = FPImportExport.instance().getFpModelFromFP(fp, f.getName());
 
-        if (model != null) {
+        if (model != null && decentralize) {
             model.decentralizeToFile(f);
         }
 
@@ -291,9 +291,10 @@ public class FPImportExport {
      * 1:N mode
      * @param mainFP - Feature points for main face
      * @param mainModel - main model
+     * @param decentralize - should landmarks be decentralized to their models, removing the transformations introduced during the model loading
      */
     public void exportOneToMany(final Component tc, final OneToManyComparison data,
-            final List<FacialPoint> mainFP, final Model mainModel) {
+            final List<FacialPoint> mainFP, final Model mainModel, final boolean decentralize) {
         final List<FpModel> points = new ArrayList<>();
         final List<File> models = data.getModels();
 
@@ -314,7 +315,7 @@ public class FPImportExport {
                         if(fp == null || fp.isEmpty())
                             continue;       //don't export fps if there are none
 
-                        FpModel model = prepareFPforExport(fp, f);
+                        FpModel model = prepareFPforExport(fp, f, decentralize);
 
                         if (model != null) {
                             points.add(model);
@@ -349,8 +350,9 @@ public class FPImportExport {
      * was initialized
      * @param data - BatchComparison class storing all computed data from N:N
      * mode
+     * @param decentralize - should landmarks be decentralized to their models, removing the transformations introduced during the model loading
      */
-    public void exportBatch(final Component tc, final BatchComparison data) {
+    public void exportBatch(final Component tc, final BatchComparison data, final boolean decentralize) {
         final List<FpModel> points = new ArrayList<>();
         final List<File> models = data.getModels();
 
@@ -371,7 +373,7 @@ public class FPImportExport {
                         if(fp == null || fp.isEmpty())
                             continue;       //don't export fps if they are not there
 
-                        FpModel model = prepareFPforExport(fp, f);
+                        FpModel model = prepareFPforExport(fp, f, decentralize);
 
                         if (model != null) {
                             points.add(model);
