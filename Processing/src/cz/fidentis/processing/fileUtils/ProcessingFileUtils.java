@@ -105,8 +105,6 @@ public class ProcessingFileUtils {
         String fPath = FileUtils.instance().getTempDirectoryPath() + File.separator + moduleTMPfolder.getPath() + File.separator + moduleTMPfolder.getName() + "_" + i + "_" + j;
         //String fPath = moduleTMPfolder.getPath() + File.separator + moduleTMPfolder.getName() + "_" + i + "_" + j;
         File f = new File(fPath + ".ftmp");
-        
-        
 
         me = new ModelExporter(model);
         me.exportModelToObj(f, textures);

@@ -206,7 +206,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jPanel7" max="32767" attributes="0"/>
-              <Component id="jScrollPane4" pref="605" max="32767" attributes="0"/>
+              <Component id="jScrollPane4" pref="800" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -214,7 +214,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane4" pref="389" max="32767" attributes="0"/>
+                  <Component id="jScrollPane4" pref="450" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -301,12 +301,29 @@
         <Container class="javax.swing.JScrollPane" name="jScrollPane4">
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Container class="cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical" name="plotsDrawingPanelBatchNumerical1">
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+            </Container>
+          </SubComponents>
         </Container>
       </SubComponents>
     </Container>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
     </Component>
-        <Container class="javax.swing.JFrame" name="jFrame4">
+    <Container class="javax.swing.JFrame" name="jFrame4">
 
       <Layout>
         <DimensionLayout dim="0">
@@ -352,12 +369,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="820" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="310" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="449" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -388,7 +405,7 @@
                           <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jComboBox7" min="-2" pref="151" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="174" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -511,14 +528,32 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="pairComparisonPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="pairComparisonPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
+      <SubComponents>
+        <Component class="cz.fidentis.gui.PairComparisonPanel" name="pairComparisonPanel">
+        </Component>
+      </SubComponents>
     </Container>
     <Container class="javax.swing.JFrame" name="alignmentFrame">
 
@@ -660,7 +695,7 @@
                       <Component id="colormapPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="slicesPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="comparisonButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -1895,6 +1930,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="cz/fidentis/gui/comparison_batch/Bundle.properties" key="BatchComparisonResults.exportLandmarksButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                </Property>
+                <Property name="actionCommand" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cz/fidentis/gui/comparison_batch/Bundle.properties" key="BatchComparisonResults.exportLandmarksButton.actionCommand_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>

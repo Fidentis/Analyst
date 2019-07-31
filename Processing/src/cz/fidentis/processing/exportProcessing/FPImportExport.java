@@ -323,7 +323,7 @@ public class FPImportExport {
                     }
 
                     //transform and store FpModel for main face        
-                    FpModel model = prepareFPforExport(mainFP, mainModel, true);
+                    FpModel model = prepareFPforExport(mainFP, mainModel, decentralize);
 
                     if (model != null) {
                         points.add(model);

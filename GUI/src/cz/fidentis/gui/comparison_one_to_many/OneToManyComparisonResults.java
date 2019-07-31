@@ -1485,7 +1485,8 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         getContext().setState(2);
         GUIController.getConfigurationTopComponent().addOneToManyComparisonComponent();
 
-        Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
+        // Load registered model, not original
+        Model m = ModelLoader.instance().loadModel(getContext().getRegisteredModels().get(0), false, true);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().drawHD(false);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setProcrustes(false);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setModel1(getContext().getPrimaryModel());
