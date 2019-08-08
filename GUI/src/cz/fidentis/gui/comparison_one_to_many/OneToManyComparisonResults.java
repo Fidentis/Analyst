@@ -69,7 +69,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         densLabel.setVisible(false);
         density.setVisible(false);
         jPanel2.setVisible(true);
-        jButton10.setVisible(false);
+        exportRegisteredFacesButton.setVisible(true);
         jButton6.setVisible(false);
         comparisonButton.setVisible(false);
         exportOrderedResultsButton.setVisible(false);
@@ -86,7 +86,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jPanel2.setVisible(false);
         comparisonButton.setVisible(true);
         jPanel1.setVisible(true);
-        jButton10.setVisible(true);
+        exportRegisteredFacesButton.setVisible(true);
         jButton6.setVisible(true);
         exportOrderedResultsButton.setVisible(true);
         maxThresholdSpinner.setVisible(true);
@@ -220,7 +220,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         visResExportButton = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        exportRegisteredFacesButton = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         density = new javax.swing.JSlider();
         densLabel = new javax.swing.JLabel();
@@ -1161,10 +1161,10 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.jButton10.text")); // NOI18N
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(exportRegisteredFacesButton, org.openide.util.NbBundle.getMessage(OneToManyComparisonResults.class, "OneToManyComparisonResults.exportRegisteredFacesButton.text")); // NOI18N
+        exportRegisteredFacesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                exportRegisteredFacesButtonActionPerformed(evt);
             }
         });
 
@@ -1271,7 +1271,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                         .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(alignParametersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportRegisteredFacesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(heatplotButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1335,7 +1335,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton10)
+                .addComponent(exportRegisteredFacesButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(alignParametersButton)
                 .addGap(24, 24, 24)
@@ -1498,13 +1498,13 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().rotationAndSizeRestart();
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void exportRegisteredFacesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportRegisteredFacesButtonActionPerformed
         //no export of avg face?
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().saveRegisteredModelsOneToMany(tc, getContext().getRegisteredModels(),
                 getContext().getModels(),
                 getContext().getPrimaryModel(), "_1n");
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_exportRegisteredFacesButtonActionPerformed
 
     /**
      * This method saves current visualisation shown in the panel after pushing
@@ -2491,6 +2491,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel densLabel2;
     private javax.swing.JSlider density;
     private javax.swing.JButton exportOrderedResultsButton;
+    private javax.swing.JButton exportRegisteredFacesButton;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
     private javax.swing.JButton heatplotButton;
@@ -2498,7 +2499,6 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
     private javax.swing.JCheckBox highlightCutsCheckBox;
     private cz.fidentis.visualisation.histogram.histogramPanel histogram1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

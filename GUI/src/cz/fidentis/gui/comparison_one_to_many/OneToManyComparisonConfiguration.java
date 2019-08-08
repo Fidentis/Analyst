@@ -85,7 +85,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         createAvgCheckBox = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton10 = new javax.swing.JButton();
+        exportRegisteredFacesButton = new javax.swing.JButton();
         exportLandmarksButton = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -198,10 +198,10 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.jButton10.text")); // NOI18N
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(exportRegisteredFacesButton, org.openide.util.NbBundle.getMessage(OneToManyComparisonConfiguration.class, "OneToManyComparisonConfiguration.exportRegisteredFacesButton.text")); // NOI18N
+        exportRegisteredFacesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                exportRegisteredFacesButtonActionPerformed(evt);
             }
         });
 
@@ -221,7 +221,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(exportLandmarksButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportRegisteredFacesButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
@@ -249,7 +249,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton10)
+                .addComponent(exportRegisteredFacesButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportLandmarksButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -489,12 +489,12 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
         GUIController.getConfigurationTopComponent().addOneToManyRegistrationComponent();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void exportRegisteredFacesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportRegisteredFacesButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().saveRegisteredModelsOneToMany(tc, getContext().getRegisteredModels(),
                 getContext().getModels(), 
                 getContext().getPrimaryModel(), "_1n");
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_exportRegisteredFacesButtonActionPerformed
 
     private void createAvgCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_createAvgCheckBoxStateChanged
   
@@ -547,10 +547,10 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
     private javax.swing.JCheckBox createAvgCheckBox;
     private javax.swing.JLabel createAvgLabel;
     private javax.swing.JButton exportLandmarksButton;
+    private javax.swing.JButton exportRegisteredFacesButton;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JSlider fpThresholdSlider;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;

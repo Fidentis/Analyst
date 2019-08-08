@@ -93,7 +93,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         colormapPanel.setVisible(false);
         slicesPanel.setVisible(false);
         jButton9.setVisible(false);
-        jButton10.setVisible(false);
+        exportRegisteredFacesButton.setVisible(true);
         jPanel2.setVisible(true);
         jButton8.setVisible(false);
         exportDistToMeanButton.setVisible(true);
@@ -117,7 +117,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jPanel1.setVisible(true);
         jPanel2.setVisible(false);
         jButton9.setVisible(true);
-        jButton10.setVisible(true);
+        exportRegisteredFacesButton.setVisible(true);
         jButton8.setVisible(true);
         exportDistToMeanButton.setVisible(false);
         exportSymetricResults.setVisible(true);
@@ -207,7 +207,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        exportRegisteredFacesButton = new javax.swing.JButton();
         heatplotButton = new javax.swing.JButton();
         exportDistToMeanButton = new javax.swing.JButton();
         exportSymetricResults = new javax.swing.JButton();
@@ -921,10 +921,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton10.text")); // NOI18N
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(exportRegisteredFacesButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportRegisteredFacesButton.text")); // NOI18N
+        exportRegisteredFacesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                exportRegisteredFacesButtonActionPerformed(evt);
             }
         });
 
@@ -1451,7 +1451,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(jLabel2)
                     .addComponent(alignResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exportRegisteredFacesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(exportDistToMeanButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1506,7 +1506,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton10)
+                .addComponent(exportRegisteredFacesButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1867,11 +1867,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         getContext().setValuesTypeIndex(valuesComboBox.getSelectedIndex());
     }//GEN-LAST:event_valuesComboBoxActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void exportRegisteredFacesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportRegisteredFacesButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().saveRegisteredModelsBatch(tc, getContext().getRegistrationResults(),
                 getContext().getModels(), "_batch");
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_exportRegisteredFacesButtonActionPerformed
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
         if (getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
@@ -2852,6 +2852,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton exportDatabaseButton;
     private javax.swing.JButton exportDistToMeanButton;
     private javax.swing.JButton exportLandmarksButton;
+    private javax.swing.JButton exportRegisteredFacesButton;
     private javax.swing.JButton exportSymetricResults;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
@@ -2861,7 +2862,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private cz.fidentis.visualisation.histogram.histogramPanel histogram1;
     private cz.fidentis.visualisation.histogram.histogramPanel histogramPanel1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
