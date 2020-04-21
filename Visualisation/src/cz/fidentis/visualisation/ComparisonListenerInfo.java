@@ -67,6 +67,9 @@ public class ComparisonListenerInfo {
     private float[] fogColor = {0f, 0f, 255f, 1.0f};
     private boolean showBoxplot = false;
     private boolean showBoxplotFunction = false;
+    
+    private Model transparentModel = null;
+    private float modelOpacity = 0.5f;
 
     public ComparisonListenerInfo() {
         models = new ArrayList<>();
@@ -232,6 +235,33 @@ public class ComparisonListenerInfo {
 
     public void setIndexOfSelectedPoint(int indexOfSelectedPoint) {
         this.indexOfSelectedPoint = indexOfSelectedPoint;
+        if (procrustes && paInfo != null) {
+            paInfo.setIndexOfSelectedPoint(indexOfSelectedPoint);
+            if (paInfo.getType() > 0) {
+                paInfo.setFacialPoints(paInfo.getGpa().countMeanConfig().getFacialPoints());
+            } else {
+                paInfo.setFacialPoints(facialPoints);
+            }
+        }
+    }
+    
+    public void setIndexOfSelectedModel(int indexOfSelectedModel) {
+        if (paInfo != null) {
+            paInfo.setIndexOfSelectedModel(indexOfSelectedModel);
+        }
+    }
+    
+    public void setIndexOfHoveredPoint(int indexOfHoveredPoint) {
+        if (paInfo != null) {
+            paInfo.setIndexOfHoveredPoint(indexOfHoveredPoint);
+            paInfo.setFacialPoints(facialPoints);
+        } 
+    }
+    
+    public void setIndexOfHoveredModel(int indexOfHoveredModel) {
+        if (paInfo != null) {
+            paInfo.setIndexOfHoveredModel(indexOfHoveredModel);
+        }
     }
 
     public float getFacialPointRadius() {
@@ -474,6 +504,22 @@ public class ComparisonListenerInfo {
     public void setShowBoxplotFunction(boolean showBoxplotFunction) {
         this.showBoxplotFunction = showBoxplotFunction;
     }
-   
-    
+
+    public Model getTransparentModel() {
+        return transparentModel;
+    }
+
+    public void setTransparentModel(Model transparentModel) {
+        this.transparentModel = transparentModel;
+    }
+
+    public float getModelOpacity() {
+        return modelOpacity;
+    }
+
+    public void setModelOpacity(float modelTransp) {
+        this.modelOpacity = modelTransp;
+    }
+
+       
 }

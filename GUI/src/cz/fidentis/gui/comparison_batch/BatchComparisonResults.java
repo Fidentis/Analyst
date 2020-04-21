@@ -25,6 +25,7 @@ import cz.fidentis.undersampling.Type;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utils.SortUtils;
 import cz.fidentis.visualisation.ColorScheme;
+import cz.fidentis.visualisation.ComparisonListenerInfo;
 import cz.fidentis.visualisation.histogram.histogramPanel;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
@@ -40,6 +41,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -93,7 +95,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         colormapPanel.setVisible(false);
         slicesPanel.setVisible(false);
         jButton9.setVisible(false);
-        exportRegisteredFacesButton.setVisible(true);
+        jButton10.setVisible(false);
         jPanel2.setVisible(true);
         jButton8.setVisible(false);
         exportDistToMeanButton.setVisible(true);
@@ -117,7 +119,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jPanel1.setVisible(true);
         jPanel2.setVisible(false);
         jButton9.setVisible(true);
-        exportRegisteredFacesButton.setVisible(true);
+        jButton10.setVisible(true);
         jButton8.setVisible(true);
         exportDistToMeanButton.setVisible(false);
         exportSymetricResults.setVisible(true);
@@ -155,7 +157,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         lensSlider = new javax.swing.JSlider();
         jScrollPane4 = new javax.swing.JScrollPane();
-        plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jFrame4 = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
@@ -170,7 +171,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         auxLensSlider = new javax.swing.JSlider();
         jLabel7 = new javax.swing.JLabel();
         pairFrame = new javax.swing.JFrame();
-        pairComparisonPanel = new cz.fidentis.gui.PairComparisonPanel();
         alignmentFrame = new javax.swing.JFrame();
         jScrollPane3 = new javax.swing.JScrollPane();
         alignmentTable = new javax.swing.JTable();
@@ -204,10 +204,23 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         sizeLabel = new javax.swing.JLabel();
         fpSizeSlider = new javax.swing.JSlider();
         exportDatabaseButton = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        showPointInfoCheckbox = new javax.swing.JCheckBox();
+        customConnectionsCheckbox = new javax.swing.JCheckBox();
+        addPointConnectionsButton = new javax.swing.JToggleButton();
+        clearConnectionsButton = new javax.swing.JButton();
+        removeConnectionsButton = new javax.swing.JToggleButton();
+        jLabel25 = new javax.swing.JLabel();
+        transparentModelBox = new javax.swing.JComboBox<>();
+        jLabel26 = new javax.swing.JLabel();
+        opacitySlider = new javax.swing.JSlider();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        exportRegisteredFacesButton = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         heatplotButton = new javax.swing.JButton();
         exportDistToMeanButton = new javax.swing.JButton();
         exportSymetricResults = new javax.swing.JButton();
@@ -420,32 +433,19 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addComponent(lensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout plotsDrawingPanelBatchNumerical1Layout = new javax.swing.GroupLayout(plotsDrawingPanelBatchNumerical1);
-        plotsDrawingPanelBatchNumerical1.setLayout(plotsDrawingPanelBatchNumerical1Layout);
-        plotsDrawingPanelBatchNumerical1Layout.setHorizontalGroup(
-            plotsDrawingPanelBatchNumerical1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        plotsDrawingPanelBatchNumerical1Layout.setVerticalGroup(
-            plotsDrawingPanelBatchNumerical1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jScrollPane4.setViewportView(plotsDrawingPanelBatchNumerical1);
-
         javax.swing.GroupLayout jFrame3Layout = new javax.swing.GroupLayout(jFrame3.getContentPane());
         jFrame3.getContentPane().setLayout(jFrame3Layout);
         jFrame3Layout.setHorizontalGroup(
             jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
         );
         jFrame3Layout.setVerticalGroup(
             jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame3Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
         );
 
         plotsDrawingPanelAuxiliary2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -458,11 +458,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         plotsDrawingPanelAuxiliary2.setLayout(plotsDrawingPanelAuxiliary2Layout);
         plotsDrawingPanelAuxiliary2Layout.setHorizontalGroup(
             plotsDrawingPanelAuxiliary2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 820, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         plotsDrawingPanelAuxiliary2Layout.setVerticalGroup(
             plotsDrawingPanelAuxiliary2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 449, Short.MAX_VALUE)
+            .addGap(0, 310, Short.MAX_VALUE)
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel5.text")); // NOI18N
@@ -525,7 +525,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(174, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -576,20 +576,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         pairFrameLayout.setHorizontalGroup(
             pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pairFrameLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(pairComparisonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         pairFrameLayout.setVerticalGroup(
             pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(pairFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pairFrameLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(pairComparisonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pairFrame.setSize(new Dimension(800,600));
@@ -869,10 +859,121 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel10.text")); // NOI18N
+
+        jPanel8.setBackground(new java.awt.Color(0, 255, 0));
+        jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel8MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 48, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel11.text")); // NOI18N
+
+        jPanel9.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel9MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 29, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(showPointInfoCheckbox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.showPointInfoCheckbox.text")); // NOI18N
+        showPointInfoCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showPointInfoCheckboxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(customConnectionsCheckbox, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.customConnectionsCheckbox.text")); // NOI18N
+        customConnectionsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customConnectionsCheckboxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(addPointConnectionsButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.addPointConnectionsButton.text")); // NOI18N
+        addPointConnectionsButton.setEnabled(false);
+        addPointConnectionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPointConnectionsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(clearConnectionsButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.clearConnectionsButton.text")); // NOI18N
+        clearConnectionsButton.setEnabled(false);
+        clearConnectionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearConnectionsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(removeConnectionsButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.removeConnectionsButton.text")); // NOI18N
+        removeConnectionsButton.setEnabled(false);
+        removeConnectionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeConnectionsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel25, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel25.text")); // NOI18N
+
+        BatchComparison c = getContext();
+        Vector<String> models = new Vector<>();
+        models.add("None");
+        //models.add("Average");
+        for (int i=0; i < c.getModels().size(); i++) {
+            models.add(c.getModel(i).getName());
+        }
+        transparentModelBox.setModel(new javax.swing.DefaultComboBoxModel<>(models));
+        transparentModelBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transparentModelBoxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel26, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jLabel26.text")); // NOI18N
+
+        opacitySlider.setMajorTickSpacing(20);
+        opacitySlider.setMinorTickSpacing(5);
+        opacitySlider.setPaintLabels(true);
+        opacitySlider.setPaintTicks(true);
+        opacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                opacitySliderStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(exportDatabaseButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(clearConnectionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(addPointConnectionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -881,9 +982,36 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(fpSizeSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(fpDistanceSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(sizeLabel))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(sizeLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(exportDatabaseButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(removeConnectionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(transparentModelBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel11))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(customConnectionsCheckbox)
+                            .addComponent(showPointInfoCheckbox))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(12, 12, 12))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(opacitySlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -896,7 +1024,33 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fpSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(transparentModelBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(opacitySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addComponent(showPointInfoCheckbox)
+                .addGap(14, 14, 14)
+                .addComponent(customConnectionsCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addPointConnectionsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removeConnectionsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clearConnectionsButton)
+                .addGap(11, 11, 11)
                 .addComponent(exportDatabaseButton))
         );
 
@@ -921,10 +1075,10 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(exportRegisteredFacesButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportRegisteredFacesButton.text")); // NOI18N
-        exportRegisteredFacesButton.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.jButton10.text")); // NOI18N
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportRegisteredFacesButtonActionPerformed(evt);
+                jButton10ActionPerformed(evt);
             }
         });
 
@@ -1433,13 +1587,14 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             }
         });
 
+        /*
         org.openide.awt.Mnemonics.setLocalizedText(exportLandmarksButton, org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportLandmarksButton.text")); // NOI18N
-        exportLandmarksButton.setActionCommand(org.openide.util.NbBundle.getMessage(BatchComparisonResults.class, "BatchComparisonResults.exportLandmarksButton.actionCommand_1")); // NOI18N
         exportLandmarksButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportLandmarksButtonActionPerformed(evt);
             }
         });
+        */
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1451,7 +1606,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                     .addComponent(jLabel2)
                     .addComponent(alignResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exportRegisteredFacesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(exportDistToMeanButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1481,7 +1636,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addComponent(colormapPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(slicesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(comparisonButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1506,7 +1661,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(exportRegisteredFacesButton)
+                .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1526,7 +1681,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1969, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1592,7 +1747,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         //    horizontalGradient1.repaint();
         histogramPanel1.repaint();
         histogram1.repaint();
-
+        setColors();
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -1867,11 +2022,11 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         getContext().setValuesTypeIndex(valuesComboBox.getSelectedIndex());
     }//GEN-LAST:event_valuesComboBoxActionPerformed
 
-    private void exportRegisteredFacesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportRegisteredFacesButtonActionPerformed
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().saveRegisteredModelsBatch(tc, getContext().getRegistrationResults(),
                 getContext().getModels(), "_batch");
-    }//GEN-LAST:event_exportRegisteredFacesButtonActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void VisualizationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualizationBoxActionPerformed
         if (getContext().getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
@@ -2082,24 +2237,24 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             }
 
-            plotsDrawingPanelBatchNumerical1.setValues(values);
+            //plotsDrawingPanelBatchNumerical1.setValues(values);
             String names[] = new String[getContext().getModels().size()];
             int i = 0;
             for (File f : getContext().getModels()) {
                 names[i] = f.getName();
                 i++;
             }
-            plotsDrawingPanelBatchNumerical1.setModelNames(names);
+            //plotsDrawingPanelBatchNumerical1.setModelNames(names);
 
-            plotsDrawingPanelBatchNumerical1.repaint();
+            //plotsDrawingPanelBatchNumerical1.repaint();
             jFrame3.setTitle("Numerical results");
             Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
             jFrame3.setIconImage(icon);
             jFrame3.setVisible(true);
             jFrame3.setSize(800, 600);
             jFrame3.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
-            plotsDrawingPanelBatchNumerical1.revalidate();
-            plotsDrawingPanelBatchNumerical1.repaint();
+            //plotsDrawingPanelBatchNumerical1.revalidate();
+            //plotsDrawingPanelBatchNumerical1.repaint();
 
         }
     }//GEN-LAST:event_heatplotButtonActionPerformed
@@ -2317,47 +2472,47 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         plotsDrawingPanelAuxiliary2.mouseClicked(evt);
 
         if (plotsDrawingPanelAuxiliary2.getSelectedModelIndex() > -1 && plotsDrawingPanelAuxiliary2.getSelectedModelIndex() < bc.getModels().size()) {
-            pairFrame.setVisible(true);
-            pairComparisonPanel.clear();
-            Runnable run = new Runnable() {
-                @Override
-                public void run() {
-                    String model2 = bc.getModels().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName();
-                    String model1 = jComboBox1.getSelectedIndex() == 0 ? "Average" : bc.getModels().get(jComboBox1.getSelectedIndex() - 1).getName();
-                    pairFrame.setTitle(model1 + " vs. " + model2);
-
-                    pairComparisonPanel.getListener().removeModel();
-                    List<File> models;
-                    if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
-                        models = bc.getModels();
-                    } else {
-                        models = bc.getRegistrationResults();
-                    }
-                    Model primary;
-                    List<Float> values;
-                    if (jComboBox1.getSelectedIndex() == 0) {
-                        primary = bc.getAverageFace();
-                        values = bc.getHdVisualResults().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex());
-                    } else {
-                        primary = ModelLoader.instance().loadModel(models.get(jComboBox1.getSelectedIndex() - 1), false, false);
-                        values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, plotsDrawingPanelAuxiliary2.getSelectedModelIndex(), true);
-                    }
-                    pairComparisonPanel.getListener().addModel(primary);
-                    pairComparisonPanel.getListener().addModel(ModelLoader.instance().loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
-
-                    HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
-                    HDpainting hdp = new HDpainting(info);
-                    pairComparisonPanel.getListener().setHdPaint(hdp);
-                    pairComparisonPanel.getListener().setHdInfo(info);
-                    pairComparisonPanel.setInfo(hdp);
-                    pairComparisonPanel.getListener().setPaintHD(true);
-                    pairFrame.setVisible(true);
-                }
-
-            };
-
-            Thread t = new Thread(run);
-            t.start();
+//            pairFrame.setVisible(true);
+//            pairComparisonPanel.clear();
+//            Runnable run = new Runnable() {
+//                @Override
+//                public void run() {
+//                    String model2 = bc.getModels().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()).getName();
+//                    String model1 = jComboBox1.getSelectedIndex() == 0 ? "Average" : bc.getModels().get(jComboBox1.getSelectedIndex() - 1).getName();
+//                    pairFrame.setTitle(model1 + " vs. " + model2);
+//
+//                    pairComparisonPanel.getListener().removeModel();
+//                    List<File> models;
+//                    if (bc.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
+//                        models = bc.getModels();
+//                    } else {
+//                        models = bc.getRegistrationResults();
+//                    }
+//                    Model primary;
+//                    List<Float> values;
+//                    if (jComboBox1.getSelectedIndex() == 0) {
+//                        primary = bc.getAverageFace();
+//                        values = bc.getHdVisualResults().get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex());
+//                    } else {
+//                        primary = ModelLoader.instance().loadModel(models.get(jComboBox1.getSelectedIndex() - 1), false, false);
+//                        values = SurfaceComparisonProcessing.instance().numRawResForModel(bc.getHdCSVresults(), bc.getModels().size(), jComboBox1.getSelectedIndex() - 1, plotsDrawingPanelAuxiliary2.getSelectedModelIndex(), true);
+//                    }
+//                    pairComparisonPanel.getListener().addModel(primary);
+//                    pairComparisonPanel.getListener().addModel(ModelLoader.instance().loadModel(models.get(plotsDrawingPanelAuxiliary2.getSelectedModelIndex()), false, false));
+//
+//                    HDpaintingInfo info = new HDpaintingInfo(values, primary, true);
+//                    HDpainting hdp = new HDpainting(info);
+//                    pairComparisonPanel.getListener().setHdPaint(hdp);
+//                    pairComparisonPanel.getListener().setHdInfo(info);
+//                    pairComparisonPanel.setInfo(hdp);
+//                    pairComparisonPanel.getListener().setPaintHD(true);
+//                    pairFrame.setVisible(true);
+//                }
+//
+//            };
+//
+//            Thread t = new Thread(run);
+//            t.start();
 
         }
     }//GEN-LAST:event_plotsDrawingPanelAuxiliary2MouseClicked
@@ -2429,8 +2584,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_colorSchemeComboBoxActionPerformed
 
     private void colorschemeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorschemeComboBoxActionPerformed
-        plotsDrawingPanelBatchNumerical1.setScheme(ColorScheme.values()[colorschemeComboBox.getSelectedIndex()]);
-        plotsDrawingPanelBatchNumerical1.repaint();
+//        plotsDrawingPanelBatchNumerical1.setScheme(ColorScheme.values()[colorschemeComboBox.getSelectedIndex()]);
+//        plotsDrawingPanelBatchNumerical1.repaint();
     }//GEN-LAST:event_colorschemeComboBoxActionPerformed
 
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
@@ -2496,7 +2651,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     }//GEN-LAST:event_minThreshSpinnerStateChanged
 
     private void lensSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_lensSliderStateChanged
-        plotsDrawingPanelBatchNumerical1.setPeakStrength(lensSlider.getValue() / 10f);
+        //plotsDrawingPanelBatchNumerical1.setPeakStrength(lensSlider.getValue() / 10f);
     }//GEN-LAST:event_lensSliderStateChanged
 
     private void densityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_densityStateChanged
@@ -2565,11 +2720,90 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonSelectedAreaActionPerformed
 
+    private void jPanel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseClicked
+        activeColorPanel = jPanel8;
+        jColorChooser1.setColor(activeColorPanel.getBackground());
+        colorDialog.setVisible(true);
+    }//GEN-LAST:event_jPanel8MouseClicked
+
+    private void showPointInfoCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPointInfoCheckboxActionPerformed
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener();
+        tc.getPaInfo().setShowPointInfo(showPointInfoCheckbox.isSelected());
+    }//GEN-LAST:event_showPointInfoCheckboxActionPerformed
+
+    private void customConnectionsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customConnectionsCheckboxActionPerformed
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener();
+        tc.getPaInfo().setCustomConnections(customConnectionsCheckbox.isSelected());
+        clearConnectionsButton.setEnabled(customConnectionsCheckbox.isSelected());
+        removeConnectionsButton.setEnabled(customConnectionsCheckbox.isSelected());
+        addPointConnectionsButton.setEnabled(customConnectionsCheckbox.isSelected());
+    }//GEN-LAST:event_customConnectionsCheckboxActionPerformed
+
+    private void addPointConnectionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPointConnectionsButtonActionPerformed
+        ViewerPanel_Batch vp = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch();
+        vp.setAddPointConnections(addPointConnectionsButton.isSelected());
+        PApaintingInfo paInfo = vp.getListener().getPaInfo();
+        if (!addPointConnectionsButton.isSelected()) {
+            paInfo.deleteNewConnection();
+        } else {
+            paInfo.setIndexOfSelectedPoint(-1);
+            paInfo.setIndexOfSelectedModel(-2);
+            vp.setRemoveConnections(false);
+            removeConnectionsButton.setSelected(false);
+        }
+    }//GEN-LAST:event_addPointConnectionsButtonActionPerformed
+
+    private void clearConnectionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearConnectionsButtonActionPerformed
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener();
+        tc.getPaInfo().clearPointConnections();
+    }//GEN-LAST:event_clearConnectionsButtonActionPerformed
+
+    private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseClicked
+        activeColorPanel = jPanel9;
+        jColorChooser1.setColor(activeColorPanel.getBackground());
+        colorDialog.setVisible(true);
+    }//GEN-LAST:event_jPanel9MouseClicked
+
+    private void removeConnectionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeConnectionsButtonActionPerformed
+        ViewerPanel_Batch vp = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch();
+        vp.setRemoveConnections(removeConnectionsButton.isSelected());
+        if (removeConnectionsButton.isSelected()) {
+            vp.setAddPointConnections(false);
+            addPointConnectionsButton.setSelected(false);
+        }
+    }//GEN-LAST:event_removeConnectionsButtonActionPerformed
+
+    private void transparentModelBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transparentModelBoxActionPerformed
+        ComparisonListenerInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getInfo();
+        if (transparentModelBox.getSelectedIndex() >= 1) {
+            Model m = ModelLoader.instance().loadModel(getContext().getRegistrationResults().get(transparentModelBox.getSelectedIndex() - 1), true, false);
+            info.setTransparentModel(m);
+            info.setIndexOfSelectedModel(transparentModelBox.getSelectedIndex() - 1);
+        } /*else if (transparentModelBox.getSelectedIndex() == 1) {
+            info.setTransparentModel(getContext().getAverageFace());
+        }*/ else {
+            info.setTransparentModel(null);
+        }
+    }//GEN-LAST:event_transparentModelBoxActionPerformed
+
+    private void opacitySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_opacitySliderStateChanged
+        ComparisonListenerInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().getInfo();
+        info.setModelOpacity(opacitySlider.getValue() / 100f);
+    }//GEN-LAST:event_opacitySliderStateChanged
+
     private void exportLandmarksButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportLandmarksButtonActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         FPImportExport.instance().exportBatch(tc, getContext(), true);
     }//GEN-LAST:event_exportLandmarksButtonActionPerformed
 
+    private void setColors() {
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener();
+        float[] color = new float[4];
+        tc.setOtherModelsPointsColor(jPanel9.getBackground().getRGBColorComponents(color));
+        float[] color2 = new float[4];
+        tc.setSecondaryPointsColor(jPanel8.getBackground().getRGBColorComponents(color2));
+    }
+    
     private void InitUserSelectedPanel() {
         LocalSelectionFrame = new JFrame("LocalAreas");
         LocalSelectionFrame.setVisible(false);
@@ -2825,6 +3059,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox VisualizationBox;
+    private javax.swing.JToggleButton addPointConnectionsButton;
     private javax.swing.JButton alignResButton;
     private javax.swing.JFrame alignmentFrame;
     private javax.swing.JTable alignmentTable;
@@ -2834,6 +3069,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JCheckBox boxplotCheckBox;
     private javax.swing.JCheckBox boxplotContinuousCheckBox;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton clearConnectionsButton;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JPanel colorPanel;
     private javax.swing.JComboBox colorSchemeComboBox;
@@ -2841,6 +3077,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JComboBox colorschemeComboBox;
     private javax.swing.JButton comparisonButton;
     private javax.swing.JSlider crosscutSizeSlider;
+    private javax.swing.JCheckBox customConnectionsCheckbox;
     private javax.swing.JSlider cylLength;
     private javax.swing.JLabel cylLengthLabel;
     private javax.swing.JSlider cylRadius;
@@ -2852,7 +3089,6 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JButton exportDatabaseButton;
     private javax.swing.JButton exportDistToMeanButton;
     private javax.swing.JButton exportLandmarksButton;
-    private javax.swing.JButton exportRegisteredFacesButton;
     private javax.swing.JButton exportSymetricResults;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
@@ -2862,6 +3098,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private cz.fidentis.visualisation.histogram.histogramPanel histogram1;
     private cz.fidentis.visualisation.histogram.histogramPanel histogramPanel1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
@@ -2883,6 +3120,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JFrame jFrame3;
     private javax.swing.JFrame jFrame4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2897,6 +3136,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -2910,6 +3151,8 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2924,19 +3167,21 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSpinner normalSpinnerX;
     private javax.swing.JSpinner normalSpinnerY;
     private javax.swing.JSpinner normalSpinnerZ;
-    private cz.fidentis.gui.PairComparisonPanel pairComparisonPanel;
+    private javax.swing.JSlider opacitySlider;
     private javax.swing.JFrame pairFrame;
     private cz.fidentis.gui.PlotsDrawingPanelAuxiliary plotsDrawingPanelAuxiliary2;
-    private cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical plotsDrawingPanelBatchNumerical1;
     private javax.swing.JSpinner positionSpinnerX;
     private javax.swing.JSpinner positionSpinnerY;
     private javax.swing.JSpinner positionSpinnerZ;
+    private javax.swing.JToggleButton removeConnectionsButton;
     private javax.swing.JCheckBox samplingRaysCheckBox;
     private javax.swing.JToggleButton selectionButton;
     private javax.swing.JCheckBox showPlaneCheckBox;
+    private javax.swing.JCheckBox showPointInfoCheckbox;
     private javax.swing.JLabel sizeLabel;
     private javax.swing.JPanel slicesPanel;
     private javax.swing.JSlider thickness;
+    private javax.swing.JComboBox<String> transparentModelBox;
     private javax.swing.JComboBox valuesComboBox;
     private javax.swing.JCheckBox vectorsCheckBox;
     private javax.swing.JButton visResExportButton;

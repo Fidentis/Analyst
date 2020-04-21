@@ -13,6 +13,7 @@ import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.comparison.localAreas.Area;
 import cz.fidentis.comparison.localAreas.LocalAreas;
 import cz.fidentis.comparison.localAreas.PointsValues;
+import cz.fidentis.comparison.procrustes.GPA;
 import cz.fidentis.comparison.procrustes.ProcrustesAnalysis;
 import cz.fidentis.composite.ModelSelector;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -27,6 +28,7 @@ import cz.fidentis.utils.MathUtils;
 import cz.fidentis.visualisation.ComparisonListenerInfo;
 import cz.fidentis.visualisation.procrustes.PApainting;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
+import cz.fidentis.visualisation.procrustes.PointConnection;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
@@ -47,10 +49,14 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.media.opengl.GL;
 import static javax.media.opengl.GL.GL_ALWAYS;
 import static javax.media.opengl.GL.GL_BACK;
@@ -240,6 +246,9 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private Model originalGizmo;
     private Vector3f gizmoIntersection;
     private boolean highlightCuts = true;
+    
+    private Vector3f selectedCoords = null;
+    private float selectedRadius;
 
     /*private ArrayList<ArrayList<Float>> distances = new ArrayList<>();
     private ArrayList<ArrayList<Vector2f>> textureCoordinates = new ArrayList<>();
@@ -343,6 +352,27 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                 gl.glPushAttrib(GL_ALL_ATTRIB_BITS);
                 info.getPaPainting().drawPointsAfterPA(gl, glut);
                 gl.glPopAttrib();
+                if (info.getTransparentModel() != null) {
+                        gl.glPushMatrix();
+                        float[] color = {0.8667f, 0.7176f, 0.6275f, info.getModelOpacity()};
+                        float[] colorKs = {0, 0, 0, 1f};
+
+                        gl.glEnable(GL.GL_BLEND);
+                        gl.glEnable(GL.GL_CULL_FACE);
+                        gl.glCullFace(GL.GL_BACK);
+                        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+                        
+                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
+                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0);
+                        gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 10);
+
+                        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, colorKs, 0);
+                        
+                        info.getTransparentModel().drawWithoutTextures(gl);
+
+                        gl.glDisable(GL.GL_BLEND);
+                        gl.glPopMatrix();
+                    }
             } else if (info.isPaintHD()) {
                 /**
                  * edited - 11.03.2015 Jakub Palenik multiple visualizations of
@@ -1717,9 +1747,49 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public boolean selectPoint(double x, double y) {
+        return selectPoint(x, y, false);
+    }
+    
+    private boolean selectPointFromList(Vector3f v, Vector3f v1, Vector3f u, List points, float minDist, boolean hover) {
+        boolean selected = false;
+        for (int i = 0; i < points.size(); i++) {
+            Object o = points.get(i);
+            Vector3f p;
+            
+            if (o instanceof FacialPoint) {
+                p = ((FacialPoint) o).getPosition();
+            } else {
+                p = (Vector3f)o;
+            }
+            double t = ((p.x - v.x) * (v1.x - v.x)
+                        + (p.y - v.y) * (v1.y - v.y) + (p.z - v.z) * (v1.z - v.z))
+                        / (float) (Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2));
+            Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
+            float dist = (float) Math.sqrt(Math.pow(w.x - p.x, 2) + Math.pow(w.y - p.y, 2) + Math.pow(w.z - p.z, 2));
+                    
+            if (dist < minDist) {
+                if (!hover) {
+                    info.setIndexOfSelectedPoint(i);
+                } else {
+                    info.setIndexOfHoveredPoint(i);
+                }
+                minDist = dist;
+                selected = true;
+            }
+        }
+        return selected;
+    }
+
+    
+    public boolean selectPoint(double x, double y, boolean hover) {
         if (!info.isProcrustes() && (info.getFacialPoints() == null || info.getFacialPoints().isEmpty())) {
             return false;
         }
+        
+        if (info.isProcrustes()) {
+            return selectPAPoint(x, y, hover);
+        }
+        
         ModelSelector picker = new ModelSelector(glu);
         picker.castRay(x, y, viewport, modelViewMatrix, projectionMatrix);
         Vector3f v = picker.getRayStartPoint();
@@ -1727,24 +1797,17 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         Vector3f u = new Vector3f(v1.x - v.x, v1.y - v.y, v1.z - v.z);
         boolean selected = false;
 
-        float minDist = Float.MAX_VALUE;
+        float minDist = info.getFacialPointRadius();
 
-        if (info.isProcrustes() && info.getPaInfo().getType() == 2) {
+        if (info.isProcrustes() && info.getPaInfo().getType() >= 1) {
             ProcrustesAnalysis mean = info.getPaInfo().getGpa().countMeanConfig();
             List<ArrayList<Vector3f>> points = new ArrayList<>();
-
+            List<FacialPoint> closePoints = new ArrayList<>();
+            
+            if (info.getPaInfo().getType() == 2) {
             for (int j = 0; j < info.getPaInfo().getGpa().getConfigs().size(); j++) {
                 ProcrustesAnalysis lpa = info.getPaInfo().getGpa().getPA(j);
                 ArrayList<Vector3f> p = new ArrayList<>();
-                /*for (int i = 0; i < mean.getConfig().getRowDimension(); i++) {
-                 Vector3f vert = new Vector3f((float) lpa.getConfig().get(i, 0),
-                 (float) lpa.getConfig().get(i, 1), (float) lpa.getConfig().get(i, 2));
-
-                 List<Vector3f> newVertices = paPainting.enhanceVertices(vert, new Vector3f((float) mean.getConfig().get(i, 0),
-                 (float) mean.getConfig().get(i, 1), (float) mean.getConfig().get(i, 2)));
-
-                 p.add(newVertices.get(0));
-                 }*/
 
                 for (Integer fpt : mean.getConfig().keySet()) {
                     FacialPoint lpaFP = lpa.getConfig().get(fpt);
@@ -1757,14 +1820,15 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                     Vector3f vert = new Vector3f(pos.x, pos.y, pos.z);
 
                     Vector3f meanPos = mean.getConfig().get(fpt).getPosition();
-                    List<Vector3f> newVertices = info.getPaPainting().enhanceVertices(vert, new Vector3f(meanPos.x, meanPos.y, meanPos.z));
-
+                    Vector3f meanVert = new Vector3f(meanPos.x, meanPos.y, meanPos.z);
+                    List<Vector3f> newVertices = info.getPaPainting().enhanceVertices(vert, meanVert);
+                    //prida souradnice bodu podle nastavene vzdalenosti
                     p.add(newVertices.get(0));
                 }
 
                 points.add(p);
             }
-            for (int i = 0; i < points.size(); i++) {
+            for (int i = 0; i < points.size(); i++) { // ktera konfigurace
                 for (int j = 0; j < points.get(i).size(); j++) {
                     Vector3f p = points.get(i).get(j);
                     double t = ((p.x - v.x) * (v1.x - v.x)
@@ -1772,18 +1836,107 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
                             / (float) (Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2));
                     Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
                     float dist = (float) Math.sqrt(Math.pow(w.x - p.x, 2) + Math.pow(w.y - p.y, 2) + Math.pow(w.z - p.z, 2));
+                    
+                    float radius = info.getFacialPointRadius() / 2f;
 
-                    if (dist < info.getPaInfo().getPointSize() / 2f && dist < minDist) {
+                    if (dist < radius / 2f && isPointCloserThanSelected(p, v, radius)) {
+                        //minDist = dist;
+                        if (!hover) {
                         StatusDisplayer.getDefault().setStatusText("Selected configuration:" + i);
+                            info.setIndexOfSelectedModel(i);
+                            info.setIndexOfSelectedPoint(j);
+                        } else {
+                            info.setIndexOfHoveredModel(i);
+                            info.setIndexOfHoveredPoint(j);
+                        }
+                        selected = true;
+                        selectedCoords = p;
+                        selectedRadius = radius;
+                    }
+                }   
+
+            }
+            }
+            
+            for (int i = 0; i < mean.getFacialPoints().size(); i++) {
+                FacialPoint fp = mean.getFacialPoints().get(i);
+                double t = ((fp.getPosition().x - v.x) * (v1.x - v.x)
+                    + (fp.getPosition().y - v.y) * (v1.y - v.y) + (fp.getPosition().z - v.z) * (v1.z - v.z))
+                    / (float) (Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2));
+                Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
+                float dist = (float) Math.sqrt(Math.pow(w.x - fp.getPosition().x, 2) + Math.pow(w.y - fp.getPosition().y, 2) + Math.pow(w.z - fp.getPosition().z, 2));
+
+                if (dist < minDist && (info.getPaInfo().getType() != 2 || isPointCloserThanSelected(fp.getPosition(), v, info.getFacialPointRadius()))) {
+                    if (!hover) {
+                        info.setIndexOfSelectedPoint(i);
+                        info.setIndexOfSelectedModel(-1);
+                        StatusDisplayer.getDefault().setStatusText("Selected configuration: avg");
+                    } else {
+                        info.setIndexOfHoveredModel(-1);
+                        info.setIndexOfHoveredPoint(i);
+                    }
+                    if (info.getPaInfo().getType() == 2) {
+                        selectedCoords = fp.getPosition();
+                        selectedRadius = info.getFacialPointRadius();
+                    } else {
                         minDist = dist;
                     }
+                    selected = true;
                 }
+                
             }
+            
+            if (!selected && hover) {
+                info.setIndexOfHoveredModel(-2);
+                info.setIndexOfHoveredPoint(-1);
+            }
+            
+        } else if (info.isProcrustes() && info.getPaInfo().getType() == 0) {
+            List<ArrayList<Vector3f>> points = new ArrayList<>();
+            ArrayList<Vector3f> p = new ArrayList<>();
+            ArrayList<Vector3f> s = new ArrayList<>();
+            
+            for (int i = 0; i < info.getFacialPoints().size(); i++) {
+                FacialPoint pfp = info.getFacialPoints().get(i);
+                FacialPoint sfp = info.getPaInfo().getPa2().getConfig().get(pfp.getType());
+                
+                if (sfp == null) {
+                    continue;
+                }
+                
+                Vector3f pos = pfp.getPosition();
+                Vector3f pVert = new Vector3f(pos.x, pos.y, pos.z);
+                pos = sfp.getPosition();
+                Vector3f sVert = new Vector3f(pos.x, pos.y, pos.z);
+                
+                List<Vector3f> newVertices = info.getPaPainting().enhanceVertices(pVert, sVert);
+                p.add(newVertices.get(0));
+                s.add(newVertices.get(1));
+            }
+            points.add(p);
+            points.add(s);
+            
+            for (int i = 0; i < points.size(); i++) { // ktera konfigurace
+                float radius = info.getFacialPointRadius();
+                for (int j = 0; j < points.get(i).size(); j++) {
+                    Vector3f pt = points.get(i).get(j);
+                    double t = ((pt.x - v.x) * (v1.x - v.x)
+                            + (pt.y - v.y) * (v1.y - v.y) + (pt.z - v.z) * (v1.z - v.z))
+                            / (float) (Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2));
+                    Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
+                    float dist = (float) Math.sqrt(Math.pow(w.x - pt.x, 2) + Math.pow(w.y - pt.y, 2) + Math.pow(w.z - pt.z, 2));
 
-        }
+                    if (dist < radius && dist < minDist) {
+                        minDist = dist;
+                            //info.setIndexOfSelectedModel(i == points.size() - 1 ? -1 : i);
+                        info.setIndexOfSelectedPoint(j);
+                        selected = true;
+                    }
+                }   
 
-        //for (FacialPoint point : facialPoints) {
-        for (int i = 0; i < info.getFacialPoints().size(); i++) {
+            }
+        } else {
+        for (int i = 0; i < info.getFacialPoints().size(); i++) { //mozna treba pouzit enhanceVertices pokud je modul 1:1
             FacialPoint fp = info.getFacialPoints().get(i);
             double t = ((fp.getPosition().x - v.x) * (v1.x - v.x)
                     + (fp.getPosition().y - v.y) * (v1.y - v.y) + (fp.getPosition().z - v.z) * (v1.z - v.z))
@@ -1791,19 +1944,216 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
             Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
             float dist = (float) Math.sqrt(Math.pow(w.x - fp.getPosition().x, 2) + Math.pow(w.y - fp.getPosition().y, 2) + Math.pow(w.z - fp.getPosition().z, 2));
 
-            if (dist < info.getFacialPointRadius() && dist < minDist) {
-                info.setIndexOfSelectedPoint(i);
-                //System.out.println("selected point" + indexOfSelectedPoint);
+            if (dist < minDist) {
+//                if (!hover) {
+                    info.setIndexOfSelectedPoint(i);
+//                    info.setIndexOfSelectedModel(-1);
+//                    StatusDisplayer.getDefault().setStatusText("Selected configuration: avg");
+//                } else {
+//                    info.setIndexOfHoveredModel(-1);
+//                    info.setIndexOfHoveredPoint(i);
+//                }
                 minDist = dist;
                 selected = true;
             }
-
         }
+//        //secondary model in 1:1
+//        if (info.isProcrustes() && info.getPaInfo().getType() == 0 && !selected) {
+//            for (FacialPoint fp : info.getPaInfo().getPa2().getConfig().values()) {
+//                
+//            //zkusit pouzit enhanceVertices na fp.getPosition
+//                double t = ((fp.getPosition().x - v.x) * (v1.x - v.x)
+//                    + (fp.getPosition().y - v.y) * (v1.y - v.y) + (fp.getPosition().z - v.z) * (v1.z - v.z))
+//                    / (float) (Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2));
+//                Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
+//                float dist = (float) Math.sqrt(Math.pow(w.x - fp.getPosition().x, 2) + Math.pow(w.y - fp.getPosition().y, 2) + Math.pow(w.z - fp.getPosition().z, 2));
+//
+//                if (dist < minDist) {
+//                    info.setIndexOfSelectedPoint(fp.getType()-1);
+//                    info.setIndexOfSelectedModel(-1);
+//                    minDist = dist;
+//                    selected = true;
+//                }
+//            }
+//        }
 
+        
+        }
+        selectedCoords = null;
+        selectedRadius = 0;
         return selected;
+    }
+    
+    public boolean selectPAPoint(double x, double y, boolean hover) {
+        ModelSelector picker = new ModelSelector(glu);
+        picker.castRay(x, y, viewport, modelViewMatrix, projectionMatrix);
+        Vector3f v = picker.getRayStartPoint();
+        Vector3f v1 = picker.getRayEndPoint();
+        Vector3f u = new Vector3f(v1.x - v.x, v1.y - v.y, v1.z - v.z);
+        boolean selected = false;
+        float radius = info.getPaInfo().getPointSize()*2;
+        
+        if (info.getPaInfo().getType() == 2) { //batch
+            GPA gpa = info.getPaInfo().getGpa();
+            ProcrustesAnalysis meanAnalysis = gpa.countMeanConfig();
+            Map<Integer, FacialPoint> meanConfig = meanAnalysis.getConfig();
 
+            for (Integer i : meanConfig.keySet()) {
+                FacialPoint mfp = meanConfig.get(i);
+                
+                Vector3f meanPos = mfp.getPosition();
+                Vector3f meanVert = new Vector3f(meanPos.x, meanPos.y, meanPos.z);
+                
+                if (isSelected(picker, meanVert, radius, true)) {
+                    if (!hover) {
+                        StatusDisplayer.getDefault().setStatusText("Selected configuration: Avg");
+                        info.setIndexOfSelectedModel(-1);
+                        info.setIndexOfSelectedPoint(i);
+                    } else {
+                        info.setIndexOfHoveredModel(-1);
+                        info.setIndexOfHoveredPoint(i);
+                    }
+                    selected = true;
+                }
+                
+                for (Integer j = 0; j < gpa.getConfigs().size(); j++) {
+                    FacialPoint fp = gpa.getPA(j).getFP(i);
+
+                    if (fp == null) {
+                        continue;
+                    }
+
+                    Vector3f pos = fp.getPosition();
+                    Vector3f vert = new Vector3f(pos.x, pos.y, pos.z);
+                    
+                    List<Vector3f> newVertices = info.getPaPainting().enhanceVertices(vert, meanVert);
+                    Vector3f newVert = newVertices.get(0);
+                    
+                    if (isSelected(picker, newVert, radius / 2f, true)) {
+                        if (!hover) {
+                            StatusDisplayer.getDefault().setStatusText("Selected configuration:" + j);
+                            info.setIndexOfSelectedModel(j);
+                            info.setIndexOfSelectedPoint(i);
+                        } else {
+                            info.setIndexOfHoveredModel(j);
+                            info.setIndexOfHoveredPoint(i);
+                        }
+                        selected = true;
+                    }
+                }
+            }
+            selectedCoords = null;
+            selectedRadius = 0;
+        } else if (info.getPaInfo().getType() == 1) { //1toN
+            GPA gpa = info.getPaInfo().getGpa();
+            ProcrustesAnalysis meanAnalysis = gpa.countMeanConfig();
+            Map<Integer, FacialPoint> meanConfig = meanAnalysis.getConfig();
+
+            for (Integer i : meanConfig.keySet()) {
+                FacialPoint mfp = meanConfig.get(i);
+                
+                Vector3f meanPos = mfp.getPosition();
+                Vector3f meanVert = new Vector3f(meanPos.x, meanPos.y, meanPos.z);
+                
+                if (isSelected(picker, meanVert, radius, false)) {
+                    if (!hover) {
+                        info.setIndexOfSelectedModel(-1);
+                        info.setIndexOfSelectedPoint(i);
+                    } else {
+                        info.setIndexOfHoveredModel(-1);
+                        info.setIndexOfHoveredPoint(i);
+                    }
+                    selected = true;
+                    break;
+                }
+            }
+        } else { //1to1
+            ProcrustesAnalysis pa1 = info.getPaInfo().getPa();
+            ProcrustesAnalysis pa2 = info.getPaInfo().getPa2();
+            
+            Map<Integer, FacialPoint> config1 = pa1.getConfig();
+            Map<Integer, FacialPoint> config2 = pa2.getConfig();
+            List<Integer> correspondence = pa1.getFPtypeCorrespondence(pa2);
+            
+            for (Integer i : correspondence) {
+                FacialPoint fp1 = config1.get(i);
+                FacialPoint fp2 = config2.get(i);
+                
+                if (fp1 == null || fp2 == null) {
+                    continue;
+                }
+                
+                Vector3f pos1 = fp1.getPosition();
+                Vector3f pos2 = fp2.getPosition();
+                
+                Vector3f vert1 = new Vector3f(pos1.x, pos1.y, pos1.z);
+                Vector3f vert2 = new Vector3f(pos2.x, pos2.y, pos2.z);
+                
+                List<Vector3f> newVertices = info.getPaPainting().enhanceVertices(vert1, vert2);
+                
+                if (isSelected(picker, newVertices.get(0), radius, false) || isSelected(picker, newVertices.get(1), radius, false)) {
+                    if (!hover) {
+                        info.setIndexOfSelectedPoint(i);
+                    } else {
+                        info.setIndexOfHoveredPoint(i);
+                    }
+                    selected = true;
+                    break;
+                }
+            }
+        }
+        
+        return selected;
+    }
+    
+    private boolean isSelected(ModelSelector picker, Vector3f p, float radius, boolean batch) {
+        Vector3f v = picker.getRayStartPoint();
+        Vector3f v1 = picker.getRayEndPoint();
+        Vector3f u = new Vector3f(v1.x - v.x, v1.y - v.y, v1.z - v.z);
+        boolean selected = false;
+        
+        double t = ((p.x - v.x) * (v1.x - v.x)
+                   + (p.y - v.y) * (v1.y - v.y) + (p.z - v.z) * (v1.z - v.z))
+                   / (float) (Math.pow(u.x, 2) + Math.pow(u.y, 2) + Math.pow(u.z, 2));
+        Vector3f w = new Vector3f((float) (v.x + t * u.x), (float) (v.y + t * u.y), (float) (v.z + t * u.z));
+        float dist = (float) Math.sqrt(Math.pow(w.x - p.x, 2) + Math.pow(w.y - p.y, 2) + Math.pow(w.z - p.z, 2));
+                    
+        if (dist < radius / 2f) {
+            if (batch && isPointCloserThanSelected(p, v, radius)) {
+                selected = true;
+                selectedCoords = p;
+                selectedRadius = radius;
+            } else if (!batch) {
+                selected = true;
+            }
+            
+        }
+        return selected;
     }
 
+    public boolean isPointHover(double x, double y) {
+        return selectPoint(x, y, true);
+    }
+    
+    private boolean isPointCloserThanSelected(Vector3f potential, Vector3f cam, float radius) {
+        if (selectedCoords == null) {
+            return true;
+        }
+        double curDist = Math.sqrt(
+                    (cam.x - selectedCoords.x) * (cam.x - selectedCoords.x)
+                    + (cam.y - selectedCoords.y) * (cam.y - selectedCoords.y)
+                    + (cam.z - selectedCoords.z) * (cam.z - selectedCoords.z))
+                    - selectedRadius;
+        
+        double newDist = Math.sqrt(
+                    (cam.x - potential.x) * (cam.x - potential.x)
+                    + (cam.y - potential.y) * (cam.y - potential.y)
+                    + (cam.z - potential.z) * (cam.z - potential.z))
+                    - radius;
+        
+        return newDist < curDist;
+    }
+    
     //returns point in mesh at given x,y position
     public Vector3f checkPointInMesh(double x, double y) {
 
@@ -1860,7 +2210,181 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         }
         return intPoint;
     }
+    
+    public boolean deleteConnection(double x, double y) {
+        ModelSelector picker = new ModelSelector(glu);
+        picker.castRay(x, y, viewport, modelViewMatrix, projectionMatrix);
+        Vector3f v = picker.getRayStartPoint();
+        Vector3f v1 = picker.getRayEndPoint();
+        
+        Set<PointConnection> connections = info.getPaInfo().getPointConnections(); 
+        Map<PointConnection, Vector3f> selectedConnections = new HashMap<>();
+        
+        if (info.getPaInfo().getType() == 0) { 
+            ProcrustesAnalysis pa1 = info.getPaInfo().getPa();
+            ProcrustesAnalysis pa2 = info.getPaInfo().getPa2();
+            
+            Map<Integer, FacialPoint> config1 = pa1.getConfig();
+            Map<Integer, FacialPoint> config2 = pa2.getConfig();
+            for (PointConnection pc : connections) {
+                FacialPoint start = config1.get(pc.getStart());
+                FacialPoint end = config1.get(pc.getEnd());
+                
+                FacialPoint start2 = config2.get(pc.getStart());
+                FacialPoint end2 = config2.get(pc.getEnd());
+                
+                if (start == null || end == null || start2 == null || end2 == null) {
+                    continue;
+                }
+                List<Vector3f> newStarts = info.getPaPainting().enhanceVertices(start.getPosition(), start2.getPosition());
+                List<Vector3f> newEnds = info.getPaPainting().enhanceVertices(end.getPosition(), end2.getPosition());
+                float rad = info.getPaInfo().getPointSize() / 4.5f;
 
+                Pair<Float, Vector3f> res = linesDistance(v, v1, newStarts.get(0), newEnds.get(0)); 
+                
+                if (res != null && res.getKey() <= rad) {
+                    selectedConnections.put(pc, res.getValue());
+                }
+                
+                res = linesDistance(v, v1, newStarts.get(1), newEnds.get(1));
+                
+                if (res != null && res.getKey() <= rad) {
+                    selectedConnections.put(pc, res.getValue());
+                }
+            }
+        } else if (info.getPaInfo().getType() == 1) { 
+            GPA gpa = info.getPaInfo().getGpa();
+            ProcrustesAnalysis meanAnalysis = gpa.countMeanConfig();
+            Map<Integer, FacialPoint> meanConfig = meanAnalysis.getConfig();
+            
+            for (PointConnection pc : connections) {
+                FacialPoint start = meanConfig.get(pc.getStart());
+                FacialPoint end = meanConfig.get(pc.getEnd());
+                
+                if (start == null || end == null) {
+                    continue;
+                }
+                float rad = info.getPaInfo().getPointSize() / 4.5f;
+
+                Pair<Float, Vector3f> res = linesDistance(v, v1, start.getPosition(), end.getPosition()); 
+                
+                if (res != null && res.getKey() <= rad) {
+                    selectedConnections.put(pc, res.getValue());
+                }
+            }
+        } else if (info.getPaInfo().getType() == 2) { 
+            GPA gpa = info.getPaInfo().getGpa();
+            ProcrustesAnalysis meanAnalysis = gpa.countMeanConfig();
+            Map<Integer, FacialPoint> meanConfig = meanAnalysis.getConfig();
+            
+            for (PointConnection pc : connections) {
+                FacialPoint start;
+                FacialPoint end;
+                
+                if (pc.getConfiguration() == -1) {
+                    start = meanConfig.get(pc.getStart());
+                    end = meanConfig.get(pc.getEnd());
+                } else {
+                    start = gpa.getPA(pc.getConfiguration()).getFP(pc.getStart());
+                    end = gpa.getPA(pc.getConfiguration()).getFP(pc.getEnd());
+                }
+                
+                if (start == null || end == null) {
+                    continue;
+                }
+
+                Pair<Float, Vector3f> res;
+                
+                if (pc.getConfiguration() >= 0) {
+                    List<Vector3f> newStarts = info.getPaPainting().enhanceVertices(start.getPosition(), meanConfig.get(pc.getStart()).getPosition());
+                    List<Vector3f> newEnds = info.getPaPainting().enhanceVertices(end.getPosition(), meanConfig.get(pc.getEnd()).getPosition());
+                    
+                    res = linesDistance(v, v1, newStarts.get(0), newEnds.get(0));
+                } else {
+                    res = linesDistance(v, v1, start.getPosition(), end.getPosition()); 
+                }
+                
+                float rad = info.getPaInfo().getPointSize() / 4.5f;
+                
+                if (res != null && res.getKey() <= rad) {
+                    selectedConnections.put(pc, res.getValue());
+                }
+            }
+        }
+        
+        if(selectedConnections.isEmpty()) {
+            return false;
+        }
+        
+        info.getPaInfo().deleteConnection(getClosest(v, selectedConnections));
+        return true;
+    }
+    
+    /**
+     * Returns point connection closest to cursor on display
+     */
+    private PointConnection getClosest(Vector3f mousePoint, Map<PointConnection, Vector3f> connections) {
+        PointConnection closest = null;
+        float dist = Float.MAX_VALUE;
+        
+        for (PointConnection pc : connections.keySet()) {
+            Vector3f conPoint = connections.get(pc);
+            Vector3f vec = new Vector3f(mousePoint.x - conPoint.x, mousePoint.y - conPoint.y, mousePoint.z - conPoint.z);
+            if (dist > vec.length()) {
+                dist = vec.length();
+                closest = pc;
+            }
+        }
+        
+        return closest;
+    }
+    
+    /**
+     * Returns distance between two lines given by two points and the closest point on line c
+     */
+    private Pair<Float, Vector3f> linesDistance(Vector3f r1, Vector3f r2, Vector3f c1, Vector3f c2) { // pocita k sobe nejblizsi body na obou primkach podle https://en.wikipedia.org/wiki/Skew_lines#Nearest_Points , bod ze spojnice zkontroluje jestli lezi mezi obema konci
+        Vector3f mouseV = new Vector3f(r2.x - r1.x, r2.y - r1.y, r2.z - r1.z);
+        Vector3f conV = new Vector3f(c2.x - c1.x, c2.y - c1.y, c2.z - c1.z);
+        Vector3f cross12 = new Vector3f();
+        cross12.cross(conV, mouseV);
+        
+        Vector3f n2 = new Vector3f();
+        n2.cross(mouseV, cross12);
+        
+        Vector3f p21diff = new Vector3f(r1.x - c1.x, r1.y - c1.y, r1.z - c1.z);
+        float t1 = p21diff.dot(n2) / conV.dot(n2);
+        
+        Vector3f pCon = new Vector3f(c1.x + (t1*conV.x), c1.y + (t1*conV.y), c1.z + (t1*conV.z));
+        
+        if (isBetween(c1, c2, pCon)) {
+            Vector3f cross21 = new Vector3f();
+            cross21.cross(mouseV, conV);
+            Vector3f n1 = new Vector3f();
+            n1.cross(conV, cross21);
+            
+            Vector3f p12diff = new Vector3f(c1.x - r1.x, c1.y - r1.y, c1.z - r1.z);
+            float t2 = p12diff.dot(n1) / mouseV.dot(n1);
+        
+            Vector3f pRay = new Vector3f(r1.x + (t2*mouseV.x), r1.y + (t2*mouseV.y), r1.z + (t2*mouseV.z));
+            
+            Vector3f distV = new Vector3f(pRay.x - pCon.x, pRay.y - pCon.y, pRay.z - pCon.z);
+            return new Pair(distV.length(), pCon);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * Returns true if point p lies on a line between points start and end
+     */
+    private boolean isBetween(Vector3f start, Vector3f end, Vector3f p) {
+        Vector3f se = new Vector3f(end.x - start.x, end.y - start.y, end.z - start.z);
+        Vector3f sp = new Vector3f(p.x - start.x, p.y - start.y, p.z - start.z);
+        Vector3f ep = new Vector3f(p.x - end.x, p.y - end.y, p.z - end.z);
+        return se.length() + 0.00001 >= sp.length() + ep.length();
+    }
+    
     public boolean editSelectedPoint(Vector3f coords) {
         if (coords != null) {
             info.getFacialPoints().get(info.getIndexOfSelectedPoint()).setCoords(coords);
@@ -2038,8 +2562,20 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
         info.setPrimaryColor(color);
     }
 
+    public void setPrimaryPointsColor(float[] color) {
+        info.getPaPainting().setColor1(color);
+    }
+
     public void setSecondaryColor(float[] color2) {
         info.setSecondaryColor(color2);
+    }
+
+    public void setSecondaryPointsColor(float[] color2) {
+        info.getPaPainting().setColor2(color2);
+    }
+    
+    public void setOtherModelsPointsColor(float[] color) {
+        info.getPaPainting().setColor3(color);
     }
 
     public void setInnerSurfaceVisible(boolean selected) {
@@ -2053,6 +2589,18 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     public void setFogColor(float[] color3) {
         info.setFogColor(color3);
     }
+
+    public void setHighlightSameTypePoints(boolean highlightSameType) {
+        info.getPaInfo().setHighlightSameTypePoints(highlightSameType);
+    }
+    
+//    public void setCustomCylinders(boolean custom) {
+//        info.getPaInfo().setCustomCylinders(custom);
+//    }
+    
+//    public void addCylinder(int start, int end) {
+//        info.getPaInfo().addCylinder(start, end);
+//    }
 
     @Override
     public void reloadTextures() {

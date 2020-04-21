@@ -40,6 +40,8 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
     private boolean removePoints = false;
     private boolean addPoints = false;
     private boolean selection = false;
+    private boolean addPointConnections = false;
+    private boolean removeConnections = false;
 
     private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
 
@@ -151,6 +153,22 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
         removePoints = false;
     }
 
+    public boolean isAddPointConnections() {
+        return addPointConnections;
+    }
+
+    public void setAddPointConnections(boolean addPointConnections) {
+        this.addPointConnections = addPointConnections;
+    }
+
+    public boolean isRemoveConnections() {
+        return removeConnections;
+    }
+
+    public void setRemoveConnections(boolean removeConnections) {
+        this.removeConnections = removeConnections;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -249,9 +267,12 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
         manipulatePoint = listener.selectPoint(evt.getX(), evt.getY());
         if (manipulatePoint) {
             //update selected point                     
-            setPointInfo(canvas, listener);
+            if (showInfo && !listener.isProcrustes()) {
+                    canvas.setFeaturePointsPanelVisibility(true);
+                    setPointInfo(canvas, listener);
+                }
 
-            if (editablePoints) {
+            if (editablePoints && !listener.isProcrustes()) {
                 canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(true);
@@ -261,14 +282,16 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
                     EditLandmarkID d = new EditLandmarkID(listener.getFacialPoint(indexOfSelectedPoint), listener.getInfo(), canvas);
                     d.setVisible(true);
                 }
-            } else if (removePoints) {
-                listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
-                listener.setIndexOfSelectedPoint(-1);
+            } else if (removePoints && !listener.isProcrustes()) {
+                listener.getFacialPoints().remove(indexOfSelectedPoint);
+                listener.setIndexOfSelectedPoint(indexOfSelectedPoint = -1);
 
                 if (showInfo) {        //no point is selected
                     canvas.setFeaturePointsPanelVisibility(false);
 
                 }
+            } else if (addPointConnections) {
+                listener.getPaInfo().connectPoint();
             }
 
         } else if (selection && SwingUtilities.isLeftMouseButton(evt)) {
@@ -282,7 +305,7 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
                     canvas.setFeaturePointsPanelVisibility(false);
                 }
             } else {
-                if (addPoints) { //on mesh plus add point
+                if (addPoints && !listener.isProcrustes()) { //on mesh plus add point
 
                     int id = listener.getInfo().getNextFreeFPID();
                     FacialPoint fp = new FacialPoint(id, pos);
@@ -296,6 +319,10 @@ public class ViewerPanel_2Faces extends javax.swing.JPanel {
                     setPointInfo(canvas, listener);
                 }
             }
+        }
+        
+        if (removeConnections) {
+            listener.deleteConnection(evt.getX(), evt.getY());
         }
     }
 

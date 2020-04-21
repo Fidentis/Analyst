@@ -53,6 +53,8 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
     
     private boolean removePoints = false;
     private boolean addPoints = false;
+    private boolean addPointConnections = false;
+    private boolean removeConnections = false;
     private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
 
     /**
@@ -237,6 +239,22 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
         removePoints = false;
     }
 
+    public boolean isAddPointConnections() {
+        return addPointConnections;
+    }
+
+    public void setAddPointConnections(boolean addPointConnections) {
+        this.addPointConnections = addPointConnections;
+    }
+
+    public boolean isRemoveConnections() {
+        return removeConnections;
+    }
+
+    public void setRemoveConnections(boolean removeConnections) {
+        this.removeConnections = removeConnections;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -337,7 +355,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
             //update selected point                     
             setPointInfo(canvas, listener);
           
-            if (editablePoints) {
+            if (editablePoints && !listener.isProcrustes()) {
                 
                 canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
                 if (showInfo) {
@@ -349,7 +367,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                     EditLandmarkID d = new EditLandmarkID(listener.getFacialPoint(indexOfSelectedPoint), listener.getInfo(), canvas);
                     d.setVisible(true);
                 }
-            }else if(removePoints){
+            }else if(removePoints && !listener.isProcrustes()){
                 listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
                 listener.setIndexOfSelectedPoint(-1);
                 
@@ -357,6 +375,8 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                     canvas.setFeaturePointsPanelVisibility(false);
 
                 }                
+            } else if (addPointConnections) {
+                listener.getPaInfo().connectPoint();
             }
             
         }else if(selection && SwingUtilities.isLeftMouseButton(evt)){
@@ -375,7 +395,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(false);
                 }
-            } else if (addPoints) {
+            } else if (addPoints && !listener.isProcrustes()) {
 
                 int id = listener.getInfo().getNextFreeFPID();
                 FacialPoint fp = new FacialPoint(id, pos);
@@ -398,6 +418,9 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
             fpExportEnable.updateObservers();
         }
         
+        if (removeConnections) {
+            listener.deleteConnection(evt.getX(), evt.getY());
+        }
     }
     
     private void setPointInfo(Canvas canvas, ComparisonGLEventListener listener) {
@@ -407,7 +430,9 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
         if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
             indexOfSelectedPoint = nextIndexOfSelectedPoint;
         }
+        if (!listener.getInfo().isProcrustes()) {
         canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
+        }
     }
 
     private void canvas2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas2MousePressed

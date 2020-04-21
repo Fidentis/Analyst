@@ -104,6 +104,10 @@ public class FacialPoint implements Serializable {
     public Vector3f getPosition(){
         return pos;
     }
+
+    public void setPosition(Vector3f pos) {
+        this.pos = pos;
+    }
     
     public String toCSVstring(String separator){
         return this.pos.x + separator + this.pos.y + separator + this.pos.z;

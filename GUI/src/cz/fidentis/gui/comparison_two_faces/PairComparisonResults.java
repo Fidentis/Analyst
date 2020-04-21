@@ -19,7 +19,9 @@ import cz.fidentis.renderer.ComparisonGLEventListener;
 import cz.fidentis.undersampling.Methods;
 import cz.fidentis.undersampling.Type;
 import cz.fidentis.visualisation.ColorScheme;
+import cz.fidentis.visualisation.ComparisonListenerInfo;
 import cz.fidentis.visualisation.histogram.histogramPanel;
+import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.visualisation.surfaceComparison.SelectionType;
@@ -46,6 +48,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private boolean maxTresholdValueChanged;
     private boolean minTresholdValueChanged;
     private boolean transpTresholdValueChanged;
+    private boolean setCylinderStart = false;
 
     /**
      * Creates new form PairComparisonResults
@@ -57,7 +60,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     public void showProcrustesControls() {
         jPanel1.setVisible(false);
         jPanel2.setVisible(true);
-        exportRegisteredFacesButton.setVisible(true);
+        jButton10.setVisible(false);
         jLabel4.setVisible(false);
         valuesComboBox.setVisible(false);
         maxThresholdSpinner.setVisible(false);
@@ -70,7 +73,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     public void showHausdorfControls() {
         jPanel1.setVisible(true);
         jPanel2.setVisible(false);
-        exportRegisteredFacesButton.setVisible(true);
+        jButton10.setVisible(true);
         jLabel4.setVisible(true);
         valuesComboBox.setVisible(true);
         maxThresholdSpinner.setVisible(true);
@@ -157,8 +160,20 @@ public class PairComparisonResults extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         sizeLabel = new javax.swing.JLabel();
         fpSizeSlider = new javax.swing.JSlider();
+        jLabel1 = new javax.swing.JLabel();
+        secondaryPointsColorPanel = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        customCylindersCheckBox = new javax.swing.JCheckBox();
+        primaryPointsColorPanel = new javax.swing.JPanel();
+        addPointConnectionsButton = new javax.swing.JToggleButton();
+        clearCylindersButton = new javax.swing.JButton();
+        removeConnectionsButton = new javax.swing.JToggleButton();
+        jLabel9 = new javax.swing.JLabel();
+        transparentModelBox = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        opacitySlider = new javax.swing.JSlider();
         jButton7 = new javax.swing.JButton();
-        exportRegisteredFacesButton = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         alignParamButton = new javax.swing.JButton();
 
@@ -500,7 +515,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                         .addGap(26, 26, 26)
                         .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(transpSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
+                        .addComponent(transpSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
                     .addGroup(shadersPanelLayout.createSequentialGroup()
                         .addGroup(shadersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(useContoursCheckbox)
@@ -679,7 +694,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         colormapPanel.setLayout(colormapPanelLayout);
         colormapPanelLayout.setHorizontalGroup(
             colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+            .addComponent(histogram1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
             .addGroup(colormapPanelLayout.createSequentialGroup()
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -694,7 +709,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(valuesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, colormapPanelLayout.createSequentialGroup()
                                 .addGroup(colormapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(minThreshSlider, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                                    .addComponent(minThreshSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addGroup(colormapPanelLayout.createSequentialGroup()
                                         .addComponent(maxThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -797,7 +812,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                             .addComponent(density, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cylRadius, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 21, Short.MAX_VALUE)
+                        .addGap(18, 36, Short.MAX_VALUE)
                         .addComponent(VisualizationBox, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
@@ -856,20 +871,137 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel1.text")); // NOI18N
+
+        secondaryPointsColorPanel.setBackground(new java.awt.Color(0, 255, 0));
+        secondaryPointsColorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        secondaryPointsColorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                secondaryPointsColorPanelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout secondaryPointsColorPanelLayout = new javax.swing.GroupLayout(secondaryPointsColorPanel);
+        secondaryPointsColorPanel.setLayout(secondaryPointsColorPanelLayout);
+        secondaryPointsColorPanelLayout.setHorizontalGroup(
+            secondaryPointsColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 48, Short.MAX_VALUE)
+        );
+        secondaryPointsColorPanelLayout.setVerticalGroup(
+            secondaryPointsColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel7.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(customCylindersCheckBox, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.customCylindersCheckBox.text")); // NOI18N
+        customCylindersCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customCylindersCheckBoxActionPerformed(evt);
+            }
+        });
+
+        primaryPointsColorPanel.setBackground(new java.awt.Color(255, 0, 0));
+        primaryPointsColorPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        primaryPointsColorPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                primaryPointsColorPanelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout primaryPointsColorPanelLayout = new javax.swing.GroupLayout(primaryPointsColorPanel);
+        primaryPointsColorPanel.setLayout(primaryPointsColorPanelLayout);
+        primaryPointsColorPanelLayout.setHorizontalGroup(
+            primaryPointsColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 48, Short.MAX_VALUE)
+        );
+        primaryPointsColorPanelLayout.setVerticalGroup(
+            primaryPointsColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 24, Short.MAX_VALUE)
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(addPointConnectionsButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.addPointConnectionsButton.text")); // NOI18N
+        addPointConnectionsButton.setEnabled(false);
+        addPointConnectionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPointConnectionsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(clearCylindersButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.clearCylindersButton.text")); // NOI18N
+        clearCylindersButton.setEnabled(false);
+        clearCylindersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearCylindersButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(removeConnectionsButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.removeConnectionsButton.text")); // NOI18N
+        removeConnectionsButton.setEnabled(false);
+        removeConnectionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeConnectionsButtonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel9.text")); // NOI18N
+
+        ComparisonListenerInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getInfo();
+        String name1 = info.getModels().get(0).getName();
+        String name2 = info.getModels().get(1).getName();
+        transparentModelBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Primary (" + name1 + ")", "Secondary (" + name2 + ")" }));
+        transparentModelBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transparentModelBoxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jLabel10.text")); // NOI18N
+
+        opacitySlider.setMajorTickSpacing(20);
+        opacitySlider.setMinorTickSpacing(5);
+        opacitySlider.setPaintLabels(true);
+        opacitySlider.setPaintTicks(true);
+        opacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                opacitySliderStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel7))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(secondaryPointsColorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(primaryPointsColorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(customCylindersCheckBox)
+                        .addComponent(clearCylindersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addPointConnectionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(fpDistanceSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fpSizeSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(sizeLabel)
+                        .addComponent(removeConnectionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(transparentModelBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(fpDistanceSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fpSizeSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(sizeLabel))
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(opacitySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -883,6 +1015,30 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fpSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(primaryPointsColorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(secondaryPointsColorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(transparentModelBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(opacitySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addComponent(customCylindersCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(addPointConnectionsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removeConnectionsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clearCylindersButton)
                 .addContainerGap())
         );
 
@@ -893,10 +1049,10 @@ public class PairComparisonResults extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(exportRegisteredFacesButton, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.exportRegisteredFacesButton.text")); // NOI18N
-        exportRegisteredFacesButton.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jButton10, org.openide.util.NbBundle.getMessage(PairComparisonResults.class, "PairComparisonResults.jButton10.text")); // NOI18N
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportRegisteredFacesButtonActionPerformed(evt);
+                jButton10ActionPerformed(evt);
             }
         });
 
@@ -922,7 +1078,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exportRegisteredFacesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(exportNumResButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(visResExportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -942,7 +1098,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportNumResButton)
@@ -951,7 +1107,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
                 .addGap(7, 7, 7)
                 .addComponent(visResExportButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(exportRegisteredFacesButton)
+                .addComponent(jButton10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(alignParamButton)
                 .addGap(16, 16, 16)
@@ -965,7 +1121,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1197,12 +1353,12 @@ public class PairComparisonResults extends javax.swing.JPanel {
         t.start();
     }//GEN-LAST:event_comparisonButtonActionPerformed
 
-    private void exportRegisteredFacesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportRegisteredFacesButtonActionPerformed
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
         ResultExports.instance().exportModels(tc,
                 tc.getProject().getSelectedComparison2Faces().getModel1(),
                 tc.getProject().getSelectedComparison2Faces().getModel2());
-    }//GEN-LAST:event_exportRegisteredFacesButtonActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
@@ -1327,6 +1483,16 @@ public class PairComparisonResults extends javax.swing.JPanel {
         fogColorPanel.getBackground().getRGBColorComponents(color3);
         tc.setFogColor(color3);
         c.setFogColor(new Color(ColorSpace.getInstance(ColorSpace.CS_sRGB), color3, 1));
+        
+        float[] color4 = new float[4];
+        primaryPointsColorPanel.getBackground().getRGBColorComponents(color4);
+        color4[3] = 1;
+        tc.setPrimaryPointsColor(color4);
+        
+        float[] color5 = new float[4];
+        secondaryPointsColorPanel.getBackground().getRGBColorComponents(color5);
+        color5[3] = 1;
+        tc.setSecondaryPointsColor(color5);
     }
 
     private void innerSurfaceSolidCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_innerSurfaceSolidCheckboxActionPerformed
@@ -1555,6 +1721,67 @@ public class PairComparisonResults extends javax.swing.JPanel {
         
         
     }//GEN-LAST:event_visResExportButtonMouseClicked
+
+    private void primaryPointsColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_primaryPointsColorPanelMouseClicked
+        activeColorPanel = primaryPointsColorPanel;
+        jColorChooser1.setColor(activeColorPanel.getBackground());
+        colorDialog.setVisible(true);
+    }//GEN-LAST:event_primaryPointsColorPanelMouseClicked
+
+    private void secondaryPointsColorPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_secondaryPointsColorPanelMouseClicked
+        activeColorPanel = secondaryPointsColorPanel;
+        jColorChooser1.setColor(activeColorPanel.getBackground());
+        colorDialog.setVisible(true);
+    }//GEN-LAST:event_secondaryPointsColorPanelMouseClicked
+
+    private void customCylindersCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customCylindersCheckBoxActionPerformed
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
+        tc.getPaInfo().setCustomConnections(customCylindersCheckBox.isSelected());
+        clearCylindersButton.setEnabled(customCylindersCheckBox.isSelected());
+        removeConnectionsButton.setEnabled(customCylindersCheckBox.isSelected());
+        addPointConnectionsButton.setEnabled(customCylindersCheckBox.isSelected());
+    }//GEN-LAST:event_customCylindersCheckBoxActionPerformed
+
+    private void addPointConnectionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPointConnectionsButtonActionPerformed
+        ViewerPanel_2Faces vp = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces();
+        vp.setAddPointConnections(addPointConnectionsButton.isSelected());
+        PApaintingInfo paInfo = vp.getListener1().getPaInfo();
+        if (!addPointConnectionsButton.isSelected()) {
+            paInfo.deleteNewConnection();
+        } else {
+            paInfo.setIndexOfSelectedPoint(-1);
+            vp.setRemoveConnections(false);
+            removeConnectionsButton.setSelected(false);
+        }
+    }//GEN-LAST:event_addPointConnectionsButtonActionPerformed
+
+    private void clearCylindersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearCylindersButtonActionPerformed
+        ComparisonGLEventListener tc = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1();
+        tc.getPaInfo().clearPointConnections();
+    }//GEN-LAST:event_clearCylindersButtonActionPerformed
+
+    private void removeConnectionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeConnectionsButtonActionPerformed
+        ViewerPanel_2Faces vp = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces();
+        vp.setRemoveConnections(removeConnectionsButton.isSelected());
+        if (removeConnectionsButton.isSelected()) {
+            vp.setAddPointConnections(false);
+            addPointConnectionsButton.setSelected(false);
+        }
+    }//GEN-LAST:event_removeConnectionsButtonActionPerformed
+
+    private void transparentModelBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transparentModelBoxActionPerformed
+        ComparisonListenerInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getInfo();
+        if (transparentModelBox.getSelectedIndex() >= 1) {
+            info.setTransparentModel(info.getModels().get(transparentModelBox.getSelectedIndex() - 1));
+        } else {
+            info.setTransparentModel(null);
+        }
+    }//GEN-LAST:event_transparentModelBoxActionPerformed
+
+    private void opacitySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_opacitySliderStateChanged
+        ComparisonListenerInfo info = GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().getListener1().getInfo();
+        info.setModelOpacity(opacitySlider.getValue() / 100f);
+    }//GEN-LAST:event_opacitySliderStateChanged
     
     public void setConfiguration() {
         maxThresholdSpinner.setVisible(false);
@@ -1671,15 +1898,18 @@ public class PairComparisonResults extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox VisualizationBox;
+    private javax.swing.JToggleButton addPointConnectionsButton;
     private javax.swing.JFrame alignFrame;
     private javax.swing.JButton alignParamButton;
     private javax.swing.JTable alignTable;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton clearCylindersButton;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JRadioButton colorOverlayRadioButton;
     private javax.swing.JComboBox colorSchemeComboBox;
     private javax.swing.JPanel colormapPanel;
     private javax.swing.JButton comparisonButton;
+    private javax.swing.JCheckBox customCylindersCheckBox;
     private javax.swing.JSlider cylLength;
     private javax.swing.JLabel cylLengthLabel;
     private javax.swing.JSlider cylRadius;
@@ -1687,7 +1917,6 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel densLabel;
     private javax.swing.JSlider density;
     private javax.swing.JButton exportNumResButton;
-    private javax.swing.JButton exportRegisteredFacesButton;
     private javax.swing.JPanel fogColorPanel;
     private javax.swing.JSlider fpDistanceSlider;
     private javax.swing.JSlider fpSizeSlider;
@@ -1695,6 +1924,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JRadioButton innerSurfaceRadioButton;
     private javax.swing.JCheckBox innerSurfaceSolidCheckbox;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -1704,6 +1934,8 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JFrame jFrame1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1714,7 +1946,9 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1729,9 +1963,13 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider minThreshSlider;
     private javax.swing.JSpinner minThreshSpinner;
     private javax.swing.JRadioButton noneRadioButton;
+    private javax.swing.JSlider opacitySlider;
     private javax.swing.JPanel primaryColorPanel;
+    private javax.swing.JPanel primaryPointsColorPanel;
     private javax.swing.JCheckBox primarySolidCheckbox;
+    private javax.swing.JToggleButton removeConnectionsButton;
     private javax.swing.JPanel secondaryColorPanel;
+    private javax.swing.JPanel secondaryPointsColorPanel;
     private javax.swing.JCheckBox secondarySolidCheckbox;
     private javax.swing.JToggleButton selectionButton;
     private javax.swing.JPanel shadersPanel;
@@ -1739,6 +1977,7 @@ public class PairComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSpinner transpSpinner;
     private javax.swing.JRadioButton transparencyRadioButton;
     private javax.swing.JSlider transparencySlider;
+    private javax.swing.JComboBox<String> transparentModelBox;
     private javax.swing.JCheckBox useContoursCheckbox;
     private javax.swing.JCheckBox useGlyphsCheckbox;
     private javax.swing.JComboBox valuesComboBox;

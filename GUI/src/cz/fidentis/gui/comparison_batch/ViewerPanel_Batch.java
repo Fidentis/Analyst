@@ -5,7 +5,9 @@
  */
 package cz.fidentis.gui.comparison_batch;
 
+import cz.fidentis.controller.BatchComparison;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.FpTexter;
 import cz.fidentis.gui.Canvas;
 import cz.fidentis.gui.ConfigurationTopComponent;
 import cz.fidentis.gui.GUIController;
@@ -17,6 +19,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.renderer.ComparisonGLEventListener;
 import cz.fidentis.utils.IntersectionUtils;
 import cz.fidentis.utils.MathUtils;
+import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -63,6 +66,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     private boolean addPoints = false;
     private ObservableMaster fpExportEnable;        //to check whether FPs can be exported once they are added, removed
     private LocalAreasJPanel pointer;
+    private boolean addPointConnections = false;
+    private boolean removeConnections = false;
     
     /**
      * Creates new form ViewerPanel4
@@ -287,6 +292,14 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         return listener2;
     }
 
+    public boolean isRemoveConnections() {
+        return removeConnections;
+    }
+
+    public void setRemoveConnections(boolean removeConnections) {
+        this.removeConnections = removeConnections;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -297,11 +310,37 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
     private void initComponents() {
 
         jSplitPane2 = new javax.swing.JSplitPane();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPopupMenu2 = new javax.swing.JPopupMenu();
+        sameTypeRadioButton = new javax.swing.JRadioButtonMenuItem();
+        sameModelRadioButton = new javax.swing.JRadioButtonMenuItem();
         jPanel1 = new javax.swing.JPanel();
         canvas1 = new cz.fidentis.gui.Canvas(projectComponent);
 
         jSplitPane2.setResizeWeight(0.5);
         jSplitPane2.setToolTipText(org.openide.util.NbBundle.getMessage(ViewerPanel_Batch.class, "ViewerPanel_Batch.jSplitPane2.toolTipText")); // NOI18N
+
+        jPopupMenu2.setMinimumSize(new java.awt.Dimension(220, 100));
+        jPopupMenu2.setPreferredSize(new java.awt.Dimension(220, 100));
+
+        buttonGroup1.add(sameTypeRadioButton);
+        sameTypeRadioButton.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(sameTypeRadioButton, org.openide.util.NbBundle.getMessage(ViewerPanel_Batch.class, "ViewerPanel_Batch.sameTypeRadioButton.text")); // NOI18N
+        sameTypeRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sameTypeRadioButtonActionPerformed(evt);
+            }
+        });
+        jPopupMenu2.add(sameTypeRadioButton);
+
+        buttonGroup1.add(sameModelRadioButton);
+        org.openide.awt.Mnemonics.setLocalizedText(sameModelRadioButton, org.openide.util.NbBundle.getMessage(ViewerPanel_Batch.class, "ViewerPanel_Batch.sameModelRadioButton.text")); // NOI18N
+        sameModelRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sameModelRadioButtonActionPerformed(evt);
+            }
+        });
+        jPopupMenu2.add(sameModelRadioButton);
 
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -355,6 +394,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
 
     private void canvas1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseClicked
         // TODO add your handling code here:
+        if (SwingUtilities.isRightMouseButton(evt) && listener.selectPoint(evt.getX(), evt.getY())) {
+             jPopupMenu2.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
     }//GEN-LAST:event_canvas1MouseClicked
 
     public void setSelection(boolean selection) {
@@ -367,6 +409,14 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().adjustThresholds();
         GUIController.getConfigurationTopComponent().getBatchComparisonResults().getHistogram().resetSlider();
 
+    }
+
+    public boolean isAddPointConnections() {
+        return addPointConnections;
+    }
+
+    public void setAddPointConnections(boolean addPointConnections) {
+        this.addPointConnections = addPointConnections;
     }
 
     private void canvas2MouseDragged(MouseEvent evt) {
@@ -440,7 +490,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
             //update selected point
             setPointInfo(canvas, listener);
           
-            if (editablePoints) {
+            if (editablePoints && !listener.isProcrustes()) {
+                
                 canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(true);
@@ -451,7 +502,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                     EditLandmarkID d = new EditLandmarkID(listener.getFacialPoint(indexOfSelectedPoint), listener.getInfo(), canvas);
                     d.setVisible(true);
                 }
-            }else if(removePoints){
+            }else if(removePoints && !listener.isProcrustes()){
                 listener.getFacialPoints().remove(nextIndexOfSelectedPoint);
                 listener.setIndexOfSelectedPoint(-1);
                 
@@ -459,7 +510,14 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                     canvas.setFeaturePointsPanelVisibility(false);
 
                 }
+            } else if (addPointConnections) {
+                listener.getPaInfo().connectPoint();
             }
+            
+//            if (SwingUtilities.isRightMouseButton(evt)) {
+//                jPopupMenu2.show(evt.getComponent(), evt.getX(), evt.getY());
+//            }
+        
             
         } else if (listener.getModel() != null) {        //pick point on the mesh
             Vector3f pos = listener.checkPointInMesh(evt.getX(), evt.getY());
@@ -469,7 +527,7 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                 if (showInfo) {
                     canvas.setFeaturePointsPanelVisibility(false);
                 }
-            } else if (addPoints) { //on mesh plus adding points is turned on
+            } else if (addPoints && !listener.isProcrustes()) { //on mesh plus adding points is turned on
                 int id = listener.getInfo().getNextFreeFPID();
                 FacialPoint fp = new FacialPoint(id, pos);
                 listener.getInfo().addFacialPoint(fp);
@@ -480,7 +538,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
                 }
 
                 setPointInfo(canvas, listener);
-            }
+            } /*else if (SwingUtilities.isRightMouseButton(evt)) {
+                jPopupMenu2.show(evt.getComponent(), evt.getX(), evt.getY());
+            }*/
 
         } 
         if (selection && SwingUtilities.isLeftMouseButton(evt)) {
@@ -495,6 +555,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
             fpExportEnable.updateObservers();
         }
         
+        if (removeConnections) {
+            listener.deleteConnection(evt.getX(), evt.getY());
+        }        
     }
     
     private void setPointInfo(Canvas canvas, ComparisonGLEventListener listener) {
@@ -504,7 +567,9 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         if (indexOfSelectedPoint != nextIndexOfSelectedPoint) {
             indexOfSelectedPoint = nextIndexOfSelectedPoint;
         }
+        if (!listener.getInfo().isProcrustes()) {
         canvas.setInfo(listener.getFacialPoint(indexOfSelectedPoint));
+        }
     }
     
     private void canvas1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canvas1MouseReleased
@@ -757,13 +822,35 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         if (pointer != null){
             pointer.setMousePosition(evt.getX(), evt.getY(), Calendar.getInstance());
         }
+        if (listener.getPaInfo() != null && listener.getPaInfo().isShowPointInfo() && listener.isPointHover(evt.getX(), evt.getY())) {
+            int indexOfSelectedModel = getListener().getPaInfo().getIndexOfHoveredModel();
+            BatchComparison bc = GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison();
+            String modelName = indexOfSelectedModel >= 0 ? bc.getModels().get(indexOfSelectedModel).getName() : "Average model";
+            PApaintingInfo paInfo = getListener().getPaInfo();
+            String pointName = FpTexter.getInstance().getFPname(paInfo.getIndexOfHoveredPoint());
+            canvas1.setToolTipText(pointName + ", " + modelName);
+        } else {
+            canvas1.setToolTipText(null);
+        }
     }//GEN-LAST:event_canvas1MouseMoved
+
+    private void sameTypeRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sameTypeRadioButtonActionPerformed
+        this.getListener().setHighlightSameTypePoints(sameTypeRadioButton.isSelected());
+    }//GEN-LAST:event_sameTypeRadioButtonActionPerformed
+
+    private void sameModelRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sameModelRadioButtonActionPerformed
+        this.getListener().setHighlightSameTypePoints(sameTypeRadioButton.isSelected());
+    }//GEN-LAST:event_sameModelRadioButtonActionPerformed
 
     // private JSplitPane jSplitPane1;
     // private Canvas canvas2;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private cz.fidentis.gui.Canvas canvas1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JRadioButtonMenuItem sameModelRadioButton;
+    private javax.swing.JRadioButtonMenuItem sameTypeRadioButton;
     // End of variables declaration//GEN-END:variables
 }

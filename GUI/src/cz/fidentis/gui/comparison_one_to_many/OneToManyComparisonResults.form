@@ -474,7 +474,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane2" alignment="0" pref="1478" max="32767" attributes="0"/>
+          <Component id="jScrollPane2" alignment="0" pref="1752" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -504,7 +504,7 @@
                           </Group>
                           <Component id="jButton7" alignment="0" max="32767" attributes="0"/>
                           <Component id="alignParametersButton" alignment="0" max="32767" attributes="0"/>
-                          <Component id="exportRegisteredFacesButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButton10" alignment="0" max="32767" attributes="0"/>
                           <Component id="visResExportButton" alignment="0" max="32767" attributes="0"/>
                           <Component id="jButton6" alignment="0" max="32767" attributes="0"/>
                           <Component id="heatplotButton1" alignment="0" max="32767" attributes="0"/>
@@ -563,7 +563,7 @@
                       <Component id="comparisonButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
@@ -578,7 +578,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="visResExportButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="exportRegisteredFacesButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton10" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="alignParametersButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
@@ -1271,7 +1271,7 @@
                               </Group>
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="histogram1" pref="343" max="32767" attributes="0"/>
+                                  <Component id="histogram1" pref="391" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1440,21 +1440,53 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                              <Component id="clearCylindersButton" max="32767" attributes="0"/>
+                              <Component id="addPointConnectionsButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="removeConnectionsButton" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="fpDistanceSlider" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="transparentModelBox" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="sizeLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="fpSizeSlider" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="opacitySlider" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="sizeLabel" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fpSizeSlider" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="fpDistanceSlider" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Component id="customCylindersCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel22" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="arrowsColorPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="avgModelColorPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1476,7 +1508,35 @@
                               <Component id="sizeLabel" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
                               <Component id="fpSizeSlider" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="avgModelColorPanel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel11" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="arrowsColorPanel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel22" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="transparentModelBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel24" min="-2" pref="24" max="-2" attributes="0"/>
+                              <Component id="opacitySlider" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="29" max="32767" attributes="0"/>
+                          <Component id="customCylindersCheckbox" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="addPointConnectionsButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="removeConnectionsButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="clearCylindersButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1522,6 +1582,164 @@
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="fpSizeSliderStateChanged"/>
                   </Events>
                 </Component>
+                <Component class="javax.swing.JLabel" name="jLabel11">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Container class="javax.swing.JPanel" name="avgModelColorPanel">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="0" green="ff" red="0" type="rgb"/>
+                    </Property>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                        <LineBorder/>
+                      </Border>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="avgModelColorPanelMouseClicked"/>
+                  </Events>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="48" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+                <Component class="javax.swing.JLabel" name="jLabel22">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.jLabel22.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Container class="javax.swing.JPanel" name="arrowsColorPanel">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="0" green="0" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                        <LineBorder/>
+                      </Border>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="arrowsColorPanelMouseClicked"/>
+                  </Events>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="48" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+                <Component class="javax.swing.JCheckBox" name="customCylindersCheckbox">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.customCylindersCheckbox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="customCylindersCheckboxActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JToggleButton" name="addPointConnectionsButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.addPointConnectionsButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[167, 25]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[167, 25]"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addPointConnectionsButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="clearCylindersButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.clearCylindersButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearCylindersButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JToggleButton" name="removeConnectionsButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.removeConnectionsButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeConnectionsButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel23">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.jLabel23.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="transparentModelBox">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(models)" type="code"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="transparentModelBoxActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="OneToManyComparison c = getContext();&#xa;Vector&lt;String&gt; models = new Vector&lt;&gt;();&#xa;models.add(&quot;None&quot;);&#xa;//models.add(&quot;Average&quot;);&#xa;models.add(c.getPrimaryModel().getName() + &quot; (primary)&quot;);&#xa;for (int i=0; i &lt; c.getModels().size(); i++) {&#xa;    models.add(c.getModel(i).getName());&#xa;}"/>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel24">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.jLabel24.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSlider" name="opacitySlider">
+                  <Properties>
+                    <Property name="majorTickSpacing" type="int" value="20"/>
+                    <Property name="minorTickSpacing" type="int" value="5"/>
+                    <Property name="paintLabels" type="boolean" value="true"/>
+                    <Property name="paintTicks" type="boolean" value="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="opacitySliderStateChanged"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JButton" name="jButton1">
@@ -1564,14 +1782,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="visResExportButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="exportRegisteredFacesButton">
+            <Component class="javax.swing.JButton" name="jButton10">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.exportRegisteredFacesButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="cz/fidentis/gui/comparison_one_to_many/Bundle.properties" key="OneToManyComparisonResults.jButton10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportRegisteredFacesButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton10ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton7">
