@@ -157,6 +157,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         lensSlider = new javax.swing.JSlider();
         jScrollPane4 = new javax.swing.JScrollPane();
+        plotsDrawingPanelBatchNumerical1 = new cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jFrame4 = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
@@ -432,6 +433,19 @@ public class BatchComparisonResults extends javax.swing.JPanel {
                 .addGap(2, 2, 2)
                 .addComponent(lensSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        javax.swing.GroupLayout plotsDrawingPanelBatchNumerical1Layout = new javax.swing.GroupLayout(plotsDrawingPanelBatchNumerical1);
+        plotsDrawingPanelBatchNumerical1.setLayout(plotsDrawingPanelBatchNumerical1Layout);
+        plotsDrawingPanelBatchNumerical1Layout.setHorizontalGroup(
+            plotsDrawingPanelBatchNumerical1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        plotsDrawingPanelBatchNumerical1Layout.setVerticalGroup(
+            plotsDrawingPanelBatchNumerical1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jScrollPane4.setViewportView(plotsDrawingPanelBatchNumerical1);
 
         javax.swing.GroupLayout jFrame3Layout = new javax.swing.GroupLayout(jFrame3.getContentPane());
         jFrame3.getContentPane().setLayout(jFrame3Layout);
@@ -2237,24 +2251,24 @@ public class BatchComparisonResults extends javax.swing.JPanel {
 
             }
 
-            //plotsDrawingPanelBatchNumerical1.setValues(values);
+            plotsDrawingPanelBatchNumerical1.setValues(values);
             String names[] = new String[getContext().getModels().size()];
             int i = 0;
             for (File f : getContext().getModels()) {
                 names[i] = f.getName();
                 i++;
             }
-            //plotsDrawingPanelBatchNumerical1.setModelNames(names);
+            plotsDrawingPanelBatchNumerical1.setModelNames(names);
 
-            //plotsDrawingPanelBatchNumerical1.repaint();
+            plotsDrawingPanelBatchNumerical1.repaint();
             jFrame3.setTitle("Numerical results");
             Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
             jFrame3.setIconImage(icon);
             jFrame3.setVisible(true);
             jFrame3.setSize(800, 600);
             jFrame3.setLocationRelativeTo(GUIController.getSelectedProjectTopComponent());
-            //plotsDrawingPanelBatchNumerical1.revalidate();
-            //plotsDrawingPanelBatchNumerical1.repaint();
+            plotsDrawingPanelBatchNumerical1.revalidate();
+            plotsDrawingPanelBatchNumerical1.repaint();
 
         }
     }//GEN-LAST:event_heatplotButtonActionPerformed
@@ -3170,6 +3184,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
     private javax.swing.JSlider opacitySlider;
     private javax.swing.JFrame pairFrame;
     private cz.fidentis.gui.PlotsDrawingPanelAuxiliary plotsDrawingPanelAuxiliary2;
+    private cz.fidentis.gui.comparison_batch.PlotsDrawingPanelBatchNumerical plotsDrawingPanelBatchNumerical1;
     private javax.swing.JSpinner positionSpinnerX;
     private javax.swing.JSpinner positionSpinnerY;
     private javax.swing.JSpinner positionSpinnerZ;
