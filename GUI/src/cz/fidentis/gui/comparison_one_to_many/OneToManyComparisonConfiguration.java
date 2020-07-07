@@ -310,6 +310,7 @@ public class OneToManyComparisonConfiguration extends javax.swing.JPanel {
                         
                         if (c.getRegistrationMethod() == RegistrationMethod.NO_REGISTRATION) {
                             mainF = ModelLoader.instance().loadModel(c.getPrimaryModel().getFile(), false, false);
+                            tc.getOneToManyViewerPanel().getListener1().setModels(mainF);
                         }
 
                         boolean createAvg = c.isCreateAvgFace();

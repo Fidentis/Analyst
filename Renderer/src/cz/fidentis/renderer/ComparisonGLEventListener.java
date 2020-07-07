@@ -2563,7 +2563,9 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void setPrimaryPointsColor(float[] color) {
-        info.getPaPainting().setColor1(color);
+        if(info.getPaPainting() != null) {
+            info.getPaPainting().setColor1(color);
+        }  
     }
 
     public void setSecondaryColor(float[] color2) {
@@ -2571,11 +2573,15 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     }
 
     public void setSecondaryPointsColor(float[] color2) {
-        info.getPaPainting().setColor2(color2);
+        if(info.getPaPainting() != null){
+            info.getPaPainting().setColor2(color2);
+        }
     }
     
     public void setOtherModelsPointsColor(float[] color) {
-        info.getPaPainting().setColor3(color);
+        if(info.getPaPainting() != null) {
+            info.getPaPainting().setColor3(color);
+        }
     }
 
     public void setInnerSurfaceVisible(boolean selected) {
