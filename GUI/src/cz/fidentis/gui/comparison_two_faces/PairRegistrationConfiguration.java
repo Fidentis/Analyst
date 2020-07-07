@@ -1170,9 +1170,16 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
 
             private void noRegistration() {
                 
-                Model model = ModelLoader.instance().loadModel(c.getModel2().getFile(), false, true);
+                Model model = ModelLoader.instance().loadModel(c.getModel1().getFile(), false, false);
+                tc.getViewerPanel_2Faces().getListener1().setModels(model);
+                c.setModel1(model);
+                                
+                model = ModelLoader.instance().loadModel(c.getModel2().getFile(), false, false);
                 tc.getViewerPanel_2Faces().getListener1().addModel(model);
+                tc.getViewerPanel_2Faces().getListener2().setModels(model);
+                c.setModel2(model);
                 
+                         
                 c.setState(2);
                 GUIController.getSelectedProjectTopComponent().getViewerPanel_2Faces().setResultButtonVisible(true, 0);
                 
