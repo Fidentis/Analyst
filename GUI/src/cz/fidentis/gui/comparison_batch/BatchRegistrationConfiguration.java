@@ -960,7 +960,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     BatchComparison c = getContext();
                     
                     FpResultsBatch res = FpProcessing.instance().calculatePointsBatch(cancelTask,
-                            c.getModels(), PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
+                            c.getModels(), PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()), tc);
                     
                     for(String key : res.getFps().keySet()){
                         List<FacialPoint> originalFps = new ArrayList<>();

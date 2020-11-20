@@ -12,12 +12,15 @@ import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.featurepoints.results.FpResultsPair;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
+import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Cancellable;
@@ -55,7 +58,7 @@ public class FpProcessing {
      * secondary face
      */
     public FpResultsPair calculatePointsPair(Cancellable cancelTask, Model mainModel, Model secondaryModel,
-            JButton registerButton, JButton exportFpButton, JButton calculateAutoButton, PDM pdm) {
+            JButton registerButton, JButton exportFpButton, JButton calculateAutoButton, PDM pdm, Component mainComponent) {
         List<FacialPoint> mainFP = new ArrayList<>();
         List<FacialPoint> secondaryFP = new ArrayList<>();
         FpResultsPair res = null;
@@ -64,8 +67,18 @@ public class FpProcessing {
         p = ProgressHandleFactory.createHandle("Computing Feature Points...", cancelTask);
         p.start();
         Icp.instance().setP(p);
-
-        //compute FPs for main face
+        
+        List<File> usedModels = new LinkedList<>();
+        usedModels.add(mainModel.getFile());
+        usedModels.add(secondaryModel.getFile());
+        
+        HashMap<String, List<FacialPoint>> allFPs = computePointsForMany(p, usedModels, pdm);
+        
+        if(allFPs != null) {
+            res = new FpResultsPair(allFPs.get(mainModel.getName()), allFPs.get(secondaryModel.getName()));
+        } else {
+            showNoCNNMessage(mainComponent);
+            //compute FPs for main face
         if (computePointsForSingleFace(p, mainModel, mainFP, registerButton, exportFpButton, calculateAutoButton, mainFP, secondaryFP, pdm)) {
             return res;
         }
@@ -76,6 +89,8 @@ public class FpProcessing {
         }
 
         res = new FpResultsPair(mainFP, secondaryFP);
+        }
+    
         finish(registerButton, exportFpButton, calculateAutoButton, p,
                 mainFP, secondaryFP);
 
@@ -140,7 +155,7 @@ public class FpProcessing {
      * @return feature points for N models and main face, along with list of
      * registered models
      */
-    public FpResultsOneToMany calculatePointsOneToMany(List<File> models, Model mainF, PDM pdm) {
+    public FpResultsOneToMany calculatePointsOneToMany(List<File> models, Model mainF, PDM pdm, Component mainComponent) {
         ProgressHandle p;
         FpResultsOneToMany results = null;
         p = ProgressHandleFactory.createHandle("Computing Feature Points...");
@@ -152,47 +167,58 @@ public class FpProcessing {
 
             Model model;
             List<FacialPoint> facialPoints;
-            Map<String, List<FacialPoint>> allFPs = new HashMap<>();
-            int size = models.size();
+            Map<String, List<FacialPoint>> allFPs = null;   
+            List<File> usedModels = new LinkedList<>();
+            usedModels.addAll(models);
+            usedModels.add(mainF.getFile());
 
-            for (int i = 0; i < size; i++) {
-                model = ModelLoader.instance().loadModel(models.get(i), true, true);
+            allFPs = computePointsForMany(p, usedModels, pdm);
 
-                facialPoints = computePointsForSingleFace(p, model, pdm);
-                allFPs.put(model.getName(), facialPoints);
+            if (allFPs == null) {   
+                showNoCNNMessage(mainComponent);
+                
+                 allFPs = new HashMap<>();
+                // Compute on mesh
+                for (int i = 0; i < models.size(); i++) {
+                    model = ModelLoader.instance().loadModel(models.get(i), true, true);
+
+                    facialPoints = computePointsForSingleFace(p, model, pdm);
+                    allFPs.put(model.getName(), facialPoints);
+                }
+
+                facialPoints = computePointsForSingleFace(p, mainF, pdm);
+                allFPs.put(mainF.getName(), facialPoints);
+
             }
 
-            facialPoints = computePointsForSingleFace(p, mainF, pdm);
-
-            results = new FpResultsOneToMany(facialPoints, (HashMap<String, List<FacialPoint>>) allFPs);
-
             p.finish();
-            
+            results = new FpResultsOneToMany((HashMap<String, List<FacialPoint>>) allFPs);
 
         } catch (Exception ex) {
             p.finish();
         }
-
+        
         return results;
     }
 
     //computes points for single face
     private List<FacialPoint> computePointsForSingleFace(ProgressHandle p, Model model, PDM pdm) {
 
-        List<FacialPoint> fps;
-
         p.progress("Computing feature points of face " + model.getName());
         p.switchToIndeterminate();
 
         LandmarkLocalization localization = LandmarkLocalization.instance();
 
-        if(model.getMatrials() != null && model.getMatrials().getMatrials().size() > 0){
-            fps = localization.landmarkDetectionTexture(model, pdm);
-        }else{
-           fps = localization.localizationOfLandmarks(model, pdm); 
-        }
-      
-        return fps;
+        return localization.localizationOfLandmarks(model, pdm); 
+    }
+    
+    private HashMap<String, List<FacialPoint>> computePointsForMany(ProgressHandle p, List<File> models, PDM pdm) {
+         p.progress("Computing feature points for faces,");
+        p.switchToIndeterminate();
+
+        LandmarkLocalization localization = LandmarkLocalization.instance();
+
+        return localization.landmarkDetectionTexture(models, pdm);
     }
 
     /**
@@ -206,7 +232,7 @@ public class FpProcessing {
      * disk
      * @return feature points for N models, along with list of registered models
      */
-    public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models, PDM pdm) {
+    public FpResultsBatch calculatePointsBatch(Cancellable cancelTask, List<File> models, PDM pdm, Component mainComponent) {
         int size = models.size();
 
         ProgressHandle p;
@@ -215,10 +241,15 @@ public class FpProcessing {
 
         Model model;
         List<FacialPoint> facialPoints;
-        Map<String, List<FacialPoint>> allFPs = new HashMap<>();
+        Map<String, List<FacialPoint>> allFPs = null;
         FpResultsBatch res = null;
-
-        for (int i = 0; i < size; i++) {
+        
+        allFPs = computePointsForMany(p, models, pdm);
+        
+        if(allFPs == null){
+            showNoCNNMessage(mainComponent);
+           allFPs = new HashMap<>();
+          for (int i = 0; i < size; i++) {
             if (Thread.currentThread().isInterrupted()) {
                 p.finish();
                 return res;
@@ -228,6 +259,7 @@ public class FpProcessing {
             facialPoints = computePointsForSingleFace(p, model, pdm);
             allFPs.put(model.getName(), facialPoints);
 
+         }
         }
 
         res = new FpResultsBatch(allFPs);
@@ -235,4 +267,11 @@ public class FpProcessing {
         return res;
     }
    
+    
+    private void showNoCNNMessage(Component parent) {
+        JOptionPane.showMessageDialog(parent, 
+                "Programme couldn't run Python, landmarks will be computed without use of texture.", "Couldn't run Python", 
+                JOptionPane.INFORMATION_MESSAGE);
+       
+    }
 }

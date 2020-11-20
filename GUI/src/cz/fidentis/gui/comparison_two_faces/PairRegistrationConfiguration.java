@@ -936,7 +936,7 @@ public class PairRegistrationConfiguration extends javax.swing.JPanel {
                 public void run() {
                     calculatePointsButton.setEnabled(false);
                     FpResultsPair res = FpProcessing.instance().calculatePointsPair(cancelTask, tc.getViewerPanel_2Faces().getListener1().getModel(), tc.getViewerPanel_2Faces().getListener2().getModel(),
-                            registerButton, exportPointsButton, calculatePointsButton, PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
+                            registerButton, exportPointsButton, calculatePointsButton, PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()), tc);
 
                     List<FacialPoint> mainCopy = new ArrayList<>();
                     List<FacialPoint> secondaryCopy = new ArrayList<>();

@@ -291,6 +291,10 @@ public class Materials {
     public ArrayList<Material> getMatrials() {
         return materials;
     }
+    
+    public String getDirectory() {
+        return directory;
+    }
 
     /**
      *

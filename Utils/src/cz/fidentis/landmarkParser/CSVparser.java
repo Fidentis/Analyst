@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,8 +105,20 @@ public static String WHITE_SPACE_SEP = "\\s+";
 
         try (PrintWriter writer = new PrintWriter(filePath, "UTF-8")) {
 
+            int numOfLandmarks = 0;
+            for (FpModel fpModel : fpModels) {
+                List<FacialPoint> tmpList = fpModel.createListFp();
+                Collections.sort(tmpList, (fp1, fp2) -> {
+                    return fp1.getType() - fp2.getType();
+                });
+                
+                if(tmpList.get(tmpList.size() -1 ).getType() > numOfLandmarks) {
+                    numOfLandmarks = tmpList.get(tmpList.size() -1 ).getType();
+                }
+            }
+            
             // Hlavicka
-            writer.println(buildHead());
+            writer.println(buildHead(numOfLandmarks));      // +1 for undefined
 
             // Body
             // Do vystupu exportovat VSETKY body z FacialPointType
@@ -120,11 +133,18 @@ public static String WHITE_SPACE_SEP = "\\s+";
         }
     }
 
-    private static String buildHead() {
+    private static String buildHead(int numOfLandmarks) {
         String head = "Model name" + SEP;
         for (int i = 0; i < FacialPointType.values().length - 1; i++) {     //TODO: make sure it works with all the landmarks
             head = head + pointToHead(i);
         }
+        
+        if(FacialPointType.values().length - 1 < numOfLandmarks) {
+            for(int i = FacialPointType.values().length - 1; i <= numOfLandmarks; i++) {
+                head += i + " x" + SEP + i + " y" + SEP + i + " z" + SEP;
+            }
+        }
+        
         // Vymaz poslednej ciarky
         return head.substring(0, head.length() - 1);
     }
@@ -147,7 +167,7 @@ public static String WHITE_SPACE_SEP = "\\s+";
 
     private static Integer getPointType(String headPart) {
 //        TODO: dorobit aj kontrolu, ci ma bod spravne vyplnene suradnice x, y, z
-        String[] part = headPart.split(" ");
+        String[] part = headPart.trim().split(" ");
         Integer result = -1;
         try{
           result = Integer.parseInt(part[0]);

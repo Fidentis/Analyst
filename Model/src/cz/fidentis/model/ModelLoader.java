@@ -83,6 +83,28 @@ public class ModelLoader {
         return model;
 
     }  // end of loadModel()
+    
+    public Model loadeModelWithoutVertices(File modelFile) {
+        model = new Model();
+        //System.out.println("Loading" + modelFile.getName());
+
+        String fnm = modelFile.getPath();
+        model.setFile(modelFile);
+        model.setDirectoryPath(modelFile.getParent() + File.separator);
+        model.setName(modelFile.getName());
+        try (BufferedReader br = new BufferedReader(new FileReader(fnm));) {
+
+            if (fnm.substring(fnm.lastIndexOf(".") + 1).equalsIgnoreCase("obj")) {
+                readObjModelWithoutVertices(br, modelFile);
+            }
+            
+            //br.close();
+        } catch (IOException e) {
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return model;
+    }
 
     private void readStlModel(BufferedReader br) // parse the STL file line-by-line
     {
@@ -285,6 +307,35 @@ public class ModelLoader {
             model.getModelDims().setBoundingBox(model.getModelDims().getCentralizedBoundingBox());
         }
     } // end of readObjModel()
+    
+    private void readObjModelWithoutVertices(BufferedReader br, File modelFile) {
+        boolean isLoaded = true;
+        String line;
+
+        try {
+            String matLib = "";
+            while (((line = br.readLine()) != null) && isLoaded) {
+                if (line.length() > 0) {
+                    line = line.trim();
+
+                   if (line.startsWith("mtllib ")) {   // load material
+                        matLib = line.substring(7);
+                        model.setMaterials(new Materials(matLib, modelFile));
+                    }
+                }
+            }
+            //closed in method from which it has been called
+            //br.close();
+        } catch (IOException e) {
+            Exceptions.printStackTrace(e);
+        }
+
+        if (!isLoaded) {
+            Logger.getLogger(ModelLoader.class.getName()).log(Level.SEVERE, "Error loading model");
+        } else {
+            model.getModelDims().setBoundingBox(model.getModelDims().getCentralizedBoundingBox());
+        }
+    }
 
     private int addSTLVert(Vector3f vert, boolean isFirstCoord, ArrayList<Vector3f> normals, Vector3f normal) /* Add vertex  to vert ArrayList,
      and update the model dimension's info. */ {
@@ -564,6 +615,7 @@ public class ModelLoader {
             }
         }
     }
+    
 
     private boolean addPLYVert(String line, boolean isFirstCoord) /* Add vertex  to vert ArrayList,
      and update the model dimension's info. */ {

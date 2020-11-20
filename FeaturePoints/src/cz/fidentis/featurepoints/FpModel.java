@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.vecmath.Vector3f;
@@ -58,14 +59,33 @@ public class FpModel implements Serializable{
     
     public String toCSVstring(String sep) {     //TODO: make sure it adds custom points
         String csvString = modelName;
-        for (int i = 0; i < FacialPointType.values().length - 1; i++) {
+        List<FacialPoint> tmpList = createListFp();
+        Collections.sort(tmpList, (fp1, fp2) -> {
+            return fp1.getType() - fp2.getType();
+        });
+        
+        int lastIndex = 0;
+        
+        while(lastIndex <= tmpList.get(tmpList.size()-1).getType()) {
+            FacialPoint fp = getFacialPoint(lastIndex);
+             if (fp != null ) {
+                csvString = csvString + sep + fp.toCSVstring(sep);
+            } else {
+                 
+                csvString = csvString + sep + sep + sep;
+            }
+             
+            lastIndex++;
+        }
+        
+        /*for (int i = 0; i < FacialPointType.values().length - 1; i++) {
             FacialPoint fp = getFacialPoint(i);
             if (fp != null ) {
                 csvString = csvString + sep + fp.toCSVstring(sep);
             } else {
                 csvString = csvString + sep + sep + sep;
             }
-        }
+        }*/
         return csvString;
     }
 

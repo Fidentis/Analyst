@@ -250,6 +250,7 @@ public class ComparisonGLEventListener extends GeneralGLEventListener {
     private Vector3f selectedCoords = null;
     private float selectedRadius;
 
+
     /*private ArrayList<ArrayList<Float>> distances = new ArrayList<>();
     private ArrayList<ArrayList<Vector2f>> textureCoordinates = new ArrayList<>();
     private ArrayList<Set<Integer>> usedFaces = new ArrayList<>();

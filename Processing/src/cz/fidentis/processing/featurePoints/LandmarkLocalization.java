@@ -16,11 +16,14 @@ import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.FpModel;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.model.Model;
+import cz.fidentis.model.ModelLoader;
 import cz.fidentis.model.corner_table.CornerTable;
 import java.io.File;
 import static java.io.File.separatorChar;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.ParserConfigurationException;
@@ -261,29 +264,75 @@ public class LandmarkLocalization {
         return landmarks;
     }
         
-    public List<FacialPoint> landmarkDetectionTexture(Model m, PDM usedPdm){
-        try {
-            //detect landmarks in 2D
-            String saved = TextureLandmarks.instance().detectTextureLandmarks(new File(m.getMatrials().getMatrials().get(0).getTextureFile()));
-            //convert 2D landmarks to 3D
-            FpModel landmarksIn3D = TextureLandmarks.instance().convert2Dto3D(saved, m);
-            Vector3f enl = landmarksIn3D.getFacialPoint(FacialPointType.EN_L.ordinal()).getPosition();
-            Vector3f enr = landmarksIn3D.getFacialPoint(FacialPointType.EN_R.ordinal()).getPosition();
-            
-            //delete tmp file
-            new File(saved).delete();
-            
-            return localizationOfLandmarks(m, usedPdm, enl, enr);
-        } catch (ParserConfigurationException | TransformerException ex) {
-            Exceptions.printStackTrace(ex);
+    public HashMap<String, List<FacialPoint>> landmarkDetectionTexture(List<File> models, PDM usedPdm){
+        String saved = TextureLandmarks.instance().detectTextureLandmarks(models);
+        
+        // Couldn't run Python
+        if(saved == null){
+            return null;
         }
         
-        return null;
+        HashMap<String, List<FacialPoint>> cnnLandmarks = TextureLandmarks.instance().CNNtoPP(new File(saved));
+        
+        for(File f : models) {
+            Model m = ModelLoader.instance().loadModel(f, false, Boolean.TRUE);
+            List<FacialPoint> currentCNNLandmarks = cnnLandmarks.get(m.getName());
+            Vector3f enl = null, enr = null, prn = null;
+            for(FacialPoint fp: currentCNNLandmarks) {
+                if(fp.getType() == FacialPointType.EN_L.ordinal())
+                    enl = fp.getPosition();
+                if(fp.getType() == FacialPointType.EN_R.ordinal())
+                    enr = fp.getPosition();
+                if(fp.getType() == FacialPointType.PRN.ordinal())
+                    prn = fp.getPosition();
+            }
+            
+            FeaturePointsUniverse fpUni = new FeaturePointsUniverse(m);
+            // simplifying the model
+            fpUni.computeSimplify();
+            
+            List<FacialPoint> pdmLandmarks = findLandmarks(usedPdm, enl, enr, prn, fpUni);
+            List<FacialPoint> mergedLandmarks = mergeLandmarks(pdmLandmarks, currentCNNLandmarks);
+
+            
+            cnnLandmarks.replace(m.getName(), mergedLandmarks);
+        }
+        
+        return cnnLandmarks;
+        
+        // TODO: some landmarks need to be adjusted via PDM (AL, G?)
+    }
+    
+    private List<FacialPoint> mergeLandmarks(List<FacialPoint> pdmLandmarks, List<FacialPoint> cnnLandmarks) {
+        FpModel finalModel = new FpModel();
+        FpModel pdmModel = new FpModel();
+        pdmModel.setFacialpoints(pdmLandmarks);
+        FpModel cnnModel = new FpModel();
+        cnnModel.setFacialpoints(cnnLandmarks);
+        
+        for(FacialPoint fp: cnnLandmarks){
+            if(fp.getType() == FacialPointType.AL_L.ordinal() ||
+             fp.getType() == FacialPointType.AL_R.ordinal()) {
+                continue;
+            }
+            
+            finalModel.addFacialPoint(fp);
+        }
+        
+        for(FacialPoint fp : pdmLandmarks){
+            if(finalModel.containsPoint(fp.getType())) {
+                continue;
+            }
+            
+            finalModel.addFacialPoint(fp);
+        }
+        
+        return finalModel.createListFp();
     }
     
     private List<FacialPoint> localizationOfLandmarks(Model model, PDM usedPdm, Vector3f enl, Vector3f enr) {
                 
-         FeaturePointsUniverse fpUni = new FeaturePointsUniverse(model);
+        FeaturePointsUniverse fpUni = new FeaturePointsUniverse(model);
 
         // simplifying the model
         fpUni.computeSimplify();

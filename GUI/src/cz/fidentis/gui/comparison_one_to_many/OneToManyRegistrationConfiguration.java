@@ -912,8 +912,9 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
+                    Model mainFace = tc.getOneToManyViewerPanel().getListener1().getModel();
                     FpResultsOneToMany res = FpProcessing.instance().calculatePointsOneToMany(c.getModels(), 
-                    tc.getOneToManyViewerPanel().getListener1().getModel(), PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()));
+                    mainFace, PDMList.instance().getPdm(pdmComboBox.getSelectedIndex()), tc);
                     
                     HashMap<String, List<FacialPoint>> resCopy = new HashMap<>();
                     List<FacialPoint> fpCopy;
@@ -928,8 +929,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     }
                     
                     fpCopy = new ArrayList<>();
-                    
-                    for(FacialPoint fp : res.getMainFfps()){
+                    for(FacialPoint fp : res.getFacialPoints().get(mainFace.getName())){
                         fpCopy.add(fp.deepCopyFp());
                     }
                     
@@ -938,8 +938,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     c.setOriginalFp(resCopy);
             
                     c.setFacialPoints(res.getFacialPoints());
-                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getMainFfps());
-                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getMainFfps());
+                    c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getFacialPoints().get(mainFace.getName()));
+                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getFacialPoints().get(mainFace.getName()));
                     
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
                         c.getFacialPoints(
