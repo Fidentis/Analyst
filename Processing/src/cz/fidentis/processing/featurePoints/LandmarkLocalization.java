@@ -14,6 +14,7 @@ import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FeaturePointsUniverse;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
@@ -264,7 +265,7 @@ public class LandmarkLocalization {
         return landmarks;
     }
         
-    public HashMap<String, List<FacialPoint>> landmarkDetectionTexture(List<File> models, PDM usedPdm){
+    public HashMap<String, CNNDetectionResult> landmarkDetectionTexture(List<File> models, PDM usedPdm){
         String saved = TextureLandmarks.instance().detectTextureLandmarks(models);
         
         // Couldn't run Python
@@ -272,11 +273,11 @@ public class LandmarkLocalization {
             return null;
         }
         
-        HashMap<String, List<FacialPoint>> cnnLandmarks = TextureLandmarks.instance().CNNtoPP(new File(saved));
+        HashMap<String, CNNDetectionResult> cnnLandmarks = TextureLandmarks.instance().CNNtoPP(new File(saved), models.size());
         
         for(File f : models) {
             Model m = ModelLoader.instance().loadModel(f, false, Boolean.TRUE);
-            List<FacialPoint> currentCNNLandmarks = cnnLandmarks.get(m.getName());
+            List<FacialPoint> currentCNNLandmarks = cnnLandmarks.get(m.getName()).getModelLandmarks();
             Vector3f enl = null, enr = null, prn = null;
             for(FacialPoint fp: currentCNNLandmarks) {
                 if(fp.getType() == FacialPointType.EN_L.ordinal())
@@ -293,9 +294,12 @@ public class LandmarkLocalization {
             
             List<FacialPoint> pdmLandmarks = findLandmarks(usedPdm, enl, enr, prn, fpUni);
             List<FacialPoint> mergedLandmarks = mergeLandmarks(pdmLandmarks, currentCNNLandmarks);
+            
+            CNNDetectionResult originalResult = cnnLandmarks.get(m.getName());
+            originalResult.setModelLandmarks(mergedLandmarks);
 
             
-            cnnLandmarks.replace(m.getName(), mergedLandmarks);
+            cnnLandmarks.replace(m.getName(), originalResult);
         }
         
         return cnnLandmarks;

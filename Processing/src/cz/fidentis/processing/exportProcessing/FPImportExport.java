@@ -8,6 +8,7 @@ package cz.fidentis.processing.exportProcessing;
 import cz.fidentis.comparison.icp.ICPTransformation;
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.controller.BatchComparison;
+import cz.fidentis.controller.Comparison2Faces;
 import cz.fidentis.controller.OneToManyComparison;
 import cz.fidentis.enums.FileExtensions;
 import cz.fidentis.featurepoints.FacialPoint;
@@ -202,6 +203,53 @@ public class FPImportExport {
             }
         }
     }
+    
+    public void exportPairTexture(final Component tc, final Comparison2Faces data,
+            final boolean decentralize) {
+        final List<FpModel> points = new ArrayList<>();
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                ProgressHandle p = ProgressHandleFactory.createHandle("Exporting Feature Points...");
+                p.start();
+
+                try {
+                     // Main face
+                     List<FacialPoint> fp = data.getMainFp().getTextureLandmarks();
+                     if(fp != null && !fp.isEmpty()){
+                        //don't export fps if there are none
+                        FpModel model = prepareFPforExport(fp, data.getModel1(), decentralize);
+
+                        if (model != null) {
+                            points.add(model);
+                        }
+                     }
+                     
+                     // secondary face
+                     // Main face
+                    fp = data.getSecondaryFp().getTextureLandmarks();
+                     if(fp != null && !fp.isEmpty()){
+                        //don't export fps if there are none
+                        FpModel model = prepareFPforExport(fp, data.getModel2(), decentralize);
+
+                        if (model != null) {
+                            points.add(model);
+                        }
+                     }
+                     
+                    FPImportExport.instance().exportPoints(tc, points);
+
+                    p.finish();
+                } catch (Exception ex) {
+                    p.finish();
+                }
+            }
+        };
+
+        Thread t = new Thread(r);
+        t.start();
+    }
 
     /**
      * Turn list of FacialPoints to FpModel. If points, or modelName are null,
@@ -310,7 +358,56 @@ public class FPImportExport {
                     for (int i = 0; i < models.size(); i++) {
                         File f = models.get(i);
                         String modelName = f.getName();
-                        List<FacialPoint> fp = data.getFacialPoints(modelName);
+                        List<FacialPoint> fp = data.getFacialPoints(modelName).getModelLandmarks();
+                        
+                        if(fp == null || fp.isEmpty())
+                            continue;       //don't export fps if there are none
+
+                        FpModel model = prepareFPforExport(fp, f, decentralize);
+
+                        if (model != null) {
+                            points.add(model);
+                        }
+                    }
+
+                    //transform and store FpModel for main face        
+                    FpModel model = prepareFPforExport(mainFP, mainModel, decentralize);
+
+                    if (model != null) {
+                        points.add(model);
+                    }
+
+                    FPImportExport.instance().exportPoints(tc, points);
+
+                    p.finish();
+                } catch (Exception ex) {
+                    p.finish();
+                }
+            }
+        };
+
+        Thread t = new Thread(r);
+        t.start();
+    }
+    
+    public void exportOneToManyTexture(final Component tc, final OneToManyComparison data,
+            final List<FacialPoint> mainFP, final Model mainModel, final boolean decentralize) {
+        final List<FpModel> points = new ArrayList<>();
+        final List<File> models = data.getModels();
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                ProgressHandle p = ProgressHandleFactory.createHandle("Exporting Feature Points...");
+                p.start();
+
+                try {
+
+                    //transform and store FpModel for N models
+                    for (int i = 0; i < models.size(); i++) {
+                        File f = models.get(i);
+                        String modelName = f.getName();
+                        List<FacialPoint> fp = data.getFacialPoints(modelName).getTextureLandmarks();
                         
                         if(fp == null || fp.isEmpty())
                             continue;       //don't export fps if there are none
@@ -368,7 +465,47 @@ public class FPImportExport {
                     for (int i = 0; i < models.size(); i++) {
                         File f = models.get(i);
                         String modelName = f.getName();
-                        List<FacialPoint> fp = data.getFacialPoints(modelName);
+                        List<FacialPoint> fp = data.getFacialPoints(modelName).getModelLandmarks();
+                        
+                        if(fp == null || fp.isEmpty())
+                            continue;       //don't export fps if they are not there
+
+                        FpModel model = prepareFPforExport(fp, f, decentralize);
+
+                        if (model != null) {
+                            points.add(model);
+                        }
+                    }
+
+                    FPImportExport.instance().exportPoints(tc, points);
+                    p.finish();
+                } catch (Exception ex) {
+                    p.finish();
+                }
+            }
+        };
+
+        Thread t = new Thread(r);
+        t.start();
+    }
+    
+    public void exportBatchTexture(final Component tc, final BatchComparison data, final boolean decentralize) {
+        final List<FpModel> points = new ArrayList<>();
+        final List<File> models = data.getModels();
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                ProgressHandle p = ProgressHandleFactory.createHandle("Exporting Texture Feature Points...");
+                p.start();
+
+                try {
+
+                    //transform and store FpModel for N faces
+                    for (int i = 0; i < models.size(); i++) {
+                        File f = models.get(i);
+                        String modelName = f.getName();
+                        List<FacialPoint> fp = data.getFacialPoints(modelName).getTextureLandmarks();
                         
                         if(fp == null || fp.isEmpty())
                             continue;       //don't export fps if they are not there

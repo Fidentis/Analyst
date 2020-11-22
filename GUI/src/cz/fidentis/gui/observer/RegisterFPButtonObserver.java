@@ -6,6 +6,7 @@
 package cz.fidentis.gui.observer;
 
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,15 +19,16 @@ import javax.swing.JButton;
  */
 public class RegisterFPButtonObserver implements Observable{
     private final JButton registerFpButton;
-    private final  Map<String, List<FacialPoint>> info;
+    private final  Map<String, CNNDetectionResult> info;
 
-    public RegisterFPButtonObserver(JButton registerFpButton, Map<String, List<FacialPoint>> info) {
+    public RegisterFPButtonObserver(JButton registerFpButton, Map<String, CNNDetectionResult> info) {
         this.registerFpButton = registerFpButton;
         this.info = info;
     }
     
-    public RegisterFPButtonObserver(JButton registerFpButton, List<FacialPoint> mainFp, String mainName, List<FacialPoint> secondaryFp, String secondaryName){
-        Map<String, List<FacialPoint>> info = new HashMap<>();
+    public RegisterFPButtonObserver(JButton registerFpButton, CNNDetectionResult mainFp, String mainName, 
+            CNNDetectionResult secondaryFp, String secondaryName){
+        Map<String, CNNDetectionResult> info = new HashMap<>();
         info.put(mainName, mainFp);
         info.put(secondaryName, secondaryFp);
         
@@ -40,8 +42,9 @@ public class RegisterFPButtonObserver implements Observable{
         if (info.keySet().size() < 2) {     //less than 2 faces loaded
             enable = false;
         } else {
-            for (List<FacialPoint> fp : info.values()) {
-                if (fp == null || fp.size() < 3) {
+            for (CNNDetectionResult fp : info.values()) {
+                if (fp == null || fp.getModelLandmarks() == null || 
+                        fp.getModelLandmarks().size() < 3) {
                     enable = false;
                     break;
                 }

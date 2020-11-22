@@ -414,7 +414,7 @@ public class ViewerPanel_1toN extends javax.swing.JPanel {
         //update points in data model
         if(removePoints || addPoints){
             String modelName = listener.getModel().getName();    
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().addFacialPoints(modelName, listener.getFacialPoints());
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedOneToManyComparison().updateModelPoints(modelName, listener.getFacialPoints());
             fpExportEnable.updateObservers();
         }
         

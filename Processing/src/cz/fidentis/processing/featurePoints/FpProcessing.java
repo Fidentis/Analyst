@@ -7,6 +7,7 @@ package cz.fidentis.processing.featurePoints;
 
 import cz.fidentis.comparison.icp.Icp;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.featurepoints.results.FpResultsPair;
@@ -72,7 +73,7 @@ public class FpProcessing {
         usedModels.add(mainModel.getFile());
         usedModels.add(secondaryModel.getFile());
         
-        HashMap<String, List<FacialPoint>> allFPs = computePointsForMany(p, usedModels, pdm);
+        HashMap<String, CNNDetectionResult> allFPs = computePointsForMany(p, usedModels, pdm);
         
         if(allFPs != null) {
             res = new FpResultsPair(allFPs.get(mainModel.getName()), allFPs.get(secondaryModel.getName()));
@@ -88,7 +89,7 @@ public class FpProcessing {
             return res;
         }
 
-        res = new FpResultsPair(mainFP, secondaryFP);
+        res = new FpResultsPair(new CNNDetectionResult(mainFP), new CNNDetectionResult(secondaryFP));
         }
     
         finish(registerButton, exportFpButton, calculateAutoButton, p,
@@ -167,13 +168,14 @@ public class FpProcessing {
 
             Model model;
             List<FacialPoint> facialPoints;
-            Map<String, List<FacialPoint>> allFPs = null;   
+            Map<String, CNNDetectionResult> allFPs = null;   
             List<File> usedModels = new LinkedList<>();
             usedModels.addAll(models);
             usedModels.add(mainF.getFile());
 
             allFPs = computePointsForMany(p, usedModels, pdm);
 
+            // Couldn't run CNN only run MPDM
             if (allFPs == null) {   
                 showNoCNNMessage(mainComponent);
                 
@@ -183,22 +185,22 @@ public class FpProcessing {
                     model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
                     facialPoints = computePointsForSingleFace(p, model, pdm);
-                    allFPs.put(model.getName(), facialPoints);
+                    allFPs.put(model.getName(), new CNNDetectionResult(facialPoints));
                 }
 
                 facialPoints = computePointsForSingleFace(p, mainF, pdm);
-                allFPs.put(mainF.getName(), facialPoints);
+                allFPs.put(mainF.getName(), new CNNDetectionResult(facialPoints));
 
             }
 
             p.finish();
-            results = new FpResultsOneToMany((HashMap<String, List<FacialPoint>>) allFPs);
+            results = new FpResultsOneToMany((HashMap<String, CNNDetectionResult>) allFPs);
 
         } catch (Exception ex) {
             p.finish();
         }
         
-        return results;
+                    return results;
     }
 
     //computes points for single face
@@ -212,7 +214,7 @@ public class FpProcessing {
         return localization.localizationOfLandmarks(model, pdm); 
     }
     
-    private HashMap<String, List<FacialPoint>> computePointsForMany(ProgressHandle p, List<File> models, PDM pdm) {
+    private HashMap<String, CNNDetectionResult> computePointsForMany(ProgressHandle p, List<File> models, PDM pdm) {
          p.progress("Computing feature points for faces,");
         p.switchToIndeterminate();
 
@@ -241,11 +243,12 @@ public class FpProcessing {
 
         Model model;
         List<FacialPoint> facialPoints;
-        Map<String, List<FacialPoint>> allFPs = null;
+        Map<String, CNNDetectionResult> allFPs = null;
         FpResultsBatch res = null;
         
         allFPs = computePointsForMany(p, models, pdm);
         
+        // Couldn't run CNN run only MPDM
         if(allFPs == null){
             showNoCNNMessage(mainComponent);
            allFPs = new HashMap<>();
@@ -257,7 +260,7 @@ public class FpProcessing {
             model = ModelLoader.instance().loadModel(models.get(i), true, true);
 
             facialPoints = computePointsForSingleFace(p, model, pdm);
-            allFPs.put(model.getName(), facialPoints);
+            allFPs.put(model.getName(), new CNNDetectionResult(facialPoints));
 
          }
         }

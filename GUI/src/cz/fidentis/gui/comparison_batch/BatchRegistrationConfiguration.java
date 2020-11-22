@@ -17,6 +17,7 @@ import cz.fidentis.featurepoints.results.FpResultsBatch;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.gui.guisetup.BatchGUIsetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
@@ -156,6 +157,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel19 = new javax.swing.JLabel();
+        exportTextureFpButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -715,6 +717,14 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel19, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.jLabel19.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportTextureFpButton, org.openide.util.NbBundle.getMessage(BatchRegistrationConfiguration.class, "BatchRegistrationConfiguration.exportTextureFpButton.text")); // NOI18N
+        exportTextureFpButton.setEnabled(false);
+        exportTextureFpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportTextureFpButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -729,11 +739,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(loadFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(fpPointInfoCheckBox))
-                .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(exportFpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -761,6 +766,12 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
             .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(fpPointInfoCheckBox))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(exportTextureFpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -790,6 +801,8 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportFpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportTextureFpButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -896,7 +909,23 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
         for (int i = 0; i < n; i++) {
             List<FacialPoint> facialPoints = comp.getProject().getSelectedBatchComparison().getFacialPoints(
-                    comp.getProject().getSelectedBatchComparison().getModel(i).getName());
+                    comp.getProject().getSelectedBatchComparison().getModel(i).getName()).getModelLandmarks();
+            if (facialPoints == null || facialPoints.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+     private Boolean areTexturesCalculated(ProjectTopComponent comp) {
+        int n = comp.getProject().getSelectedBatchComparison().getModels().size();
+        if (n == 0) {
+            return false;
+        }
+
+        for (int i = 0; i < n; i++) {
+            List<FacialPoint> facialPoints = comp.getProject().getSelectedBatchComparison().getFacialPoints(
+                    comp.getProject().getSelectedBatchComparison().getModel(i).getName()).getTextureLandmarks();
             if (facialPoints == null || facialPoints.isEmpty()) {
                 return false;
             }
@@ -964,21 +993,22 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     
                     for(String key : res.getFps().keySet()){
                         List<FacialPoint> originalFps = new ArrayList<>();
-                        for(FacialPoint fp : res.getFps().get(key))
+                        for(FacialPoint fp : res.getFps().get(key).getModelLandmarks())
                             originalFps.add(fp.deepCopyFp());
                         
                         c.addOriginalFp(key, originalFps);
                     }                    
 
                     //move to GUI manipulation eventually
-                    c.setFacialPoints((HashMap<String, List<FacialPoint>>) res.getFps());
+                    c.setFacialPoints((HashMap<String, CNNDetectionResult>) res.getFps());
                     tc.getViewerPanel_Batch().getListener().setFacialPoints(
                              c.getFacialPoints(
                                     tc.getViewerPanel_Batch().getListener().getModel().getName()
-                            ));
+                            ).getModelLandmarks());
 
                     registerButton.setEnabled(areFPCalculated(tc));
                     exportFpButton.setEnabled(areFPCalculated(tc));
+                    exportTextureFpButton.setEnabled(areTexturesCalculated(tc));
                 }
             };
             runningTask = new Thread(run);
@@ -1100,7 +1130,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
 
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
-                                    c.getModels().get(i).getName());
+                                    c.getModels().get(i).getName()).getModelLandmarks();
                             fpMatrix.add(facialPoints);
                             
                             Model m = ModelLoader.instance().loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
@@ -1129,8 +1159,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                     c.setTrans(trans);
                         
                         tc.getProject().getSelectedBatchComparison().setTrans(trans);
-                        
-                        tc.getProject().getSelectedBatchComparison().clearFacialPoints();
 
                         List<File> results = new ArrayList<>(size);
                         File tmpModuleFile = new File("" + System.currentTimeMillis());
@@ -1138,17 +1166,17 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
                         FileUtils.instance().createTMPmoduleFolder(tmpModuleFile);
 
                         for (int i = 0; i < size; i++) {
-                            c.addFacialPoints(c.getModel(i).getName(),
-                                    procrustes.getGpa().getPA(i).getFacialPoints());
+                            c.update3DPoints(c.getModel(i).getName(), procrustes.getGpa().getPA(i).getFacialPoints());
                             
                             Model m = ModelLoader.instance().loadModel(c.getModel(i), false, Boolean.TRUE);
                             m.setVerts(procrustes.getGpa().getPA(i).getVertices());
-                            procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()));                            
+                            procrustes.getGpa().getPA(i).updateFacialPoints(c.getFacialPoints(m.getName()).getModelLandmarks());                            
                             
                             //Update canvas with registered model
                             if (m.getName().equals(tc.getViewerPanel_Batch().getListener().getModel().getName())) {
                                 tc.getViewerPanel_Batch().getListener().setModels(m);
-                                tc.getViewerPanel_Batch().getListener().setFacialPoints(c.getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()));
+                                tc.getViewerPanel_Batch().getListener().setFacialPoints(
+                                        c.getFacialPoints(tc.getViewerPanel_Batch().getListener().getModel().getName()).getModelLandmarks());
                             }
                             
                             ProgressHandle k = ProgressHandleFactory.createHandle("saving registered files.");
@@ -1237,8 +1265,6 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             return;
         }
 
-        c.clearFacialPoints();
-
         List<File> models = new ArrayList<>();
 
         models.addAll(c.getModels());
@@ -1252,7 +1278,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
             List<FacialPoint> originalFp = model.createListFp();
             c.addOriginalFp(model.getModelName(), originalFp);
 
-            c.addFacialPoints(
+            c.update3DPoints(
                     model.getModelName(), model.getFacialPoints());
         }
 
@@ -1387,6 +1413,11 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         if(PDMList.instance().addedNewName())
         pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
     }//GEN-LAST:event_pdmComboBoxMouseClicked
+
+    private void exportTextureFpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportTextureFpButtonActionPerformed
+       final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        FPImportExport.instance().exportBatchTexture(tc, getContext(), false);
+    }//GEN-LAST:event_exportTextureFpButtonActionPerformed
     private void setColor() {
         GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
         getContext().setPointColor(fpColorPanel.getBackground());
@@ -1404,7 +1435,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
         if (c.isFirstCreated()) {
             //to check whether FPs can be exported once they are added, removed
             ObservableMaster o = new ObservableMaster();
-            ExportFPButtonObserver export = new ExportFPButtonObserver(exportFpButton,
+            ExportFPButtonObserver export = new ExportFPButtonObserver(exportFpButton, exportTextureFpButton,
                     c.getFacialPoints());
             RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
             o.addObserver(export);
@@ -1521,6 +1552,7 @@ public class BatchRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel discPanel;
     private javax.swing.JToggleButton editFpButton;
     private javax.swing.JButton exportFpButton;
+    private javax.swing.JButton exportTextureFpButton;
     private javax.swing.JComboBox facesComboBox;
     private javax.swing.JPanel fpColorPanel;
     private javax.swing.JCheckBox fpPointInfoCheckBox;

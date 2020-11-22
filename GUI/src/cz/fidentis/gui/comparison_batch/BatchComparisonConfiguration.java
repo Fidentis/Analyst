@@ -349,7 +349,7 @@ public class BatchComparisonConfiguration extends javax.swing.JPanel {
                         int size = c.getModels().size();
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
-                                    c.getModels().get(i).getName());
+                                    c.getModels().get(i).getName()).getModelLandmarks();
                             list.add(facialPoints);
                         }
 

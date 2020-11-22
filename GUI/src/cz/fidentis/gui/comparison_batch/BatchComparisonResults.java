@@ -1871,7 +1871,7 @@ public class BatchComparisonResults extends javax.swing.JPanel {
             Model m = ModelLoader.instance().loadModel(getContext().getModel(0), false, true);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().setModel(m);
             GUIController.getSelectedProjectTopComponent().getViewerPanel_Batch().getListener().setFacialPoints(
-                    getContext().getFacialPoints(m.getName())
+                    getContext().getFacialPoints(m.getName()).getModelLandmarks()
             );
         }
 

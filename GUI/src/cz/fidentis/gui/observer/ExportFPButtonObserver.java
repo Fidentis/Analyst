@@ -6,6 +6,7 @@
 package cz.fidentis.gui.observer;
 
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +18,23 @@ import javax.swing.JButton;
  */
 public class ExportFPButtonObserver implements Observable{
     private final JButton exportFpButton;
-    private final Map<String, List<FacialPoint>> fps;
+    private final JButton exportTextureFpButton;
+    private final Map<String, CNNDetectionResult> fps;
 
-    public ExportFPButtonObserver(JButton exportFpButton, Map<String, List<FacialPoint>> fps) {
+    public ExportFPButtonObserver(JButton exportFpButton, JButton exportTextureFpButton, 
+            Map<String, CNNDetectionResult> fps) {
         this.exportFpButton = exportFpButton;
+        this.exportTextureFpButton = exportTextureFpButton;
         this.fps = fps;
     }
     
-    public ExportFPButtonObserver(JButton exportFpButton, List<FacialPoint> mainFp, String mainName,
-            List<FacialPoint> secondaryFp, String secondaryName) {
+    public ExportFPButtonObserver(JButton exportFpButton, JButton exportTextureFpButton, CNNDetectionResult mainFp, 
+            String mainName,
+            CNNDetectionResult secondaryFp, String secondaryName) {
         this.exportFpButton = exportFpButton;
+        this.exportTextureFpButton = exportTextureFpButton;
         
-        Map<String, List<FacialPoint>> fp = new HashMap<>();
+        Map<String, CNNDetectionResult> fp = new HashMap<>();
         fp.put(mainName, mainFp);
         fp.put(secondaryName, secondaryFp);
         
@@ -39,14 +45,25 @@ public class ExportFPButtonObserver implements Observable{
     public void update() {        
         //there has to be at least one point on single face loaded
         boolean exportFP = false;
+        boolean exportTexture = false;
         
-        for(List<FacialPoint> fp : fps.values()){
-            if(fp != null && !fp.isEmpty()){
+        for(CNNDetectionResult fp : fps.values()){
+            if(fp != null && fp.getModelLandmarks() != null && 
+                    !fp.getModelLandmarks().isEmpty()){
                 exportFP = true;
                 break;
             }
         }
         
+        for(CNNDetectionResult fp : fps.values()){
+            if(fp != null && fp.getTextureLandmarks() != null && 
+                    !fp.getTextureLandmarks().isEmpty()){
+                exportTexture = true;
+                break;
+            }
+        }
+        
+        exportTextureFpButton.setEnabled(exportTexture);
         exportFpButton.setEnabled(exportFP);
     } 
 }

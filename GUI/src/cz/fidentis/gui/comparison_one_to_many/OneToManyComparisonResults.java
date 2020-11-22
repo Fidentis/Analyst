@@ -1660,7 +1660,7 @@ public class OneToManyComparisonResults extends javax.swing.JPanel {
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setModel1(getContext().getPrimaryModel());
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().setModel2(m);
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().setFacialPoints(
-                getContext().getFacialPoints(m.getName())
+                getContext().getFacialPoints(m.getName()).getModelLandmarks()
         );
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener2().rotationAndSizeRestart();

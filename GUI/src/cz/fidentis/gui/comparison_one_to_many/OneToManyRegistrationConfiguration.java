@@ -19,6 +19,7 @@ import cz.fidentis.featurepoints.results.FpResultsOneToMany;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.gui.actions.landmarks.PDMList;
 import cz.fidentis.gui.guisetup.OneToManyGUISetup;
 import cz.fidentis.gui.observer.ExportFPButtonObserver;
@@ -143,6 +144,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel17 = new javax.swing.JLabel();
+        exportTextureFPButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         continueComparisonCheckBox = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
@@ -665,6 +667,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.jLabel17.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(exportTextureFPButton, org.openide.util.NbBundle.getMessage(OneToManyRegistrationConfiguration.class, "OneToManyRegistrationConfiguration.exportTextureFPButton.text")); // NOI18N
+        exportTextureFPButton.setEnabled(false);
+        exportTextureFPButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportTextureFPButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout fpPanelLayout = new javax.swing.GroupLayout(fpPanel);
         fpPanel.setLayout(fpPanelLayout);
         fpPanelLayout.setHorizontalGroup(
@@ -700,6 +710,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(fpPanelLayout.createSequentialGroup()
                 .addGroup(fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -709,7 +720,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     .addComponent(fpScaleCheckBox)
                     .addComponent(fpThresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
-            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(exportTextureFPButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         fpPanelLayout.setVerticalGroup(
             fpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -739,6 +750,8 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(exportTextureFPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -851,7 +864,24 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         }
         for (int i = 0; i < n; i++) {
             List<FacialPoint> facialPoints = comp.getProject().getSelectedOneToManyComparison().getFacialPoints(
-                    comp.getProject().getSelectedOneToManyComparison().getModel(i).getName());
+                    comp.getProject().getSelectedOneToManyComparison().getModel(i).getName()).getModelLandmarks();
+            if (facialPoints == null || facialPoints.isEmpty()) {
+                return false;
+            }
+        }
+        List<FacialPoint> facialPoints = comp.getOneToManyViewerPanel().getListener1().getFacialPoints();
+
+        return !facialPoints.isEmpty();
+    }
+    
+    private Boolean areTextureFPCalculated(ProjectTopComponent comp) {
+        int n = comp.getProject().getSelectedOneToManyComparison().getModels().size();
+        if (n == 0) {
+            return false;
+        }
+        for (int i = 0; i < n; i++) {
+            List<FacialPoint> facialPoints = comp.getProject().getSelectedOneToManyComparison().getFacialPoints(
+                    comp.getProject().getSelectedOneToManyComparison().getModel(i).getName()).getTextureLandmarks();
             if (facialPoints == null || facialPoints.isEmpty()) {
                 return false;
             }
@@ -921,7 +951,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     
                     for(String key : res.getFacialPoints().keySet()){
                         fpCopy = new ArrayList<>();
-                        for(FacialPoint fp : res.getFacialPoints().get(key)){
+                        for(FacialPoint fp : res.getFacialPoints().get(key).getModelLandmarks()){
                             fpCopy.add(fp.deepCopyFp());
                         }
                         
@@ -929,7 +959,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                     }
                     
                     fpCopy = new ArrayList<>();
-                    for(FacialPoint fp : res.getFacialPoints().get(mainFace.getName())){
+                    for(FacialPoint fp : res.getFacialPoints().get(mainFace.getName()).getModelLandmarks()){
                         fpCopy.add(fp.deepCopyFp());
                     }
                     
@@ -939,17 +969,18 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             
                     c.setFacialPoints(res.getFacialPoints());
                     c.addFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName(), res.getFacialPoints().get(mainFace.getName()));
-                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getFacialPoints().get(mainFace.getName()));
+                    tc.getOneToManyViewerPanel().getListener1().initFpUniverse(res.getFacialPoints().get(mainFace.getName()).getModelLandmarks());
                     
                     tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
                         c.getFacialPoints(
                                 tc.getOneToManyViewerPanel().getListener2().getModel().getName()
-                        ));
+                        ).getModelLandmarks());
             
             
                     //move to GUI manipulation eventually
                     registerButton.setEnabled(areFPCalculated(tc));
                     exportFPButton.setEnabled(areFPCalculated(tc));
+                    exportTextureFPButton.setEnabled(areTextureFPCalculated(tc));
                     }
                 };
            
@@ -1059,7 +1090,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         int size = c.getModels().size();
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> facialPoints = c.getFacialPoints(
-                                    c.getModels().get(i).getName());
+                                    c.getModels().get(i).getName()).getModelLandmarks();
                             list.add(facialPoints);
 
                             Model m = ModelLoader.instance().loadModel(c.getModel(i), Boolean.FALSE, Boolean.TRUE);
@@ -1067,7 +1098,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         }
 
                         Model mainFace = tc.getOneToManyViewerPanel().getListener1().getModel();
-                        Procrustes1ToMany procrustes = new Procrustes1ToMany(c.getFacialPoints(mainFace.getName()), mainFace.getVerts(),
+                        Procrustes1ToMany procrustes = new Procrustes1ToMany(c.getFacialPoints(mainFace.getName()).getModelLandmarks(), mainFace.getVerts(),
                                 list, verts, c.isFpScaling());
 
                         List<List<ICPTransformation>> trans = procrustes.align1withN();
@@ -1089,11 +1120,10 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         c.getPrimaryModel().setVerts(procrustes.getPa().getVertices());
                         //procrustes.getPa().updateFacialPoints(tc.getOneToManyViewerPanel().getListener1().getFpUniverse().getFacialPoints()); WHAT DOES THIS DO?
 
-                        List<FacialPoint> mainFp = c.getFacialPoints(mainFace.getName());
+                        //List<FacialPoint> mainFp = c.getFacialPoints(mainFace.getName()).getModelLandmarks();
                         
                         //clear all current Feature Points in listener
-                        c.clearFacialPoints();
-                        c.addFacialPoints(c.getPrimaryModel().getName(), mainFp);
+                        c.updateModelPoints(c.getPrimaryModel().getName(), procrustes.getPa().getFacialPoints());
                         List<File> r = new LinkedList<>();      //registered models saved to disk
                         File tmpModuleFile = new File("" + System.currentTimeMillis());
 
@@ -1102,11 +1132,11 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         for (int i = 0; i < size; i++) {
                             List<FacialPoint> values = new ArrayList<>();
                             values.addAll(procrustes.getPa2().get(i).getConfig().values());
-                            c.addFacialPoints(c.getModel(i).getName(), values);
+                            c.updateModelPoints(c.getModel(i).getName(), values);
 
                             Model m = ModelLoader.instance().loadModel(c.getModel(i), false, Boolean.TRUE);
                             m.setVerts(procrustes.getPa2(i).getVertices());
-                            procrustes.getPa2(i).updateFacialPoints(c.getFacialPoints(m.getName()));
+                            procrustes.getPa2(i).updateFacialPoints(c.getFacialPoints(m.getName()).getModelLandmarks());
 
                             if (tc.getOneToManyViewerPanel().getListener2().getModel().getName().equals(m.getName())) {
                                 tc.getOneToManyViewerPanel().getListener2().setModels(m);
@@ -1124,7 +1154,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                         tc.getOneToManyViewerPanel().getListener2().setFacialPoints(
                                 tc.getProject().getSelectedOneToManyComparison().getFacialPoints(
                                         tc.getOneToManyViewerPanel().getListener2().getModel().getName()
-                                ));
+                                ).getModelLandmarks());
 
                     } catch (Exception ex) {
                         Exceptions.printStackTrace(ex);
@@ -1217,7 +1247,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
                 tc.getOneToManyViewerPanel().getListener2().setFacialPoints(model.getFacialPoints());
             }
             
-            c.addFacialPoints(model.getModelName(), model.getFacialPoints());
+            c.addFacialPoints(model.getModelName(), new CNNDetectionResult(model.getFacialPoints()));
             c.addOriginalFp(model.getModelName(), model.createListFp());
         }
         
@@ -1356,6 +1386,14 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
         if(PDMList.instance().addedNewName())
         pdmComboBox.setModel(new DefaultComboBoxModel<>(PDMList.instance().getPdmNamesArray()));
     }//GEN-LAST:event_pdmComboBoxMouseClicked
+
+    private void exportTextureFPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportTextureFPButtonActionPerformed
+        final ProjectTopComponent tc = GUIController.getSelectedProjectTopComponent();
+        FPImportExport.instance().exportOneToManyTexture(tc,
+                getContext(),
+                getContext().getFacialPoints(tc.getOneToManyViewerPanel().getListener1().getModel().getName()).getTextureLandmarks(),
+                tc.getOneToManyViewerPanel().getListener1().getModel(), false);
+    }//GEN-LAST:event_exportTextureFPButtonActionPerformed
     private void setColor() {
 
         GUIController.getSelectedProjectTopComponent().getOneToManyViewerPanel().getListener1().setColorOfPoint(fpColorPanel.getBackground().getRGBColorComponents(new float[3]));
@@ -1377,7 +1415,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
             //to check whether FPs can be exported once they are added, removed
             ObservableMaster o = new ObservableMaster();
             ExportFPButtonObserver export = new ExportFPButtonObserver(exportFPButton,
-                    c.getFacialPoints());
+                    exportTextureFPButton, c.getFacialPoints());
             RegisterFPButtonObserver register = new RegisterFPButtonObserver(registerButton, c.getFacialPoints());
 
             o.addObserver(export);
@@ -1468,6 +1506,7 @@ public class OneToManyRegistrationConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel discPanel;
     private javax.swing.JToggleButton editFPButton;
     private javax.swing.JButton exportFPButton;
+    private javax.swing.JButton exportTextureFPButton;
     private javax.swing.JPanel fpColorPanel;
     private javax.swing.JPanel fpPanel;
     private javax.swing.JCheckBox fpScaleCheckBox;

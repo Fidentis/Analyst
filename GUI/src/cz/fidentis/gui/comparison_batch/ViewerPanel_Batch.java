@@ -551,7 +551,8 @@ public class ViewerPanel_Batch extends javax.swing.JPanel {
         //update points in data model
         if(removePoints || addPoints){
             String modelName = listener.getModel().getName();    
-            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().addFacialPoints(modelName, listener.getFacialPoints());
+            GUIController.getSelectedProjectTopComponent().getProject().getSelectedBatchComparison().
+                    update3DPoints(modelName, listener.getFacialPoints());
             fpExportEnable.updateObservers();
         }
         
