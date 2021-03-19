@@ -11,6 +11,7 @@ import cz.fidentis.controller.Gender;
 import cz.fidentis.featurepoints.FacialPoint;
 import cz.fidentis.featurepoints.FacialPointType;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.gui.GUIController;
 import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.merging.doubly_conected_edge_list.parts.HalfEdgeId;
@@ -105,7 +106,7 @@ public final class ImportFromImage implements ActionListener {
                             //set landmarks
                             if(landmarksIn3D != null){
                                 tc.getViewerPanel_2Faces().getListener1().setFacialPoints(landmarksIn3D);
-                                tc.getProject().getSelectedComparison2Faces().setMainFp(landmarksIn3D);
+                                tc.getProject().getSelectedComparison2Faces().updateMainFp(landmarksIn3D);
                                 tc.getViewerPanel_2Faces().checkFpAvaibility();
                             }
                         } else {
@@ -116,7 +117,7 @@ public final class ImportFromImage implements ActionListener {
                              //set landmarks
                             if(landmarksIn3D != null){
                                 tc.getViewerPanel_2Faces().getListener2().setFacialPoints(landmarksIn3D);
-                                tc.getProject().getSelectedComparison2Faces().setSecondaryFp(landmarksIn3D);
+                                tc.getProject().getSelectedComparison2Faces().updateSecondaryFp(landmarksIn3D);
                                 tc.getViewerPanel_2Faces().checkFpAvaibility();
                             }
                         }
@@ -143,7 +144,8 @@ public final class ImportFromImage implements ActionListener {
                         }
                         
                         if(landmarksIn3D != null){
-                            tc.getProject().getSelectedOneToManyComparison().addFacialPoints(imported.getName(),landmarksIn3D);
+                            tc.getProject().getSelectedOneToManyComparison().addFacialPoints(imported.getName(),
+                                    new CNNDetectionResult(landmarksIn3D));
                             tc.getOneToManyViewerPanel().checkFpAvailable();
                         }
                             
@@ -156,7 +158,8 @@ public final class ImportFromImage implements ActionListener {
                         
                         if(landmarksIn3D != null){
                             tc.getViewerPanel_Batch().getListener().setFacialPoints(landmarksIn3D);
-                            tc.getProject().getSelectedBatchComparison().addFacialPoints(imported.getName(), landmarksIn3D);
+                            tc.getProject().getSelectedBatchComparison().addFacialPoints(imported.getName(), 
+                                    new CNNDetectionResult(landmarksIn3D));
                             tc.getViewerPanel_Batch().checkFpAvaialable();
                         }
                         break;

@@ -5,8 +5,6 @@
  */
 package cz.fidentis.featurepoints.results;
 
-import cz.fidentis.featurepoints.FacialPoint;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,13 +12,13 @@ import java.util.Map;
  * @author Zuzana Ferkova
  */
 public class FpResultsBatch {
-    private final Map<String, List<FacialPoint>> fps;
+    private final Map<String, CNNDetectionResult> fps;
 
-    public FpResultsBatch(Map<String, List<FacialPoint>> fps) {
+    public FpResultsBatch(Map<String, CNNDetectionResult> fps) {
         this.fps = fps;
     }
 
-    public Map<String, List<FacialPoint>> getFps() {
+    public Map<String, CNNDetectionResult> getFps() {
         return fps;
     }
        

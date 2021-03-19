@@ -5,3 +5,5 @@
 /Logs/
 *.log
 **/__pycache__
+models/Python/
+models/resources/trainingModels/CNN/models/

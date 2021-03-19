@@ -398,7 +398,7 @@ public final class NavigatorTopComponent extends TopComponent {
                         }
                         
                         if(batchComparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
-                            List<FacialPoint> l = batchComparison.getFacialPoints(model.getName());
+                            List<FacialPoint> l = batchComparison.getFacialPoints(model.getName()).getModelLandmarks();
                             
                             // reverse transformations made on facial points if needed
                             if(batchComparison.getTrans() != null && batchComparison.getTrans().size() > lastNodeIndex) {
@@ -423,7 +423,7 @@ public final class NavigatorTopComponent extends TopComponent {
                         }
                         
                         // display facial points of corresponding model (by index)
-                        listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(lastNodeIndex).getName()));
+                        listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(lastNodeIndex).getName()).getModelLandmarks());
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.averageModel"))) {
                         listener.setModels(batchComparison.getAverageFace());
@@ -438,7 +438,7 @@ public final class NavigatorTopComponent extends TopComponent {
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.results"))) {
                         if(batchComparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-                            listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(0).getName()));
+                            listener.setFacialPoints(batchComparison.getFacialPoints(batchComparison.getModel(0).getName()).getModelLandmarks());
                             listener.setProcrustes(true);
                         } else {
                             listener.setModels(batchComparison.getAverageFace());
@@ -464,7 +464,7 @@ public final class NavigatorTopComponent extends TopComponent {
 
 
                         if(comparison.getRegistrationMethod() == RegistrationMethod.PROCRUSTES)   { //in case procrustes if picked do this
-                            List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName());   //there will always be at least empty list
+                            List<FacialPoint> l = comparison.getFacialPoints(listenerSecondary.getModel().getName()).getModelLandmarks();   //there will always be at least empty list
                             
                             // reverse transformations made on facial points if needed
                             if(comparison.getTrans() != null && comparison.getTrans().size() > lastNodeIndex) {
@@ -481,11 +481,11 @@ public final class NavigatorTopComponent extends TopComponent {
                         listenerSecondary.setModels(model);
                         
                         // display facial points of corresponding model (by index)
-                        listenerSecondary.setFacialPoints(comparison.getFacialPoints(comparison.getModel(lastNodeIndex).getName()));
+                        listenerSecondary.setFacialPoints(comparison.getFacialPoints(comparison.getModel(lastNodeIndex).getName()).getModelLandmarks());
                     }
                     if(path.getLastPathComponent().toString().equals(strings.getString("tree.node.results"))) {
                         if(comparison.getComparisonMethod() == ComparisonMethod.PROCRUSTES) {
-                            listenerPrimary.setFacialPoints(comparison.getFacialPoints(comparison.getModel(0).getName()));
+                            listenerPrimary.setFacialPoints(comparison.getFacialPoints(comparison.getModel(0).getName()).getModelLandmarks());
                             listenerPrimary.setProcrustes(true);
                         } else {
                             listenerPrimary.drawHD(true);

@@ -5,22 +5,20 @@
  */
 package cz.fidentis.featurepoints.results;
 
-import cz.fidentis.featurepoints.FacialPoint;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  *
  * @author Zuzana Ferkova
  */
 public class FpResultsOneToMany {
-    private final HashMap<String ,List<FacialPoint>> facialPoints;
+    private final HashMap<String, CNNDetectionResult> facialPoints;
 
-    public FpResultsOneToMany(HashMap<String, List<FacialPoint>> facialPoints) {
+    public FpResultsOneToMany(HashMap<String, CNNDetectionResult> facialPoints) {
         this.facialPoints = facialPoints;
     }
 
-    public HashMap<String, List<FacialPoint>> getFacialPoints() {
+    public HashMap<String, CNNDetectionResult> getFacialPoints() {
         return facialPoints;
     }
 }

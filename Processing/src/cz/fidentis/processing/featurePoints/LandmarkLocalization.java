@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import jv.geom.PgElementSet;
 import jv.vecmath.PdVector;
+import org.netbeans.api.progress.ProgressHandle;
 import org.openide.util.Exceptions;
 
 /**
@@ -265,46 +266,52 @@ public class LandmarkLocalization {
         return landmarks;
     }
         
-    public HashMap<String, CNNDetectionResult> landmarkDetectionTexture(List<File> models, PDM usedPdm){
-        String saved = TextureLandmarks.instance().detectTextureLandmarks(models);
-        
-        // Couldn't run Python
-        if(saved == null){
-            return null;
-        }
-        
-        HashMap<String, CNNDetectionResult> cnnLandmarks = TextureLandmarks.instance().CNNtoPP(new File(saved), models.size());
-        
-        for(File f : models) {
-            Model m = ModelLoader.instance().loadModel(f, false, Boolean.TRUE);
-            List<FacialPoint> currentCNNLandmarks = cnnLandmarks.get(m.getName()).getModelLandmarks();
-            Vector3f enl = null, enr = null, prn = null;
-            for(FacialPoint fp: currentCNNLandmarks) {
-                if(fp.getType() == FacialPointType.EN_L.ordinal())
-                    enl = fp.getPosition();
-                if(fp.getType() == FacialPointType.EN_R.ordinal())
-                    enr = fp.getPosition();
-                if(fp.getType() == FacialPointType.PRN.ordinal())
-                    prn = fp.getPosition();
+    public HashMap<String, CNNDetectionResult> landmarkDetectionTexture(List<File> models, PDM usedPdm, ProgressHandle p){
+        try {
+            String saved = TextureLandmarks.instance().detectTextureLandmarks(models);
+            
+            // Couldn't run Python
+            if(saved == null){
+                return null;
             }
             
-            FeaturePointsUniverse fpUni = new FeaturePointsUniverse(m);
-            // simplifying the model
-            fpUni.computeSimplify();
+            HashMap<String, CNNDetectionResult> cnnLandmarks = TextureLandmarks.instance().CNNtoPP(new File(saved), models.size(), p);
             
-            List<FacialPoint> pdmLandmarks = findLandmarks(usedPdm, enl, enr, prn, fpUni);
-            List<FacialPoint> mergedLandmarks = mergeLandmarks(pdmLandmarks, currentCNNLandmarks);
+            for(File f : models) {
+                Model m = ModelLoader.instance().loadModel(f, false, Boolean.TRUE);
+                p.progress("Computing landmark adjustments for " + m.getName());
+                List<FacialPoint> currentCNNLandmarks = cnnLandmarks.get(m.getName()).getModelLandmarks();
+                Vector3f enl = null, enr = null, prn = null;
+                for(FacialPoint fp: currentCNNLandmarks) {
+                    if(fp.getType() == FacialPointType.EN_L.ordinal())
+                        enl = fp.getPosition();
+                    if(fp.getType() == FacialPointType.EN_R.ordinal())
+                        enr = fp.getPosition();
+                    if(fp.getType() == FacialPointType.PRN.ordinal())
+                        prn = fp.getPosition();
+                }
+                
+                FeaturePointsUniverse fpUni = new FeaturePointsUniverse(m);
+                // simplifying the model
+                fpUni.computeSimplify();
+                
+                List<FacialPoint> pdmLandmarks = findLandmarks(usedPdm, enl, enr, prn, fpUni);
+                List<FacialPoint> mergedLandmarks = mergeLandmarks(pdmLandmarks, currentCNNLandmarks);
+                
+                CNNDetectionResult originalResult = cnnLandmarks.get(m.getName());
+                originalResult.setModelLandmarks(mergedLandmarks);
+                
+                
+                cnnLandmarks.replace(m.getName(), originalResult);
+            }
             
-            CNNDetectionResult originalResult = cnnLandmarks.get(m.getName());
-            originalResult.setModelLandmarks(mergedLandmarks);
-
+            return cnnLandmarks;
             
-            cnnLandmarks.replace(m.getName(), originalResult);
+            // TODO: some landmarks need to be adjusted via PDM (AL, G?)
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+            return null;
         }
-        
-        return cnnLandmarks;
-        
-        // TODO: some landmarks need to be adjusted via PDM (AL, G?)
     }
     
     private List<FacialPoint> mergeLandmarks(List<FacialPoint> pdmLandmarks, List<FacialPoint> cnnLandmarks) {

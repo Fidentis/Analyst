@@ -220,7 +220,7 @@ public class FpProcessing {
 
         LandmarkLocalization localization = LandmarkLocalization.instance();
 
-        return localization.landmarkDetectionTexture(models, pdm);
+        return localization.landmarkDetectionTexture(models, pdm, p);
     }
 
     /**

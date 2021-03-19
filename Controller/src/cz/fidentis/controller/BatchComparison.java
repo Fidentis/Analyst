@@ -10,6 +10,7 @@ import cz.fidentis.controller.data.ColormapConfig;
 import cz.fidentis.controller.data.CrosscutConfig;
 import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.model.Model;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
@@ -44,7 +45,7 @@ public class BatchComparison {
     private File hdCSVresults;          //URL to directory where computed numerical results in csv format are stored in
     private ArrayList<ArrayList<Float>> hdVisualResults;    //visual results, num of inner array == num of models, num of outer arrays == num of vertices of avgFace
     private ArrayList<File> models = new ArrayList<>();     //URLs to models stored on disk
-    private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<>();  //feature points associated with their model
+    private HashMap<String , CNNDetectionResult> facialPoints = new HashMap<>();  //feature points associated with their model
     private HashMap<String, List<FacialPoint>> originalFp = new HashMap<>();    //original FPs loaded/computed into the programme, TODO: fix reverse transformation and delete this (there might be issue with not keeping all transformations with FP registration)
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison, 4/ results
     
@@ -454,15 +455,14 @@ public class BatchComparison {
     }
 
     
-    public HashMap<String, List<FacialPoint>> getFacialPoints() {
+    public HashMap<String, CNNDetectionResult> getFacialPoints() {
         return facialPoints;
     }
 
-    public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
-        this.facialPoints.clear();
-        this.facialPoints.putAll(facialPoints);
+    public void setFacialPoints(HashMap<String, CNNDetectionResult> facialPoints) {
+        this.facialPoints = facialPoints;
     }
-
+    
     public HashMap<String, List<FacialPoint>> getOriginalFp() {
         return originalFp;
     }
@@ -648,7 +648,7 @@ public class BatchComparison {
 
     public void addModel(File model){
         models.add(model);
-        facialPoints.put(model.getName(), new LinkedList<FacialPoint>());       //make sure there is a list ready for FPs
+        facialPoints.put(model.getName(), new CNNDetectionResult());       //make sure there is a list ready for FPs
         if(node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }
@@ -667,16 +667,19 @@ public class BatchComparison {
         modelsAdded = true;
     }
     
-    public void addFacialPoints(String model, List<FacialPoint> FP){
+    public void addFacialPoints(String model, CNNDetectionResult FP){
         facialPoints.put(model, FP);
         
     }
     
-    public void clearFacialPoints(){
-        facialPoints.clear();
+    public void update3DPoints(String model, List<FacialPoint> modelFP){
+        List<FacialPoint> fps = facialPoints.get(model).getModelLandmarks();
+        fps.clear();
+        fps.addAll(modelFP);
     }
     
-    public List<FacialPoint> getFacialPoints(String model){
+    
+    public CNNDetectionResult getFacialPoints(String model){
         return facialPoints.get(model);
         
     }

@@ -36,6 +36,7 @@ import cz.fidentis.model.ModelExporter;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.visualisation.surfaceComparison.HDpaintingInfo;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.processing.exportProcessing.FPImportExport;
 import cz.fidentis.visualisation.procrustes.PApaintingInfo;
 import java.io.FileInputStream;
@@ -219,13 +220,13 @@ public final class SaveProject implements ActionListener {
         
         // savig of feature points - a bit complicated but reusing the same format
         // as other project types
-        HashMap<String, List<FacialPoint>> fps = new HashMap<>(2);
+        HashMap<String, CNNDetectionResult> fps = new HashMap<>(2);
         HashMap<String, File> modelFiles = new HashMap<>(2);
-        if (comparison.getMainFp() != null && comparison.getMainFp().size() > 0) {
-            fps.put("main", comparison.getMainFp());
+        if (comparison.getMainFp() != null && comparison.getMainFp().getModelLandmarks().size() > 0) {
+            fps.put("main", new CNNDetectionResult(comparison.getMainFp().getModelLandmarks()));
         }
-        if (comparison.getSecondaryFp() != null && comparison.getSecondaryFp().size() > 0) {
-            fps.put("secondary", comparison.getSecondaryFp());
+        if (comparison.getSecondaryFp() != null && comparison.getSecondaryFp().getModelLandmarks().size() > 0) {
+            fps.put("secondary", new CNNDetectionResult(comparison.getSecondaryFp().getModelLandmarks()));
             //modelFiles.put("secondary", comparison.getModel2().getFile());
         }
         if( fps.size() > 0) {
@@ -681,7 +682,7 @@ public final class SaveProject implements ActionListener {
      * @param auxFile - the temporary directory of the project to be zipped.
      * @throws IOException if there is a problem with writing feature points to file.
      */
-    private void appendFeaturePoints(Map<String, List<FacialPoint>> fps, Map<String, File> models, Element parent, File auxFile) throws IOException {
+    private void appendFeaturePoints(Map<String, CNNDetectionResult> fps, Map<String, File> models, Element parent, File auxFile) throws IOException {
         // create a node describing how facial points are saved
         Element fpE = parent.getOwnerDocument().createElement("facial-points");
         parent.appendChild(fpE);
@@ -696,7 +697,7 @@ public final class SaveProject implements ActionListener {
         File fpFile = new File(auxFile.getAbsolutePath() + path);
         ArrayList<FpModel> fpModels = new ArrayList<>(fps.size());
         for (String name : fps.keySet()) {
-            FpModel fpmodel = FPImportExport.instance().getFpModelFromFP(fps.get(name), name);
+            FpModel fpmodel = FPImportExport.instance().getFpModelFromFP(fps.get(name).getModelLandmarks(), name);
             
             // decentralize to file if possible
             if (models != null && models.get(name) !=  null) {

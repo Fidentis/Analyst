@@ -16,6 +16,7 @@ import cz.fidentis.model.ModelLoader;
 import cz.fidentis.utils.FileUtils;
 import cz.fidentis.utils.MathUtils;
 import cz.fidentis.utilsException.FileManipulationException;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 
 import java.io.File;
@@ -29,10 +30,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.netbeans.api.progress.ProgressHandle;
 import org.openide.util.Exceptions;
 
 /**
@@ -119,7 +122,7 @@ public class TextureLandmarks {
         }
     }
     
-    public List<FpModel> get2DLandmarks(File modelsPath, int numModels) {
+    public List<FpModel> get2DLandmarks(List<File> originalTextures, File modelsPath, int numModels) throws IOException {
         String mouthRes = SAVE_PATH_CNN + File.separator + "res_mouth_";
         String lEyeRes = SAVE_PATH_CNN + File.separator + "res_lEye_";
         String rEyeRes = SAVE_PATH_CNN + File.separator + "res_rEye_";
@@ -147,6 +150,10 @@ public class TextureLandmarks {
 
 
                 String nameWithoutExtension = f.getName().substring(0, f.getName().length() - 4);
+                
+                BufferedImage bimg = ImageIO.read(originalTextures.get(modelIx + i * BATCH_SIZE));
+                int width = bimg.getWidth();
+                int height = bimg.getHeight();
 
                 List<FacialPoint> resTexture = new ArrayList<>();
                 List<Float> mouthInfo = getModelCutoutData(SAVE_PATH_CNN + File.separator + "mouth_" + i + File.separator + nameWithoutExtension + ".txt");
@@ -155,7 +162,7 @@ public class TextureLandmarks {
                 List<Float> noseInfo = getModelCutoutData(SAVE_PATH_CNN + File.separator + "nose_" + i + File.separator + nameWithoutExtension + ".txt");
 
                 // 2D landmarks
-                detecte2DLandmarks(resTexture, rEyeInfo, lEyeInfo, mouthInfo, noseInfo, lmREye, lmLEye, lmMouth, lmNose, modelIx);
+                detecte2DLandmarks(resTexture, rEyeInfo, lEyeInfo, mouthInfo, noseInfo, lmREye, lmLEye, lmMouth, lmNose, modelIx, width, height);
                 
                 FpModel m = new FpModel(f.getName());
                 m.setFacialpoints(resTexture);
@@ -308,7 +315,7 @@ public class TextureLandmarks {
         
     }
      
-     public HashMap<String, CNNDetectionResult> CNNtoPP(File modelsPath, int numModels) {
+     public HashMap<String, CNNDetectionResult> CNNtoPP(File modelsPath, int numModels, ProgressHandle p) throws IOException {
         String mouthRes = SAVE_PATH_CNN + File.separator + "res_mouth_";
         String lEyeRes = SAVE_PATH_CNN + File.separator + "res_lEye_";
         String rEyeRes = SAVE_PATH_CNN + File.separator + "res_rEye_";
@@ -338,8 +345,11 @@ public class TextureLandmarks {
 
                 String nameWithoutExtension = f.getName().substring(0, f.getName().length() - 4);
                 String modelName = nameWithoutExtension + ".obj";
+                p.progress("Acquiring 3D landmarks for model " + modelName + ".");
                 Model m = ModelLoader.instance().loadModel(new File(modelFolder + File.separator + i + File.separator + modelName), false, true);   
-
+                BufferedImage bimg = ImageIO.read(new File(m.getMatrials().getMatrials().get(0).getTextureFile()));
+                int width = bimg.getWidth();
+                int height = bimg.getHeight();
                 KDTreeIndexed txtTree = new KDTreeIndexed(m.getTexCoords());
                 HashMap<Integer, Integer> vertTxtCorrespondence = buildTextureVertexCorrespondence(m);
 
@@ -351,7 +361,7 @@ public class TextureLandmarks {
                 List<Float> noseInfo = getModelCutoutData(SAVE_PATH_CNN + File.separator + "nose_" + i + File.separator + nameWithoutExtension + ".txt");
 
                 // 2D landmarks
-                detecte2DLandmarks(resTexture, rEyeInfo, lEyeInfo, mouthInfo, noseInfo, lmREye, lmLEye, lmMouth, lmNose, modelIx);
+                detecte2DLandmarks(resTexture, rEyeInfo, lEyeInfo, mouthInfo, noseInfo, lmREye, lmLEye, lmMouth, lmNose, modelIx, width, height);
                 
                 
                 // 3D landmarks
@@ -395,7 +405,8 @@ public class TextureLandmarks {
      }
      
      private void detecte2DLandmarks(List<FacialPoint> resTexture, List<Float> rEyeInfo, List<Float> lEyeInfo, List<Float> mouthInfo,
-             List<Float> noseInfo, List<Vector2f> lmREye, List<Vector2f> lmLEye, List<Vector2f> lmMouth, List<Vector2f> lmNose, int modelIx){
+             List<Float> noseInfo, List<Vector2f> lmREye, List<Vector2f> lmLEye, List<Vector2f> lmMouth, List<Vector2f> lmNose, int modelIx,
+             int textureWidth, int textureHeight){
                 resTexture.add(new FacialPoint(FacialPointType.EX_R.ordinal(), find2dTexturePosition(rEyeInfo, lmREye.get(modelIx * 4 ))));
                 resTexture.add(new FacialPoint(FacialPointType.EN_R.ordinal(), find2dTexturePosition(rEyeInfo, lmREye.get(modelIx * 4 + 1))));
                 resTexture.add(new FacialPoint(FacialPointType.PAS_R.ordinal(), find2dTexturePosition(rEyeInfo, lmREye.get(modelIx * 4 + 2))));
@@ -420,6 +431,12 @@ public class TextureLandmarks {
                 resTexture.add(new FacialPoint(FacialPointType.AL_L.ordinal(), find2dTexturePosition(noseInfo, lmNose.get(modelIx * 5 + 2 ))));
                 resTexture.add(new FacialPoint(FacialPointType.N.ordinal(), find2dTexturePosition(noseInfo, lmNose.get(modelIx * 5 + 3 ))));
                 resTexture.add(new FacialPoint(FacialPointType.PRN.ordinal(), find2dTexturePosition(noseInfo, lmNose.get(modelIx * 5 + 4 ))));
+                
+                // Data is normalized, get pixel value
+                for(FacialPoint fp: resTexture){
+                    fp.getPosition().x *= textureWidth;
+                    fp.getPosition().y *= textureHeight;
+                }
      }
      
      

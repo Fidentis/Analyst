@@ -30,6 +30,7 @@ import cz.fidentis.gui.ProjectTopComponent;
 import cz.fidentis.gui.actions.newprojectwizard.ModelFileFilter;
 import cz.fidentis.landmarkParser.CSVparser;
 import cz.fidentis.featurepoints.FpModel;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.gui.guisetup.TwoFacesGUISetup;
 import cz.fidentis.model.Model;
 import cz.fidentis.model.ModelLoader;
@@ -246,12 +247,12 @@ public final class OpenProject implements ActionListener {
             if (loadedFps != null) {
                 for(FpModel m : loadedFps) {
                     if (m.getModelName().equals("main")) {
-                        comparison2f.setMainFp(m.createListFp());
-                        ntc.getViewerPanel_2Faces().getListener1().setFacialPoints(comparison2f.getMainFp());
+                        comparison2f.setMainFp(new CNNDetectionResult(m.createListFp()));
+                        ntc.getViewerPanel_2Faces().getListener1().setFacialPoints(comparison2f.getMainFp().getModelLandmarks());
                     }
                     if (m.getModelName().equals("secondary")) {
-                        comparison2f.setSecondaryFp(m.createListFp());
-                        ntc.getViewerPanel_2Faces().getListener2().setFacialPoints(comparison2f.getSecondaryFp());
+                        comparison2f.setSecondaryFp(new CNNDetectionResult(m.createListFp()));
+                        ntc.getViewerPanel_2Faces().getListener2().setFacialPoints(comparison2f.getSecondaryFp().getModelLandmarks());
                     }
                 }
             }
@@ -310,7 +311,8 @@ public final class OpenProject implements ActionListener {
                         ntc.getOneToManyViewerPanel().getListener1().initFpUniverse(model.getFacialPoints());
 
                     }
-                    comparison1N.addFacialPoints(model.getModelName(), model.getFacialPoints());
+                    comparison1N.addFacialPoints(model.getModelName(), 
+                            new CNNDetectionResult(model.getFacialPoints()));
                 }
             }
             if (comparison1N.getState() >= 3) {
@@ -337,7 +339,8 @@ public final class OpenProject implements ActionListener {
             if (loadedFps != null) {
                 FPImportExport.instance().alignPointsToModels(loadedFps, comparison.getModels());
                 for (FpModel model : loadedFps) {
-                    comparison.addFacialPoints(model.getModelName(), model.getFacialPoints());
+                    comparison.addFacialPoints(model.getModelName(), 
+                            new CNNDetectionResult(model.getFacialPoints()));
                 }
             }
             if (comparison.getState() >= 3) {

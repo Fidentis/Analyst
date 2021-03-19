@@ -5,27 +5,24 @@
  */
 package cz.fidentis.featurepoints.results;
 
-import cz.fidentis.featurepoints.FacialPoint;
-import java.util.List;
-
 /**
  *
  * @author Zuzana Ferkova
  */
 public class FpResultsPair {
-    private final List<FacialPoint> mainFps;
-    private final List<FacialPoint> secondaryFps;
+    private final CNNDetectionResult mainFps;
+    private final CNNDetectionResult secondaryFps;
 
-    public FpResultsPair(List<FacialPoint> mainFps, List<FacialPoint> secondaryFps) {
+    public FpResultsPair(CNNDetectionResult mainFps, CNNDetectionResult secondaryFps) {
         this.mainFps = mainFps;
         this.secondaryFps = secondaryFps;
     }
 
-    public List<FacialPoint> getMainFps() {
+    public CNNDetectionResult getMainFps() {
         return mainFps;
     }
 
-    public List<FacialPoint> getSecondaryFps() {
+    public CNNDetectionResult getSecondaryFps() {
         return secondaryFps;
     }
     

@@ -9,6 +9,7 @@ import cz.fidentis.controller.data.ColormapConfig;
 import cz.fidentis.controller.data.CrosscutConfig;
 import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.model.Model;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
@@ -45,8 +46,8 @@ public class OneToManyComparison {
     private List<File> registeredModels;            //models after registration, stored on the disk
     private Model primaryModel;                     //mainFace
     private Model avgFace;                          //avgFace
-    private HashMap<String ,List<FacialPoint>> facialPoints = new HashMap<String, List<FacialPoint>>();         //feature points associated with the model of given name
-    private HashMap<String, List<FacialPoint>> originalFp = new HashMap<String, List<FacialPoint>>();
+    private HashMap<String, CNNDetectionResult> facialPoints = new HashMap<>();         //feature points associated with the model of given name
+    private HashMap<String, List<FacialPoint>> originalFp = new HashMap<>();
     private int state = 1; // 1 - registration, 2 - registration results, 3 - comparison
     private Node node;
     private Node node_primaryModel;
@@ -315,11 +316,11 @@ public class OneToManyComparison {
         this.value = value;
     }
 
-    public HashMap<String, List<FacialPoint>> getFacialPoints() {
+    public HashMap<String, CNNDetectionResult> getFacialPoints() {
         return facialPoints;
     }
 
-    public void setFacialPoints(HashMap<String, List<FacialPoint>> facialPoints) {
+    public void setFacialPoints(HashMap<String, CNNDetectionResult> facialPoints) {
         this.facialPoints.clear();   
         this.facialPoints.putAll(facialPoints);
     }
@@ -582,7 +583,7 @@ public class OneToManyComparison {
 
     public void addModel(File model){
         models.add(model);
-        facialPoints.put(model.getName(), new LinkedList<FacialPoint>());      //make sure there's list to add FPs to
+        facialPoints.put(model.getName(), new CNNDetectionResult());      //make sure there's list to add FPs to
         if(node_models == null) {
             node_models = node.addChild(strings.getString("tree.node.comparedModels"));
         }
@@ -606,16 +607,22 @@ public class OneToManyComparison {
     }
     
     
-    public void addFacialPoints(String model, List<FacialPoint> FP){
+    public void addFacialPoints(String model, CNNDetectionResult FP){
         facialPoints.put(model, FP);
         
+    }
+    
+    public void updateModelPoints(String model, List<FacialPoint> fps){
+        List<FacialPoint> originalFp = facialPoints.get(model).getModelLandmarks();
+        originalFp.clear();
+        originalFp.addAll(fps);
     }
     
     public void clearFacialPoints(){
         facialPoints.clear();
     }
     
-    public List<FacialPoint> getFacialPoints(String model){
+    public CNNDetectionResult getFacialPoints(String model){
         return facialPoints.get(model);
         
     }

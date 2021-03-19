@@ -10,6 +10,7 @@ import cz.fidentis.controller.data.ColormapConfig;
 import cz.fidentis.controller.data.TransparencyConfig;
 import cz.fidentis.controller.data.VectorsConfig;
 import cz.fidentis.featurepoints.FacialPoint;
+import cz.fidentis.featurepoints.results.CNNDetectionResult;
 import cz.fidentis.model.Model;
 import cz.fidentis.visualisation.ColorScheme;
 import cz.fidentis.visualisation.surfaceComparison.HDpainting;
@@ -50,8 +51,8 @@ public class Comparison2Faces {
     private List<ICPTransformation> compFTransformations;
     
     private ArrayList<List<FacialPoint>> databaseFacialPoints = new ArrayList<List<FacialPoint>>();         //database of FPs is currently not used within the application
-    private List<FacialPoint> mainFp = new ArrayList<>();
-    private List<FacialPoint> secondaryFp = new ArrayList<>();
+    private CNNDetectionResult mainFp = new CNNDetectionResult();
+    private CNNDetectionResult secondaryFp = new CNNDetectionResult();
     private List<FacialPoint> originalMainFp;
     private List<FacialPoint> originalSecondaryFp;
     private boolean editPoints;         //DON'T need to save in project
@@ -357,30 +358,40 @@ public class Comparison2Faces {
     }
     
 
-    public List<FacialPoint> getMainFp() {
+    public CNNDetectionResult getMainFp() {
         return mainFp;
     }
 
-    public void setMainFp(List<FacialPoint> mainFp) {
-        this.mainFp.clear();
-        this.mainFp.addAll(mainFp);
+    public void setMainFp(CNNDetectionResult mainFp) {
+        this.mainFp = mainFp;
+    }
+    
+    public void updateMainFp(List<FacialPoint> fps) {
+        List<FacialPoint> fp = this.mainFp.getModelLandmarks();
+        fp.clear();
+        fp.addAll(fps);
     }
     
     public void addMainFp(FacialPoint fp){
-        this.mainFp.add(fp);
+        this.mainFp.getModelLandmarks().add(fp);
     }
 
-    public List<FacialPoint> getSecondaryFp() {
+    public CNNDetectionResult getSecondaryFp() {
         return secondaryFp;
     }
 
-    public void setSecondaryFp(List<FacialPoint> secondaryFp) {
-        this.secondaryFp.clear();
-        this.secondaryFp.addAll(secondaryFp);
+    public void setSecondaryFp(CNNDetectionResult secondaryFp) {
+        this.secondaryFp = secondaryFp;
+    }
+    
+    public void updateSecondaryFp(List<FacialPoint> fps) {
+        List<FacialPoint> fp = this.secondaryFp.getModelLandmarks();
+        fp.clear();
+        fp.addAll(fps);
     }
     
     public void addSecondaryFp(FacialPoint fp){
-        this.secondaryFp.add(fp);
+        this.secondaryFp.getModelLandmarks().add(fp);
     }
     
     public boolean isCompareButtonEnabled() {
