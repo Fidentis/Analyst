@@ -115,6 +115,7 @@
             <public-packages>
                 <package>cz.fidentis.gui</package>
                 <package>cz.fidentis.processing.comparison.surfaceComparison</package>
+                <package>cz.fidentis.processing.decimation</package>
                 <package>cz.fidentis.processing.exportProcessing</package>
                 <package>cz.fidentis.processing.featurePoints</package>
                 <package>cz.fidentis.processing.fileUtils</package>
